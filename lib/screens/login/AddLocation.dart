@@ -10,6 +10,6 @@ class AddLocation extends StatefulWidget {
 class _AddLocationState extends State<AddLocation> {
   @override
   Widget build(BuildContext context) {
-    return const SizedBox.expand();
+    return  SizedBox.expand();
   }
 }
