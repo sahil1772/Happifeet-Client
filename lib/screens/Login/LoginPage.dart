@@ -5,8 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:happifeet_client_app/screens/login/ForgotPassword.dart';
-import 'package:happifeet_client_app/screens/login/OTPPage.dart';
+import 'package:happifeet_client_app/screens/Login/ForgotPassword.dart';
+import 'package:happifeet_client_app/screens/Login/OTPPage.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
 
 import '../../network/ApiFactory.dart';

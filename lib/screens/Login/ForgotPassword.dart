@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:happifeet_client_app/screens/login/OTPPage.dart';
+import 'package:happifeet_client_app/screens/Login/OTPPage.dart';
 
 import '../../network/ApiFactory.dart';
 import '../../utils/ColorParser.dart';
