@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:happifeet_client_app/screens/Manage/ManageSMTP/manage_smtp_details.dart';
 
 import 'Login/LoginPage.dart';
 
@@ -39,6 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
           context,
           MaterialPageRoute(
             builder: (BuildContext context) => LoginPageWidget(),
+            // builder: (BuildContext context) => ManageSMTPDetails(),
           ));
     });
   }

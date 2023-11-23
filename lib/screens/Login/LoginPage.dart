@@ -9,6 +9,7 @@ import 'package:happifeet_client_app/screens/Login/ForgotPassword.dart';
 import 'package:happifeet_client_app/screens/Login/OTPPage.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
 
+import '../../components/BottomNavigation.dart';
 import '../../network/ApiFactory.dart';
 
 class LoginPageWidget extends StatefulWidget{
@@ -172,8 +173,8 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
                      }else{
                        log("INVALID USERNAME IN LOGIN PAGE");
                      }
-                     
-                     
+
+                     BottomNavigationHappiFeet().goToBottomNavigation(context);
                      // OtpPageWidget().goToOtpPage(context);
                      },
                      child: Text("Login",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: Colors.white)),)

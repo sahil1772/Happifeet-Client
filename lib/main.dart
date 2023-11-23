@@ -1,10 +1,21 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:happifeet_client_app/screens/splash_screen.dart';
 
-void main() {
+void main() async{
 
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  await EasyLocalization.ensureInitialized();
+  runApp(
+      EasyLocalization(
+          supportedLocales: [
+            Locale('en'),
+            Locale('es'),
+            Locale('ru'),
+            Locale('zh'),
+          ],
+  path: 'assets/i18n',
+  child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {
