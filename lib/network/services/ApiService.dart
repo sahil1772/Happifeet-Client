@@ -5,7 +5,8 @@ import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
-var base_url = "http://demo.imageonline.in/keephappifeet/statistics/mobileApi.php";
+// var base_url = "http://demo.imageonline.in/keephappifeet/statistics/mobileApi.php";
+var base_url = "https://demo.imageonline.in/keephappifeet/statistics/mobileClientApi.php";
 // var base_url = "http://192.168.4.9:82/keephappifeet/statistics/mobileApi.php";
 // var base_url = "https://dev2.imageonline.co.in/keephappifeet/statistics/mobileApi.php";
 

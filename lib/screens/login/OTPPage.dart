@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../utils/ColorParser.dart';
 
@@ -39,7 +40,32 @@ class _OtpPageWidgetState extends State<OtpPageWidget>{
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Text("Enter the 4 Digits Code That You Have Received on Your Email",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w400) ,textAlign: TextAlign.center),
                 ),
-                SizedBox(height: 30,),
+                SizedBox(height: 40,),
+
+               /** OTP field **/
+                Padding(
+                  padding:  EdgeInsets.symmetric(horizontal: 24),
+                  child: PinCodeTextField(
+                    appContext: context,
+                    length: 4,
+                    keyboardType: TextInputType.number,
+                    pastedTextStyle: TextStyle(
+                      color: Colors.green.shade600,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    pinTheme: PinTheme(
+                      activeColor: ColorParser().hexToColor("#01825C"),
+                      inactiveColor: ColorParser().hexToColor("#01825C"),
+                      shape: PinCodeFieldShape.box,
+                      borderRadius: BorderRadius.circular(5),
+                      fieldHeight: 50,
+                      fieldWidth: 50,
+                      activeFillColor: Colors.white,
+                    ),
+
+                  ),
+                ),
+                // SizedBox(height: 30,),
 
                RichText(
                    text: TextSpan(

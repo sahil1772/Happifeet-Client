@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:happifeet_client_app/screens/login/ForgotPassword.dart';
 import 'package:happifeet_client_app/screens/login/OTPPage.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
+
+import '../../network/ApiFactory.dart';
 
 class LoginPageWidget extends StatefulWidget{
   @override
@@ -16,6 +20,8 @@ class LoginPageWidget extends StatefulWidget{
 class _LoginPageWidgetState extends State<LoginPageWidget>{
 
   String? emailerror;
+  String? email;
+  String? password;
 
   @override
   void initState() {
@@ -25,6 +31,23 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
     /** Display with status and navigation bar **/
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
+
+
+  // void getLoginData() async{
+  //   var response = await ApiFactory().getLoginDetails().getLoginDetails(task, username, password)
+  //   log("response inside citylist page ${response}");
+  //   ListOfCities = response;
+  //   ListOfCitiesTemp = response;
+  //
+  //   log("listofcities ${ListOfCities.length}");
+  //
+  //   // log("Listofcities ${ListOfCities.first.testColor}");
+  //
+  //   setState(() {});
+  //
+  //
+  // }
+
   getEmailError() {
     return emailerror;
   }
@@ -67,6 +90,10 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
                      setEmailError(EmailValidator.validate(value)
                          ? null
                          : "Please enter valid email");
+                     
+                     setState(() {
+                       email = value;
+                     });
                    },
 
                      decoration: InputDecoration(
@@ -88,6 +115,9 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
                  ),
                  SizedBox(height: 30,),
                  TextField(
+                   onChanged: (value){
+                     password = value;
+                   },
                     obscureText: true,
                      decoration: InputDecoration(
                        filled: true,
@@ -131,8 +161,20 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
                        //     )
                        // ),
                    ),
-                     onPressed: () {
-                     OtpPageWidget().goToOtpPage(context);
+                     onPressed: () async{
+                     
+                     var response = await ApiFactory().sendLoginDetails().sendLoginDetails("login",email!, password!);
+
+                     log("RESPONSE LOGIN ${response.status}");
+                     if(response.status == 1){
+                       log("VALID USERNMAE IN LOGIN PAGE");
+
+                     }else{
+                       log("INVALID USERNAME IN LOGIN PAGE");
+                     }
+                     
+                     
+                     // OtpPageWidget().goToOtpPage(context);
                      },
                      child: Text("Login",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: Colors.white)),)
                  // SvgPicture.asset("assets/images/login/logo.svg"),

@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:happifeet_client_app/screens/login/OTPPage.dart';
 
+import '../../network/ApiFactory.dart';
 import '../../utils/ColorParser.dart';
 
 class ForgotPasswordWidget extends StatefulWidget{
@@ -19,6 +23,25 @@ class ForgotPasswordWidget extends StatefulWidget{
 }
 
 class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget>{
+
+  String? email;
+  String? emailerror;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+
+
+
+  getEmailError() {
+    return emailerror;
+  }
+
+  setEmailError(value) {
+    emailerror = value;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +66,9 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget>{
                 ),
                 SizedBox(height: 30,),
                 TextField(
-                    obscureText: true,
+                  onChanged: (value){
+                    email = value;
+                  },
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
@@ -51,7 +76,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget>{
 
                       hintText: 'Email ID',
                       hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                      // errorText: getEmailError(),
+                      errorText: getEmailError(),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(
@@ -77,7 +102,32 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget>{
                     //     )
                     // ),
                   ),
-                  onPressed: () {},
+                  onPressed: () async{
+
+
+                    Future.delayed(
+                        Duration(seconds: 3),
+                            () {
+                          OtpPageWidget().goToOtpPage(context);
+                        });
+
+
+                    var response = await ApiFactory().sendForgotPasswordDetails().sendForgotPasswordDetails("forgotpassword",email!, "123456");
+
+                    log("RESPONSE FORGOT PASSWORD ${response.status}");
+                    if(response.status == 1){
+                      log("VALID USERNMAE IN FORGOT PASSWORD PAGE");
+
+
+
+                    }else{
+                      log("INVALID USERNAME IN FORGOT PASSWORD PAGE");
+                    }
+
+                    // OtpPageWidget().goToOtpPage(context);
+
+
+                  },
                   child: Text("Get OTP",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: Colors.white)),)
                 // SvgPicture.asset("assets/images/login/logo.svg"),
               ],
