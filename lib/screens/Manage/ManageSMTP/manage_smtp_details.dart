@@ -3,27 +3,87 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:happifeet_client_app/model/SMTP/SmtpDetails.dart';
+import 'package:happifeet_client_app/network/ApiFactory.dart';
 
 import '../../../components/HappiFeetAppBar.dart';
 import '../../../utils/ColorParser.dart';
 List<String> fieldOptions = ['Item 1','Item 2','Item 3',"Item 4"];
 class ManageSMTPDetails extends StatefulWidget{
+
+
+
+  goToManageSMTPPage(BuildContext context){
+    Navigator.push(context, MaterialPageRoute(builder: (_) => ManageSMTPDetails()));
+  }
+
   @override
   State<ManageSMTPDetails> createState() => _ManageSMTPDetailsState();
 
 }
 
 class _ManageSMTPDetailsState extends State<ManageSMTPDetails>{
+  
 
-  String dropdownValueSelected = fieldOptions.first;
+  String? dropdownValueSelected = fieldOptions.first;
+  List<SmtpDetails> SmtpData = [];
+  TextEditingController smtphostController = new TextEditingController();
+  TextEditingController emailController = new TextEditingController();
+  TextEditingController usernameController = new TextEditingController();
+  TextEditingController passwordController = new TextEditingController();
+  TextEditingController portController = new TextEditingController();
+  TextEditingController fromemailController = new TextEditingController();
+
 
   @override
   void initState() {
     // TODO: implement initState
+    getSmtpDetail();
+
     super.initState();
 
-    /** Display with status and navigation bar **/
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
+
+  }
+  
+  void getSmtpDetail() async{
+    var response = await ApiFactory().getSmtpDetails().getSmtpDetails("smtp", "41");
+    SmtpData = response;
+    setinitialData();
+    log("SMTP data in smtp page ${SmtpData.first}");
+  }
+
+   setinitialData() async{
+    if( SmtpData.first.smtp_host != null ){
+      smtphostController.text = await SmtpData!.first.smtp_host!;
+    }
+
+    if( SmtpData.first.email_from_name != null ){
+      emailController.text = await SmtpData!.first.email_from_name!;
+    }
+    if( SmtpData.first.smtp_username != null ){
+      usernameController.text = await SmtpData!.first.smtp_username!;
+    }
+    if( SmtpData.first.smtp_password != null ){
+      passwordController.text = await SmtpData!.first.smtp_password!;
+    }
+    if( SmtpData.first.smtp_port != null ){
+      portController.text = await SmtpData!.first.smtp_port!;
+    }
+    if( SmtpData.first.from_email_id != null ){
+      fromemailController.text = await SmtpData!.first.from_email_id!;
+    }
+    if( SmtpData.first.smtp_security != null ){
+log("INSIDEIFFFFFFFFFFFFF");
+     setState(() async{
+       dropdownValueSelected = SmtpData!.first.smtp_security!;
+       log("OHHHHHHHHH${dropdownValueSelected}");
+     });
+    }
+    setState(() {
+
+    });
+
   }
 
 
@@ -97,6 +157,8 @@ class _ManageSMTPDetailsState extends State<ManageSMTPDetails>{
                              Text("SMTP Host"),
                              SizedBox(height: 8,),
                              TextField(
+                               controller: smtphostController,
+
                                  onChanged: (value){
 
                                  },
@@ -129,6 +191,7 @@ class _ManageSMTPDetailsState extends State<ManageSMTPDetails>{
                              Text("Email id"),
                              SizedBox(height: 8,),
                              TextField(
+                               controller: emailController,
                                  onChanged: (value){
 
                                  },
@@ -161,6 +224,7 @@ class _ManageSMTPDetailsState extends State<ManageSMTPDetails>{
                              Text("Username"),
                              SizedBox(height: 8,),
                              TextField(
+                               controller: usernameController,
                                  onChanged: (value){
 
                                  },
@@ -193,6 +257,7 @@ class _ManageSMTPDetailsState extends State<ManageSMTPDetails>{
                              Text("Password"),
                              SizedBox(height: 8,),
                              TextField(
+                               controller: passwordController,
                                  onChanged: (value){
 
                                  },
@@ -225,6 +290,7 @@ class _ManageSMTPDetailsState extends State<ManageSMTPDetails>{
                              Text("Port"),
                              SizedBox(height: 8,),
                              TextField(
+                               controller: portController,
                                  onChanged: (value){
 
                                  },
@@ -257,6 +323,7 @@ class _ManageSMTPDetailsState extends State<ManageSMTPDetails>{
                              Text("From Email"),
                              SizedBox(height: 8,),
                              TextField(
+                               controller: fromemailController,
                                  onChanged: (value){
 
                                  },
@@ -296,18 +363,19 @@ class _ManageSMTPDetailsState extends State<ManageSMTPDetails>{
                                  iconSize: 50,
 
                                  items: fieldOptions.map<DropdownMenuItem<String>>((value) {
+
                                    return DropdownMenuItem<String>(
                                      value: value,
                                      child: Text(value),
                                    );
                                  }).toList(),
                                  onChanged: (value) {
-                                   setState(() {
-                                     log("before ${value}");
-                                     dropdownValueSelected = value!;
-                                     // ListOfFeedbackDetails.first.value = value;
-                                     log("after ${dropdownValueSelected}");
-                                   });
+                                   // setState(() {
+                                   //   log("before ${value}");
+                                   //   dropdownValueSelected = value!;
+                                   //   // ListOfFeedbackDetails.first.value = value;
+                                   //   log("after ${dropdownValueSelected}");
+                                   // });
                                  }),
                            ],
                          ),

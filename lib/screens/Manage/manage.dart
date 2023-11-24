@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:happifeet_client_app/screens/Manage/ManageSMTP/manage_smtp_details.dart';
 
 import '../../components/HappiFeetAppBar.dart';
 
@@ -122,17 +123,22 @@ class _ManageWidgetState extends State<ManageWidget>{
                                   ],
                                 ),
                               ),
-                              Container(
-                                decoration: BoxDecoration(border: Border.all(color: Colors.black12),borderRadius: BorderRadius.all(Radius.circular(14),)),
-                                width: 180,
-                                height: 160,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset("assets/images/manage/users.svg"),
-                                    SizedBox(height: 5,),
-                                    Text("Manage \nSMTP Details",textAlign: TextAlign.center),
-                                  ],
+                              InkWell(
+                                onTap: (){
+                                  ManageSMTPDetails().goToManageSMTPPage(context);
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(border: Border.all(color: Colors.black12),borderRadius: BorderRadius.all(Radius.circular(14),)),
+                                  width: 180,
+                                  height: 160,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SvgPicture.asset("assets/images/manage/users.svg"),
+                                      SizedBox(height: 5,),
+                                      Text("Manage \nSMTP Details",textAlign: TextAlign.center),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],
