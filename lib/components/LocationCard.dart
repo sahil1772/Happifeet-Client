@@ -31,6 +31,7 @@ class _LocationCardState extends State<LocationCard>{
 
         child: Flex(
           direction: Axis.horizontal,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Card(
               child: SizedBox(
@@ -45,129 +46,98 @@ class _LocationCardState extends State<LocationCard>{
               //   height: 80,
               // ),
             ),
-            Flexible(
-              flex: 4,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'City Name',
-                      // overflow: TextOverflow.ellipsis,
-                      maxLines:1,
-                      style: TextStyle(
-                          color:   Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 0.5),
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'City Name',
+                    // overflow: TextOverflow.ellipsis,
+                    maxLines:1,
+                    style: TextStyle(
+                        color:   Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 0.5),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 1.0),
+                    child: Text(
+                      'Thomasville Rd, ',
+                      softWrap: true,
+                      maxLines: 1,
+                      overflow: TextOverflow.clip,
+                      style: TextStyle(color: Colors.grey ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 1.0),
-                      child: Text(
-                        'Thomasville Rd, ',
-                        softWrap: true,
-                        maxLines: 1,
-                        overflow: TextOverflow.clip,
-                        style: TextStyle(color: Colors.grey ),
-                      ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 1.0),
+                    child: Text(
+                      'Tallahassee, FL 32309, USA',
+                      softWrap: true,
+                      maxLines: 1,
+                      overflow: TextOverflow.clip,
+                      style: TextStyle(color:  Colors.grey ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 1.0),
-                      child: Text(
-                        'Tallahassee, FL 32309, USA',
-                        softWrap: true,
-                        maxLines: 1,
-                        overflow: TextOverflow.clip,
-                        style: TextStyle(color:  Colors.grey ),
-                      ),
-                    ),
-                    /** amenities listing horizontal **/
+                  ),
+                  /** amenities listing horizontal **/
 
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    //   child: Row(
-                    //     children: [
-                    //       SizedBox(
-                    //         height:24,
-                    //         child: ListView.builder(
-                    //           shrinkWrap: true,
-                    //             scrollDirection: Axis.horizontal,
-                    //             itemCount: 3,
-                    //             itemBuilder: (BuildContext, index) {
-                    //           return Container(
-                    //             height: 24,
-                    //             margin: EdgeInsets.only(right: 10),
-                    //             width: 24,
-                    //             // child: Image.asset("assets/images/amenities/Accessible.png"),
-                    //             // child: amenitiesList == [] ? Image.asset("assets/images/amenities/Accessible.png") : Image.network(amenitiesList![0]),
-                    //             child: index > amenitiesList!.length - 1 ? Image.asset("assets/images/amenities/Accessible.png")  : Image.network(amenitiesList![index]),
-                    //
-                    //             // decoration: BoxDecoration(
-                    //             //   color: Theme.of(context).primaryColor,
-                    //             //   shape: BoxShape.circle,
-                    //             // ),
-                    //           );
-                    //         }),
-                    //       ),
-                    //
-                    //
-                    //     ],
-                    //   ),
-                    // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  //   child: Row(
+                  //     children: [
+                  //       SizedBox(
+                  //         height:24,
+                  //         child: ListView.builder(
+                  //           shrinkWrap: true,
+                  //             scrollDirection: Axis.horizontal,
+                  //             itemCount: 3,
+                  //             itemBuilder: (BuildContext, index) {
+                  //           return Container(
+                  //             height: 24,
+                  //             margin: EdgeInsets.only(right: 10),
+                  //             width: 24,
+                  //             // child: Image.asset("assets/images/amenities/Accessible.png"),
+                  //             // child: amenitiesList == [] ? Image.asset("assets/images/amenities/Accessible.png") : Image.network(amenitiesList![0]),
+                  //             child: index > amenitiesList!.length - 1 ? Image.asset("assets/images/amenities/Accessible.png")  : Image.network(amenitiesList![index]),
+                  //
+                  //             // decoration: BoxDecoration(
+                  //             //   color: Theme.of(context).primaryColor,
+                  //             //   shape: BoxShape.circle,
+                  //             // ),
+                  //           );
+                  //         }),
+                  //       ),
+                  //
+                  //
+                  //     ],
+                  //   ),
+                  // ),
 
-                  ],
-                ),
+                ],
               ),
             ),
             // SizedBox(width: 10),
-            // SizedBox(width: 20,),
-            Flexible(
-
-              child: Column(
-                children: [
-                  ListView.separated(
-                    padding: EdgeInsets.zero,
-                    physics: ScrollPhysics(),
-
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    itemCount: 3,
-                    itemBuilder: (BuildContext, index) {
-                      return Container(
-                        height: 24,
-                        // margin: EdgeInsets.only(right: 0),
-                        width: 24,
-                        // child: Image.asset("assets/images/amenities/Accessible.png"),
-                        // child: amenitiesList == [] ? Image.asset("assets/images/amenities/Accessible.png") : Image.network(amenitiesList![0]),
-                        child: SvgPicture.asset("assets/images/location/editing.svg")
-
-                        // decoration: BoxDecoration(
-                        //   color: Theme.of(context).primaryColor,
-                        //   shape: BoxShape.circle,
-                        // ),
-                      );
-                    }, separatorBuilder: (BuildContext context, int index) { return SizedBox(height: 5,); },),
-                ],
-
-                // children: [
-                //   Row(
-                //     children: [
-                //       Icon(Icons.star,color: Colors.amber,),
-                //       Text('${widget.city!.rating}'),
-                //     ],
-                //   ),
-                //   Row(
-                //     children: [
-                //       Icon(Icons.location_on_rounded,color: Colors.deepOrangeAccent,),
-                //       Text(widget.city!.distance!),
-                //     ],
-                //   ),
-                //
-                // ],
+            SizedBox(width: 45,),
+            Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  left: BorderSide(
+                    color: Colors.black38
+                  )
+                )
               ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+               children: [
+                 SvgPicture.asset("assets/images/location/editing.svg"),
+                 SvgPicture.asset("assets/images/location/editing.svg"),
+                 SvgPicture.asset("assets/images/location/editing.svg")
+               ],
 
+              ),
             )
           ],
         ),
