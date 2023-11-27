@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../screens/Dashboard/dashboard.dart';
 import '../screens/Manage/manage.dart';
@@ -25,7 +26,14 @@ class _BottomNavigationHappiFeetState extends State<BottomNavigationHappiFeet>{
   @override
   void initState() {
     _controller = PersistentTabController(initialIndex: 0);
+    setBoolForLogIn();
     super.initState();
+  }
+
+  void setBoolForLogIn() async {
+    /** update checkIfLoggedIn value in shared pref   **/
+    SharedPreferences prefs =  await SharedPreferences.getInstance();
+    prefs.setBool('loggedIn', true);
   }
 
   List<Widget> _buildScreens() {
