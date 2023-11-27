@@ -11,6 +11,7 @@ import 'package:happifeet_client_app/utils/ColorParser.dart';
 
 import '../../components/BottomNavigation.dart';
 import '../../network/ApiFactory.dart';
+import '../../storage/shared_preferences.dart';
 
 class LoginPageWidget extends StatefulWidget{
   @override
@@ -174,8 +175,11 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
                        log("INVALID USERNAME IN LOGIN PAGE");
                      }
 
+
                      BottomNavigationHappiFeet().goToBottomNavigation(context);
                      // OtpPageWidget().goToOtpPage(context);
+
+
                      },
                      child: Text("Login",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: Colors.white)),)
                  // SvgPicture.asset("assets/images/login/logo.svg"),

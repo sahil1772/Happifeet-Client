@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageSMTP/manage_smtp_details.dart';
 
+import '../storage/shared_preferences.dart';
 import 'Login/LoginPage.dart';
 
 
@@ -35,13 +36,15 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> init() async {
     Timer(const Duration(seconds: 2), () {
-      // SharedPref.instance.checkFirstSeen(context);
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => LoginPageWidget(),
-            // builder: (BuildContext context) => ManageSMTPDetails(),
-          ));
+      SharedPref.instance.checkIfLoggedIn(context);
+
+      // Navigator.pushReplacement(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (BuildContext context) => LoginPageWidget(),
+      //       // builder: (BuildContext context) => ManageSMTPDetails(),
+      //     ));
+
     });
   }
 

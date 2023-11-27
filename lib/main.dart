@@ -1,7 +1,6 @@
-import 'dart:math';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:happifeet_client_app/screens/splash_screen.dart';
 
 void main() async{
@@ -40,6 +39,10 @@ class _MyAppState extends State<MyApp> {
       title: 'HappiFeet Client App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        textTheme: GoogleFonts.poppinsTextTheme(
+            Theme.of(context).textTheme
+        ),
+        canvasColor: Colors.transparent,
 
         colorScheme: ColorScheme.fromSeed(seedColor: from(Color(0xff49AC43))),
         useMaterial3: true,

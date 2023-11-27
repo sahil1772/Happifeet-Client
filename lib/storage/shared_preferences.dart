@@ -1,8 +1,12 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../components/BottomNavigation.dart';
 import '../model/Theme/ClientTheme.dart';
+import '../screens/Login/LoginPage.dart';
 
 class SharedPref {
   SharedPreferences? prefs;
@@ -13,6 +17,51 @@ class SharedPref {
   factory SharedPref() {
     return instance;
   }
+
+  /** Session management **/
+
+  Future checkIfLoggedIn(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isLogin = (prefs.getBool('loggedIn') ?? false);
+    // bool? _seen = await prefs.setBool('seen',false);
+    log("VALUE OF isLogin ${isLogin}");
+
+    if (isLogin) {
+      log("inside LoggedIn");
+      // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context)));
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => BottomNavigationHappiFeet(),
+          ));
+    } else {
+      // await prefs.setBool('seen', true);
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginPageWidget(),
+          ));
+    }
+  }
+
+
+  // setLoginDetail(bool value) async{
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   log("data in login ${value} ");
+  //   prefs?.setBool("isLogIn", value);
+  // }
+  //
+  //
+  // getLoginDetail() async{
+  //   SharedPreferences prefs =  await SharedPreferences.getInstance();
+  //   bool? data =  prefs?.getBool("isLogIn");
+  //   log("Data in getLoginDetail ${data}");
+  //   return data;
+  // }
+
+
+
+
 
 
   ClientTheme clientTheme = new ClientTheme();

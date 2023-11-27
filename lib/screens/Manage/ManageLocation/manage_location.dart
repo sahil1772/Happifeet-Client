@@ -127,9 +127,6 @@ class _ManageLocationWidgetState extends State<ManageLocationWidget>{
                       ),
                       /**   listview builder     **/
 
-
-
-
                       /**  Location Listing **/
 
                       Flexible(

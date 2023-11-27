@@ -1,3 +1,4 @@
+import 'package:email_otp/email_otp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -18,6 +19,8 @@ class OtpPageWidget extends StatefulWidget{
 }
 
 class _OtpPageWidgetState extends State<OtpPageWidget>{
+  TextEditingController otpController = new TextEditingController();
+  EmailOTP myauth = EmailOTP();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,6 +49,7 @@ class _OtpPageWidgetState extends State<OtpPageWidget>{
                 Padding(
                   padding:  EdgeInsets.symmetric(horizontal: 24),
                   child: PinCodeTextField(
+                    controller: otpController,
                     appContext: context,
                     length: 4,
                     keyboardType: TextInputType.number,
@@ -95,7 +99,24 @@ class _OtpPageWidgetState extends State<OtpPageWidget>{
                     //     )
                     // ),
                   ),
-                  onPressed: () {},
+
+
+                    onPressed: () async {
+                      if (await myauth.verifyOTP(otp: otpController.text) == true) {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(const SnackBar(
+                    content: Text("OTP is verified"),
+                    ));
+                    } else {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(const SnackBar(
+                    content: Text("Invalid OTP"),
+                    ));
+                    }
+                  },
+
+
+
                   child: Text("Continue",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: Colors.white)),)
                 // SvgPicture.asset("assets/images/login/logo.svg"),
               ],
