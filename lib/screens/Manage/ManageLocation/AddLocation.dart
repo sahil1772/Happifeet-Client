@@ -205,6 +205,7 @@ class _AddLocationState extends State<AddLocation>
                   child: TextField(
                     decoration: InputDecoration(
                       contentPadding:
+
                       EdgeInsets.symmetric(horizontal: 10, vertical: 16),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
