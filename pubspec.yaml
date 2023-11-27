@@ -83,6 +83,7 @@ flutter:
     - assets/images/bottomSheet/
     - assets/fonts/
     - assets/i18n/
+    - assets/images/reports/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

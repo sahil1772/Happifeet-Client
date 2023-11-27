@@ -141,6 +141,7 @@ class _ManageLocationWidgetState extends State<ManageLocationWidget>{
                           }, separatorBuilder: (BuildContext context, int index) { return SizedBox(height: 8,); },
                         ),
                       ),
+                      SizedBox(height: 50,),
                     ],
                   ),
                 ),
