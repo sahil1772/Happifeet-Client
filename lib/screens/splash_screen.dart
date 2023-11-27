@@ -36,14 +36,14 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> init() async {
     Timer(const Duration(seconds: 2), () {
-      // SharedPref.instance.checkIfLoggedIn(context);
+      SharedPref.instance.checkIfLoggedIn(context);
 
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => LoginPageWidget(),
-            // builder: (BuildContext context) => ManageSMTPDetails(),
-          ));
+      // Navigator.pushReplacement(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (BuildContext context) => LoginPageWidget(),
+      //       // builder: (BuildContext context) => ManageSMTPDetails(),
+      //     ));
 
     });
   }
