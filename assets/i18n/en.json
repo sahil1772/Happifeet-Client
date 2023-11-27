@@ -1,0 +1,18 @@
+{
+  "Select_Language": "Select Language",
+  "Park_Images": "Park Images",
+  "Park_Info": "Park Info",
+  "Park_Availability": "Park Availability",
+  "Park_Features": "Park Features",
+  "Park_Address": "Park Address",
+  "Client_Name": "Client Name *",
+  "Main_Site": "Main Site",
+  "Location_Name": "Location Name *",
+  "Address_Street": "Address & Street *",
+  "City": "City *",
+  "State": "State *",
+  "Zip": "Zip *",
+  "Latitude": "Latitude *",
+  "Longitude": "Longitude *",
+  "Main_City_Location": "Main City Location"
+}

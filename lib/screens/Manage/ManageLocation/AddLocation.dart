@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:happifeet_client_app/i18n/locale_keys.g.dart';
 
 import '../../../components/HappiFeetAppBar.dart';
 import '../../../utils/ColorParser.dart';
@@ -25,7 +27,16 @@ class _AddLocationState extends State<AddLocation>
 
     _controller = TabController(length: 2, vsync: this);
     _controller!.addListener(() {
-      setState(() {});
+      setState(() {
+        switch (_controller!.index) {
+          case 0:
+            context.setLocale(const Locale("en"));
+            break;
+          case 1:
+            context.setLocale(const Locale("es"));
+            break;
+        }
+      });
     });
     super.initState();
   }
@@ -55,7 +66,7 @@ class _AddLocationState extends State<AddLocation>
                 // SizedBox(height: 105),
                 Padding(
                   padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height / 8),
+                      top: MediaQuery.of(context).size.height / 9),
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -91,11 +102,11 @@ class _AddLocationState extends State<AddLocation>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          "Select Language",
+                        padding: const EdgeInsets.all(8.0),
+                        child: const Text(
+                          LocaleKeys.Select_Language,
                           style: TextStyle(fontSize: 18),
-                        ),
+                        ).tr(),
                       ),
                       TabBar(
                           indicatorSize: TabBarIndicatorSize.label,
@@ -171,102 +182,86 @@ class _AddLocationState extends State<AddLocation>
               mainAxisSize: MainAxisSize.min,
               children: [
                 Padding(
-                  padding: EdgeInsets.only(bottom: 16.0),
+                  padding: const EdgeInsets.only(bottom: 16.0),
                   child: Text(
-                    "Client Name *",
+                    LocaleKeys.Client_Name,
                     style: TextStyle(
-                        fontSize: labelTextSize, color: Color(0xff757575)),
-                  ),
+                        fontSize: labelTextSize,
+                        color: const Color(0xff757575)),
+                  ).tr(),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: TextField(
                     decoration: InputDecoration(
-                      contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10, vertical: 16),
-
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0xffc4c4c4),
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 16),
                       border: OutlineInputBorder(
-                        borderSide: BorderSide( color: const Color(0xffc4c4c4),),
+                        borderSide: const BorderSide(
+                          color: Color(0xffc4c4c4),
+                        ),
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 16.0),
+                  padding: const EdgeInsets.only(bottom: 16.0),
                   child: Text(
-                    "Main Site *",
+                    LocaleKeys.Main_Site,
                     style: TextStyle(
-                        fontSize: labelTextSize, color: Color(0xff757575)),
-                  ),
+                        fontSize: labelTextSize,
+                        color: const Color(0xff757575)),
+                  ).tr(),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: TextField(
                     decoration: InputDecoration(
-                      contentPadding:
-
-                      EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0xffc4c4c4),
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 16),
                       border: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0xffc4c4c4),
+                        ),
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 16.0),
+                  padding: const EdgeInsets.only(bottom: 16.0),
                   child: Text(
-                    "Location Name *",
+                    LocaleKeys.Location_Name,
                     style: TextStyle(
-                        fontSize: labelTextSize, color: Color(0xff757575)),
-                  ),
+                        fontSize: labelTextSize,
+                        color: const Color(0xff757575)),
+                  ).tr(),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: TextField(
                     decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 16),
-                      border: OutlineInputBorder(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0xffc4c4c4),
+                        ),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 16.0),
-                  child: Text(
-                    "Address & Street *",
-                    style: TextStyle(
-                        fontSize: labelTextSize, color: Color(0xff757575)),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 20.0),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 16),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 16.0),
-                  child: Text(
-                    "City *",
-                    style: TextStyle(
-                        fontSize: labelTextSize, color: Color(0xff757575)),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 20.0),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 16),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -274,19 +269,26 @@ class _AddLocationState extends State<AddLocation>
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 16.0),
+                  padding: const EdgeInsets.only(bottom: 16.0),
                   child: Text(
-                    "State *",
+                    LocaleKeys.Address_Street,
                     style: TextStyle(
-                        fontSize: labelTextSize, color: Color(0xff757575)),
-                  ),
+                        fontSize: labelTextSize,
+                        color: const Color(0xff757575)),
+                  ).tr(),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: TextField(
                     decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0xffc4c4c4),
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 16),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -294,19 +296,26 @@ class _AddLocationState extends State<AddLocation>
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 16.0),
+                  padding: const EdgeInsets.only(bottom: 16.0),
                   child: Text(
-                    "Zip *",
+                    LocaleKeys.City,
                     style: TextStyle(
-                        fontSize: labelTextSize, color: Color(0xff757575)),
-                  ),
+                        fontSize: labelTextSize,
+                        color: const Color(0xff757575)),
+                  ).tr(),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: TextField(
                     decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0xffc4c4c4),
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 16),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -314,19 +323,26 @@ class _AddLocationState extends State<AddLocation>
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 16.0),
+                  padding: const EdgeInsets.only(bottom: 16.0),
                   child: Text(
-                    "Latitude *",
+                    LocaleKeys.State,
                     style: TextStyle(
-                        fontSize: labelTextSize, color: Color(0xff757575)),
-                  ),
+                        fontSize: labelTextSize,
+                        color: const Color(0xff757575)),
+                  ).tr(),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: TextField(
                     decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0xffc4c4c4),
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 16),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -334,19 +350,26 @@ class _AddLocationState extends State<AddLocation>
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 16.0),
+                  padding: const EdgeInsets.only(bottom: 16.0),
                   child: Text(
-                    "Longitude *",
+                    LocaleKeys.Zip,
                     style: TextStyle(
-                        fontSize: labelTextSize, color: Color(0xff757575)),
-                  ),
+                        fontSize: labelTextSize,
+                        color: const Color(0xff757575)),
+                  ).tr(),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: TextField(
                     decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0xffc4c4c4),
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 16),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -354,19 +377,80 @@ class _AddLocationState extends State<AddLocation>
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 16.0),
+                  padding: const EdgeInsets.only(bottom: 16.0),
                   child: Text(
-                    "Main City Location",
+                    LocaleKeys.Latitude,
                     style: TextStyle(
-                        fontSize: labelTextSize, color: Color(0xff757575)),
-                  ),
+                        fontSize: labelTextSize,
+                        color: const Color(0xff757575)),
+                  ).tr(),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: TextField(
                     decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0xffc4c4c4),
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 16),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  child: Text(
+                    LocaleKeys.Longitude,
+                    style: TextStyle(
+                        fontSize: labelTextSize,
+                        color: const Color(0xff757575)),
+                  ).tr(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0xffc4c4c4),
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 16),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  child: Text(
+                    LocaleKeys.Main_City_Location,
+                    style: TextStyle(
+                        fontSize: labelTextSize,
+                        color: const Color(0xff757575)),
+                  ).tr(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0xffc4c4c4),
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 16),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -387,14 +471,15 @@ class _AddLocationState extends State<AddLocation>
                 ),
                 borderRadius: const BorderRadius.all(Radius.circular(56))),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
-              child: Text(
-                "Park Address",
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
+              child: const Text(
+                LocaleKeys.Park_Address,
                 style: TextStyle(
                   fontSize: 18,
                   color: Color(0xff01825C),
                 ),
-              ),
+              ).tr(),
             ),
           ),
         )
@@ -424,11 +509,12 @@ class _AddLocationState extends State<AddLocation>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "Client Name *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                   ],
@@ -447,14 +533,15 @@ class _AddLocationState extends State<AddLocation>
                 ),
                 borderRadius: const BorderRadius.all(Radius.circular(56))),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
-              child: Text(
-                "Park Images",
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
+              child: const Text(
+                LocaleKeys.Park_Images,
                 style: TextStyle(
                   fontSize: 18,
                   color: Color(0xff01825C),
                 ),
-              ),
+              ).tr(),
             ),
           ),
         )
@@ -484,83 +571,93 @@ class _AddLocationState extends State<AddLocation>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "Client Name *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "Main Site *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "Location Name *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "Address & Street *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "City *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "State *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "Zip *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "Latitude *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "Longitude *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "Main City Location",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                   ],
@@ -579,14 +676,15 @@ class _AddLocationState extends State<AddLocation>
                 ),
                 borderRadius: const BorderRadius.all(Radius.circular(56))),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
-              child: Text(
-                "Park Info",
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
+              child: const Text(
+                LocaleKeys.Park_Info,
                 style: TextStyle(
                   fontSize: 18,
                   color: Color(0xff01825C),
                 ),
-              ),
+              ).tr(),
             ),
           ),
         )
@@ -616,83 +714,93 @@ class _AddLocationState extends State<AddLocation>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "Client Name *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "Main Site *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "Location Name *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "Address & Street *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "City *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "State *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "Zip *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "Latitude *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "Longitude *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "Main City Location",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                   ],
@@ -711,14 +819,15 @@ class _AddLocationState extends State<AddLocation>
                 ),
                 borderRadius: const BorderRadius.all(Radius.circular(56))),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
-              child: Text(
-                "Park Availability",
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
+              child: const Text(
+                LocaleKeys.Park_Availability,
                 style: TextStyle(
                   fontSize: 18,
                   color: Color(0xff01825C),
                 ),
-              ),
+              ).tr(),
             ),
           ),
         )
@@ -748,83 +857,93 @@ class _AddLocationState extends State<AddLocation>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "Client Name *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "Main Site *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "Location Name *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "Address & Street *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "City *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "State *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "Zip *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "Latitude *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "Longitude *",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0),
                       child: Text(
                         "Main City Location",
                         style: TextStyle(
-                            fontSize: labelTextSize, color: Color(0xff757575)),
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
                       ),
                     ),
                   ],
@@ -843,14 +962,15 @@ class _AddLocationState extends State<AddLocation>
                 ),
                 borderRadius: const BorderRadius.all(Radius.circular(56))),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
-              child: Text(
-                "Park Features",
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
+              child: const Text(
+                LocaleKeys.Park_Features,
                 style: TextStyle(
                   fontSize: 18,
                   color: Color(0xff01825C),
                 ),
-              ),
+              ).tr(),
             ),
           ),
         )

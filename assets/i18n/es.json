@@ -1,0 +1,18 @@
+{
+  "Select_Language": "Seleccione el idioma",
+  "Park_Images": "Imágenes del parque",
+  "Park_Info": "Información del parque",
+  "Park_Availability": "Disponibilidad del parque",
+  "Park_Features": "Características del parque",
+  "Park_Address": "Dirección del parque",
+  "Client_Name": "Nombre del Cliente *",
+  "Main_Site": "Sitio principal",
+  "Location_Name": "Nombre del lugar *",
+  "Address_Street": "Nombre de la calle *",
+  "City": "Ciudad *",
+  "State": "Estado *",
+  "Zip": "Código postal *",
+  "Latitude": "Latitud *",
+  "Longitude": "Longitud *",
+  "Main_City_Location": "Ubicación de la ciudad principal"
+}
