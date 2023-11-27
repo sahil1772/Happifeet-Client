@@ -30,6 +30,8 @@ class _AddLocationState extends State<AddLocation>
     super.initState();
   }
 
+  double? labelTextSize = 14.0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,7 +90,7 @@ class _AddLocationState extends State<AddLocation>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(
                           "Select Language",
@@ -106,12 +108,12 @@ class _AddLocationState extends State<AddLocation>
                           tabs: [
                             Text(
                               "English".toUpperCase(),
-                              style: const TextStyle(
-                                fontSize: 16,
+                              style: TextStyle(
+                                fontSize: labelTextSize,
                               ),
                             ),
                             Text("Español".toUpperCase(),
-                                style: const TextStyle(fontSize: 16))
+                                style: TextStyle(fontSize: labelTextSize))
                           ]),
                       Container(
                         width: MediaQuery.of(context).size.width,
@@ -119,13 +121,15 @@ class _AddLocationState extends State<AddLocation>
                         color: const Color(0x50aeaeae),
                         margin: const EdgeInsets.only(bottom: 16),
                       ),
-                      SingleChildScrollView(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            loadContent(),
-                          ],
+                      Flexible(
+                        fit: FlexFit.tight,
+                        flex: 1,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              loadContent(),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -138,102 +142,718 @@ class _AddLocationState extends State<AddLocation>
   }
 
   Widget loadContent() {
-    return Container(
-      child: Stack(
-        children: [
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 15),
-            decoration: BoxDecoration(
-                border: Border.all(
-                  width: 1,
-                  color: const Color(0xffc4c4c4),
-                ),
-                borderRadius: const BorderRadius.all(Radius.circular(15))),
-            child:  Row(
-              mainAxisSize: MainAxisSize.max,
+    return Column(
+      children: [
+        addressBlock(),
+        imagesBlock(),
+        infoBlock(),
+        availabilityBlock(),
+        featuresBlock(),
+      ],
+    );
+  }
+
+  Widget addressBlock() {
+    return Stack(
+      children: [
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 20),
+          decoration: BoxDecoration(
+              border: Border.all(
+                width: 1,
+                color: const Color(0xffc4c4c4),
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(15))),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 48),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 16.0),
-                        child: Text(
-                          "Site *",
-                          style:
-                              TextStyle(fontSize: 16, color: Color(0xff757575)),
-                        ),
-                      ),  Padding(
-                        padding: const EdgeInsets.only(bottom: 16.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 1,
-                                color: const Color(0xffc4c4c4),
-                              ),
-                              borderRadius: const BorderRadius.all(Radius.circular(15))),
-                          child: const TextField(
-                            style:
-                            TextStyle(fontSize: 16, color: Color(0xff757575)),
-                          ),
-                        ),
-                      ),
-
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 16.0),
-                        child: Text(
-                          "Client *",
-                          style:
-                              TextStyle(fontSize: 16, color: Color(0xff757575)),
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 16.0),
-                        child: Text(
-                          "Site Name *",
-                          style:
-                              TextStyle(fontSize: 16, color: Color(0xff757575)),
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 16.0),
-                        child: Text(
-                          "Address *",
-                          style:
-                              TextStyle(fontSize: 16, color: Color(0xff757575)),
-                        ),
-                      ),
-                    ],
+                  padding: EdgeInsets.only(bottom: 16.0),
+                  child: Text(
+                    "Client Name *",
+                    style: TextStyle(
+                        fontSize: labelTextSize, color: Color(0xff757575)),
                   ),
-                )
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      contentPadding:
+                      EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide( color: const Color(0xffc4c4c4),),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 16.0),
+                  child: Text(
+                    "Main Site *",
+                    style: TextStyle(
+                        fontSize: labelTextSize, color: Color(0xff757575)),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      contentPadding:
+                      EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 16.0),
+                  child: Text(
+                    "Location Name *",
+                    style: TextStyle(
+                        fontSize: labelTextSize, color: Color(0xff757575)),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 16.0),
+                  child: Text(
+                    "Address & Street *",
+                    style: TextStyle(
+                        fontSize: labelTextSize, color: Color(0xff757575)),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 16.0),
+                  child: Text(
+                    "City *",
+                    style: TextStyle(
+                        fontSize: labelTextSize, color: Color(0xff757575)),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 16.0),
+                  child: Text(
+                    "State *",
+                    style: TextStyle(
+                        fontSize: labelTextSize, color: Color(0xff757575)),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 16.0),
+                  child: Text(
+                    "Zip *",
+                    style: TextStyle(
+                        fontSize: labelTextSize, color: Color(0xff757575)),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 16.0),
+                  child: Text(
+                    "Latitude *",
+                    style: TextStyle(
+                        fontSize: labelTextSize, color: Color(0xff757575)),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 16.0),
+                  child: Text(
+                    "Longitude *",
+                    style: TextStyle(
+                        fontSize: labelTextSize, color: Color(0xff757575)),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 16.0),
+                  child: Text(
+                    "Main City Location",
+                    style: TextStyle(
+                        fontSize: labelTextSize, color: Color(0xff757575)),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
-          Center(
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                    width: 1,
-                    color: const Color(0xff01825C),
-                  ),
-                  borderRadius: const BorderRadius.all(Radius.circular(56))),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.0),
-                child: Text(
-                  "Address",
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Color(0xff01825C),
-                  ),
+        ),
+        Center(
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                  width: 1,
+                  color: const Color(0xff01825C),
+                ),
+                borderRadius: const BorderRadius.all(Radius.circular(56))),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
+              child: Text(
+                "Park Address",
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Color(0xff01825C),
                 ),
               ),
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget imagesBlock() {
+    return Stack(
+      children: [
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 20),
+          decoration: BoxDecoration(
+              border: Border.all(
+                width: 1,
+                color: const Color(0xffc4c4c4),
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(15))),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 36),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "Client Name *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+        Center(
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                  width: 1,
+                  color: const Color(0xff01825C),
+                ),
+                borderRadius: const BorderRadius.all(Radius.circular(56))),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
+              child: Text(
+                "Park Images",
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Color(0xff01825C),
+                ),
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget infoBlock() {
+    return Stack(
+      children: [
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 20),
+          decoration: BoxDecoration(
+              border: Border.all(
+                width: 1,
+                color: const Color(0xffc4c4c4),
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(15))),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 36),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "Client Name *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "Main Site *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "Location Name *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "Address & Street *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "City *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "State *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "Zip *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "Latitude *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "Longitude *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "Main City Location",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+        Center(
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                  width: 1,
+                  color: const Color(0xff01825C),
+                ),
+                borderRadius: const BorderRadius.all(Radius.circular(56))),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
+              child: Text(
+                "Park Info",
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Color(0xff01825C),
+                ),
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget availabilityBlock() {
+    return Stack(
+      children: [
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 20),
+          decoration: BoxDecoration(
+              border: Border.all(
+                width: 1,
+                color: const Color(0xffc4c4c4),
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(15))),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 36),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "Client Name *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "Main Site *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "Location Name *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "Address & Street *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "City *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "State *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "Zip *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "Latitude *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "Longitude *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "Main City Location",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+        Center(
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                  width: 1,
+                  color: const Color(0xff01825C),
+                ),
+                borderRadius: const BorderRadius.all(Radius.circular(56))),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
+              child: Text(
+                "Park Availability",
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Color(0xff01825C),
+                ),
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget featuresBlock() {
+    return Stack(
+      children: [
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 20),
+          decoration: BoxDecoration(
+              border: Border.all(
+                width: 1,
+                color: const Color(0xffc4c4c4),
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(15))),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 36),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "Client Name *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "Main Site *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "Location Name *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "Address & Street *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "City *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "State *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "Zip *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "Latitude *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "Longitude *",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "Main City Location",
+                        style: TextStyle(
+                            fontSize: labelTextSize, color: Color(0xff757575)),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+        Center(
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                  width: 1,
+                  color: const Color(0xff01825C),
+                ),
+                borderRadius: const BorderRadius.all(Radius.circular(56))),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
+              child: Text(
+                "Park Features",
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Color(0xff01825C),
+                ),
+              ),
+            ),
+          ),
+        )
+      ],
     );
   }
 }
