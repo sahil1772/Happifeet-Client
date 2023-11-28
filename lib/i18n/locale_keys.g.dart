@@ -14,6 +14,7 @@ abstract class  LocaleKeys {
   static const City = 'City';
   static const State = 'State';
   static const Zip = 'Zip';
+  static const Description = 'Description';
   static const Latitude = 'Latitude';
   static const Longitude = 'Longitude';
   static const Main_City_Location = 'Main_City_Location';

@@ -12,6 +12,7 @@
   "City": "City *",
   "State": "State *",
   "Zip": "Zip *",
+  "Description": "Description *",
   "Latitude": "Latitude *",
   "Longitude": "Longitude *",
   "Main_City_Location": "Main City Location"

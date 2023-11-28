@@ -1,0 +1,19 @@
+{
+  "Select_Language": "Выбрать язык",
+  "Park_Images": "Изображения парка",
+  "Park_Info": "Информация о парке",
+  "Park_Availability": "Наличие парка",
+  "Park_Features": "Особенности парка",
+  "Park_Address": "Адрес парка",
+  "Client_Name": "Имя клиента *",
+  "Main_Site": "Основной сайт",
+  "Location_Name": "Название местоположения *",
+  "Address_Street": "Адрес и улица *",
+  "City": "Город *",
+  "State": "Состояние *",
+  "Zip": "Почтовый индекс *",
+  "Description": "Описание *",
+  "Latitude": "Широта *",
+  "Longitude": "Долгота *",
+  "Main_City_Location": "Местоположение главного города"
+}

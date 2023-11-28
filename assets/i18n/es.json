@@ -12,6 +12,7 @@
   "City": "Ciudad *",
   "State": "Estado *",
   "Zip": "Código postal *",
+  "Description": "Descripción *",
   "Latitude": "Latitud *",
   "Longitude": "Longitud *",
   "Main_City_Location": "Ubicación de la ciudad principal"

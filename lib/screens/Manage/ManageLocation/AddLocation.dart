@@ -17,28 +17,48 @@ class AddLocation extends StatefulWidget {
   State<AddLocation> createState() => _AddLocationState();
 }
 
+Map<String, String> getLanguages() {
+  Map<String, String> lang = {};
+  lang.addAll({"en": "English"});
+  lang.addAll({"es": "Español"});
+  lang.addAll({"ru": "Russian"});
+  lang.addAll({"zh": "Chinese"});
+
+  return lang;
+}
+
 class _AddLocationState extends State<AddLocation>
     with SingleTickerProviderStateMixin {
   TabController? _controller;
 
+  Map<String, String> languages = getLanguages();
+
+  List<Map<String, Map<TextField, TextEditingController>>> dataControllers = [];
+
   @override
   void initState() {
     // TODO: implement initState
+    setState(() {
+      context.setLocale(Locale("en"));
 
-    _controller = TabController(length: 2, vsync: this);
+      // context.setLocale(Locale(languages.keys.elementAt(_controller!.index)));
+    });
+    _controller = TabController(length: languages.keys.length, vsync: this);
     _controller!.addListener(() {
       setState(() {
-        switch (_controller!.index) {
-          case 0:
-            context.setLocale(const Locale("en"));
-            break;
-          case 1:
-            context.setLocale(const Locale("es"));
-            break;
-        }
+        // context.setLocale(Locale("en"));
+
+        context.setLocale(Locale(languages.keys.elementAt(_controller!.index)));
       });
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    context.setLocale(Locale("en"));
+    super.dispose();
   }
 
   double? labelTextSize = 14.0;
@@ -117,14 +137,13 @@ class _AddLocationState extends State<AddLocation>
                           labelColor: const Color(0xff49AC43),
                           indicatorColor: const Color(0xff49AC43),
                           tabs: [
-                            Text(
-                              "English".toUpperCase(),
-                              style: TextStyle(
-                                fontSize: labelTextSize,
+                            for (int i = 0; i < languages.keys.length; i++)
+                              Text(
+                                languages.values.elementAt(i).toUpperCase(),
+                                style: TextStyle(
+                                  fontSize: labelTextSize,
+                                ),
                               ),
-                            ),
-                            Text("Español".toUpperCase(),
-                                style: TextStyle(fontSize: labelTextSize))
                           ]),
                       Container(
                         width: MediaQuery.of(context).size.width,
@@ -138,7 +157,9 @@ class _AddLocationState extends State<AddLocation>
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
-                              loadContent(),
+                              _controller!.index == 0
+                                  ? loadContent()
+                                  : otherLanguageFields(),
                             ],
                           ),
                         ),
@@ -430,32 +451,25 @@ class _AddLocationState extends State<AddLocation>
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 16.0),
-                  child: Text(
-                    LocaleKeys.Main_City_Location,
-                    style: TextStyle(
-                        fontSize: labelTextSize,
-                        color: const Color(0xff757575)),
-                  ).tr(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 20.0),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0xffc4c4c4),
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 16),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20.0),
+                      child: Checkbox(
+                        value: false,
+                        onChanged: (value) {},
                       ),
                     ),
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        LocaleKeys.Main_City_Location,
+                        style: TextStyle(
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
+                      ).tr(),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -974,6 +988,217 @@ class _AddLocationState extends State<AddLocation>
             ),
           ),
         )
+      ],
+    );
+  }
+
+  otherLanguageFields() {
+    return Column(
+      children: [
+        Stack(
+          children: [
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 20),
+              decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 1,
+                    color: const Color(0xffc4c4c4),
+                  ),
+                  borderRadius: const BorderRadius.all(Radius.circular(15))),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 48),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    //CLIENT NAME
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        LocaleKeys.Client_Name,
+                        style: TextStyle(
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
+                      ).tr(),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20.0),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0xffc4c4c4),
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 16),
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0xffc4c4c4),
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    //CLIENT LOCATION NAME
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        LocaleKeys.Location_Name,
+                        style: TextStyle(
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
+                      ).tr(),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20.0),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0xffc4c4c4),
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 16),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    //ADDRESS STREET
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        LocaleKeys.Address_Street,
+                        style: TextStyle(
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
+                      ).tr(),
+                    ),
+                    TextField(
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color(0xffc4c4c4),
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 16),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Center(
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      width: 1,
+                      color: const Color(0xff01825C),
+                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(56))),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
+                  child: const Text(
+                    LocaleKeys.Park_Address,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Color(0xff01825C),
+                    ),
+                  ).tr(),
+                ),
+              ),
+            )
+          ],
+        ),
+        Stack(
+          children: [
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 20),
+              decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 1,
+                    color: const Color(0xffc4c4c4),
+                  ),
+                  borderRadius: const BorderRadius.all(Radius.circular(15))),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 48),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    //Description
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        LocaleKeys.Description,
+                        style: TextStyle(
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
+                      ).tr(),
+                    ),
+                    TextField(
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color(0xffc4c4c4),
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 16),
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color(0xffc4c4c4),
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Center(
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      width: 1,
+                      color: const Color(0xff01825C),
+                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(56))),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
+                  child: const Text(
+                    LocaleKeys.Park_Info,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Color(0xff01825C),
+                    ),
+                  ).tr(),
+                ),
+              ),
+            )
+          ],
+        ),
       ],
     );
   }

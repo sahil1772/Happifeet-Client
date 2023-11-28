@@ -1,0 +1,19 @@
+{
+  "Select_Language": "选择语言",
+  "Park_Images": "公园图片",
+  "Park_Info": "公园信息",
+  "Park_Availability": "公园可用性",
+  "Park_Features": "公园特色",
+  "Park_Address": "公园地址",
+  "Client_Name": "客户端名称*",
+  "Main_Site": "主站点",
+  "Location_Name": "位置名称*",
+  "Address_Street": "地址和街道 *",
+  "City": "城市*",
+  "State": "状态*",
+  "Zip": "邮编*",
+  "Description": "描述*",
+  "Latitude": "纬度*",
+  "Longitude": "经度*",
+  "Main_City_Location": "主要城市位置"
+}
