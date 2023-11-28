@@ -18,6 +18,47 @@ class SharedPref {
     return instance;
   }
 
+  /** Access permission **/
+
+  setPermissions() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("locationPermission", true);
+    prefs.setBool("usersPermission", true);
+    prefs.setBool("announcementPermission", true);
+    prefs.setBool("smtpPermission", false);
+
+    log("inside setPermissions");
+  }
+
+  getPermissionlocation() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? data = prefs.getBool("locationPermission");
+    log("inside getPermissionlocation ${data}");
+    return data;
+  }
+
+  getPermissionUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? data = prefs.getBool("usersPermission");
+    log("inside getPermissionUser ${data}");
+    return data;
+  }
+
+  getPermissionAnnouncement() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? data = prefs.getBool("announcementPermission");
+    log("inside getPermissionAnnouncement ${data}");
+
+    return data;
+  }
+
+  Future<bool?> getPermissionSmtp() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? data = prefs.getBool("smtpPermission");
+    log("inside getPermissionSmtp ${data}");
+    return data;
+  }
+
   /** Session management **/
 
   Future checkIfLoggedIn(BuildContext context) async {
@@ -44,7 +85,6 @@ class SharedPref {
     }
   }
 
-
   // setLoginDetail(bool value) async{
   //   SharedPreferences prefs = await SharedPreferences.getInstance();
   //   log("data in login ${value} ");
@@ -58,11 +98,6 @@ class SharedPref {
   //   log("Data in getLoginDetail ${data}");
   //   return data;
   // }
-
-
-
-
-
 
   ClientTheme clientTheme = new ClientTheme();
 
@@ -117,18 +152,10 @@ class SharedPref {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     log("DATA IN saveTheme ${value['text_color']}");
 
-
     clientTheme = ClientTheme.fromJson(value);
 
     prefs.setString("current_city_theme", clientTheme.toString());
 
-
     // log("CURRENT THEME ${(prefs.get("current_city_theme") as CityTheme).toJson()}");
-
-
-
   }
-
 }
-
-

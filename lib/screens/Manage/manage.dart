@@ -1,11 +1,16 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageLocation/AddLocation.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageLocation/manage_location.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageSMTP/manage_smtp_details.dart';
+import 'package:happifeet_client_app/storage/shared_preferences.dart';
 
 import '../../components/HappiFeetAppBar.dart';
+import '../../model/PermissionData.dart';
+import 'ManageUsers/assigned_user_listing.dart';
 
 class ManageWidget extends StatefulWidget{
   @override
@@ -14,8 +19,62 @@ class ManageWidget extends StatefulWidget{
 }
 
 class _ManageWidgetState extends State<ManageWidget>{
+   // List<PermissionData> data = new PermissionData() as List<PermissionData>;
+   bool? isSmtpAllowed  = false;
+   bool? isUsersAllowed  = false;
+   bool? isLocationAllowed = false;
+   bool? isAnnouncementAllowed  = false;
+
+   Future<void> checkPermissions() async {
+
+       isSmtpAllowed = await SharedPref.instance.getPermissionSmtp();
+       isLocationAllowed = await SharedPref.instance.getPermissionlocation();
+       isUsersAllowed = await SharedPref.instance.getPermissionUser();
+       isAnnouncementAllowed = await SharedPref.instance.getPermissionAnnouncement();
+
+     log("value of isSmtpAllowed ${isSmtpAllowed}");
+     log("value of isLocationAllowed ${isLocationAllowed}");
+     log("value of isUsersAllowed ${isUsersAllowed}");
+     log("value of isAnnouncementAllowed ${isAnnouncementAllowed}");
+     setState(() {
+
+     });
+   }
+  @override
+  void initState() {
+    // TODO: implement initState
+    // checkPermissions();
+    SharedPref.instance.setPermissions();
+
+    checkPermissions();
+
+    super.initState();
+  }
+
+  // checkPermissions()  async{
+  //   log("DATAAAAA ${await SharedPref.instance.getPermissionlocation()}");
+  //   if(await SharedPref.instance.getPermissionlocation()){
+  //     data.name = "Manage Location";
+  //     data.img = "assets/images/manage/location.svg";
+  //   } if( await SharedPref.instance.getPermissionUser()){
+  //     data.name = "Manage Users";
+  //     data.img = "assets/images/manage/users.svg";
+  //   } if(await SharedPref.instance.getPermissionAnnouncement()){
+  //     data.name = "Manage Announcement";
+  //     data.img = "assets/images/manage/announcement.svg";
+  //   } if(await SharedPref.instance.getPermissionSmtp()){
+  //     data.name = "Manage SMTP Details";
+  //     data.img = "assets/images/manage/smtp.svg";
+  //   }
+  //   log("AFTER ADDING DATA ${data!.toJson()}");
+  // }
+
+
+
+
   @override
   Widget build(BuildContext context) {
+
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -73,83 +132,92 @@ class _ManageWidgetState extends State<ManageWidget>{
                       padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 22),
                       child: Column(
                         children: [
-                          /** First Row **/
-                         Row(
-                           mainAxisAlignment: MainAxisAlignment.spaceAround,
+                   GridView(
+                       padding: EdgeInsets.all(0),
+                       gridDelegate:  const SliverGridDelegateWithMaxCrossAxisExtent(
+                           maxCrossAxisExtent: 200,
+                           // childAspectRatio: (itemWidth / itemHeight),
+                           childAspectRatio: 0.9,
+                           crossAxisSpacing: 20,
+                           mainAxisSpacing: 30),
+
+                       shrinkWrap: true,
+                       physics: ScrollPhysics(),
+                     children: [
+                       if(isLocationAllowed!)
+                       InkWell(
+                         onTap:(){
+                ManageLocationWidget().gotoManageLocation(context);
+                },
+                         child: Container(
+                           decoration: BoxDecoration(border: Border.all(color: Colors.black12,),borderRadius: BorderRadius.all(Radius.circular(14))),
+                           width: 180,
+                           height: 160,
+                           child: Column(
+                             mainAxisAlignment: MainAxisAlignment.center,
+                             children: [
+                               SvgPicture.asset("assets/images/manage/location.svg"),
+                               SizedBox(height: 5,),
+                               Text("Manage \nLocation",textAlign: TextAlign.center),
+                             ],
+                           ),
+                         ),
+                       ),
+                       if(isUsersAllowed!)
+                         InkWell(
+                           onTap: () {
+                             AssignedUserListing().goToAssignedUserListing(context);
+                    },
+                           child: Container(
+                             decoration: BoxDecoration(border: Border.all(color: Colors.black12),borderRadius: BorderRadius.all(Radius.circular(14),)),
+                             width: 180,
+                             height: 160,
+                             child: Column(
+                               mainAxisAlignment: MainAxisAlignment.center,
+                               children: [
+                                 SvgPicture.asset("assets/images/manage/users.svg"),
+                                 SizedBox(height: 5,),
+                                 Text("Manage \nUsers",textAlign: TextAlign.center),
+                               ],
+                             ),
+                           ),
+                         ),
+                       if(isAnnouncementAllowed!)
+                       Container(
+                         decoration: BoxDecoration(border: Border.all(color: Colors.black12,),borderRadius: BorderRadius.all(Radius.circular(14))),
+                         width: 180,
+                         height: 160,
+                         child: Column(
+                           mainAxisAlignment: MainAxisAlignment.center,
                            children: [
-                             InkWell(
-                               onTap : (){
-                                 ManageLocationWidget().gotoManageLocation(context);
-                               },
-                               child: Container(
-                                 decoration: BoxDecoration(border: Border.all(color: Colors.black12,),borderRadius: BorderRadius.all(Radius.circular(14))),
-                                 width: 180,
-                                 height: 160,
-                                 child: Column(
-                                   mainAxisAlignment: MainAxisAlignment.center,
-                                   children: [
-                                     SvgPicture.asset("assets/images/manage/location.svg"),
-                                     SizedBox(height: 5,),
-                                     Text("Manage \nLocation",textAlign: TextAlign.center),
-                                   ],
-                                 ),
-                               ),
-                             ),
-                             Container(
-                               decoration: BoxDecoration(border: Border.all(color: Colors.black12),borderRadius: BorderRadius.all(Radius.circular(14),)),
-                               width: 180,
-                               height: 160,
-                               child: Column(
-                                 mainAxisAlignment: MainAxisAlignment.center,
-                                 children: [
-                                   SvgPicture.asset("assets/images/manage/users.svg"),
-                                   SizedBox(height: 5,),
-                                   Text("Manage \nUsers",textAlign: TextAlign.center),
-                                 ],
-                               ),
-                             ),
+                             SvgPicture.asset("assets/images/manage/announcement.svg"),
+                             SizedBox(height: 5,),
+                             Text("Manage \nAnnouncement",textAlign: TextAlign.center),
                            ],
                          ),
-                          /** Second Row **/
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(border: Border.all(color: Colors.black12,),borderRadius: BorderRadius.all(Radius.circular(14))),
-                                width: 180,
-                                height: 160,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset("assets/images/manage/location.svg"),
-                                    SizedBox(height: 5,),
-                                    Text("Manage \nAnnouncement",textAlign: TextAlign.center),
-                                  ],
-                                ),
-                              ),
-                              InkWell(
-                                onTap: (){
-                                  ManageSMTPDetails().goToManageSMTPPage(context);
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(border: Border.all(color: Colors.black12),borderRadius: BorderRadius.all(Radius.circular(14),)),
-                                  width: 180,
-                                  height: 160,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      SvgPicture.asset("assets/images/manage/users.svg"),
-                                      SizedBox(height: 5,),
-                                      Text("Manage \nSMTP Details",textAlign: TextAlign.center),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                       ),
+                       if(isSmtpAllowed!)
+                       InkWell(
+                         onTap:(){
+                           ManageSMTPDetails().goToManageSMTPPage(context);
+                         },
+                         child: Container(
+                           decoration: BoxDecoration(border: Border.all(color: Colors.black12),borderRadius: BorderRadius.all(Radius.circular(14),)),
+                           width: 180,
+                           height: 160,
+                           child: Column(
+                             mainAxisAlignment: MainAxisAlignment.center,
+                             children: [
+                               SvgPicture.asset("assets/images/manage/smtp.svg"),
+                               SizedBox(height: 5,),
+                               Text("Manage \nSMTP Details",textAlign: TextAlign.center),
+                             ],
+                           ),
+                         ),
+                       ),
+
+                     ],
+                  )
                         ],
                       ),
                     ),
@@ -161,4 +229,6 @@ class _ManageWidgetState extends State<ManageWidget>{
       ),
     );
   }
+
+
 }

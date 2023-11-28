@@ -174,6 +174,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
                      }else{
                        log("INVALID USERNAME IN LOGIN PAGE");
                      }
+                     SharedPref.instance.setPermissions();
 
 
                      BottomNavigationHappiFeet().goToBottomNavigation(context);
