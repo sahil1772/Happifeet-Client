@@ -36,13 +36,16 @@ class _AddLocationState extends State<AddLocation>
   List<Map<String, Map<TextField, TextEditingController>>> dataControllers = [];
 
   @override
+  void reassemble() {
+    // TODO: implement reassemble
+
+    super.reassemble();
+  }
+
+  @override
   void initState() {
     // TODO: implement initState
-    setState(() {
-      context.setLocale(Locale("en"));
 
-      // context.setLocale(Locale(languages.keys.elementAt(_controller!.index)));
-    });
     _controller = TabController(length: languages.keys.length, vsync: this);
     _controller!.addListener(() {
       setState(() {
@@ -184,6 +187,8 @@ class _AddLocationState extends State<AddLocation>
       ],
     );
   }
+
+  bool isMainCity = false;
 
   Widget addressBlock() {
     return Stack(
@@ -451,25 +456,21 @@ class _AddLocationState extends State<AddLocation>
                     ),
                   ),
                 ),
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 20.0),
-                      child: Checkbox(
-                        value: false,
-                        onChanged: (value) {},
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Text(
-                        LocaleKeys.Main_City_Location,
-                        style: TextStyle(
-                            fontSize: labelTextSize,
-                            color: const Color(0xff757575)),
-                      ).tr(),
-                    ),
-                  ],
+                CheckboxListTile(
+                  controlAffinity: ListTileControlAffinity.leading,
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(
+                    LocaleKeys.Main_City_Location,
+                    style: TextStyle(
+                        fontSize: labelTextSize,
+                        color: const Color(0xff757575)),
+                  ).tr(),
+                  value: isMainCity,
+                  onChanged: (value) {
+                    setState(() {
+                      isMainCity = value!;
+                    });
+                  },
                 ),
               ],
             ),
@@ -533,6 +534,44 @@ class _AddLocationState extends State<AddLocation>
                     ),
                   ],
                 ),
+              ),
+              Padding(
+                padding:
+                const EdgeInsets.symmetric(horizontal: 10, vertical: 36),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "Client Name *",
+                        style: TextStyle(
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding:
+                const EdgeInsets.symmetric(horizontal: 10, vertical: 36),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: Text(
+                        "Client Name *",
+                        style: TextStyle(
+                            fontSize: labelTextSize,
+                            color: const Color(0xff757575)),
+                      ),
+                    ),
+                  ],
+                ),
               )
             ],
           ),
@@ -574,110 +613,42 @@ class _AddLocationState extends State<AddLocation>
                 color: const Color(0xffc4c4c4),
               ),
               borderRadius: const BorderRadius.all(Radius.circular(15))),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 36),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Text(
-                        "Client Name *",
-                        style: TextStyle(
-                            fontSize: labelTextSize,
-                            color: const Color(0xff757575)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Text(
-                        "Main Site *",
-                        style: TextStyle(
-                            fontSize: labelTextSize,
-                            color: const Color(0xff757575)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Text(
-                        "Location Name *",
-                        style: TextStyle(
-                            fontSize: labelTextSize,
-                            color: const Color(0xff757575)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Text(
-                        "Address & Street *",
-                        style: TextStyle(
-                            fontSize: labelTextSize,
-                            color: const Color(0xff757575)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Text(
-                        "City *",
-                        style: TextStyle(
-                            fontSize: labelTextSize,
-                            color: const Color(0xff757575)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Text(
-                        "State *",
-                        style: TextStyle(
-                            fontSize: labelTextSize,
-                            color: const Color(0xff757575)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Text(
-                        "Zip *",
-                        style: TextStyle(
-                            fontSize: labelTextSize,
-                            color: const Color(0xff757575)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Text(
-                        "Latitude *",
-                        style: TextStyle(
-                            fontSize: labelTextSize,
-                            color: const Color(0xff757575)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Text(
-                        "Longitude *",
-                        style: TextStyle(
-                            fontSize: labelTextSize,
-                            color: const Color(0xff757575)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Text(
-                        "Main City Location",
-                        style: TextStyle(
-                            fontSize: labelTextSize,
-                            color: const Color(0xff757575)),
-                      ),
-                    ),
-                  ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 48),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                //Description
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  child: Text(
+                    LocaleKeys.Description,
+                    style: TextStyle(
+                        fontSize: labelTextSize,
+                        color: const Color(0xff757575)),
+                  ).tr(),
                 ),
-              )
-            ],
+                TextField(
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Color(0xffc4c4c4),
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 16),
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Color(0xffc4c4c4),
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
         Center(
