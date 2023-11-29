@@ -47,7 +47,7 @@ class _ManageSMTPDetailsState extends State<ManageSMTPDetails>{
   }
   
   void getSmtpDetail() async{
-    var response = await ApiFactory().getSmtpDetails().getSmtpDetails("smtp", "41");
+    var response = await ApiFactory().getSMTPService().getSmtpDetails("smtp", "41");
     SmtpData = response;
     setinitialData();
     log("SMTP data in smtp page ${SmtpData.first}");

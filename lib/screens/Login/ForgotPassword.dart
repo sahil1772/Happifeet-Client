@@ -151,7 +151,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget>{
                     //     });
 
 
-                    var response = await ApiFactory().sendForgotPasswordDetails().sendForgotPasswordDetails("forgotpassword",email!, "123456");
+                    var response = await ApiFactory().getLoginService().sendForgotPasswordDetails("forgotpassword",email!, "123456");
 
                     log("RESPONSE FORGOT PASSWORD ${response.status}");
                     if(response.status == 1){

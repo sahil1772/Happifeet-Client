@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:happifeet_client_app/model/Login/LoginData.dart';
 
-import '../../model/SuccessResponse.dart';
+import '../../model/BaseResponse.dart';
 import '../interface/interface_login.dart';
 import 'ApiService.dart';
 
@@ -13,7 +13,7 @@ class LoginService implements InterfaceLogin{
 
   /** send forgot password details **/
   @override
-  Future<SuccessResponse> sendForgotPasswordDetails(String task, String username, String new_password) async{
+  Future<BaseResponse> sendForgotPasswordDetails(String task, String username, String new_password) async{
   try{
 
 
@@ -30,17 +30,17 @@ class LoginService implements InterfaceLogin{
     log("this is response sending forgot password data ${response.statusCode}");
 
     if (response.statusCode == 200) {
-      // var data = SuccessResponse.fromJson(json.decode(response.data));
-      var data = List<SuccessResponse>.from(json
+      // var data = BaseResponse.fromJson(json.decode(response.data));
+      var data = List<BaseResponse>.from(json
           .decode(response.data)
-          .map((model) => SuccessResponse.fromJson(model)));
+          .map((model) => BaseResponse.fromJson(model)));
 
       log("forgot password data send successfully");
       return data.first;
     }
     else{
       log("forgot password data sending failed");
-      return SuccessResponse(status: "400",msg: "Response is Faliure");
+      return BaseResponse(status: "400",msg: "Response is Faliure");
     }
 
   }on DioException catch (error) {
@@ -53,7 +53,7 @@ class LoginService implements InterfaceLogin{
 
   /** send login details **/
   @override
-  Future<SuccessResponse> sendLoginDetails(String task, String username, String password) async{
+  Future<BaseResponse> sendLoginDetails(String task, String username, String password) async{
    try{
 
      var map = {
@@ -70,17 +70,17 @@ class LoginService implements InterfaceLogin{
      log("this is response sending login data ${response.statusCode}");
 
      if (response.statusCode == 200) {
-       // var data = SuccessResponse.fromJson(json.decode(response.data));
-       var data = List<SuccessResponse>.from(json
+       // var data = BaseResponse.fromJson(json.decode(response.data));
+       var data = List<BaseResponse>.from(json
            .decode(response.data)
-           .map((model) => SuccessResponse.fromJson(model)));
+           .map((model) => BaseResponse.fromJson(model)));
 
        log("login data send successfully");
        return data.first;
      }
      else{
        log("login data sending failed");
-       return SuccessResponse(status: "400",msg: "Response is Faliure");
+       return BaseResponse(status: "400",msg: "Response is Faliure");
      }
 
    }on DioException catch (error) {

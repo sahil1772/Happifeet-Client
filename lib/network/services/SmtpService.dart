@@ -26,7 +26,7 @@ try{
 
 
   if (response.statusCode == 200) {
-    // var data = SuccessResponse.fromJson(json.decode(response.data));
+    // var data = BaseResponse.fromJson(json.decode(response.data));
     var data = List<SmtpDetails>.from(json
         .decode(response.data)
         .map((model) => SmtpDetails.fromJson(model)));

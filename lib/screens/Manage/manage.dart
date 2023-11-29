@@ -9,7 +9,6 @@ import 'package:happifeet_client_app/screens/Manage/ManageSMTP/manage_smtp_detai
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
 
 import '../../components/HappiFeetAppBar.dart';
-import '../../model/PermissionData.dart';
 import 'ManageUsers/assigned_user_listing.dart';
 
 class ManageWidget extends StatefulWidget{

@@ -27,7 +27,7 @@ class LocationData {
 
   List<String>? parkFeatures;
 
-  List<LocationData>? otherLanguages;
+  List<LocationData>? otherLanguages = [];
 
 
   LocationData(

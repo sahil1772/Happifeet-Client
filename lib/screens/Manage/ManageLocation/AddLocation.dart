@@ -1,12 +1,13 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:happifeet_client_app/i18n/locale_keys.g.dart';
+import 'package:happifeet_client_app/model/BaseResponse.dart';
 import 'package:happifeet_client_app/model/Location/LocationData.dart';
 
 import '../../../components/HappiFeetAppBar.dart';
+import '../../../network/ApiFactory.dart';
 import '../../../utils/ColorParser.dart';
 
 class AddLocation extends StatefulWidget {
@@ -41,15 +42,20 @@ class _AddLocationState extends State<AddLocation>
 
   LocationData? locationData;
 
-  TextEditingController en_clientNameController = TextEditingController();
-  TextEditingController en_locationNameController = TextEditingController();
-  TextEditingController en_addressStreetController = TextEditingController();
-  TextEditingController en_cityController = TextEditingController();
-  TextEditingController en_stateController = TextEditingController();
-  TextEditingController en_zipController = TextEditingController();
-  TextEditingController en_latitudeController = TextEditingController();
-  TextEditingController en_longitudeController = TextEditingController();
-  TextEditingController en_descriptionController = TextEditingController();
+  TextEditingController en_clientNameController =
+      TextEditingController(text: "");
+  TextEditingController en_locationNameController =
+      TextEditingController(text: "");
+  TextEditingController en_addressStreetController =
+      TextEditingController(text: "");
+  TextEditingController en_cityController = TextEditingController(text: "");
+  TextEditingController en_stateController = TextEditingController(text: "");
+  TextEditingController en_zipController = TextEditingController(text: "");
+  TextEditingController en_latitudeController = TextEditingController(text: "");
+  TextEditingController en_longitudeController =
+      TextEditingController(text: "");
+  TextEditingController en_descriptionController =
+      TextEditingController(text: "");
 
   @override
   void reassemble() {
@@ -62,7 +68,7 @@ class _AddLocationState extends State<AddLocation>
   void initState() {
     // TODO: implement initState
     locationData = LocationData(language: "en");
-
+    locationData!.otherLanguages = [];
 
     _controller = TabController(length: languages.keys.length, vsync: this);
     _controller!.addListener(() {
@@ -73,12 +79,11 @@ class _AddLocationState extends State<AddLocation>
       });
     });
 
-
     if (dataControllers.keys
         .contains(languages.keys.elementAt(_controller!.index))) {
       log("ALREADY HAS CONTROLLERS");
       Map<String, TextEditingController>? controllers =
-      dataControllers[languages.keys.elementAt(_controller!.index)];
+          dataControllers[languages.keys.elementAt(_controller!.index)];
       en_clientNameController = controllers!["clientName"]!;
       en_locationNameController = controllers["locationName"]!;
       en_addressStreetController = controllers["address"]!;
@@ -228,12 +233,24 @@ class _AddLocationState extends State<AddLocation>
 
   Widget loadContent() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         addressBlock(),
         imagesBlock(),
         infoBlock(),
         availabilityBlock(),
         featuresBlock(),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 56.0),
+          child: ElevatedButton(
+              onPressed: () {
+                submitDetails();
+              },
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: Text("Submit"),
+              )),
+        )
       ],
     );
   }
@@ -696,6 +713,7 @@ class _AddLocationState extends State<AddLocation>
                   ).tr(),
                 ),
                 TextField(
+                  controller: en_descriptionController,
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderSide: const BorderSide(
@@ -743,16 +761,7 @@ class _AddLocationState extends State<AddLocation>
     );
   }
 
-  var months = List.generate(
-      12,
-      (index) => CheckboxListTile(
-            contentPadding: EdgeInsets.zero,
-            controlAffinity: ListTileControlAffinity.leading,
-            value: false,
-            title: Text(
-                "${DateFormat("MMMM").format(new DateFormat("MM").parse("${(index + 1)}"))}"),
-            onChanged: (value) {},
-          ));
+  bool isChecked = false;
 
   Widget availabilityBlock() {
     return Stack(
@@ -826,15 +835,28 @@ class _AddLocationState extends State<AddLocation>
                 ),
                 showByMonth
                     ? GridView(
-                        padding: EdgeInsets.only(top: 10),
+                        padding: const EdgeInsets.only(top: 10),
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                                 childAspectRatio: 2, crossAxisCount: 2),
-                        children: months,
+                        children: List.generate(12, (index) {
+                          return CheckboxListTile(
+                            contentPadding: EdgeInsets.zero,
+                            controlAffinity: ListTileControlAffinity.leading,
+                            value: isChecked,
+                            title: Text(
+                                "${DateFormat("MMMM").format(new DateFormat("MM").parse("${(index + 1)}"))}"),
+                            onChanged: (value) {
+                              setState(() {
+                                isChecked = value!;
+                              });
+                            },
+                          );
+                        }),
                       )
-                    : SizedBox()
+                    : const SizedBox()
               ],
             ),
           ),
@@ -1009,10 +1031,26 @@ class _AddLocationState extends State<AddLocation>
   }
 
   otherLanguageFields() {
-    TextEditingController? clientNameController = TextEditingController();
-    TextEditingController? locationNameController = TextEditingController();
-    TextEditingController? addressController = TextEditingController();
-    TextEditingController? descriptionController = TextEditingController();
+    bool isEnglishFormFilled = false;
+
+    TextEditingController? clientNameController =
+        TextEditingController(text: "");
+    TextEditingController? locationNameController =
+        TextEditingController(text: "");
+    TextEditingController? addressController = TextEditingController(text: "");
+    TextEditingController? descriptionController =
+        TextEditingController(text: "");
+
+    log("English Form Details :::");
+    for (var element in dataControllers["en"]!.entries) {
+      log("${element.key}", error: element.value.text);
+      if (element.value.text == "") {
+        isEnglishFormFilled = false;
+        break;
+      } else {
+        isEnglishFormFilled = true;
+      }
+    }
 
     if (dataControllers.keys
         .contains(languages.keys.elementAt(_controller!.index))) {
@@ -1035,10 +1073,35 @@ class _AddLocationState extends State<AddLocation>
       });
     }
 
-    log("Controllers ::::: \n $dataControllers");
+    // log("Controllers ::::: \n $dataControllers");
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        !isEnglishFormFilled
+            ? Container(
+                margin: const EdgeInsets.only(bottom: 24),
+                decoration: BoxDecoration(
+                    border: Border.all(width: 1.0, color: Colors.red),
+                    borderRadius: BorderRadius.circular(10)),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 20),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Please fill details in English first.",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.red,
+                            letterSpacing: 0.2),
+                      )
+                    ],
+                  ),
+                ),
+              )
+            : SizedBox(),
         Stack(
           children: [
             Container(
@@ -1247,7 +1310,107 @@ class _AddLocationState extends State<AddLocation>
             )
           ],
         ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 56.0),
+          child: ElevatedButton(
+              onPressed: () {
+                submitDetails();
+              },
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: Text("Submit"),
+              )),
+        )
       ],
     );
+  }
+
+  Future<void> submitDetails() async {
+    bool isValid = checkValidation();
+
+    if (isValid) {
+      if (languages.keys.elementAt(_controller!.index) == "en") {
+        locationData = LocationData(language: "en");
+        locationData!.clientName =
+            dataControllers["en"]?["clientName"]?.value.text;
+        locationData!.locationName =
+            dataControllers["en"]?["locationName"]?.value.text;
+        locationData!.addressStreet =
+            dataControllers["en"]?["address"]?.value.text;
+        locationData!.description =
+            dataControllers["en"]?["description"]?.value.text;
+        locationData!.city = dataControllers["en"]?["city"]?.value.text;
+        locationData!.state = dataControllers["en"]?["state"]?.value.text;
+        locationData!.zip = dataControllers["en"]?["zip"]?.value.text;
+        locationData!.latitude = dataControllers["en"]?["latitude"]?.value.text;
+        locationData!.longitude =
+            dataControllers["en"]!["longitude"]!.value.text;
+      } else {
+        try {
+          log("ADDING DETAILS FOR LANGUAGE ${languages.values.elementAt(_controller!.index)}");
+          LocationData otherLanguage = LocationData(
+              language: languages.keys.elementAt(_controller!.index));
+
+          otherLanguage.description = dataControllers[
+                  languages.keys.elementAt(_controller!.index)]!["description"]!
+              .text;
+          otherLanguage.locationName = dataControllers[languages.keys
+                  .elementAt(_controller!.index)]!["locationName"]!
+              .text;
+          otherLanguage.clientName = dataControllers[
+                  languages.keys.elementAt(_controller!.index)]!["clientName"]!
+              .text;
+          otherLanguage.addressStreet = dataControllers[
+                  languages.keys.elementAt(_controller!.index)]!["address"]!
+              .text;
+
+          log("NEW LANGUAGE ${otherLanguage.toJson()}");
+          if (locationData!.otherLanguages != null) {
+            if (locationData!.otherLanguages!.any((element) =>
+                element.language ==
+                languages.keys.elementAt(_controller!.index))) {
+              locationData!.otherLanguages!.add(otherLanguage);
+            }
+          } else {
+            locationData!.otherLanguages = [];
+            locationData!.otherLanguages!.add(otherLanguage);
+          }
+        } catch (e) {
+          log("ERROR OCCURRED WHILE TRYING TO ADD OTHER LANGUAGE DETAILS : $e");
+        }
+      }
+
+      log("LOCATION DATA SUBMIT ::: ${locationData!.toJson()}");
+
+      BaseResponse response = await ApiFactory()
+          .getLocationService()
+          .submitLocationData(locationData!);
+      if (response.status == 200) {
+        _controller!.index = (_controller!.index + 1 > languages.length - 1)
+            ? _controller!.index
+            : (_controller!.index + 1);
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(response.msg!)));
+      }
+    }
+  }
+
+  bool checkValidation() {
+    bool isFormFilled = true;
+
+    for (var element
+        in dataControllers[languages.keys.elementAt(_controller!.index)]!
+            .entries) {
+      log("${element.key}", error: element.value.text);
+      if (element.value.text == "") {
+        isFormFilled = false;
+        break;
+      } else {
+        isFormFilled = true;
+      }
+    }
+
+    return isFormFilled;
   }
 }

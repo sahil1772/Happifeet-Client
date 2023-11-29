@@ -34,9 +34,10 @@ LocationData _$LocationDataFromJson(Map<String, dynamic> json) => LocationData(
       parkFeatures: (json['parkFeatures'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
-    )..otherLanguages = (json['otherLanguages'] as List<dynamic>?)
-        ?.map((e) => LocationData.fromJson(e as Map<String, dynamic>))
-        .toList();
+      otherLanguages: (json['otherLanguages'] as List<dynamic>?)
+          ?.map((e) => LocationData.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
 
 Map<String, dynamic> _$LocationDataToJson(LocationData instance) =>
     <String, dynamic>{

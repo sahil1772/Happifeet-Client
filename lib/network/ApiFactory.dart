@@ -1,3 +1,5 @@
+import 'package:happifeet_client_app/network/interface/InterfaceLocation.dart';
+import 'package:happifeet_client_app/network/services/LocationService.dart';
 import 'package:happifeet_client_app/network/services/LoginService.dart';
 import 'package:happifeet_client_app/network/services/SmtpService.dart';
 
@@ -12,39 +14,23 @@ class ApiFactory {
   factory ApiFactory() {
     return _instance;
   }
+
   InterfaceLogin? _interfaceLogin;
   InterfaceSmtp? _interfaceSmtp;
+  InterfaceLocation? _interfaceLocation;
 
-  InterfaceSmtp getSmtpDetails(){
-    if (_interfaceSmtp == null) {
-      _interfaceSmtp = SmtpService();
-    }
+  InterfaceSmtp getSMTPService() {
+    _interfaceSmtp ??= SmtpService();
     return _interfaceSmtp!;
   }
 
-
-
-
-  InterfaceLogin sendForgotPasswordDetails(){
-    if (_interfaceLogin == null) {
-      _interfaceLogin = LoginService();
-    }
-    return _interfaceLogin!;
+  InterfaceLocation getLocationService() {
+    _interfaceLocation ??= LocationService();
+    return _interfaceLocation!;
   }
 
-
-
-  InterfaceLogin sendLoginDetails(){
-    if (_interfaceLogin == null) {
-      _interfaceLogin = LoginService();
-    }
+  InterfaceLogin getLoginService() {
+    _interfaceLogin ??= LoginService();
     return _interfaceLogin!;
   }
-
-
-
-
-
 }
-
-
