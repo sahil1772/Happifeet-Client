@@ -10,7 +10,7 @@ class OtpPageWidget extends StatefulWidget{
   const OtpPageWidget({super.key});
 
   goToOtpPage(BuildContext context){
-    Navigator.push(context, MaterialPageRoute(builder: (_) => OtpPageWidget()));
+    Navigator.push(context, MaterialPageRoute(builder: (_) => const OtpPageWidget()));
   }
 
   @override
@@ -19,7 +19,7 @@ class OtpPageWidget extends StatefulWidget{
 }
 
 class _OtpPageWidgetState extends State<OtpPageWidget>{
-  TextEditingController otpController = new TextEditingController();
+  TextEditingController otpController = TextEditingController();
   EmailOTP myauth = EmailOTP();
   @override
   Widget build(BuildContext context) {
@@ -34,20 +34,20 @@ class _OtpPageWidgetState extends State<OtpPageWidget>{
               crossAxisAlignment: CrossAxisAlignment.center,
               // mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 80,),
+                const SizedBox(height: 80,),
                 Center(child: Image.asset("assets/images/login/logo.png")),
-                SizedBox(height: 30,),
-                Text("Enter OTP",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
-                SizedBox(height: 10,),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                const SizedBox(height: 30,),
+                const Text("Enter OTP",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
+                const SizedBox(height: 10,),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24),
                   child: Text("Enter the 4 Digits Code That You Have Received on Your Email",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w400) ,textAlign: TextAlign.center),
                 ),
-                SizedBox(height: 40,),
+                const SizedBox(height: 40,),
 
                /** OTP field **/
                 Padding(
-                  padding:  EdgeInsets.symmetric(horizontal: 24),
+                  padding:  const EdgeInsets.symmetric(horizontal: 24),
                   child: PinCodeTextField(
                     controller: otpController,
                     appContext: context,
@@ -72,7 +72,7 @@ class _OtpPageWidgetState extends State<OtpPageWidget>{
                 // SizedBox(height: 30,),
 
                RichText(
-                   text: TextSpan(
+                   text: const TextSpan(
                      children: [
                        TextSpan(
                          text: 'Didn’t Receive Code ',
@@ -86,10 +86,10 @@ class _OtpPageWidgetState extends State<OtpPageWidget>{
                      ]
                    ),),
 
-                SizedBox(height: 30,),
+                const SizedBox(height: 30,),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    fixedSize: Size(320, 51),
+                    fixedSize: const Size(320, 51),
                     backgroundColor: ColorParser().hexToColor("#01825C"),
 
                     // shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -117,7 +117,7 @@ class _OtpPageWidgetState extends State<OtpPageWidget>{
 
 
 
-                  child: Text("Continue",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: Colors.white)),)
+                  child: const Text("Continue",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: Colors.white)),)
                 // SvgPicture.asset("assets/images/login/logo.svg"),
               ],
             ),

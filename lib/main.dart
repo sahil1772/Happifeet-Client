@@ -11,7 +11,7 @@ void main() async{
   await EasyLocalization.ensureInitialized();
   runApp(
       EasyLocalization(
-          supportedLocales: [
+          supportedLocales: const [
             Locale('en'),
             Locale('es'),
             Locale('ru'),
@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
         ),
         canvasColor: Colors.transparent,
 
-        colorScheme: ColorScheme.fromSeed(seedColor: from(Color(0xff49AC43))),
+        colorScheme: ColorScheme.fromSeed(seedColor: from(const Color(0xff49AC43))),
         useMaterial3: true,
       ),
       home: const SplashScreen(),

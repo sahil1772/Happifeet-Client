@@ -1,4 +1,3 @@
-import 'package:happifeet_client_app/model/Login/LoginData.dart';
 
 import '../../model/BaseResponse.dart';
 

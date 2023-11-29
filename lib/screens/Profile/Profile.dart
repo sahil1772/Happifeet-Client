@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -6,6 +5,8 @@ import '../../components/HappiFeetAppBar.dart';
 import '../../utils/ColorParser.dart';
 
 class ProfileWidget extends StatefulWidget{
+  const ProfileWidget({super.key});
+
   @override
   State<ProfileWidget> createState() => _ProfileWidgetState();
 
@@ -29,9 +30,9 @@ class _ProfileWidgetState extends State<ProfileWidget>{
                   end: Alignment.bottomRight,
                   colors: [Colors.green, Colors.white],
                 )),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20,top: 140),
-              child: const Column(
+            child: const Padding(
+              padding: EdgeInsets.only(left: 20,top: 140),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
@@ -60,7 +61,7 @@ class _ProfileWidgetState extends State<ProfileWidget>{
               builder:
                   (BuildContext context, ScrollController scrollController) {
                 return Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: const BoxDecoration(
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(25),
@@ -73,16 +74,16 @@ class _ProfileWidgetState extends State<ProfileWidget>{
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                         Text("Name",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w500),),
-                         Text("John Wick",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400)),
-                          SizedBox(
+                         const Text("Name",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w500),),
+                         const Text("John Wick",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400)),
+                          const SizedBox(
                             height: 20,
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Current Password"),
-                              SizedBox(height: 8,),
+                              const Text("Current Password"),
+                              const SizedBox(height: 8,),
                               TextField(
 
                                   onChanged: (value){
@@ -93,7 +94,7 @@ class _ProfileWidgetState extends State<ProfileWidget>{
                                     filled: true,
                                     fillColor: Colors.white,
                                     // labelText: labelText,
-                                    hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                                    hintStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                                     // errorText: getEmailError(),
                                     focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
@@ -107,14 +108,14 @@ class _ProfileWidgetState extends State<ProfileWidget>{
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("New Password"),
-                              SizedBox(height: 8,),
+                              const Text("New Password"),
+                              const SizedBox(height: 8,),
                               TextField(
 
                                   onChanged: (value){
@@ -125,7 +126,7 @@ class _ProfileWidgetState extends State<ProfileWidget>{
                                     filled: true,
                                     fillColor: Colors.white,
                                     // labelText: labelText,
-                                    hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                                    hintStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                                     // errorText: getEmailError(),
                                     focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
@@ -139,14 +140,14 @@ class _ProfileWidgetState extends State<ProfileWidget>{
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Confirm Password"),
-                              SizedBox(height: 8,),
+                              const Text("Confirm Password"),
+                              const SizedBox(height: 8,),
                               TextField(
 
                                   onChanged: (value){
@@ -157,7 +158,7 @@ class _ProfileWidgetState extends State<ProfileWidget>{
                                     filled: true,
                                     fillColor: Colors.white,
                                     // labelText: labelText,
-                                    hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                                    hintStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                                     // errorText: getEmailError(),
                                     focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
@@ -171,7 +172,7 @@ class _ProfileWidgetState extends State<ProfileWidget>{
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                         ],

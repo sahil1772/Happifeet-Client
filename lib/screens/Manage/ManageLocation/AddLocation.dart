@@ -847,7 +847,7 @@ class _AddLocationState extends State<AddLocation>
                             controlAffinity: ListTileControlAffinity.leading,
                             value: isChecked,
                             title: Text(
-                                "${DateFormat("MMMM").format(new DateFormat("MM").parse("${(index + 1)}"))}"),
+                                DateFormat("MMMM").format(DateFormat("MM").parse("${(index + 1)}"))),
                             onChanged: (value) {
                               setState(() {
                                 isChecked = value!;
@@ -1043,7 +1043,7 @@ class _AddLocationState extends State<AddLocation>
 
     log("English Form Details :::");
     for (var element in dataControllers["en"]!.entries) {
-      log("${element.key}", error: element.value.text);
+      log(element.key, error: element.value.text);
       if (element.value.text == "") {
         isEnglishFormFilled = false;
         break;
@@ -1101,7 +1101,7 @@ class _AddLocationState extends State<AddLocation>
                   ),
                 ),
               )
-            : SizedBox(),
+            : const SizedBox(),
         Stack(
           children: [
             Container(
@@ -1402,7 +1402,7 @@ class _AddLocationState extends State<AddLocation>
     for (var element
         in dataControllers[languages.keys.elementAt(_controller!.index)]!
             .entries) {
-      log("${element.key}", error: element.value.text);
+      log(element.key, error: element.value.text);
       if (element.value.text == "") {
         isFormFilled = false;
         break;

@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,7 +17,7 @@ class SharedPref {
     return instance;
   }
 
-  /** Access permission **/
+  /// Access permission
 
   setPermissions() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -33,21 +32,21 @@ class SharedPref {
   getPermissionlocation() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? data = prefs.getBool("locationPermission");
-    log("inside getPermissionlocation ${data}");
+    log("inside getPermissionlocation $data");
     return data;
   }
 
   getPermissionUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? data = prefs.getBool("usersPermission");
-    log("inside getPermissionUser ${data}");
+    log("inside getPermissionUser $data");
     return data;
   }
 
   getPermissionAnnouncement() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? data = prefs.getBool("announcementPermission");
-    log("inside getPermissionAnnouncement ${data}");
+    log("inside getPermissionAnnouncement $data");
 
     return data;
   }
@@ -55,17 +54,17 @@ class SharedPref {
   Future<bool?> getPermissionSmtp() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? data = prefs.getBool("smtpPermission");
-    log("inside getPermissionSmtp ${data}");
+    log("inside getPermissionSmtp $data");
     return data;
   }
 
-  /** Session management **/
+  /// Session management
 
   Future checkIfLoggedIn(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool isLogin = (prefs.getBool('loggedIn') ?? false);
     // bool? _seen = await prefs.setBool('seen',false);
-    log("VALUE OF isLogin ${isLogin}");
+    log("VALUE OF isLogin $isLogin");
 
     if (isLogin) {
       log("inside LoggedIn");
@@ -80,7 +79,7 @@ class SharedPref {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => LoginPageWidget(),
+            builder: (context) => const LoginPageWidget(),
           ));
     }
   }
@@ -99,7 +98,7 @@ class SharedPref {
   //   return data;
   // }
 
-  ClientTheme clientTheme = new ClientTheme();
+  ClientTheme clientTheme = ClientTheme();
 
   createTheme(String key, String values) {
     switch (key) {
@@ -143,11 +142,10 @@ class SharedPref {
   }
 
   ClientTheme getCityTheme() {
-    return this.clientTheme;
+    return clientTheme;
   }
 
   saveTheme(Map<String, dynamic> value) async {
-    Map<String, dynamic> data;
     log("type of data ${value.runtimeType}");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     log("DATA IN saveTheme ${value['text_color']}");

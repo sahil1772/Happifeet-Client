@@ -1,9 +1,7 @@
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:happifeet_client_app/screens/Manage/ManageLocation/AddLocation.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageLocation/manage_location.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageSMTP/manage_smtp_details.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
@@ -12,6 +10,8 @@ import '../../components/HappiFeetAppBar.dart';
 import 'ManageUsers/assigned_user_listing.dart';
 
 class ManageWidget extends StatefulWidget{
+  const ManageWidget({super.key});
+
   @override
   State<ManageWidget> createState() => _ManageWidgetState();
 
@@ -31,10 +31,10 @@ class _ManageWidgetState extends State<ManageWidget>{
        isUsersAllowed = await SharedPref.instance.getPermissionUser();
        isAnnouncementAllowed = await SharedPref.instance.getPermissionAnnouncement();
 
-     log("value of isSmtpAllowed ${isSmtpAllowed}");
-     log("value of isLocationAllowed ${isLocationAllowed}");
-     log("value of isUsersAllowed ${isUsersAllowed}");
-     log("value of isAnnouncementAllowed ${isAnnouncementAllowed}");
+     log("value of isSmtpAllowed $isSmtpAllowed");
+     log("value of isLocationAllowed $isLocationAllowed");
+     log("value of isUsersAllowed $isUsersAllowed");
+     log("value of isAnnouncementAllowed $isAnnouncementAllowed");
      setState(() {
 
      });
@@ -89,9 +89,9 @@ class _ManageWidgetState extends State<ManageWidget>{
                   end: Alignment.bottomRight,
                   colors: [Colors.green, Colors.white],
                 )),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20,top: 140),
-              child: const Column(
+            child: const Padding(
+              padding: EdgeInsets.only(left: 20,top: 140),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
@@ -132,7 +132,7 @@ class _ManageWidgetState extends State<ManageWidget>{
                       child: Column(
                         children: [
                    GridView(
-                       padding: EdgeInsets.all(0),
+                       padding: const EdgeInsets.all(0),
                        gridDelegate:  const SliverGridDelegateWithMaxCrossAxisExtent(
                            maxCrossAxisExtent: 200,
                            // childAspectRatio: (itemWidth / itemHeight),
@@ -141,23 +141,23 @@ class _ManageWidgetState extends State<ManageWidget>{
                            mainAxisSpacing: 30),
 
                        shrinkWrap: true,
-                       physics: ScrollPhysics(),
+                       physics: const ScrollPhysics(),
                      children: [
                        if(isLocationAllowed!)
                        InkWell(
                          onTap:(){
-                ManageLocationWidget().gotoManageLocation(context);
+                const ManageLocationWidget().gotoManageLocation(context);
                 },
                          child: Container(
-                           decoration: BoxDecoration(border: Border.all(color: Colors.black12,),borderRadius: BorderRadius.all(Radius.circular(14))),
+                           decoration: BoxDecoration(border: Border.all(color: Colors.black12,),borderRadius: const BorderRadius.all(Radius.circular(14))),
                            width: 180,
                            height: 160,
                            child: Column(
                              mainAxisAlignment: MainAxisAlignment.center,
                              children: [
                                SvgPicture.asset("assets/images/manage/location.svg"),
-                               SizedBox(height: 5,),
-                               Text("Manage \nLocation",textAlign: TextAlign.center),
+                               const SizedBox(height: 5,),
+                               const Text("Manage \nLocation",textAlign: TextAlign.center),
                              ],
                            ),
                          ),
@@ -165,51 +165,51 @@ class _ManageWidgetState extends State<ManageWidget>{
                        if(isUsersAllowed!)
                          InkWell(
                            onTap: () {
-                             AssignedUserListing().goToAssignedUserListing(context);
+                             const AssignedUserListing().goToAssignedUserListing(context);
                     },
                            child: Container(
-                             decoration: BoxDecoration(border: Border.all(color: Colors.black12),borderRadius: BorderRadius.all(Radius.circular(14),)),
+                             decoration: BoxDecoration(border: Border.all(color: Colors.black12),borderRadius: const BorderRadius.all(Radius.circular(14),)),
                              width: 180,
                              height: 160,
                              child: Column(
                                mainAxisAlignment: MainAxisAlignment.center,
                                children: [
                                  SvgPicture.asset("assets/images/manage/users.svg"),
-                                 SizedBox(height: 5,),
-                                 Text("Manage \nUsers",textAlign: TextAlign.center),
+                                 const SizedBox(height: 5,),
+                                 const Text("Manage \nUsers",textAlign: TextAlign.center),
                                ],
                              ),
                            ),
                          ),
                        if(isAnnouncementAllowed!)
                        Container(
-                         decoration: BoxDecoration(border: Border.all(color: Colors.black12,),borderRadius: BorderRadius.all(Radius.circular(14))),
+                         decoration: BoxDecoration(border: Border.all(color: Colors.black12,),borderRadius: const BorderRadius.all(Radius.circular(14))),
                          width: 180,
                          height: 160,
                          child: Column(
                            mainAxisAlignment: MainAxisAlignment.center,
                            children: [
                              SvgPicture.asset("assets/images/manage/announcement.svg"),
-                             SizedBox(height: 5,),
-                             Text("Manage \nAnnouncement",textAlign: TextAlign.center),
+                             const SizedBox(height: 5,),
+                             const Text("Manage \nAnnouncement",textAlign: TextAlign.center),
                            ],
                          ),
                        ),
                        if(isSmtpAllowed!)
                        InkWell(
                          onTap:(){
-                           ManageSMTPDetails().goToManageSMTPPage(context);
+                           const ManageSMTPDetails().goToManageSMTPPage(context);
                          },
                          child: Container(
-                           decoration: BoxDecoration(border: Border.all(color: Colors.black12),borderRadius: BorderRadius.all(Radius.circular(14),)),
+                           decoration: BoxDecoration(border: Border.all(color: Colors.black12),borderRadius: const BorderRadius.all(Radius.circular(14),)),
                            width: 180,
                            height: 160,
                            child: Column(
                              mainAxisAlignment: MainAxisAlignment.center,
                              children: [
                                SvgPicture.asset("assets/images/manage/smtp.svg"),
-                               SizedBox(height: 5,),
-                               Text("Manage \nSMTP Details",textAlign: TextAlign.center),
+                               const SizedBox(height: 5,),
+                               const Text("Manage \nSMTP Details",textAlign: TextAlign.center),
                              ],
                            ),
                          ),

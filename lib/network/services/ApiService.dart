@@ -1,8 +1,6 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:dio/io.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 // var base_url = "http://demo.imageonline.in/keephappifeet/statistics/mobileApi.php";
@@ -26,10 +24,10 @@ class NetworkClient implements InterceptorsWrapper {
   final Dio dio = Dio(
     BaseOptions(
         maxRedirects: 2,
-        sendTimeout: Duration(seconds: 90000),
+        sendTimeout: const Duration(seconds: 90000),
         baseUrl: base_url,
-        connectTimeout: Duration(seconds: 10000),
-        receiveTimeout: Duration(seconds: 10000),
+        connectTimeout: const Duration(seconds: 10000),
+        receiveTimeout: const Duration(seconds: 10000),
         contentType: "multipart/form-data"
       // headers: <String, dynamic>{"User-agent": Jiffy().dateTime}
     ),
@@ -70,7 +68,7 @@ class NetworkClient implements InterceptorsWrapper {
   }
 
   @override
-  void onError(DioError err, ErrorInterceptorHandler handler) {
+  void onError(DioException err, ErrorInterceptorHandler handler) {
     log("Interceptor $err");
     return handler.next(err);
   }

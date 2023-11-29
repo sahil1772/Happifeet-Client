@@ -4,7 +4,7 @@ part 'BaseResponse.g.dart';
 
 @JsonSerializable()
 class BaseResponse {
-  dynamic? status;
+  dynamic status;
   String? msg;
 
   BaseResponse(

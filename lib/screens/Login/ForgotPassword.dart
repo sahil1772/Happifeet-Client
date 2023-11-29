@@ -14,7 +14,7 @@ class ForgotPasswordWidget extends StatefulWidget{
   const ForgotPasswordWidget({super.key});
 
   goToForgotPasswordPage(BuildContext context){
-    Navigator.push(context, MaterialPageRoute(builder: (_) => ForgotPasswordWidget() ));
+    Navigator.push(context, MaterialPageRoute(builder: (_) => const ForgotPasswordWidget() ));
   }
 
 
@@ -58,16 +58,16 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget>{
               crossAxisAlignment: CrossAxisAlignment.center,
               // mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 80,),
+                const SizedBox(height: 80,),
                 Center(child: Image.asset("assets/images/login/logo.png")),
-                SizedBox(height: 30,),
-               Text("Forgot Password",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
-                SizedBox(height: 10,),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                const SizedBox(height: 30,),
+               const Text("Forgot Password",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
+                const SizedBox(height: 10,),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24),
                   child: Text("Enter Your Email id For The Verification Process We Will Send 4 Digits Code to Your Email",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w400) ,textAlign: TextAlign.center),
                 ),
-                SizedBox(height: 30,),
+                const SizedBox(height: 30,),
                 TextField(
                   onChanged: (value){
                     setEmailError(EmailValidator.validate(value)
@@ -84,7 +84,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget>{
                       // labelText: labelText,
 
                       hintText: 'Email ID',
-                      hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                      hintStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                       errorText: getEmailError(),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -96,12 +96,12 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget>{
                               width: 1, color: ColorParser().hexToColor("#D7D7D7"))),
                     )
                 ),
-                SizedBox(height: 10,),
+                const SizedBox(height: 10,),
 
-                SizedBox(height: 30,),
+                const SizedBox(height: 30,),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    fixedSize: Size(320, 51),
+                    fixedSize: const Size(320, 51),
                     backgroundColor: ColorParser().hexToColor("#01825C"),
 
                     // shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -129,9 +129,9 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget>{
                         ));
 
                         Future.delayed(
-                            Duration(seconds: 5),
+                            const Duration(seconds: 5),
                                 () {
-                              OtpPageWidget().goToOtpPage(context);
+                              const OtpPageWidget().goToOtpPage(context);
                             });
 
 
@@ -167,7 +167,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget>{
 
 
                   },
-                  child: Text("Get OTP",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: Colors.white)),)
+                  child: const Text("Get OTP",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: Colors.white)),)
                 // SvgPicture.asset("assets/images/login/logo.svg"),
               ],
             ),

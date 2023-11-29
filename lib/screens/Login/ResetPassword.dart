@@ -1,15 +1,16 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../utils/ColorParser.dart';
 
 class ResetPasswordWidget extends StatefulWidget{
+  const ResetPasswordWidget({super.key});
+
   @override
   State<ResetPasswordWidget> createState() => _ResetPasswordWidgetState();
 
   goToResetPasswordPage(BuildContext context){
-    Navigator.push(context, MaterialPageRoute(builder: (_) => ResetPasswordWidget()));
+    Navigator.push(context, MaterialPageRoute(builder: (_) => const ResetPasswordWidget()));
   }
 
 
@@ -30,14 +31,14 @@ class _ResetPasswordWidgetState extends State<ResetPasswordWidget>{
               crossAxisAlignment: CrossAxisAlignment.center,
               // mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 80,),
+                const SizedBox(height: 80,),
                 Center(child: Image.asset("assets/images/login/logo.png")),
-                SizedBox(height: 10,),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                const SizedBox(height: 10,),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24),
                   child: Text("Set The New Password For Your So You Can Login and Access ",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w400) ,textAlign: TextAlign.center),
                 ),
-                SizedBox(height: 30,),
+                const SizedBox(height: 30,),
                 TextField(
                     onChanged: (value){
 
@@ -48,7 +49,7 @@ class _ResetPasswordWidgetState extends State<ResetPasswordWidget>{
                       fillColor: Colors.white,
                       // labelText: labelText,
                       hintText: 'Email',
-                      hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                      hintStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
 
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -60,7 +61,7 @@ class _ResetPasswordWidgetState extends State<ResetPasswordWidget>{
                               width: 1, color: ColorParser().hexToColor("#D7D7D7"))),
                     )
                 ),
-                SizedBox(height: 30,),
+                const SizedBox(height: 30,),
                 TextField(
                     obscureText: true,
                     decoration: InputDecoration(
@@ -69,7 +70,7 @@ class _ResetPasswordWidgetState extends State<ResetPasswordWidget>{
                       // labelText: labelText,
 
                       hintText: 'Password',
-                      hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                      hintStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                       // errorText: getEmailError(),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -82,10 +83,10 @@ class _ResetPasswordWidgetState extends State<ResetPasswordWidget>{
                     )
                 ),
 
-                SizedBox(height: 30,),
+                const SizedBox(height: 30,),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    fixedSize: Size(320, 51),
+                    fixedSize: const Size(320, 51),
                     backgroundColor: ColorParser().hexToColor("#01825C"),
 
                     // shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -98,7 +99,7 @@ class _ResetPasswordWidgetState extends State<ResetPasswordWidget>{
                   onPressed: () {
                     // OtpPageWidget().goToOtpPage(context);
                   },
-                  child: Text("Login",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: Colors.white)),)
+                  child: const Text("Login",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: Colors.white)),)
                 // SvgPicture.asset("assets/images/login/logo.svg"),
               ],
             ),

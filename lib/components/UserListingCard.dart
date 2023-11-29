@@ -1,9 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
 
 class UserListingCard extends StatefulWidget{
+  const UserListingCard({super.key});
+
   @override
   State<UserListingCard> createState() => _UserListingCardState();
 
@@ -18,7 +19,7 @@ class _UserListingCardState extends State<UserListingCard>{
       child: Container(
         width: MediaQuery.of(context).size.width,
         // padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 10),
-        padding: EdgeInsets.only(left: 10,top: 0,bottom: 0,right: 0),
+        padding: const EdgeInsets.only(left: 10,top: 0,bottom: 0,right: 0),
         // margin: const EdgeInsets.symmetric(vertical: 8,horizontal: 8),
         margin:  const EdgeInsets.symmetric(vertical: 8,horizontal: 8),
         decoration: BoxDecoration(
@@ -26,7 +27,7 @@ class _UserListingCardState extends State<UserListingCard>{
           // border: Border.all(
           //   color: Colors.black,
           // ),
-          boxShadow: [BoxShadow(blurRadius: 3,color: Colors.black12,spreadRadius: 2),],
+          boxShadow: const [BoxShadow(blurRadius: 3,color: Colors.black12,spreadRadius: 2),],
           borderRadius: BorderRadius.circular(10),
         ),
 
@@ -69,18 +70,18 @@ class _UserListingCardState extends State<UserListingCard>{
                                 fontWeight: FontWeight.w500,
                                 letterSpacing: 0.5),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 15,
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(vertical: 1.0),
+                            padding: const EdgeInsets.symmetric(vertical: 1.0),
                             child: Row(
                               children: [
                                 SvgPicture.asset("assets/images/manageUser/mail.svg"),
-                                SizedBox(
+                                const SizedBox(
                                   width: 15,
                                 ),
-                                Text(
+                                const Text(
                                   'tester7701@gmail.com',
                                   softWrap: true,
                                   maxLines: 1,
@@ -90,18 +91,18 @@ class _UserListingCardState extends State<UserListingCard>{
                               ],
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(vertical: 1.0),
+                            padding: const EdgeInsets.symmetric(vertical: 1.0),
                             child: Row(
                               children: [
                                 SvgPicture.asset("assets/images/manageUser/call.svg"),
-                                SizedBox(
+                                const SizedBox(
                                   width: 15,
                                 ),
-                                Text(
+                                const Text(
                                   '8788888888',
                                   softWrap: true,
                                   maxLines: 1,
@@ -111,10 +112,10 @@ class _UserListingCardState extends State<UserListingCard>{
                               ],
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 15,
                           ),
-                          Padding(
+                          const Padding(
                             padding: EdgeInsets.symmetric(vertical: 1.0),
                             child: Row(
                               children: [
@@ -136,7 +137,7 @@ class _UserListingCardState extends State<UserListingCard>{
                       ),
                     ),
                     // SizedBox(width: 10),
-                    SizedBox(width: 35,),
+                    const SizedBox(width: 35,),
 
 
                   ],
@@ -156,13 +157,13 @@ class _UserListingCardState extends State<UserListingCard>{
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Divider(color: Colors.grey.shade200),
-                    SizedBox(height: 8,),
+                    const SizedBox(height: 8,),
                     SvgPicture.asset("assets/images/location/editing.svg"),
-                    SizedBox(height: 8,),
+                    const SizedBox(height: 8,),
                     Divider(color: Colors.grey.shade200),
-                    SizedBox(height: 8,),
+                    const SizedBox(height: 8,),
                     SvgPicture.asset("assets/images/location/delete.svg"),
-                    SizedBox(height: 8,),
+                    const SizedBox(height: 8,),
                     Divider(color: Colors.grey.shade200),
 
 

@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:happifeet_client_app/model/Login/LoginData.dart';
 
 import '../../model/BaseResponse.dart';
 import '../interface/interface_login.dart';
@@ -11,7 +10,7 @@ import 'ApiService.dart';
 class LoginService implements InterfaceLogin{
 
 
-  /** send forgot password details **/
+  ///send forgot password details
   @override
   Future<BaseResponse> sendForgotPasswordDetails(String task, String username, String new_password) async{
   try{
@@ -25,7 +24,7 @@ class LoginService implements InterfaceLogin{
 
     var response =
         await NetworkClient().dio.post(base_url,data: FormData.fromMap(map));
-    log("this is response of forgot password ${response}");
+    log("this is response of forgot password $response");
 
     log("this is response sending forgot password data ${response.statusCode}");
 
@@ -51,7 +50,7 @@ class LoginService implements InterfaceLogin{
   }
 
 
-  /** send login details **/
+  /// send login details
   @override
   Future<BaseResponse> sendLoginDetails(String task, String username, String password) async{
    try{
@@ -64,7 +63,7 @@ class LoginService implements InterfaceLogin{
 
      var response =
          await NetworkClient().dio.post(base_url,data: FormData.fromMap(map));
-     log("this is response of login data ${response}");
+     log("this is response of login data $response");
 
 
      log("this is response sending login data ${response.statusCode}");

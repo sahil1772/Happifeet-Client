@@ -9,7 +9,7 @@ import 'ApiService.dart';
 
 class SmtpService implements InterfaceSmtp{
 
-  /** get SMTP data **/
+  /// get SMTP data
 
 
   @override
@@ -22,7 +22,7 @@ try{
 
   var response =
       await NetworkClient().dio.post(base_url,data: FormData.fromMap(map));
-  log("this is response of forgot password ${response}");
+  log("this is response of forgot password $response");
 
 
   if (response.statusCode == 200) {

@@ -4,10 +4,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:happifeet_client_app/screens/Manage/ManageSMTP/manage_smtp_details.dart';
 
 import '../storage/shared_preferences.dart';
-import 'Login/LoginPage.dart';
 
 
 

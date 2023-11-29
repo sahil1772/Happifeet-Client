@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../components/HappiFeetAppBar.dart';
@@ -6,11 +5,13 @@ import '../../../components/UserListingCard.dart';
 import '../../../utils/ColorParser.dart';
 
 class AssignedUserListing extends StatefulWidget{
+  const AssignedUserListing({super.key});
+
   @override
   State<AssignedUserListing> createState() => _AssignedUserListingState();
 
   goToAssignedUserListing(BuildContext context){
-    Navigator.push(context, MaterialPageRoute(builder: (_) => AssignedUserListing() ));
+    Navigator.push(context, MaterialPageRoute(builder: (_) => const AssignedUserListing() ));
   }
 
 }
@@ -36,7 +37,7 @@ class _AssignedUserListingState extends State<AssignedUserListing>{
                 // SizedBox(height: 105),
                 Padding(
                   padding:  EdgeInsets.only(top: MediaQuery.of(context).size.height/8),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
@@ -63,8 +64,8 @@ class _AssignedUserListingState extends State<AssignedUserListing>{
               builder:
                   (BuildContext context, ScrollController scrollController) {
                 return Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  decoration:  BoxDecoration(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration:  const BoxDecoration(
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(25),
                           topRight: Radius.circular(25)),
@@ -88,9 +89,9 @@ class _AssignedUserListingState extends State<AssignedUserListing>{
                                       onChanged: (value) {
                                         // filterSearchResults(value);
                                       },
-                                      style: TextStyle(fontSize: 16),
+                                      style: const TextStyle(fontSize: 16),
                                       decoration: InputDecoration(
-                                        prefixIcon: Icon(Icons.search),
+                                        prefixIcon: const Icon(Icons.search),
                                         prefixIconColor: ColorParser().hexToColor("#1A7C52"),
                                         labelText: 'Search',
                                         // labelText: widget.selectedLanguage == "1"
@@ -99,7 +100,7 @@ class _AssignedUserListingState extends State<AssignedUserListing>{
                                         labelStyle: TextStyle(color: ColorParser().hexToColor("#9E9E9E")),
 
                                         focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
+                                            borderSide: const BorderSide(
                                               color: Colors.grey,
                                               width: 1,
 
@@ -107,7 +108,7 @@ class _AssignedUserListingState extends State<AssignedUserListing>{
                                             borderRadius: BorderRadius.circular(10)
                                         ),
                                         enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
+                                            borderSide: const BorderSide(
                                               width: 1,
                                               color:  Colors.grey,),
                                             borderRadius: BorderRadius.circular(10)
@@ -127,15 +128,15 @@ class _AssignedUserListingState extends State<AssignedUserListing>{
                           child: ListView.separated(
                             padding: EdgeInsets.zero,
 
-                            physics: ScrollPhysics(),
+                            physics: const ScrollPhysics(),
                             itemCount: 10,
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
-                              return UserListingCard();
-                            }, separatorBuilder: (BuildContext context, int index) { return SizedBox(height: 8,); },
+                              return const UserListingCard();
+                            }, separatorBuilder: (BuildContext context, int index) { return const SizedBox(height: 8,); },
                           ),
                         ),
-                        SizedBox(height: 50,),
+                        const SizedBox(height: 50,),
                       ],
                     ),
                   ),
@@ -155,7 +156,7 @@ class _AssignedUserListingState extends State<AssignedUserListing>{
                   // AddLocation().gotoAddLocation(context);
                 },
                 style: ElevatedButton.styleFrom(backgroundColor: ColorParser().hexToColor("#1A7C52"),elevation: 0),
-                child: Text("Add User",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),),
+                child: const Text("Add User",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),),
 
               ),
             ),

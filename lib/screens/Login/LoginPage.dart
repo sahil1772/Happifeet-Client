@@ -1,12 +1,10 @@
 import 'dart:developer';
 
 import 'package:email_validator/email_validator.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:happifeet_client_app/screens/Login/ForgotPassword.dart';
-import 'package:happifeet_client_app/screens/Login/OTPPage.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
 
 import '../../components/BottomNavigation.dart';
@@ -14,6 +12,8 @@ import '../../network/ApiFactory.dart';
 import '../../storage/shared_preferences.dart';
 
 class LoginPageWidget extends StatefulWidget{
+  const LoginPageWidget({super.key});
+
   @override
   State<LoginPageWidget> createState() => _LoginPageWidgetState();
 
@@ -84,9 +84,9 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
                crossAxisAlignment: CrossAxisAlignment.center,
                // mainAxisAlignment: MainAxisAlignment.center,
                children: [
-                 SizedBox(height: 80,),
+                 const SizedBox(height: 80,),
                  Center(child: Image.asset("assets/images/login/logo.png")),
-                 SizedBox(height: 30,),
+                 const SizedBox(height: 30,),
                  TextField(
                    onChanged: (value){
                      setEmailError(EmailValidator.validate(value)
@@ -103,7 +103,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
                        fillColor: Colors.white,
                        // labelText: labelText,
                        hintText: 'Email',
-                       hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                       hintStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                        errorText: getEmailError(),
                        focusedBorder: OutlineInputBorder(
                          borderRadius: BorderRadius.circular(12),
@@ -115,7 +115,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
                                width: 1, color: ColorParser().hexToColor("#D7D7D7"))),
                      )
                  ),
-                 SizedBox(height: 30,),
+                 const SizedBox(height: 30,),
                  TextField(
                    onChanged: (value){
                      password = value;
@@ -127,7 +127,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
                        // labelText: labelText,
 
                        hintText: 'Password',
-                       hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                       hintStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                        // errorText: getEmailError(),
                        focusedBorder: OutlineInputBorder(
                            borderRadius: BorderRadius.circular(12),
@@ -139,21 +139,21 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
                                width: 1, color: ColorParser().hexToColor("#D7D7D7"))),
                      )
                  ),
-                 SizedBox(height: 15,),
+                 const SizedBox(height: 15,),
                  Row(
                    mainAxisAlignment: MainAxisAlignment.end,
                    children: [
                      InkWell(
                        onTap: () {
-                         ForgotPasswordWidget().goToForgotPasswordPage(context);
+                         const ForgotPasswordWidget().goToForgotPasswordPage(context);
                        },
-                         child: Text("Forgot Password",style: TextStyle(color: Colors.red,fontSize: 14),)),
+                         child: const Text("Forgot Password",style: TextStyle(color: Colors.red,fontSize: 14),)),
                    ],
                  ),
-                 SizedBox(height: 30,),
+                 const SizedBox(height: 30,),
                  ElevatedButton(
                    style: ElevatedButton.styleFrom(
-                     fixedSize: Size(320, 51),
+                     fixedSize: const Size(320, 51),
                        backgroundColor: ColorParser().hexToColor("#01825C"),
 
                        // shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -182,7 +182,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
 
 
                      },
-                     child: Text("Login",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: Colors.white)),)
+                     child: const Text("Login",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: Colors.white)),)
                  // SvgPicture.asset("assets/images/login/logo.svg"),
                ],
              ),

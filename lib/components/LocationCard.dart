@@ -1,8 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class LocationCard extends StatefulWidget{
+  const LocationCard({super.key});
+
   @override
   State<LocationCard> createState() => _LocationCardState();
 
@@ -17,7 +18,7 @@ class _LocationCardState extends State<LocationCard>{
       child: Container(
         width: MediaQuery.of(context).size.width,
         // padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 10),
-        padding: EdgeInsets.only(left: 10,top: 0,bottom: 0,right: 0),
+        padding: const EdgeInsets.only(left: 10,top: 0,bottom: 0,right: 0),
         // margin: const EdgeInsets.symmetric(vertical: 8,horizontal: 8),
         margin:  const EdgeInsets.symmetric(vertical: 8,horizontal: 8),
         decoration: BoxDecoration(
@@ -25,7 +26,7 @@ class _LocationCardState extends State<LocationCard>{
           // border: Border.all(
           //   color: Colors.black,
           // ),
-          boxShadow: [BoxShadow(blurRadius: 3,color: Colors.black12,spreadRadius: 2),],
+          boxShadow: const [BoxShadow(blurRadius: 3,color: Colors.black12,spreadRadius: 2),],
           borderRadius: BorderRadius.circular(10),
         ),
 
@@ -54,8 +55,8 @@ class _LocationCardState extends State<LocationCard>{
                       // ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -128,7 +129,7 @@ class _LocationCardState extends State<LocationCard>{
                     ),
                   ),
                   // SizedBox(width: 10),
-                  SizedBox(width: 35,),
+                  const SizedBox(width: 35,),
 
 
                 ],
@@ -147,11 +148,11 @@ class _LocationCardState extends State<LocationCard>{
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SvgPicture.asset("assets/images/location/editing.svg"),
-                    SizedBox(height: 5,),
+                    const SizedBox(height: 5,),
                     Divider(color: Colors.grey.shade200),
                     SvgPicture.asset("assets/images/location/delete.svg"),
                     Divider(color: Colors.grey.shade200),
-                    SizedBox(height: 5,),
+                    const SizedBox(height: 5,),
                     SvgPicture.asset("assets/images/location/qrCode.svg"),
                   ],
                 ),

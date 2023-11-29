@@ -1,8 +1,6 @@
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:happifeet_client_app/model/SMTP/SmtpDetails.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
 
@@ -10,11 +8,13 @@ import '../../../components/HappiFeetAppBar.dart';
 import '../../../utils/ColorParser.dart';
 List<String> fieldOptions = ['Item 1','Item 2','Item 3',"Item 4"];
 class ManageSMTPDetails extends StatefulWidget{
+  const ManageSMTPDetails({super.key});
+
 
 
 
   goToManageSMTPPage(BuildContext context){
-    Navigator.push(context, MaterialPageRoute(builder: (_) => ManageSMTPDetails()));
+    Navigator.push(context, MaterialPageRoute(builder: (_) => const ManageSMTPDetails()));
   }
 
   @override
@@ -27,12 +27,12 @@ class _ManageSMTPDetailsState extends State<ManageSMTPDetails>{
 
   String? dropdownValueSelected = fieldOptions.first;
   List<SmtpDetails> SmtpData = [];
-  TextEditingController smtphostController = new TextEditingController();
-  TextEditingController emailController = new TextEditingController();
-  TextEditingController usernameController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
-  TextEditingController portController = new TextEditingController();
-  TextEditingController fromemailController = new TextEditingController();
+  TextEditingController smtphostController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController portController = TextEditingController();
+  TextEditingController fromemailController = TextEditingController();
 
 
   @override
@@ -55,29 +55,29 @@ class _ManageSMTPDetailsState extends State<ManageSMTPDetails>{
 
    setinitialData() async{
     if( SmtpData.first.smtp_host != null ){
-      smtphostController.text = await SmtpData!.first.smtp_host!;
+      smtphostController.text = SmtpData.first.smtp_host!;
     }
 
     if( SmtpData.first.email_from_name != null ){
-      emailController.text = await SmtpData!.first.email_from_name!;
+      emailController.text = SmtpData.first.email_from_name!;
     }
     if( SmtpData.first.smtp_username != null ){
-      usernameController.text = await SmtpData!.first.smtp_username!;
+      usernameController.text = SmtpData.first.smtp_username!;
     }
     if( SmtpData.first.smtp_password != null ){
-      passwordController.text = await SmtpData!.first.smtp_password!;
+      passwordController.text = SmtpData.first.smtp_password!;
     }
     if( SmtpData.first.smtp_port != null ){
-      portController.text = await SmtpData!.first.smtp_port!;
+      portController.text = SmtpData.first.smtp_port!;
     }
     if( SmtpData.first.from_email_id != null ){
-      fromemailController.text = await SmtpData!.first.from_email_id!;
+      fromemailController.text = SmtpData.first.from_email_id!;
     }
     if( SmtpData.first.smtp_security != null ){
 log("INSIDEIFFFFFFFFFFFFF");
      setState(() async{
-       dropdownValueSelected = SmtpData!.first.smtp_security!;
-       log("OHHHHHHHHH${dropdownValueSelected}");
+       dropdownValueSelected = SmtpData.first.smtp_security!;
+       log("OHHHHHHHHH $dropdownValueSelected");
      });
     }
     setState(() {
@@ -110,7 +110,7 @@ log("INSIDEIFFFFFFFFFFFFF");
                // SizedBox(height: 105),
                Padding(
                  padding:  EdgeInsets.only(top: MediaQuery.of(context).size.height/8),
-                 child: Row(
+                 child: const Row(
                    mainAxisAlignment: MainAxisAlignment.center,
                    children: [
                      Text(
@@ -137,8 +137,8 @@ log("INSIDEIFFFFFFFFFFFFF");
              builder:
                  (BuildContext context, ScrollController scrollController) {
                return Container(
-                 padding: EdgeInsets.symmetric(horizontal: 16),
-                 decoration:  BoxDecoration(
+                 padding: const EdgeInsets.symmetric(horizontal: 16),
+                 decoration:  const BoxDecoration(
                      borderRadius: BorderRadius.only(
                          topLeft: Radius.circular(25),
                          topRight: Radius.circular(25)),
@@ -154,8 +154,8 @@ log("INSIDEIFFFFFFFFFFFFF");
                          Column(
                            crossAxisAlignment: CrossAxisAlignment.start,
                            children: [
-                             Text("SMTP Host"),
-                             SizedBox(height: 8,),
+                             const Text("SMTP Host"),
+                             const SizedBox(height: 8,),
                              TextField(
                                controller: smtphostController,
 
@@ -168,7 +168,7 @@ log("INSIDEIFFFFFFFFFFFFF");
                                    fillColor: Colors.white,
                                    // labelText: labelText,
                                    hintText: 'SMTP Host',
-                                   hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                                   hintStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                                    // errorText: getEmailError(),
                                    focusedBorder: OutlineInputBorder(
                                        borderRadius: BorderRadius.circular(12),
@@ -182,14 +182,14 @@ log("INSIDEIFFFFFFFFFFFFF");
                              ),
                            ],
                          ),
-                         SizedBox(
+                         const SizedBox(
                            height: 20,
                          ),
                          Column(
                            crossAxisAlignment: CrossAxisAlignment.start,
                            children: [
-                             Text("Email id"),
-                             SizedBox(height: 8,),
+                             const Text("Email id"),
+                             const SizedBox(height: 8,),
                              TextField(
                                controller: emailController,
                                  onChanged: (value){
@@ -201,7 +201,7 @@ log("INSIDEIFFFFFFFFFFFFF");
                                    fillColor: Colors.white,
                                    // labelText: labelText,
                                    hintText: 'Email id',
-                                   hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                                   hintStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                                    // errorText: getEmailError(),
                                    focusedBorder: OutlineInputBorder(
                                        borderRadius: BorderRadius.circular(12),
@@ -215,14 +215,14 @@ log("INSIDEIFFFFFFFFFFFFF");
                              ),
                            ],
                          ),
-                         SizedBox(
+                         const SizedBox(
                            height: 20,
                          ),
                          Column(
                            crossAxisAlignment: CrossAxisAlignment.start,
                            children: [
-                             Text("Username"),
-                             SizedBox(height: 8,),
+                             const Text("Username"),
+                             const SizedBox(height: 8,),
                              TextField(
                                controller: usernameController,
                                  onChanged: (value){
@@ -234,7 +234,7 @@ log("INSIDEIFFFFFFFFFFFFF");
                                    fillColor: Colors.white,
                                    // labelText: labelText,
                                    hintText: 'Username',
-                                   hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                                   hintStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                                    // errorText: getEmailError(),
                                    focusedBorder: OutlineInputBorder(
                                        borderRadius: BorderRadius.circular(12),
@@ -248,14 +248,14 @@ log("INSIDEIFFFFFFFFFFFFF");
                              ),
                            ],
                          ),
-                         SizedBox(
+                         const SizedBox(
                            height: 20,
                          ),
                          Column(
                            crossAxisAlignment: CrossAxisAlignment.start,
                            children: [
-                             Text("Password"),
-                             SizedBox(height: 8,),
+                             const Text("Password"),
+                             const SizedBox(height: 8,),
                              TextField(
                                controller: passwordController,
                                  onChanged: (value){
@@ -267,7 +267,7 @@ log("INSIDEIFFFFFFFFFFFFF");
                                    fillColor: Colors.white,
                                    // labelText: labelText,
                                    hintText: 'Password',
-                                   hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                                   hintStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                                    // errorText: getEmailError(),
                                    focusedBorder: OutlineInputBorder(
                                        borderRadius: BorderRadius.circular(12),
@@ -281,14 +281,14 @@ log("INSIDEIFFFFFFFFFFFFF");
                              ),
                            ],
                          ),
-                         SizedBox(
+                         const SizedBox(
                            height: 20,
                          ),
                          Column(
                            crossAxisAlignment: CrossAxisAlignment.start,
                            children: [
-                             Text("Port"),
-                             SizedBox(height: 8,),
+                             const Text("Port"),
+                             const SizedBox(height: 8,),
                              TextField(
                                controller: portController,
                                  onChanged: (value){
@@ -300,7 +300,7 @@ log("INSIDEIFFFFFFFFFFFFF");
                                    fillColor: Colors.white,
                                    // labelText: labelText,
                                    hintText: 'Port',
-                                   hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                                   hintStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                                    // errorText: getEmailError(),
                                    focusedBorder: OutlineInputBorder(
                                        borderRadius: BorderRadius.circular(12),
@@ -314,14 +314,14 @@ log("INSIDEIFFFFFFFFFFFFF");
                              ),
                            ],
                          ),
-                         SizedBox(
+                         const SizedBox(
                            height: 20,
                          ),
                          Column(
                            crossAxisAlignment: CrossAxisAlignment.start,
                            children: [
-                             Text("From Email"),
-                             SizedBox(height: 8,),
+                             const Text("From Email"),
+                             const SizedBox(height: 8,),
                              TextField(
                                controller: fromemailController,
                                  onChanged: (value){
@@ -333,7 +333,7 @@ log("INSIDEIFFFFFFFFFFFFF");
                                    fillColor: Colors.white,
                                    // labelText: labelText,
                                    hintText: 'From Email',
-                                   hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                                   hintStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                                    // errorText: getEmailError(),
                                    focusedBorder: OutlineInputBorder(
                                        borderRadius: BorderRadius.circular(12),
@@ -347,19 +347,19 @@ log("INSIDEIFFFFFFFFFFFFF");
                              ),
                            ],
                          ),
-                         SizedBox(
+                         const SizedBox(
                            height: 20,
                          ),
                          Column(
                            crossAxisAlignment: CrossAxisAlignment.start,
                            children: [
-                             Text("Connection Security"),
-                             SizedBox(height: 8,),
+                             const Text("Connection Security"),
+                             const SizedBox(height: 8,),
                              DropdownButton(
                                isExpanded: true,
 
                                  value: dropdownValueSelected,
-                                 icon: Icon(Icons.arrow_drop_down_sharp),
+                                 icon: const Icon(Icons.arrow_drop_down_sharp),
                                  iconSize: 50,
 
                                  items: fieldOptions.map<DropdownMenuItem<String>>((value) {
@@ -380,10 +380,10 @@ log("INSIDEIFFFFFFFFFFFFF");
                            ],
                          ),
 
-                         SizedBox(height: 30,),
+                         const SizedBox(height: 30,),
                          ElevatedButton(
                            style: ElevatedButton.styleFrom(
-                             fixedSize: Size(320, 51),
+                             fixedSize: const Size(320, 51),
                              backgroundColor: ColorParser().hexToColor("#01825C"),
 
                              // shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -396,8 +396,8 @@ log("INSIDEIFFFFFFFFFFFFF");
                            onPressed: () async{
 
                            },
-                           child: Text("Login",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: Colors.white)),),
-                         SizedBox(height: 50,),
+                           child: const Text("Login",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: Colors.white)),),
+                         const SizedBox(height: 50,),
 
                          /** SUBMIT BUTTON **/
 

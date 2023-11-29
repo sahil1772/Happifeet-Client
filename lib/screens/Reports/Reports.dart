@@ -1,10 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../components/HappiFeetAppBar.dart';
 
 class ReportsWidget extends StatefulWidget{
+  const ReportsWidget({super.key});
+
   @override
   State<ReportsWidget> createState() => _ReportsWidgetState();
 
@@ -28,9 +29,9 @@ class _ReportsWidgetState extends State<ReportsWidget>{
                   end: Alignment.bottomRight,
                   colors: [Colors.green, Colors.white],
                 )),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20,top: 140),
-              child: const Column(
+            child: const Padding(
+              padding: EdgeInsets.only(left: 20,top: 140),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
@@ -78,36 +79,36 @@ class _ReportsWidgetState extends State<ReportsWidget>{
                                 onTap : (){
                                 },
                                 child: Container(
-                                  decoration: BoxDecoration(border: Border.all(color: Colors.black12,),borderRadius: BorderRadius.all(Radius.circular(14))),
+                                  decoration: BoxDecoration(border: Border.all(color: Colors.black12,),borderRadius: const BorderRadius.all(Radius.circular(14))),
                                   width: 180,
                                   height: 160,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       SvgPicture.asset("assets/images/reports/comments.svg"),
-                                      SizedBox(height: 5,),
-                                      Text("Comments",textAlign: TextAlign.center),
+                                      const SizedBox(height: 5,),
+                                      const Text("Comments",textAlign: TextAlign.center),
                                     ],
                                   ),
                                 ),
                               ),
                               Container(
-                                decoration: BoxDecoration(border: Border.all(color: Colors.black12),borderRadius: BorderRadius.all(Radius.circular(14),)),
+                                decoration: BoxDecoration(border: Border.all(color: Colors.black12),borderRadius: const BorderRadius.all(Radius.circular(14),)),
                                 width: 180,
                                 height: 160,
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     SvgPicture.asset("assets/images/reports/status.svg"),
-                                    SizedBox(height: 5,),
-                                    Text("Status",textAlign: TextAlign.center),
+                                    const SizedBox(height: 5,),
+                                    const Text("Status",textAlign: TextAlign.center),
                                   ],
                                 ),
                               ),
                             ],
                           ),
                           /** Second Row **/
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
 

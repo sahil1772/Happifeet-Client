@@ -1,19 +1,18 @@
-import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:happifeet_client_app/components/LocationCard.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageLocation/AddLocation.dart';
 
 import '../../../components/HappiFeetAppBar.dart';
-import '../../../storage/shared_preferences.dart';
 import '../../../utils/ColorParser.dart';
 
 class ManageLocationWidget extends StatefulWidget{
+  const ManageLocationWidget({super.key});
+
 
 
   gotoManageLocation(BuildContext context){
-    Navigator.push(context, MaterialPageRoute(builder: (_) =>  ManageLocationWidget()));
+    Navigator.push(context, MaterialPageRoute(builder: (_) =>  const ManageLocationWidget()));
   }
 
   @override
@@ -42,7 +41,7 @@ class _ManageLocationWidgetState extends State<ManageLocationWidget>{
               // SizedBox(height: 105),
               Padding(
                 padding:  EdgeInsets.only(top: MediaQuery.of(context).size.height/8),
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
@@ -69,8 +68,8 @@ class _ManageLocationWidgetState extends State<ManageLocationWidget>{
             builder:
                 (BuildContext context, ScrollController scrollController) {
               return Container(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                decoration:  BoxDecoration(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration:  const BoxDecoration(
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(25),
                         topRight: Radius.circular(25)),
@@ -94,9 +93,9 @@ class _ManageLocationWidgetState extends State<ManageLocationWidget>{
                                     onChanged: (value) {
                                       // filterSearchResults(value);
                                     },
-                                    style: TextStyle(fontSize: 16),
+                                    style: const TextStyle(fontSize: 16),
                                     decoration: InputDecoration(
-                                      prefixIcon: Icon(Icons.search),
+                                      prefixIcon: const Icon(Icons.search),
                                       prefixIconColor: ColorParser().hexToColor("#1A7C52"),
                                       labelText: 'Search',
                                       // labelText: widget.selectedLanguage == "1"
@@ -105,7 +104,7 @@ class _ManageLocationWidgetState extends State<ManageLocationWidget>{
                                       labelStyle: TextStyle(color: ColorParser().hexToColor("#9E9E9E")),
 
                                       focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
+                                          borderSide: const BorderSide(
                                             color: Colors.grey,
                                             width: 1,
 
@@ -113,7 +112,7 @@ class _ManageLocationWidgetState extends State<ManageLocationWidget>{
                                           borderRadius: BorderRadius.circular(10)
                                       ),
                                       enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
+                                          borderSide: const BorderSide(
                                               width: 1,
                                               color:  Colors.grey,),
                                           borderRadius: BorderRadius.circular(10)
@@ -133,15 +132,15 @@ class _ManageLocationWidgetState extends State<ManageLocationWidget>{
                         child: ListView.separated(
                           padding: EdgeInsets.zero,
 
-                          physics: ScrollPhysics(),
+                          physics: const ScrollPhysics(),
                           itemCount: 10,
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
-                            return LocationCard();
-                          }, separatorBuilder: (BuildContext context, int index) { return SizedBox(height: 8,); },
+                            return const LocationCard();
+                          }, separatorBuilder: (BuildContext context, int index) { return const SizedBox(height: 8,); },
                         ),
                       ),
-                      SizedBox(height: 50,),
+                      const SizedBox(height: 50,),
                     ],
                   ),
                 ),
@@ -158,10 +157,10 @@ class _ManageLocationWidgetState extends State<ManageLocationWidget>{
             child: ElevatedButton(
 
               onPressed: () {
-                AddLocation().gotoAddLocation(context);
+                const AddLocation().gotoAddLocation(context);
               },
               style: ElevatedButton.styleFrom(backgroundColor: ColorParser().hexToColor("#1A7C52"),elevation: 0),
-              child: Text("Add Location",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),),
+              child: const Text("Add Location",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),),
 
             ),
           ),
