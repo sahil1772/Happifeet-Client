@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:happifeet_client_app/i18n/locale_keys.g.dart';
+import 'package:happifeet_client_app/model/Location/LocationData.dart';
 
 import '../../../components/HappiFeetAppBar.dart';
 import '../../../utils/ColorParser.dart';
@@ -33,7 +37,19 @@ class _AddLocationState extends State<AddLocation>
 
   Map<String, String> languages = getLanguages();
 
-  List<Map<String, Map<TextField, TextEditingController>>> dataControllers = [];
+  Map<String, Map<String, TextEditingController>> dataControllers = {};
+
+  LocationData? locationData;
+
+  TextEditingController en_clientNameController = TextEditingController();
+  TextEditingController en_locationNameController = TextEditingController();
+  TextEditingController en_addressStreetController = TextEditingController();
+  TextEditingController en_cityController = TextEditingController();
+  TextEditingController en_stateController = TextEditingController();
+  TextEditingController en_zipController = TextEditingController();
+  TextEditingController en_latitudeController = TextEditingController();
+  TextEditingController en_longitudeController = TextEditingController();
+  TextEditingController en_descriptionController = TextEditingController();
 
   @override
   void reassemble() {
@@ -45,6 +61,8 @@ class _AddLocationState extends State<AddLocation>
   @override
   void initState() {
     // TODO: implement initState
+    locationData = LocationData(language: "en");
+
 
     _controller = TabController(length: languages.keys.length, vsync: this);
     _controller!.addListener(() {
@@ -54,13 +72,45 @@ class _AddLocationState extends State<AddLocation>
         context.setLocale(Locale(languages.keys.elementAt(_controller!.index)));
       });
     });
+
+
+    if (dataControllers.keys
+        .contains(languages.keys.elementAt(_controller!.index))) {
+      log("ALREADY HAS CONTROLLERS");
+      Map<String, TextEditingController>? controllers =
+      dataControllers[languages.keys.elementAt(_controller!.index)];
+      en_clientNameController = controllers!["clientName"]!;
+      en_locationNameController = controllers["locationName"]!;
+      en_addressStreetController = controllers["address"]!;
+      en_descriptionController = controllers["description"]!;
+      en_cityController = controllers["city"]!;
+      en_stateController = controllers["state"]!;
+      en_zipController = controllers["zip"]!;
+      en_latitudeController = controllers["latitude"]!;
+      en_longitudeController = controllers["longitude"]!;
+    } else {
+      dataControllers.addAll({
+        "en": {
+          "clientName": en_clientNameController,
+          "locationName": en_locationNameController,
+          "address": en_addressStreetController,
+          "description": en_descriptionController,
+          "city": en_cityController,
+          "state": en_stateController,
+          "zip": en_zipController,
+          "latitude": en_latitudeController,
+          "longitude": en_longitudeController,
+        }
+      });
+    }
     super.initState();
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    context.setLocale(Locale("en"));
+    context.setLocale(const Locale("en"));
+    _controller!.dispose();
     super.dispose();
   }
 
@@ -89,7 +139,7 @@ class _AddLocationState extends State<AddLocation>
                 // SizedBox(height: 105),
                 Padding(
                   padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height / 9),
+                      top: MediaQuery.of(context).size.height / 7.5),
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -189,6 +239,7 @@ class _AddLocationState extends State<AddLocation>
   }
 
   bool isMainCity = false;
+  bool showByMonth = true;
 
   Widget addressBlock() {
     return Stack(
@@ -219,6 +270,7 @@ class _AddLocationState extends State<AddLocation>
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: TextField(
+                    controller: en_clientNameController,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
@@ -279,6 +331,7 @@ class _AddLocationState extends State<AddLocation>
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: TextField(
+                    controller: en_locationNameController,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
@@ -306,6 +359,7 @@ class _AddLocationState extends State<AddLocation>
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: TextField(
+                    controller: en_addressStreetController,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
@@ -333,6 +387,7 @@ class _AddLocationState extends State<AddLocation>
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: TextField(
+                    controller: en_cityController,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
@@ -360,6 +415,7 @@ class _AddLocationState extends State<AddLocation>
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: TextField(
+                    controller: en_stateController,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
@@ -387,6 +443,7 @@ class _AddLocationState extends State<AddLocation>
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: TextField(
+                    controller: en_zipController,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
@@ -414,6 +471,7 @@ class _AddLocationState extends State<AddLocation>
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: TextField(
+                    controller: en_latitudeController,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
@@ -441,6 +499,7 @@ class _AddLocationState extends State<AddLocation>
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: TextField(
+                    controller: en_longitudeController,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
@@ -513,67 +572,74 @@ class _AddLocationState extends State<AddLocation>
                 color: const Color(0xffc4c4c4),
               ),
               borderRadius: const BorderRadius.all(Radius.circular(15))),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 36),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Text(
-                        "Client Name *",
-                        style: TextStyle(
-                            fontSize: labelTextSize,
-                            color: const Color(0xff757575)),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 48),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  child: Text(
+                    "Park Images",
+                    style: TextStyle(
+                        fontSize: labelTextSize,
+                        color: const Color(0xff757575)),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0xffc4c4c4),
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 16),
+                      border: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0xffc4c4c4),
+                        ),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 36),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Text(
-                        "Client Name *",
-                        style: TextStyle(
-                            fontSize: labelTextSize,
-                            color: const Color(0xff757575)),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  child: Text(
+                    "Gallery Images",
+                    style: TextStyle(
+                        fontSize: labelTextSize,
+                        color: const Color(0xff757575)),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 0.0),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0xffc4c4c4),
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 16),
+                      border: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0xffc4c4c4),
+                        ),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 36),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Text(
-                        "Client Name *",
-                        style: TextStyle(
-                            fontSize: labelTextSize,
-                            color: const Color(0xff757575)),
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
+              ],
+            ),
           ),
         ),
         Center(
@@ -677,6 +743,17 @@ class _AddLocationState extends State<AddLocation>
     );
   }
 
+  var months = List.generate(
+      12,
+      (index) => CheckboxListTile(
+            contentPadding: EdgeInsets.zero,
+            controlAffinity: ListTileControlAffinity.leading,
+            value: false,
+            title: Text(
+                "${DateFormat("MMMM").format(new DateFormat("MM").parse("${(index + 1)}"))}"),
+            onChanged: (value) {},
+          ));
+
   Widget availabilityBlock() {
     return Stack(
       children: [
@@ -688,110 +765,78 @@ class _AddLocationState extends State<AddLocation>
                 color: const Color(0xffc4c4c4),
               ),
               borderRadius: const BorderRadius.all(Radius.circular(15))),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 36),
-                child: Column(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 48),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
+                    OutlinedButton(
+                      onPressed: () {
+                        setState(() {
+                          showByMonth = true;
+                        });
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(showByMonth
+                            ? Theme.of(context).primaryColor
+                            : Colors.transparent),
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0))),
+                      ),
                       child: Text(
-                        "Client Name *",
+                        "Choose by Month",
                         style: TextStyle(
-                            fontSize: labelTextSize,
-                            color: const Color(0xff757575)),
+                            fontSize: 12,
+                            color: showByMonth
+                                ? Colors.white
+                                : Theme.of(context).primaryColor),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Text(
-                        "Main Site *",
-                        style: TextStyle(
-                            fontSize: labelTextSize,
-                            color: const Color(0xff757575)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Text(
-                        "Location Name *",
-                        style: TextStyle(
-                            fontSize: labelTextSize,
-                            color: const Color(0xff757575)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Text(
-                        "Address & Street *",
-                        style: TextStyle(
-                            fontSize: labelTextSize,
-                            color: const Color(0xff757575)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Text(
-                        "City *",
-                        style: TextStyle(
-                            fontSize: labelTextSize,
-                            color: const Color(0xff757575)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Text(
-                        "State *",
-                        style: TextStyle(
-                            fontSize: labelTextSize,
-                            color: const Color(0xff757575)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Text(
-                        "Zip *",
-                        style: TextStyle(
-                            fontSize: labelTextSize,
-                            color: const Color(0xff757575)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Text(
-                        "Latitude *",
-                        style: TextStyle(
-                            fontSize: labelTextSize,
-                            color: const Color(0xff757575)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Text(
-                        "Longitude *",
-                        style: TextStyle(
-                            fontSize: labelTextSize,
-                            color: const Color(0xff757575)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Text(
-                        "Main City Location",
-                        style: TextStyle(
-                            fontSize: labelTextSize,
-                            color: const Color(0xff757575)),
-                      ),
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: OutlinedButton(
+                          onPressed: () {
+                            setState(() {
+                              showByMonth = false;
+                            });
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(
+                                showByMonth
+                                    ? Colors.transparent
+                                    : Theme.of(context).primaryColor),
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                    side: const BorderSide(width: 0.0),
+                                    borderRadius: BorderRadius.circular(10.0))),
+                          ),
+                          child: Text("Choose by Date",
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: !showByMonth
+                                      ? Colors.white
+                                      : Theme.of(context).primaryColor))),
                     ),
                   ],
                 ),
-              )
-            ],
+                showByMonth
+                    ? GridView(
+                        padding: EdgeInsets.only(top: 10),
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                childAspectRatio: 2, crossAxisCount: 2),
+                        children: months,
+                      )
+                    : SizedBox()
+              ],
+            ),
           ),
         ),
         Center(
@@ -964,6 +1009,34 @@ class _AddLocationState extends State<AddLocation>
   }
 
   otherLanguageFields() {
+    TextEditingController? clientNameController = TextEditingController();
+    TextEditingController? locationNameController = TextEditingController();
+    TextEditingController? addressController = TextEditingController();
+    TextEditingController? descriptionController = TextEditingController();
+
+    if (dataControllers.keys
+        .contains(languages.keys.elementAt(_controller!.index))) {
+      log("ALREADY HAS CONTROLLERS");
+      Map<String, TextEditingController>? controllers =
+          dataControllers[languages.keys.elementAt(_controller!.index)];
+      clientNameController = controllers!["clientName"];
+      locationNameController = controllers["locationName"];
+      addressController = controllers["address"];
+      descriptionController = controllers["description"];
+    } else {
+      log("DOESN'T HAVE CONTROLLERS");
+      dataControllers.addAll({
+        languages.keys.elementAt(_controller!.index): {
+          "clientName": clientNameController,
+          "locationName": locationNameController,
+          "address": addressController,
+          "description": descriptionController
+        }
+      });
+    }
+
+    log("Controllers ::::: \n $dataControllers");
+
     return Column(
       children: [
         Stack(
@@ -996,6 +1069,7 @@ class _AddLocationState extends State<AddLocation>
                     Padding(
                       padding: const EdgeInsets.only(bottom: 20.0),
                       child: TextField(
+                        controller: clientNameController,
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
@@ -1028,6 +1102,7 @@ class _AddLocationState extends State<AddLocation>
                     Padding(
                       padding: const EdgeInsets.only(bottom: 20.0),
                       child: TextField(
+                        controller: locationNameController,
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
@@ -1055,6 +1130,7 @@ class _AddLocationState extends State<AddLocation>
                       ).tr(),
                     ),
                     TextField(
+                      controller: addressController,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                           borderSide: const BorderSide(
@@ -1125,6 +1201,7 @@ class _AddLocationState extends State<AddLocation>
                       ).tr(),
                     ),
                     TextField(
+                      controller: descriptionController,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                           borderSide: const BorderSide(
