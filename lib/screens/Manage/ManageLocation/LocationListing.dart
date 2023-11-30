@@ -12,19 +12,19 @@ import '../../../network/ApiFactory.dart';
 import '../../../storage/shared_preferences.dart';
 import '../../../utils/ColorParser.dart';
 
-class ManageLocationWidget extends StatefulWidget{
+class LocationListing extends StatefulWidget{
 
 
   gotoManageLocation(BuildContext context){
-    Navigator.push(context, MaterialPageRoute(builder: (_) =>   ManageLocationWidget()));
+    Navigator.push(context, MaterialPageRoute(builder: (_) =>   LocationListing()));
   }
 
   @override
-  State<ManageLocationWidget> createState() => _ManageLocationWidgetState();
+  State<LocationListing> createState() => _ManageLocationWidgetState();
 
 }
 
-class _ManageLocationWidgetState extends State<ManageLocationWidget>{
+class _ManageLocationWidgetState extends State<LocationListing>{
 
   List<LocationData> locationDetails = [];
   List<LocationData> locationDetailsTemp = [];

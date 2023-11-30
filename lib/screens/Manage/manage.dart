@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:happifeet_client_app/screens/Manage/ManageLocation/location_listing.dart';
+import 'package:happifeet_client_app/screens/Manage/ManageLocation/LocationListing.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageSMTP/manage_smtp_details.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
 
@@ -146,7 +146,7 @@ class _ManageWidgetState extends State<ManageWidget>{
                        if(isLocationAllowed!)
                        InkWell(
                          onTap:(){
-                 ManageLocationWidget().gotoManageLocation(context);
+                           LocationListing().gotoManageLocation(context);
                 },
                          child: Container(
                            decoration: BoxDecoration(border: Border.all(color: Colors.black12,),borderRadius: const BorderRadius.all(Radius.circular(14))),
