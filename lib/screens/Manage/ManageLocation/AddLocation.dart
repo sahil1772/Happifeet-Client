@@ -4,7 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:happifeet_client_app/i18n/locale_keys.g.dart';
 import 'package:happifeet_client_app/model/BaseResponse.dart';
-import 'package:happifeet_client_app/model/Location/LocationData.dart';
+import 'package:happifeet_client_app/model/Location/LocationDataModel.dart';
 
 import '../../../components/HappiFeetAppBar.dart';
 import '../../../network/ApiFactory.dart';
@@ -40,7 +40,7 @@ class _AddLocationState extends State<AddLocation>
 
   Map<String, Map<String, TextEditingController>> dataControllers = {};
 
-  LocationData? locationData;
+  LocationDataModel? locationData;
 
   TextEditingController en_clientNameController =
       TextEditingController(text: "");
@@ -67,7 +67,7 @@ class _AddLocationState extends State<AddLocation>
   @override
   void initState() {
     // TODO: implement initState
-    locationData = LocationData(language: "en");
+    locationData = LocationDataModel(language: "en");
     locationData!.otherLanguages = [];
 
     _controller = TabController(length: languages.keys.length, vsync: this);
@@ -1330,7 +1330,7 @@ class _AddLocationState extends State<AddLocation>
 
     if (isValid) {
       if (languages.keys.elementAt(_controller!.index) == "en") {
-        locationData = LocationData(language: "en");
+        locationData = LocationDataModel(language: "en");
         locationData!.clientName =
             dataControllers["en"]?["clientName"]?.value.text;
         locationData!.locationName =
@@ -1348,7 +1348,7 @@ class _AddLocationState extends State<AddLocation>
       } else {
         try {
           log("ADDING DETAILS FOR LANGUAGE ${languages.values.elementAt(_controller!.index)}");
-          LocationData otherLanguage = LocationData(
+          LocationDataModel otherLanguage = LocationDataModel(
               language: languages.keys.elementAt(_controller!.index));
 
           otherLanguage.description = dataControllers[

@@ -1,18 +1,22 @@
+import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:happifeet_client_app/components/LocationCard.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageLocation/AddLocation.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../components/HappiFeetAppBar.dart';
+import '../../../model/Location/LocationData.dart';
+import '../../../network/ApiFactory.dart';
+import '../../../storage/shared_preferences.dart';
 import '../../../utils/ColorParser.dart';
 
 class ManageLocationWidget extends StatefulWidget{
-  const ManageLocationWidget({super.key});
-
 
 
   gotoManageLocation(BuildContext context){
-    Navigator.push(context, MaterialPageRoute(builder: (_) =>  const ManageLocationWidget()));
+    Navigator.push(context, MaterialPageRoute(builder: (_) =>   ManageLocationWidget()));
   }
 
   @override
@@ -21,6 +25,52 @@ class ManageLocationWidget extends StatefulWidget{
 }
 
 class _ManageLocationWidgetState extends State<ManageLocationWidget>{
+
+  List<LocationData> locationDetails = [];
+  List<LocationData> locationDetailsTemp = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getLocationDetails();
+    super.initState();
+  }
+
+  void getLocationDetails() async{
+    var response = await ApiFactory().getLocationService().getLocationListService("list_location");
+
+    // var response = await ApiFactory().getLocationService().submitLocationData(data)
+    log("response inside manage location page ${response}");
+    locationDetails = response;
+    locationDetailsTemp = response;
+    log("DATAAAA in locationDetails ${locationDetails}");
+    setState(() {
+
+    });
+    log("LENGTHHHHHH${locationDetails.length}");
+
+  }
+
+  filterSearchResults(String keyword) async {
+    log("search keyword ${keyword}");
+
+    setState(() {
+      if (keyword.isEmpty) {
+        locationDetails = locationDetailsTemp;
+      } else {
+        locationDetails = locationDetailsTemp.where((element) {
+          return (element as LocationData)
+              .park_name!
+              .toLowerCase()
+              .toString()
+              .contains(keyword.toLowerCase());
+        }).toList();
+      }
+    });
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
   return Scaffold(
@@ -28,7 +78,9 @@ class _ManageLocationWidgetState extends State<ManageLocationWidget>{
     extendBodyBehindAppBar: true,
     appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false)
         .getAppBar(context),
-    body: Stack(
+    body:
+    // locationDetails.isEmpty ? CircularProgressIndicator() :
+    Stack(
       children: [
         Container(
             decoration:  BoxDecoration(
@@ -133,14 +185,15 @@ class _ManageLocationWidgetState extends State<ManageLocationWidget>{
                           padding: EdgeInsets.zero,
 
                           physics: const ScrollPhysics(),
-                          itemCount: 10,
+                          itemCount: locationDetails.length,
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
-                            return const LocationCard();
-                          }, separatorBuilder: (BuildContext context, int index) { return const SizedBox(height: 8,); },
+
+                            return LocationCard(locationDetails: locationDetails[index],);
+                          }, separatorBuilder: (BuildContext context, int index) { return SizedBox(height: 8,); },
                         ),
                       ),
-                      const SizedBox(height: 50,),
+                      SizedBox(height: 50,),
                     ],
                   ),
                 ),
@@ -157,10 +210,10 @@ class _ManageLocationWidgetState extends State<ManageLocationWidget>{
             child: ElevatedButton(
 
               onPressed: () {
-                const AddLocation().gotoAddLocation(context);
+                AddLocation().gotoAddLocation(context);
               },
               style: ElevatedButton.styleFrom(backgroundColor: ColorParser().hexToColor("#1A7C52"),elevation: 0),
-              child: const Text("Add Location",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),),
+              child: Text("Add Location",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),),
 
             ),
           ),

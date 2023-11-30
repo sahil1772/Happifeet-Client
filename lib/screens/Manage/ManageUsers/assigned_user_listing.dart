@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:happifeet_client_app/screens/Manage/ManageUsers/add_assigned_user.dart';
 
 import '../../../components/HappiFeetAppBar.dart';
 import '../../../components/UserListingCard.dart';
@@ -153,7 +154,7 @@ class _AssignedUserListingState extends State<AssignedUserListing>{
               child: ElevatedButton(
 
                 onPressed: () {
-                  // AddLocation().gotoAddLocation(context);
+                  AddAssignedUserWidget().goToAddAssignedUser(context);
                 },
                 style: ElevatedButton.styleFrom(backgroundColor: ColorParser().hexToColor("#1A7C52"),elevation: 0),
                 child: const Text("Add User",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),),
