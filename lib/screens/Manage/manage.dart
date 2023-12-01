@@ -2,12 +2,14 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:happifeet_client_app/resources/resources.dart';
+import 'package:happifeet_client_app/screens/Manage/ManageClients/ClientListing.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageLocation/LocationListing.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageSMTP/manage_smtp_details.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
 
 import '../../components/HappiFeetAppBar.dart';
-import 'ManageUsers/assigned_user_listing.dart';
+import 'ManageUsers/AssignedUserListing.dart';
 
 class ManageWidget extends StatefulWidget{
   const ManageWidget({super.key});
@@ -157,7 +159,7 @@ class _ManageWidgetState extends State<ManageWidget>{
                              children: [
                                SvgPicture.asset("assets/images/manage/location.svg"),
                                const SizedBox(height: 5,),
-                               const Text("Manage \nLocation",textAlign: TextAlign.center),
+                                Text("Manage \nLocation",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: Resources.colors.hfText),textAlign: TextAlign.center),
                              ],
                            ),
                          ),
@@ -176,7 +178,7 @@ class _ManageWidgetState extends State<ManageWidget>{
                                children: [
                                  SvgPicture.asset("assets/images/manage/users.svg"),
                                  const SizedBox(height: 5,),
-                                 const Text("Manage \nUsers",textAlign: TextAlign.center),
+                                  Text("Manage \nUsers",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: Resources.colors.hfText),textAlign: TextAlign.center),
                                ],
                              ),
                            ),
@@ -191,7 +193,7 @@ class _ManageWidgetState extends State<ManageWidget>{
                            children: [
                              SvgPicture.asset("assets/images/manage/announcement.svg"),
                              const SizedBox(height: 5,),
-                             const Text("Manage \nAnnouncement",textAlign: TextAlign.center),
+                              Text("Manage \nAnnouncement",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: Resources.colors.hfText),textAlign: TextAlign.center),
                            ],
                          ),
                        ),
@@ -209,7 +211,25 @@ class _ManageWidgetState extends State<ManageWidget>{
                              children: [
                                SvgPicture.asset("assets/images/manage/smtp.svg"),
                                const SizedBox(height: 5,),
-                               const Text("Manage \nSMTP Details",textAlign: TextAlign.center),
+                                Text("Manage \nSMTP Details",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: Resources.colors.hfText),textAlign: TextAlign.center),
+                             ],
+                           ),
+                         ),
+                       ),
+                       InkWell(
+                         onTap:(){
+                           ClientListingWidget().gotoClientListingPage(context);
+                         },
+                         child: Container(
+                           decoration: BoxDecoration(border: Border.all(color: Colors.black12),borderRadius: const BorderRadius.all(Radius.circular(14),)),
+                           width: 150,
+                           height: 130,
+                           child: Column(
+                             mainAxisAlignment: MainAxisAlignment.center,
+                             children: [
+                               SvgPicture.asset("assets/images/manage/smtp.svg"),
+                               const SizedBox(height: 5,),
+                               Text("Manage Clients",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: Resources.colors.hfText),textAlign: TextAlign.center),
                              ],
                            ),
                          ),

@@ -5,6 +5,7 @@ import 'package:happifeet_client_app/model/SMTP/SmtpDetails.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
 
 import '../../../components/HappiFeetAppBar.dart';
+import '../../../resources/resources.dart';
 import '../../../utils/ColorParser.dart';
 List<String> fieldOptions = ['Item 1','Item 2','Item 3',"Item 4"];
 class ManageSMTPDetails extends StatefulWidget{
@@ -355,28 +356,69 @@ log("INSIDEIFFFFFFFFFFFFF");
                            children: [
                              const Text("Connection Security"),
                              const SizedBox(height: 8,),
-                             DropdownButton(
-                               isExpanded: true,
+                             Container(
+                               child: SizedBox(
+                                 height: 60,
+                                 child: DropdownButtonFormField(
+                                     dropdownColor: Colors.white,
 
-                                 value: dropdownValueSelected,
-                                 icon: const Icon(Icons.arrow_drop_down_sharp),
-                                 iconSize: 50,
+                                     // isDense: true,
+                                     //   isExpanded: true,
+                                     decoration:   InputDecoration(
+                                       enabledBorder: OutlineInputBorder(
+                                         borderSide: BorderSide(color: ColorParser().hexToColor("#D7D7D7")),
+                                         borderRadius: BorderRadius.all(Radius.circular(15)),
 
-                                 items: fieldOptions.map<DropdownMenuItem<String>>((value) {
+                                       ),
+                                       focusedBorder: OutlineInputBorder(
+                                         borderSide: BorderSide(color: ColorParser().hexToColor("#D7D7D7")),
+                                         borderRadius: BorderRadius.all(Radius.circular(15)),
+                                       ),
+                                     ),
 
-                                   return DropdownMenuItem<String>(
-                                     value: value,
-                                     child: Text(value),
-                                   );
-                                 }).toList(),
-                                 onChanged: (value) {
-                                   // setState(() {
-                                   //   log("before ${value}");
-                                   //   dropdownValueSelected = value!;
-                                   //   // ListOfFeedbackDetails.first.value = value;
-                                   //   log("after ${dropdownValueSelected}");
-                                   // });
-                                 }),
+                                     value: dropdownValueSelected,
+                                     icon: const Icon(Icons.arrow_drop_down_sharp),
+                                     iconSize: 30,
+
+
+                                     items: fieldOptions.map<DropdownMenuItem<String>>((value) {
+
+                                       return DropdownMenuItem<String>(
+
+                                         value: value,
+                                         child: Text(value,style: TextStyle(fontSize: 16,fontWeight: FontWeight.w500,color: Resources.colors.hfText)),
+                                       );
+                                     }).toList(),
+                                     onChanged: (value) {
+                                       setState(() {
+                                         log("before ${value}");
+                                         dropdownValueSelected = value!;
+                                         // ListOfFeedbackDetails.first.value = value;
+                                         log("after ${dropdownValueSelected}");
+                                       });
+                                     }),
+                               ),
+                             ),
+                             // DropdownButton(
+                             //   isExpanded: true,
+                             //     value: dropdownValueSelected,
+                             //     icon: const Icon(Icons.arrow_drop_down_sharp),
+                             //     iconSize: 50,
+                             //     items: fieldOptions.map<DropdownMenuItem<String>>((value) {
+                             //
+                             //       return DropdownMenuItem<String>(
+                             //         value: value,
+                             //         child: Text(value),
+                             //       );
+                             //     }).toList(),
+                             //     onChanged: (value) {
+                             //       setState(() {
+                             //         log("before ${value}");
+                             //         dropdownValueSelected = value!;
+                             //         // ListOfFeedbackDetails.first.value = value;
+                             //         log("after ${dropdownValueSelected}");
+                             //       });
+                             //     }),
                            ],
                          ),
 

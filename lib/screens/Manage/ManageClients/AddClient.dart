@@ -1,32 +1,27 @@
-import 'dart:developer';
-
-import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 
 import '../../../components/HappiFeetAppBar.dart';
 import '../../../utils/ColorParser.dart';
 
-class AddAssignedUserWidget extends StatefulWidget{
+class AddClientWidget extends StatefulWidget{
 
-
-  goToAddAssignedUser(BuildContext context){
-    Navigator.push(context, MaterialPageRoute(builder: (_) => AddAssignedUserWidget()));
+  gotoAddClientPage(BuildContext context){
+    Navigator.push(context, MaterialPageRoute(builder: (_) => AddClientWidget()));
   }
 
+
   @override
-  State<AddAssignedUserWidget> createState() => _AddAssignedUserWidgetState();
-  
+  State<AddClientWidget> createState() => _AddClientWidgetState();
+
 }
 
-class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget>{
+class _AddClientWidgetState extends State<AddClientWidget>{
   TextEditingController userNameController = new TextEditingController();
   TextEditingController contactController = new TextEditingController();
   TextEditingController staffController = new TextEditingController();
   TextEditingController remarkController = new TextEditingController();
   bool isActive = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +49,7 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget>{
                         children: [
                           Text(
 
-                            'Add Assigned User',
+                            'Add Client',
                             // "Select Location".tr(),
                             // "Select Location".language(context),
                             // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
@@ -94,7 +89,12 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget>{
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Name"),
+                              Row(
+                                children: [
+                                  const Text("Name"),
+                                  Text(" *",style: TextStyle(color: Colors.red),),
+                                ],
+                              ),
                               SizedBox(height: 8,),
                               TextField(
                                   controller: userNameController,
@@ -121,13 +121,58 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget>{
                               ),
                             ],
                           ),
+
                           SizedBox(
                             height: 20,
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Contact No"),
+                              Row(
+                                children: [
+                                  const Text("Password"),
+                                  Text(" *",style: TextStyle(color: Colors.red),),
+                                ],
+                              ),
+                              SizedBox(height: 8,),
+                              TextField(
+                                  controller: contactController,
+                                  onChanged: (value){
+
+                                  },
+                                  obscureText: true,
+
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                    // labelText: labelText,
+                                    hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                                    // errorText: getEmailError(),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: BorderSide(
+                                            color: ColorParser().hexToColor("#D7D7D7"), width: 1)),
+                                    enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: BorderSide(
+                                            width: 1, color: ColorParser().hexToColor("#D7D7D7"))),
+                                  )
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  const Text("Contact No"),
+                                  Text(" *",style: TextStyle(color: Colors.red),),
+                                ],
+                              ),
                               SizedBox(height: 8,),
                               TextField(
                                   controller: contactController,
@@ -153,13 +198,20 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget>{
                               ),
                             ],
                           ),
+
+
                           SizedBox(
                             height: 20,
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Staff"),
+                              Row(
+                                children: [
+                                  const Text("Staff"),
+                                  Text(" *",style: TextStyle(color: Colors.red),),
+                                ],
+                              ),
                               SizedBox(height: 8,),
                               TextField(
                                   controller: staffController,
@@ -192,7 +244,12 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget>{
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Remark"),
+                              Row(
+                                children: [
+                                  const Text("Remark"),
+                                  Text(" *",style: TextStyle(color: Colors.red),),
+                                ],
+                              ),
                               SizedBox(height: 8,),
                               TextField(
                                   controller: remarkController,
@@ -230,9 +287,9 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget>{
                               child: Switch(
                                   value: isActive,
                                   onChanged: (value){
-                                  setState(() {
-                                    isActive = value;
-                                  });
+                                    setState(() {
+                                      isActive = value;
+                                    });
                                   }),
                             ),
                           ),

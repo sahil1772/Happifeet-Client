@@ -24,7 +24,7 @@ class SharedPref {
     prefs.setBool("locationPermission", true);
     prefs.setBool("usersPermission", true);
     prefs.setBool("announcementPermission", true);
-    prefs.setBool("smtpPermission", false);
+    prefs.setBool("smtpPermission", true);
 
     log("inside setPermissions");
   }

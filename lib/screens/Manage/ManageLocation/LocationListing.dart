@@ -26,8 +26,8 @@ class LocationListing extends StatefulWidget{
 
 class _ManageLocationWidgetState extends State<LocationListing>{
 
-  List<LocationData> locationDetails = [];
-  List<LocationData> locationDetailsTemp = [];
+  Iterable<LocationData> locationDetails = [];
+  Iterable<LocationData> locationDetailsTemp = [];
 
   @override
   void initState() {
@@ -190,7 +190,7 @@ class _ManageLocationWidgetState extends State<LocationListing>{
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
 
-                            return LocationCard(locationDetails: locationDetails[index],);
+                            return LocationCard(locationDetails: locationDetails);
                           }, separatorBuilder: (BuildContext context, int index) { return SizedBox(height: 8,); },
                         ),
                       ),

@@ -5,9 +5,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../model/Location/LocationData.dart';
 
 class LocationCard extends StatefulWidget{
-  LocationData? locationDetails;
+  Iterable<LocationData>? locationDetails;
 
-  LocationCard({Key? key,this.locationDetails});
+  LocationCard({Key? key, this.locationDetails});
 
   @override
   State<LocationCard> createState() => _LocationCardState();
@@ -64,7 +64,7 @@ class _LocationCardState extends State<LocationCard>{
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        widget.locationDetails!.park_name!,
+                        widget.locationDetails!.first.park_name!,
                         // overflow: TextOverflow.ellipsis,
                         // maxLines:2,
                         overflow: TextOverflow.clip,
@@ -79,7 +79,7 @@ class _LocationCardState extends State<LocationCard>{
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 1.0),
                         child: Text(
-                          widget.locationDetails!.address!,
+                          widget.locationDetails!.first.park_name!,
                           softWrap: true,
                           maxLines: 1,
                           overflow: TextOverflow.clip,

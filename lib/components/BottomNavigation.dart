@@ -28,6 +28,7 @@ class _BottomNavigationHappiFeetState extends State<BottomNavigationHappiFeet>{
   void initState() {
     _controller = PersistentTabController(initialIndex: 0);
     setBoolForLogIn();
+
     /** Display with status and navigation bar **/
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     super.initState();

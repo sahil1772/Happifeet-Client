@@ -7,5 +7,5 @@ import '../../model/Location/LocationData.dart';
 abstract class InterfaceLocation{
   Future<BaseResponse> submitLocationData(LocationDataModel data);
 
-  Future<List<LocationData>> getLocationListService(String task);
+  Future<Iterable<LocationData>> getLocationListService(String task);
 }

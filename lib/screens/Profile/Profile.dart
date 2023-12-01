@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:happifeet_client_app/resources/resources.dart';
 
 import '../../components/HappiFeetAppBar.dart';
 import '../../utils/ColorParser.dart';
@@ -74,15 +75,15 @@ class _ProfileWidgetState extends State<ProfileWidget>{
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                         const Text("Name",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w500),),
-                         const Text("John Wick",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400)),
+                          Text("Name",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w500,color: Resources.colors.hfText),),
+                          Text("John Wick",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: Resources.colors.hfText)),
                           const SizedBox(
                             height: 20,
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text("Current Password"),
+                               Text("Current Password",style: TextStyle(fontSize:16,fontWeight: FontWeight.w500,color: Resources.colors.hfText),),
                               const SizedBox(height: 8,),
                               TextField(
 
@@ -114,7 +115,7 @@ class _ProfileWidgetState extends State<ProfileWidget>{
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text("New Password"),
+                               Text("New Password",style: TextStyle(fontSize:16,fontWeight: FontWeight.w500,color: Resources.colors.hfText)),
                               const SizedBox(height: 8,),
                               TextField(
 
@@ -146,7 +147,7 @@ class _ProfileWidgetState extends State<ProfileWidget>{
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text("Confirm Password"),
+                               Text("Confirm Password",style: TextStyle(fontSize:16,fontWeight: FontWeight.w500,color: Resources.colors.hfText)),
                               const SizedBox(height: 8,),
                               TextField(
 

@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:happifeet_client_app/screens/Reports/Comments.dart';
 
 import '../../components/HappiFeetAppBar.dart';
+import '../../resources/resources.dart';
 
 class ReportsWidget extends StatefulWidget{
   const ReportsWidget({super.key});
@@ -38,7 +39,7 @@ class _ReportsWidgetState extends State<ReportsWidget>{
                   Row(
                     children: [
                       Text(
-                        'Manage',
+                        'Reports',
                         style: TextStyle(
                             fontSize: 24, fontWeight: FontWeight.w600,color: Colors.white),
                       ),
@@ -89,7 +90,7 @@ class _ReportsWidgetState extends State<ReportsWidget>{
                                     children: [
                                       SvgPicture.asset("assets/images/reports/comments.svg"),
                                       const SizedBox(height: 5,),
-                                      const Text("Comments",textAlign: TextAlign.center),
+                                       Text("Comments",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: Resources.colors.hfText),textAlign: TextAlign.center),
                                     ],
                                   ),
                                 ),
@@ -103,7 +104,7 @@ class _ReportsWidgetState extends State<ReportsWidget>{
                                   children: [
                                     SvgPicture.asset("assets/images/reports/status.svg"),
                                     const SizedBox(height: 5,),
-                                    const Text("Status",textAlign: TextAlign.center),
+                                     Text("Status",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: Resources.colors.hfText),textAlign: TextAlign.center),
                                   ],
                                 ),
                               ),

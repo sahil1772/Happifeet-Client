@@ -35,7 +35,7 @@ class LocationService implements InterfaceLocation {
   }
 
   @override
-  Future<List<LocationData>> getLocationListService(String task) async{
+  Future<Iterable<LocationData>> getLocationListService(String task) async{
     try{
       var map = {
         'task': task,
@@ -48,11 +48,11 @@ class LocationService implements InterfaceLocation {
 
 
       if (response.statusCode == 200) {
-        List<LocationData> data = List<LocationData>.from(json
+        Iterable<LocationData> data = List<LocationData>.from(json
             .decode(response.data)
-            .map((model) => LocationData.fromJson(model)));
+            .map((model) => LocationData.fromJson(model))).take(10);
         log(
-          "response done ${data.toString()}",
+          "response done for getLocationListService ${data.toString()}",
         );
         return data;
       } else {

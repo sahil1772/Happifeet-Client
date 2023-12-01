@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:happifeet_client_app/screens/Manage/ManageUsers/add_assigned_user.dart';
+import 'package:happifeet_client_app/screens/Manage/ManageUsers/AddAssignedUser.dart';
 
 import '../../../components/HappiFeetAppBar.dart';
 import '../../../components/UserListingCard.dart';
