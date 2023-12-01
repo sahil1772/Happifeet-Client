@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:happifeet_client_app/screens/Reports/Comments.dart';
 
 import '../../components/HappiFeetAppBar.dart';
 
@@ -77,6 +78,7 @@ class _ReportsWidgetState extends State<ReportsWidget>{
                             children: [
                               InkWell(
                                 onTap : (){
+                                  CommentsWidget().gotoCommentsWidget(context);
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(border: Border.all(color: Colors.black12,),borderRadius: const BorderRadius.all(Radius.circular(14))),

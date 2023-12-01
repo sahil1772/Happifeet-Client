@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,6 +28,8 @@ class _BottomNavigationHappiFeetState extends State<BottomNavigationHappiFeet>{
   void initState() {
     _controller = PersistentTabController(initialIndex: 0);
     setBoolForLogIn();
+    /** Display with status and navigation bar **/
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     super.initState();
   }
 

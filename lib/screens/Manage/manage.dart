@@ -134,11 +134,11 @@ class _ManageWidgetState extends State<ManageWidget>{
                    GridView(
                        padding: const EdgeInsets.all(0),
                        gridDelegate:  const SliverGridDelegateWithMaxCrossAxisExtent(
-                           maxCrossAxisExtent: 200,
+                           maxCrossAxisExtent: 180,
                            // childAspectRatio: (itemWidth / itemHeight),
-                           childAspectRatio: 0.9,
+                           childAspectRatio: 1,
                            crossAxisSpacing: 20,
-                           mainAxisSpacing: 30),
+                           mainAxisSpacing: 20),
 
                        shrinkWrap: true,
                        physics: const ScrollPhysics(),
@@ -150,8 +150,8 @@ class _ManageWidgetState extends State<ManageWidget>{
                 },
                          child: Container(
                            decoration: BoxDecoration(border: Border.all(color: Colors.black12,),borderRadius: const BorderRadius.all(Radius.circular(14))),
-                           width: 180,
-                           height: 160,
+                           width: 150,
+                           height: 130,
                            child: Column(
                              mainAxisAlignment: MainAxisAlignment.center,
                              children: [
@@ -169,8 +169,8 @@ class _ManageWidgetState extends State<ManageWidget>{
                     },
                            child: Container(
                              decoration: BoxDecoration(border: Border.all(color: Colors.black12),borderRadius: const BorderRadius.all(Radius.circular(14),)),
-                             width: 180,
-                             height: 160,
+                             width: 150,
+                             height: 130,
                              child: Column(
                                mainAxisAlignment: MainAxisAlignment.center,
                                children: [
@@ -184,8 +184,8 @@ class _ManageWidgetState extends State<ManageWidget>{
                        if(isAnnouncementAllowed!)
                        Container(
                          decoration: BoxDecoration(border: Border.all(color: Colors.black12,),borderRadius: const BorderRadius.all(Radius.circular(14))),
-                         width: 180,
-                         height: 160,
+                         width: 150,
+                         height: 130,
                          child: Column(
                            mainAxisAlignment: MainAxisAlignment.center,
                            children: [
@@ -202,8 +202,8 @@ class _ManageWidgetState extends State<ManageWidget>{
                          },
                          child: Container(
                            decoration: BoxDecoration(border: Border.all(color: Colors.black12),borderRadius: const BorderRadius.all(Radius.circular(14),)),
-                           width: 180,
-                           height: 160,
+                           width: 150,
+                           height: 130,
                            child: Column(
                              mainAxisAlignment: MainAxisAlignment.center,
                              children: [
