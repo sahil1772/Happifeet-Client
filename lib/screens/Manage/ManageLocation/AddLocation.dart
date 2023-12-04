@@ -846,8 +846,8 @@ class _AddLocationState extends State<AddLocation>
                             contentPadding: EdgeInsets.zero,
                             controlAffinity: ListTileControlAffinity.leading,
                             value: isChecked,
-                            title: Text(
-                                DateFormat("MMMM").format(DateFormat("MM").parse("${(index + 1)}"))),
+                            title: Text(DateFormat("MMMM").format(
+                                DateFormat("MM").parse("${(index + 1)}"))),
                             onChanged: (value) {
                               setState(() {
                                 isChecked = value!;
