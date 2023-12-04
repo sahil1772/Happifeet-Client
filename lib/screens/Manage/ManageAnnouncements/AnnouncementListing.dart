@@ -1,25 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:happifeet_client_app/screens/Reports/CommentsFilterPage.dart';
+import 'package:happifeet_client_app/screens/Manage/ManageAnnouncements/AddAnnouncement.dart';
 
-import '../../components/CommentsCard.dart';
-import '../../components/HappiFeetAppBar.dart';
-import '../../utils/ColorParser.dart';
+import '../../../components/AnnouncementCard.dart';
+import '../../../components/HappiFeetAppBar.dart';
+import '../../../utils/ColorParser.dart';
 
-class CommentsWidget extends StatefulWidget{
+class AnnouncementListingWidget extends StatefulWidget{
 
-  gotoCommentsWidget(BuildContext context){
-    Navigator.push(context, MaterialPageRoute(builder: (_) => CommentsWidget()));
+
+  gotoAnnouncementListingPage(BuildContext context) {
+    Navigator.push(context, MaterialPageRoute(builder: (_) => AnnouncementListingWidget()));
   }
 
 
   @override
-  State<CommentsWidget> createState() => _CommentsWidgetState();
-
+  State<AnnouncementListingWidget> createState() => _AnnouncementListingWidgetState();
+  
 }
 
-class _CommentsWidgetState extends State<CommentsWidget> {
+class _AnnouncementListingWidgetState extends State<AnnouncementListingWidget>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +54,7 @@ class _CommentsWidgetState extends State<CommentsWidget> {
                     children: [
                       Text(
 
-                        "Comments",
+                        "List Announcement",
                         // "Select Location".tr(),
                         // "Select Location".language(context),
                         // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
@@ -89,8 +90,10 @@ class _CommentsWidgetState extends State<CommentsWidget> {
                       children: [
                         /** Search bar **/
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 26),
+                          // padding: const EdgeInsets.symmetric(
+                          //     horizontal: 8, vertical: 26),
+
+                          padding: const EdgeInsets.only(left: 8,top: 20,right: 8,bottom: 20),
                           child: Row(
                             children: [
                               Flexible(
@@ -103,19 +106,20 @@ class _CommentsWidgetState extends State<CommentsWidget> {
                                       },
                                       style: const TextStyle(fontSize: 16),
                                       decoration: InputDecoration(
-                                        prefixIcon: InkWell(
-                                            onTap: () {
-                                              // FilterpageWidget().gotoFilterPage(
-                                              //     context);
-                                              Navigator.of(context).push(_createRoute());
-                                            },
-                                            child: SvgPicture.asset(
-                                                "assets/images/comments/filter.svg")),
+                                        prefixIcon: Icon(Icons.search),
+                                        // prefixIcon: InkWell(
+                                        //     onTap: () {
+                                        //       // FilterpageWidget().gotoFilterPage(
+                                        //       //     context);
+                                        //       // Navigator.of(context).push(_createRoute());
+                                        //     },
+                                        //     child: SvgPicture.asset(
+                                        //         "assets/images/comments/filter.svg")),
                                         prefixIconConstraints: BoxConstraints(
                                             minHeight: 30, minWidth: 60),
                                         prefixIconColor: ColorParser()
                                             .hexToColor("#1A7C52"),
-                                        labelText: ' Filters',
+                                        labelText: 'Search',
                                         // labelText: widget.selectedLanguage == "1"
                                         //     ? "Search".language(context)
                                         //     : "Search",
@@ -146,6 +150,9 @@ class _CommentsWidgetState extends State<CommentsWidget> {
                             ],
                           ),
                         ),
+
+
+
                         /**   listview builder     **/
 
                         /**  Comments card Listing **/
@@ -158,7 +165,7 @@ class _CommentsWidgetState extends State<CommentsWidget> {
                             itemCount: 10,
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
-                              return CommentsCard();
+                              return AnnouncementCard();
                             },
                             separatorBuilder: (BuildContext context,
                                 int index) {
@@ -174,28 +181,27 @@ class _CommentsWidgetState extends State<CommentsWidget> {
               })
         ],
       ),
+      bottomSheet: Container(
+        height: 50,
+        color: ColorParser().hexToColor("#1A7C52"),
+        child: Row(
+          children: [
+            Expanded(
+              child: ElevatedButton(
 
-    );
-  }
+                onPressed: () {
+                  // AddLocation().gotoAddLocation(context);
+                  AddAnnouncementWidget().gotoAddAnnouncementPage(context);
+                },
+                style: ElevatedButton.styleFrom(backgroundColor: ColorParser().hexToColor("#1A7C52"),elevation: 0),
+                child: Text("Add Announcement",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),),
 
-  Route _createRoute() {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) =>
-          CommentsFilterpageWidget(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(-1.0, 0.0);
-        const end = Offset.zero;
-        const curve = Curves.easeOut;
-        final tween = Tween(begin: begin, end: end);
-        final curvedAnimation = CurvedAnimation(
-          parent: animation,
-          curve: curve,
-        );
-        return SlideTransition(
-          position: tween.animate(curvedAnimation),
-          child: child,
-        );
-      },
+              ),
+            ),
+          ],
+        ),
+      ),
+
     );
   }
 }

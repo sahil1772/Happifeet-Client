@@ -15,5 +15,6 @@
   "Description": "Descripción *",
   "Latitude": "Latitud *",
   "Longitude": "Longitud *",
-  "Main_City_Location": "Ubicación de la ciudad principal"
+  "Main_City_Location": "Ubicación de la ciudad principal",
+  "Title" : "título"
 }

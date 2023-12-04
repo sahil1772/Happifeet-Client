@@ -9,19 +9,19 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../../resources/resources.dart';
 
 List<String> fieldOptions = ['Item 1','Item 2','Item 3',"Item 4"];
-class FilterpageWidget extends StatefulWidget{
+class CommentsFilterpageWidget extends StatefulWidget{
 
 
   gotoFilterPage(BuildContext context){
-    Navigator.push(context, MaterialPageRoute(builder: (_) => FilterpageWidget()));
+    Navigator.push(context, MaterialPageRoute(builder: (_) => CommentsFilterpageWidget()));
   }
 
   @override
-  State<FilterpageWidget> createState() => _FilterpageWidgetState();
+  State<CommentsFilterpageWidget> createState() => _CommentsFilterpageWidgetState();
 
 }
 
-class _FilterpageWidgetState extends State<FilterpageWidget>{
+class _CommentsFilterpageWidgetState extends State<CommentsFilterpageWidget>{
   bool isSelected = true;
   bool isStatusSelected = true;
   bool isQrSelected = true;

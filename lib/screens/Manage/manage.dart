@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:happifeet_client_app/resources/resources.dart';
+import 'package:happifeet_client_app/screens/Manage/ManageAnnouncements/AnnouncementListing.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageClients/ClientListing.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageLocation/LocationListing.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageSMTP/manage_smtp_details.dart';
@@ -184,17 +185,22 @@ class _ManageWidgetState extends State<ManageWidget>{
                            ),
                          ),
                        if(isAnnouncementAllowed!)
-                       Container(
-                         decoration: BoxDecoration(border: Border.all(color: Colors.black12,),borderRadius: const BorderRadius.all(Radius.circular(14))),
-                         width: 150,
-                         height: 130,
-                         child: Column(
-                           mainAxisAlignment: MainAxisAlignment.center,
-                           children: [
-                             SvgPicture.asset("assets/images/manage/announcement.svg"),
-                             const SizedBox(height: 5,),
-                              Text("Manage \nAnnouncement",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: Resources.colors.hfText),textAlign: TextAlign.center),
-                           ],
+                       InkWell(
+                         onTap: (){
+                      AnnouncementListingWidget().gotoAnnouncementListingPage(context);
+                    },
+                         child: Container(
+                           decoration: BoxDecoration(border: Border.all(color: Colors.black12,),borderRadius: const BorderRadius.all(Radius.circular(14))),
+                           width: 150,
+                           height: 130,
+                           child: Column(
+                             mainAxisAlignment: MainAxisAlignment.center,
+                             children: [
+                               SvgPicture.asset("assets/images/manage/announcement.svg"),
+                               const SizedBox(height: 5,),
+                                Text("Manage \nAnnouncement",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: Resources.colors.hfText),textAlign: TextAlign.center),
+                             ],
+                           ),
                          ),
                        ),
                        if(isSmtpAllowed!)

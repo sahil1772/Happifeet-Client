@@ -18,5 +18,6 @@ abstract class  LocaleKeys {
   static const Latitude = 'Latitude';
   static const Longitude = 'Longitude';
   static const Main_City_Location = 'Main_City_Location';
+  static const Title = 'Title';
 
 }

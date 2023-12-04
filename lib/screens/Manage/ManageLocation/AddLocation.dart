@@ -111,13 +111,7 @@ class _AddLocationState extends State<AddLocation>
     super.initState();
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    context.setLocale(const Locale("en"));
-    _controller!.dispose();
-    super.dispose();
-  }
+
 
   double? labelTextSize = 14.0;
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:happifeet_client_app/screens/Reports/Comments.dart';
+import 'package:happifeet_client_app/screens/Reports/Status.dart';
 
 import '../../components/HappiFeetAppBar.dart';
 import '../../resources/resources.dart';
@@ -95,17 +96,22 @@ class _ReportsWidgetState extends State<ReportsWidget>{
                                   ),
                                 ),
                               ),
-                              Container(
-                                decoration: BoxDecoration(border: Border.all(color: Colors.black12),borderRadius: const BorderRadius.all(Radius.circular(14),)),
-                                width: 180,
-                                height: 160,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset("assets/images/reports/status.svg"),
-                                    const SizedBox(height: 5,),
-                                     Text("Status",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: Resources.colors.hfText),textAlign: TextAlign.center),
-                                  ],
+                              InkWell(
+                                onTap: (){
+                                  StatusWidget().gotoStatusPage(context);
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(border: Border.all(color: Colors.black12),borderRadius: const BorderRadius.all(Radius.circular(14),)),
+                                  width: 180,
+                                  height: 160,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SvgPicture.asset("assets/images/reports/status.svg"),
+                                      const SizedBox(height: 5,),
+                                       Text("Status",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: Resources.colors.hfText),textAlign: TextAlign.center),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],

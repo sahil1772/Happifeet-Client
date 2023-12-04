@@ -15,5 +15,6 @@
   "Description": "Описание *",
   "Latitude": "Широта *",
   "Longitude": "Долгота *",
-  "Main_City_Location": "Местоположение главного города"
+  "Main_City_Location": "Местоположение главного города",
+  "Title": "заголовок"
 }

@@ -15,5 +15,6 @@
   "Description": "描述*",
   "Latitude": "纬度*",
   "Longitude": "经度*",
-  "Main_City_Location": "主要城市位置"
+  "Main_City_Location": "主要城市位置",
+  "Title" : "标题"
 }

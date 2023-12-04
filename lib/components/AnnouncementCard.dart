@@ -1,20 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:happifeet_client_app/resources/resources.dart';
 
-import '../model/Location/LocationData.dart';
-
-class LocationCard extends StatefulWidget{
-  Iterable<LocationData>? locationDetails;
-
-  LocationCard({Key? key, this.locationDetails});
-
+class AnnouncementCard extends StatefulWidget{
   @override
-  State<LocationCard> createState() => _LocationCardState();
+  State<AnnouncementCard> createState() => _AnnouncementCardState();
 
 }
 
-class _LocationCardState extends State<LocationCard>{
+class _AnnouncementCardState extends State<AnnouncementCard>{
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -41,30 +36,32 @@ class _LocationCardState extends State<LocationCard>{
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Card(
-                  child: SizedBox(
-                    width: 100,
-                    height: 100,
-                    child: SvgPicture.asset("assets/images/location/locationImg.svg"),
-                    // child: Image.asset(widget.city!.location_image!),
+                padding: const EdgeInsets.symmetric(vertical: 12 ),
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Resources.colors.buttonColorDark)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("22",style: TextStyle(fontSize: 32,fontWeight: FontWeight.w400,color: Resources.colors.buttonColorDark),),
+                      Text("June",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: Resources.colors.buttonColorDark)),
+                      Text("2023",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: Resources.colors.buttonColorDark)),
+                    ],
                   ),
-                  // color: Theme.of(context).primaryColor,
-                  // child: const SizedBox(
-                  //   width: 80,
-                  //   height: 80,
-                  // ),
                 ),
               ),
               Flexible(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 10),
+                  padding: const EdgeInsets.only(left: 14),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        widget.locationDetails!.first.park_name!,
+                        'Alfred B. Maclay',
                         // overflow: TextOverflow.ellipsis,
                         // maxLines:2,
                         overflow: TextOverflow.clip,
@@ -76,22 +73,13 @@ class _LocationCardState extends State<LocationCard>{
                             fontWeight: FontWeight.w500,
                             letterSpacing: 0.5),
                       ),
+
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 1.0),
                         child: Text(
-                          widget.locationDetails!.first.park_name!,
+                          'Lorem ipsum dolor sit amet consectetur adipiscing',
                           softWrap: true,
-                          maxLines: 1,
-                          overflow: TextOverflow.clip,
-                          style: TextStyle(color: Colors.grey ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 1.0),
-                        child: Text(
-                          'Tallahassee, FL 32309, USA',
-                          softWrap: true,
-                          maxLines: 1,
+                          maxLines: 2,
                           overflow: TextOverflow.clip,
                           style: TextStyle(color:  Colors.grey ),
                         ),
@@ -109,7 +97,7 @@ class _LocationCardState extends State<LocationCard>{
                 decoration: BoxDecoration(
                   border: Border(
                     left: BorderSide(
-                     color:  Colors.grey.shade200,
+                      color:  Colors.grey.shade200,
                     ),
                   ),
                 ),
@@ -117,12 +105,11 @@ class _LocationCardState extends State<LocationCard>{
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SvgPicture.asset("assets/images/location/editing.svg"),
-                    SizedBox(height: 5,),
+                    SizedBox(height: 10,),
                     Divider(color: Colors.grey.shade200),
+                    SizedBox(height: 10 ,),
                     SvgPicture.asset("assets/images/location/delete.svg"),
-                    Divider(color: Colors.grey.shade200),
-                    SizedBox(height: 5,),
-                    SvgPicture.asset("assets/images/location/qrCode.svg"),
+
                   ],
                 ),
               )
@@ -133,5 +120,4 @@ class _LocationCardState extends State<LocationCard>{
       ),
     );
   }
-
 }
