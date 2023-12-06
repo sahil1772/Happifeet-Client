@@ -71,11 +71,18 @@ class _AddLocationState extends State<AddLocation>
     locationData!.otherLanguages = [];
 
     _controller = TabController(length: languages.keys.length, vsync: this);
+
     _controller!.addListener(() {
       setState(() {
         // context.setLocale(Locale("en"));
+        log("CONTROLLER INDEX ${languages.keys.elementAt(_controller!.index)}");
+        if(_controller!.indexIsChanging){
+          log("tab is changing");
+          context.setLocale(Locale(languages.keys.elementAt(_controller!.index)));
+        }else{
+          log("INSIDE ELSE OF LISTENER${_controller!.index}");
+        }
 
-        context.setLocale(Locale(languages.keys.elementAt(_controller!.index)));
       });
     });
 
@@ -108,8 +115,10 @@ class _AddLocationState extends State<AddLocation>
         }
       });
     }
+
     super.initState();
   }
+
 
 
 
@@ -1341,7 +1350,7 @@ class _AddLocationState extends State<AddLocation>
             dataControllers["en"]!["longitude"]!.value.text;
       } else {
         try {
-          log("ADDING DETAILS FOR LANGUAGE ${languages.values.elementAt(_controller!.index)}");
+          // log("ADDING DETAILS FOR LANGUAGE ${languages.values.elementAt(_controller!.index)}");
           LocationDataModel otherLanguage = LocationDataModel(
               language: languages.keys.elementAt(_controller!.index));
 

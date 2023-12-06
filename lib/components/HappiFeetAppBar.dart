@@ -15,10 +15,12 @@ class HappiFeetAppBar {
     return AppBar(
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15),bottomRight: Radius.circular(15))),
       // automaticallyImplyLeading: IsDashboard,
+      leadingWidth: 77,
 
       leading: !isCitiyList ?  Padding(
           padding: const EdgeInsets.only(left: 16),
-          child: Image.asset("assets/images/appBar/city_jpg.jpg"),
+          child: SvgPicture.asset("assets/images/appBar/npp-logo.svg"),
+          // child: Image.asset("assets/images/appBar/city_jpg.jpg"),
           // child: Image.network(SharedPref.instance.getCityTheme().logo!)
       ) : const SizedBox(),
 

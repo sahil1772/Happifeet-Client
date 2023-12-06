@@ -6,6 +6,7 @@ import '../../components/HappiFeetAppBar.dart';
 import '../../components/StatusCard.dart';
 import '../../resources/resources.dart';
 import '../../utils/ColorParser.dart';
+import 'StatusFilterpage.dart';
 
 class StatusWidget extends StatefulWidget{
 
@@ -110,9 +111,8 @@ class _StatusWidgetState extends State<StatusWidget>{
                                       decoration: InputDecoration(
                                         prefixIcon: InkWell(
                                             onTap: () {
-                                              // FilterpageWidget().gotoFilterPage(
-                                              //     context);
-                                              // Navigator.of(context).push(_createRoute());
+
+                                              Navigator.of(context).push(_createRoute());
                                             },
                                             child: SvgPicture.asset(
                                                 "assets/images/comments/filter.svg")),
@@ -275,24 +275,24 @@ class _StatusWidgetState extends State<StatusWidget>{
     );
   }
 
-  // Route _createRoute() {
-  //   return PageRouteBuilder(
-  //     pageBuilder: (context, animation, secondaryAnimation) =>
-  //         StatusFilterpageWidget(),
-  //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-  //       const begin = Offset(-1.0, 0.0);
-  //       const end = Offset.zero;
-  //       const curve = Curves.easeOut;
-  //       final tween = Tween(begin: begin, end: end);
-  //       final curvedAnimation = CurvedAnimation(
-  //         parent: animation,
-  //         curve: curve,
-  //       );
-  //       return SlideTransition(
-  //         position: tween.animate(curvedAnimation),
-  //         child: child,
-  //       );
-  //     },
-  //   );
-  // }
+  Route _createRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          StatusFilterpageWidget(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(-1.0, 0.0);
+        const end = Offset.zero;
+        const curve = Curves.easeOut;
+        final tween = Tween(begin: begin, end: end);
+        final curvedAnimation = CurvedAnimation(
+          parent: animation,
+          curve: curve,
+        );
+        return SlideTransition(
+          position: tween.animate(curvedAnimation),
+          child: child,
+        );
+      },
+    );
+  }
 }

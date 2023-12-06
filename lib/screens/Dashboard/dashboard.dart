@@ -352,9 +352,11 @@ class _DashboardWidgetState extends State<DashboardWidget> {
     graphSize = MediaQuery.of(context).size.height / 4;
 
     setState(() {
-      context.setLocale(const Locale("en"));
+      // context.setLocale(const Locale("en"));
     });
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      resizeToAvoidBottomInset: false,
       appBar: HappiFeetAppBar(IsDashboard: true, isCitiyList: false)
           .getAppBar(context),
       body: Stack(

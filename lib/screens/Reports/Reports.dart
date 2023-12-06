@@ -21,7 +21,7 @@ class _ReportsWidgetState extends State<ReportsWidget>{
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
-      appBar: HappiFeetAppBar(IsDashboard: true,isCitiyList: true)
+      appBar: HappiFeetAppBar(IsDashboard: true,isCitiyList: false)
           .getAppBar(context),
       body: Stack(
         children: [

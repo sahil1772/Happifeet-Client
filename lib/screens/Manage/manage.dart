@@ -81,7 +81,7 @@ class _ManageWidgetState extends State<ManageWidget>{
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
-      appBar: HappiFeetAppBar(IsDashboard: true,isCitiyList: true)
+      appBar: HappiFeetAppBar(IsDashboard: true,isCitiyList: false)
           .getAppBar(context),
       body: Stack(
         children: [
