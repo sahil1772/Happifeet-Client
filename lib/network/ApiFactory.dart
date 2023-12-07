@@ -1,10 +1,16 @@
 import 'package:happifeet_client_app/network/interface/InterfaceLocation.dart';
+import 'package:happifeet_client_app/network/services/AnnouncementService.dart';
+import 'package:happifeet_client_app/network/services/AssignedUserService.dart';
+import 'package:happifeet_client_app/network/services/FeedbackService.dart';
 import 'package:happifeet_client_app/network/services/LocationService.dart';
 import 'package:happifeet_client_app/network/services/LoginService.dart';
 import 'package:happifeet_client_app/network/services/SmtpService.dart';
 
-import 'interface/interface_login.dart';
-import 'interface/interface_smtp.dart';
+import 'interface/InrerfaceFeedback.dart';
+import 'interface/InterfaceAnnouncement.dart';
+import 'interface/InterfaceLogin.dart';
+import 'interface/InterfaceSmtp.dart';
+import 'interface/InterfaceUsers.dart';
 
 class ApiFactory {
   ApiFactory._privateConstructor();
@@ -18,6 +24,33 @@ class ApiFactory {
   InterfaceLogin? _interfaceLogin;
   InterfaceSmtp? _interfaceSmtp;
   InterfaceLocation? _interfaceLocation;
+  InterfaceUsers? _interfaceUsers;
+  InterfaceAnnouncement? _interfaceAnnouncement;
+  InterfaceFeedback? _interfaceFeedback;
+
+
+
+  InterfaceFeedback getFeedbackService() {
+    _interfaceFeedback ??= FeedbackService();
+    return _interfaceFeedback!;
+  }
+
+
+
+
+  InterfaceAnnouncement getAnnouncementService() {
+    _interfaceAnnouncement ??= AnnouncementService();
+    return _interfaceAnnouncement!;
+  }
+
+
+
+  InterfaceUsers getUserService() {
+    _interfaceUsers ??= AssignedUserService();
+    return _interfaceUsers!;
+  }
+
+
 
   InterfaceSmtp getSMTPService() {
     _interfaceSmtp ??= SmtpService();

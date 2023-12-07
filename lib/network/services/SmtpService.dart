@@ -6,7 +6,7 @@ import 'package:happifeet_client_app/model/BaseResponse.dart';
 import 'package:happifeet_client_app/model/SMTP/SmtpDetails.dart';
 
 import '../../model/SMTP/SmtpDataModel.dart';
-import '../interface/interface_smtp.dart';
+import '../interface/InterfaceSmtp.dart';
 import 'ApiService.dart';
 
 class SmtpService implements InterfaceSmtp {
@@ -18,7 +18,7 @@ class SmtpService implements InterfaceSmtp {
    try{
      var map = data.toJson();
 
-     map.addAll({"task": "sendSmtpDetails"});
+     map.addAll({"task": "smtp"});
 
      var response = await NetworkClient()
          .dio

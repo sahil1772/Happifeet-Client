@@ -26,8 +26,8 @@ class LocationListing extends StatefulWidget{
 
 class _ManageLocationWidgetState extends State<LocationListing>{
 
-  Iterable<LocationData> locationDetails = [];
-  Iterable<LocationData> locationDetailsTemp = [];
+  List<LocationData> locationDetails = [];
+  List<LocationData> locationDetailsTemp = [];
 
   @override
   void initState() {
@@ -37,13 +37,13 @@ class _ManageLocationWidgetState extends State<LocationListing>{
   }
 
   void getLocationDetails() async{
-    var response = await ApiFactory().getLocationService().getLocationListService("list_location");
+    var response = await ApiFactory().getLocationService().getLocationListData("list_location");
 
     // var response = await ApiFactory().getLocationService().submitLocationData(data)
     // log("response inside manage location page ${response}");
-    locationDetails = response;
+    locationDetails = response!;
     locationDetailsTemp = response;
-    // log("DATAAAA in locationDetails ${locationDetails}");
+    log("DATAAAA in locationDetails ${locationDetails}");
     setState(() {
 
     });
@@ -190,7 +190,7 @@ class _ManageLocationWidgetState extends State<LocationListing>{
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
 
-                            return LocationCard(locationDetails: locationDetails);
+                            return LocationCard(locationDetails: locationDetails[index]);
                           }, separatorBuilder: (BuildContext context, int index) { return SizedBox(height: 8,); },
                         ),
                       ),

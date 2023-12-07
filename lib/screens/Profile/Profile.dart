@@ -30,11 +30,14 @@ class _ProfileWidgetState extends State<ProfileWidget>{
       body: Stack(
         children: [
           Container(
-            decoration: const BoxDecoration(
+            decoration:  BoxDecoration(
                 gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Colors.green, Colors.white],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [
+                    ColorParser().hexToColor("#34A846"),
+                    ColorParser().hexToColor("#83C03D")
+                  ],
                 )),
             child: const Padding(
               padding: EdgeInsets.only(left: 20,top: 140),

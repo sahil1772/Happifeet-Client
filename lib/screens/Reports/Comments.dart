@@ -185,7 +185,7 @@ class _CommentsWidgetState extends State<CommentsWidget> {
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(-1.0, 0.0);
         const end = Offset.zero;
-        const curve = Curves.easeOut;
+        const curve = Curves.easeIn;
         final tween = Tween(begin: begin, end: end);
         final curvedAnimation = CurvedAnimation(
           parent: animation,

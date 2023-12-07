@@ -4,6 +4,30 @@ part 'LocationDataModel.g.dart';
 
 @JsonSerializable()
 class LocationDataModel {
+
+  // String? park_id;
+  // String? park_name;
+  // String? address;
+  // String? city;
+  // String? state;
+  // String? description;
+  // String? park_name_spa;
+  // String? address_spa;
+  // String? city_spa;
+  // String? zip;
+  // String? description_spa;
+  // List? fuUpload;
+  // String? main_loc;
+  // double? latitude;
+  // double? longitude;
+  // String? reserve_link;
+  // String? available;
+  // List? monthChk;
+  // List? features;
+  // String? status;
+
+
+/** OLD **/
   String? language;
   String? clientName;
   String? mainSite;
@@ -17,21 +41,39 @@ class LocationDataModel {
   String? mainCityLocation;
   List<String>? parkImages;
   List<String>? galleryImages;
-
   String? description;
-
   String? parkAvailability;
   String? startDate;
   String? endDate;
   List<String>? parkAvailabilityMonths;
-
   List<String>? parkFeatures;
-
   List<LocationDataModel>? otherLanguages = [];
 
 
   LocationDataModel(
-      {required this.language,
+      {
+    // this.park_id,
+    //     this.park_name,
+    //     this.address,
+    //     this.city,
+    //     this.state,
+    //     this.description,
+    //     this.park_name_spa,
+    //     this.address_spa,
+    //     this.city_spa,
+    //     this.zip,
+    //     this.description_spa,
+    //     this.fuUpload,
+    //     this.main_loc,
+    //     this.latitude,
+    //     this.longitude,
+    //     this.reserve_link,
+    //     this.available,
+    //     this.monthChk,
+    //     this.features,
+    //     this.status
+
+        required this.language,
       this.clientName,
       this.mainSite,
       this.locationName,
@@ -50,7 +92,9 @@ class LocationDataModel {
       this.endDate,
       this.parkAvailabilityMonths,
       this.parkFeatures,
-      this.otherLanguages});
+      this.otherLanguages
+      //
+      });
 
   factory LocationDataModel.fromJson(Map<String, dynamic> json) =>
       _$LocationDataModelFromJson(json);

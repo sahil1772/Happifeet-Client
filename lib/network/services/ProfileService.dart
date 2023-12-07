@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:happifeet_client_app/network/interface/interface_profile.dart';
+import 'package:happifeet_client_app/network/interface/InterfaceProfile.dart';
 
 import '../../model/BaseResponse.dart';
 import 'ApiService.dart';

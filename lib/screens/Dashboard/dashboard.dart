@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:happifeet_client_app/components/HappiFeetAppBar.dart';
 import 'package:happifeet_client_app/screens/Dashboard/Graph%20Model/GraphData.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
@@ -365,15 +366,16 @@ class _DashboardWidgetState extends State<DashboardWidget> {
           Container(
               decoration: BoxDecoration(
                   gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
                 colors: [
                   ColorParser().hexToColor("#34A846"),
                   ColorParser().hexToColor("#83C03D")
                 ],
               )),
               child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 56.0, horizontal: 36),
+                // padding: EdgeInsets.symmetric(vertical: 56.0, horizontal: 36),
+                padding: EdgeInsets.only(left: 20,top: 140),
                 child: Text(
                   "Dashboard",
                   // "Select Location".tr(),
@@ -385,10 +387,14 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                       fontWeight: FontWeight.w500),
                 ),
               )),
+          Positioned(
+              right: 0,
+              top: MediaQuery.of(context).size.height/9.5,
+              child: SvgPicture.asset("assets/images/manage/manageBG.svg",)),
           DraggableScrollableSheet(
-              initialChildSize: 0.8,
-              minChildSize: 0.8,
-              maxChildSize: 0.8,
+              initialChildSize: 0.67,
+              minChildSize: 0.67,
+              maxChildSize: 0.67,
               builder:
                   (BuildContext context, ScrollController scrollController) {
                 return Container(

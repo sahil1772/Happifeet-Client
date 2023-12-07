@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -5,7 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../model/Location/LocationData.dart';
 
 class LocationCard extends StatefulWidget{
-  Iterable<LocationData>? locationDetails;
+  LocationData? locationDetails;
 
   LocationCard({Key? key, this.locationDetails});
 
@@ -15,6 +17,12 @@ class LocationCard extends StatefulWidget{
 }
 
 class _LocationCardState extends State<LocationCard>{
+  @override
+  void initState() {
+    // TODO: implement initState
+    // log("locationDetails List ${widget.locationDetails!.park_name}");
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -64,7 +72,7 @@ class _LocationCardState extends State<LocationCard>{
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        widget.locationDetails!.first.park_name!,
+                        widget.locationDetails!.park_name!,
                         // overflow: TextOverflow.ellipsis,
                         // maxLines:2,
                         overflow: TextOverflow.clip,
@@ -79,7 +87,7 @@ class _LocationCardState extends State<LocationCard>{
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 1.0),
                         child: Text(
-                          widget.locationDetails!.first.park_name!,
+                          widget.locationDetails!.park_name!,
                           softWrap: true,
                           maxLines: 1,
                           overflow: TextOverflow.clip,

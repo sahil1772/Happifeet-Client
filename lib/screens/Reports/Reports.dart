@@ -5,6 +5,7 @@ import 'package:happifeet_client_app/screens/Reports/Status.dart';
 
 import '../../components/HappiFeetAppBar.dart';
 import '../../resources/resources.dart';
+import '../../utils/ColorParser.dart';
 
 class ReportsWidget extends StatefulWidget{
   const ReportsWidget({super.key});
@@ -26,11 +27,14 @@ class _ReportsWidgetState extends State<ReportsWidget>{
       body: Stack(
         children: [
           Container(
-            decoration: const BoxDecoration(
+            decoration:  BoxDecoration(
                 gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Colors.green, Colors.white],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [
+                    ColorParser().hexToColor("#34A846"),
+                    ColorParser().hexToColor("#83C03D")
+                  ],
                 )),
             child: const Padding(
               padding: EdgeInsets.only(left: 20,top: 140),

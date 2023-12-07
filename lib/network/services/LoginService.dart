@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 
 import '../../model/BaseResponse.dart';
-import '../interface/interface_login.dart';
+import '../interface/InterfaceLogin.dart';
 import 'ApiService.dart';
 
 class LoginService implements InterfaceLogin{
