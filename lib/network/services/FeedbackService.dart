@@ -109,7 +109,7 @@ class FeedbackService implements InterfaceFeedback {
     try{
       var map = data.toJson();
 
-      map.addAll({"task":"add_announcement"});
+      map.addAll({"task":"feedback_list"});
 
 
       var response =
