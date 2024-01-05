@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
@@ -352,9 +351,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
 
     graphSize = MediaQuery.of(context).size.height / 4;
 
-    setState(() {
-      // context.setLocale(const Locale("en"));
-    });
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
@@ -375,7 +372,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
               )),
               child: const Padding(
                 // padding: EdgeInsets.symmetric(vertical: 56.0, horizontal: 36),
-                padding: EdgeInsets.only(left: 20,top: 140),
+                padding: EdgeInsets.only(left: 20, top: 140),
                 child: Text(
                   "Dashboard",
                   // "Select Location".tr(),
@@ -389,8 +386,10 @@ class _DashboardWidgetState extends State<DashboardWidget> {
               )),
           Positioned(
               right: 0,
-              top: MediaQuery.of(context).size.height/9.5,
-              child: SvgPicture.asset("assets/images/manage/manageBG.svg",)),
+              top: MediaQuery.of(context).size.height / 9.5,
+              child: SvgPicture.asset(
+                "assets/images/manage/manageBG.svg",
+              )),
           DraggableScrollableSheet(
               initialChildSize: 0.67,
               minChildSize: 0.67,
@@ -1028,11 +1027,10 @@ class _DashboardWidgetState extends State<DashboardWidget> {
               ),
               Flex(
                 direction: Axis.horizontal,
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   const Expanded(
-                    flex: 1,
+                    flex: 2,
                     child: Padding(
                       padding:
                           EdgeInsets.symmetric(vertical: 10.0, horizontal: 16),
@@ -1067,12 +1065,14 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              "View",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xff757575)),
+                            Center(
+                              child: Text(
+                                "View",
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xff757575)),
+                              ),
                             ),
                           ],
                         ),
@@ -1080,18 +1080,20 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                     ),
                   ),
                   Expanded(
-                    flex: 1,
+                    flex: 2,
                     child: Container(
                       color: Colors.yellowAccent,
                       child: const Padding(
                         padding: EdgeInsets.symmetric(
                             vertical: 10.0, horizontal: 16),
-                        child: Text(
-                          "Completed",
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xff757575)),
+                        child: Center(
+                          child: Text(
+                            "Completed",
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xff757575)),
+                          ),
                         ),
                       ),
                     ),

@@ -1,4 +1,5 @@
 
+import 'package:happifeet_client_app/model/Location/Features.dart';
 import 'package:happifeet_client_app/model/Location/LocationDataModel.dart';
 import 'package:happifeet_client_app/model/BaseResponse.dart';
 
@@ -11,4 +12,6 @@ abstract class InterfaceLocation{
   Future<List<LocationDataModel>> editLocationData(String task,String park_id);
   Future<BaseResponse> submitLocationData(LocationDataModel data);
   Future<List<LocationData>?> getLocationListData(String task);
+
+  Future<List<Features>?> getFeatures();
 }
