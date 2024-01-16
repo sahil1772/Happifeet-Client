@@ -170,14 +170,16 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
                      log("RESPONSE LOGIN ${response.status}");
                      if(response.status == 1){
                        log("VALID USERNMAE IN LOGIN PAGE");
+                       BottomNavigationHappiFeet().goToBottomNavigation(context);
 
                      }else{
                        log("INVALID USERNAME IN LOGIN PAGE");
+                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Invalid username or password")));
                      }
                      SharedPref.instance.setPermissions();
 
 
-                     BottomNavigationHappiFeet().goToBottomNavigation(context);
+
                      // OtpPageWidget().goToOtpPage(context);
 
 

@@ -114,34 +114,34 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget>{
 
 
                     onPressed: () async {
-                      myauth.setConfig(
-                          appEmail: "test@happifeet.com",
-                          appName: "HappiFeet",
-                          userEmail: email,
-                          otpLength: 4,
-                          otpType: OTPType.digitsOnly
-                      );
-                      if (await myauth.sendOTP() == true) {
-                        log("OTP SENT");
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text("OTP has been sent"),
-                        ));
-
-                        Future.delayed(
-                            const Duration(seconds: 5),
-                                () {
-                              const OtpPageWidget().goToOtpPage(context);
-                            });
-
-
-                      } else {
-                        log("OTP SENDING FAILED");
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text("Oops, OTP send failed"),
-                        ));
-                      }
+                      // myauth.setConfig(
+                      //     appEmail: "test@happifeet.com",
+                      //     appName: "HappiFeet",
+                      //     userEmail: email,
+                      //     otpLength: 4,
+                      //     otpType: OTPType.digitsOnly
+                      // );
+                      // if (await myauth.sendOTP() == true) {
+                      //   log("OTP SENT");
+                      //   ScaffoldMessenger.of(context)
+                      //       .showSnackBar(const SnackBar(
+                      //     content: Text("OTP has been sent"),
+                      //   ));
+                      //
+                      //   Future.delayed(
+                      //       const Duration(seconds: 5),
+                      //           () {
+                      //         const OtpPageWidget().goToOtpPage(context);
+                      //       });
+                      //
+                      //
+                      // } else {
+                      //   log("OTP SENDING FAILED");
+                      //   ScaffoldMessenger.of(context)
+                      //       .showSnackBar(const SnackBar(
+                      //     content: Text("Oops, OTP send failed"),
+                      //   ));
+                      // }
 
 
                     // Future.delayed(
@@ -151,7 +151,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget>{
                     //     });
 
 
-                    var response = await ApiFactory().getLoginService().sendForgotPasswordDetails("forgotpassword",email!, "123456");
+                    var response = await ApiFactory().getLoginService().sendEmailIfForgotPassword("sendResetPasswordOTP",email!);
 
                     log("RESPONSE FORGOT PASSWORD ${response.status}");
                     if(response.status == 1){
@@ -161,6 +161,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget>{
 
                     }else{
                       log("INVALID USERNAME IN FORGOT PASSWORD PAGE");
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Email Not Found")));
                     }
 
                     // OtpPageWidget().goToOtpPage(context);
