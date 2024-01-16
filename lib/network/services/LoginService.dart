@@ -10,23 +10,23 @@ import 'ApiService.dart';
 class LoginService implements InterfaceLogin{
 
 
-  ///send forgot password details
+  ///send email if forgot password
   @override
-  Future<BaseResponse> sendForgotPasswordDetails(String task, String username, String new_password) async{
+  Future<BaseResponse> sendEmailIfForgotPassword(String task, String email) async{
   try{
 
 
     var map = {
       'task' : task,
-      'username': username,
-      'new_password' : new_password
+      'email': email,
+
     };
 
     var response =
         await NetworkClient().dio.post(base_url,data: FormData.fromMap(map));
-    log("this is response of forgot password $response");
+    log("this is response of sendEmailIfForgotPassword $response");
 
-    log("this is response sending forgot password data ${response.statusCode}");
+    log("this is response ssendEmailIfForgotPassword ${response.statusCode}");
 
     if (response.statusCode == 200) {
       // var data = BaseResponse.fromJson(json.decode(response.data));
