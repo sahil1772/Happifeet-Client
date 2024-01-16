@@ -87,7 +87,6 @@ class NetworkClient implements InterceptorsWrapper {
   @override
   void onResponse(
       Response<dynamic> response, ResponseInterceptorHandler handler) {
-    log("data $response");
     return handler.next(response);
   }
 }

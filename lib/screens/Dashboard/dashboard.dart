@@ -1,9 +1,12 @@
-import 'dart:math';
+import 'dart:convert';
+import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:happifeet_client_app/components/HappiFeetAppBar.dart';
+import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/screens/Dashboard/Graph%20Model/GraphData.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -25,332 +28,85 @@ class _DashboardWidgetState extends State<DashboardWidget> {
   Filter_TYPE type = Filter_TYPE.WEEKLY;
 
   List<ColumnSeries> commentsGraphColumns = <ColumnSeries<GraphData, String>>[
-    ColumnSeries<GraphData, String>(
-        // Bind data source
-        dataSource: <GraphData>[
-          GraphData(
-              xCoordinateName: 'Jan',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-              xCoordinateName: 'Feb',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-              xCoordinateName: 'Mar',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-              xCoordinateName: 'Apr',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-              xCoordinateName: 'Jun',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-              xCoordinateName: 'July',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-        ],
-        color: Colors.lightGreen,
-        xValueMapper: (GraphData sales, _) => sales.xCoordinateName,
-        yValueMapper: (GraphData sales, _) => sales.yCoordinateValue)
+    // Bind data source
   ];
 
-  List<LineSeries> ratingGraphLine = <LineSeries<GraphData, String>>[
-    LineSeries<GraphData, String>(
-        // Bind data source
-        dataSource: <GraphData>[
-          GraphData(
-              xCoordinateName: 'Jan',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-              xCoordinateName: 'Feb',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-              xCoordinateName: 'Mar',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-              xCoordinateName: 'Apr',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-              xCoordinateName: 'Jun',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-              xCoordinateName: 'July',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-              xCoordinateName: 'Aug',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-        ],
-        color: const Color(0xffC99700),
-        markerSettings: const MarkerSettings(isVisible: true),
-        dataLabelSettings: const DataLabelSettings(
-          isVisible: false,
-        ),
-        xValueMapper: (GraphData sales, _) => sales.xCoordinateName,
-        yValueMapper: (GraphData sales, _) => sales.yCoordinateValue),
-  ];
+  List<LineSeries> ratingGraphLine = <LineSeries<GraphData, String>>[];
 
   List<StackedColumnSeries> recommendationStackedColumns =
-      <StackedColumnSeries<GraphData, String>>[
-    StackedColumnSeries<GraphData, String>(
-        legendIconType: LegendIconType.rectangle,
-        legendItemText: "Happily",
-        markerSettings: const MarkerSettings(),
-        // Bind data source
-        dataSource: <GraphData>[
-          GraphData(
-              xCoordinateName: 'Jan',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-              xCoordinateName: 'Feb',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-              xCoordinateName: 'Mar',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-              xCoordinateName: 'Apr',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-              xCoordinateName: 'Jun',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-              xCoordinateName: 'July',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-              xCoordinateName: 'Aug',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-        ],
-        color: Colors.green,
-        xValueMapper: (GraphData sales, _) => sales.xCoordinateName,
-        yValueMapper: (GraphData sales, _) => sales.yCoordinateValue),
-    StackedColumnSeries<GraphData, String>(
-        legendIconType: LegendIconType.rectangle,
-        legendItemText: "Unhappy",
-        // Bind data source
-        dataSource: <GraphData>[
-          GraphData(
-              xCoordinateName: 'Jan',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-              xCoordinateName: 'Feb',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-              xCoordinateName: 'Mar',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-              xCoordinateName: 'Apr',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-              xCoordinateName: 'Jun',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-              xCoordinateName: 'July',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-              xCoordinateName: 'Aug',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-        ],
-        color: Colors.deepOrangeAccent,
-        xValueMapper: (GraphData sales, _) => sales.xCoordinateName,
-        yValueMapper: (GraphData sales, _) => sales.yCoordinateValue),
-    StackedColumnSeries<GraphData, String>(
-        legendIconType: LegendIconType.rectangle,
-        legendItemText: "Maybe",
-        // Bind data source
-        dataSource: <GraphData>[
-          GraphData(
-              xCoordinateName: 'Jan',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-            xCoordinateName: 'Feb',
-            yCoordinateValue: Random().nextInt(100 - 10) + 10,
-          ),
-          GraphData(
-              xCoordinateName: 'Mar',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-              xCoordinateName: 'Apr',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-              xCoordinateName: 'Jun',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-              xCoordinateName: 'July',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          GraphData(
-              xCoordinateName: 'Aug',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10),
-        ],
-        color: Colors.orangeAccent,
-        xValueMapper: (GraphData sales, _) => sales.xCoordinateName,
-        yValueMapper: (GraphData sales, _) => sales.yCoordinateValue),
-  ];
+      <StackedColumnSeries<GraphData, String>>[];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+  }
+
+  Future<Map<String, dynamic>?> getData(String? parkId,String? filterBy) async {
+    if (commentsGraphColumns != null) {
+      //Clearing Comments Data
+      commentsGraphColumns.clear();
+    }
+    if (ratingGraphLine != null) {
+      //Clearing Ratings Data
+      ratingGraphLine.clear();
+    }
+
+    if (recommendationStackedColumns != null) {
+      //Clearing Recommendation Data
+      recommendationStackedColumns.clear();
+    }
+
+    Response? dashboardResponse = await ApiFactory()
+        .getDashboardService()
+        .getParkAnalytics(parkId,filterBy!.toLowerCase());
+
+    Map<String, dynamic> responseData = json.decode(dashboardResponse!.data!);
+
+    fetchComments(responseData);
+    fetchRatings(responseData);
+    fetchRecommendation(responseData);
+
+    return dashboardResponse.data;
   }
 
   @override
   Widget build(BuildContext context) {
-    commentsGraphColumns = <ColumnSeries<GraphData, String>>[
-      ColumnSeries<GraphData, String>(
-          // Bind data source
-          dataSource: <GraphData>[
-            GraphData(
-                xCoordinateName: 'Jan',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-                xCoordinateName: 'Feb',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-                xCoordinateName: 'Mar',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-                xCoordinateName: 'Apr',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-                xCoordinateName: 'Jun',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-                xCoordinateName: 'July',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          ],
-          color: Colors.lightGreen,
-          xValueMapper: (GraphData sales, _) => sales.xCoordinateName,
-          yValueMapper: (GraphData sales, _) => sales.yCoordinateValue)
-    ];
+    // recommendationStackedColumns = <StackedColumnSeries<GraphData, String>>[
 
-    ratingGraphLine = <LineSeries<GraphData, String>>[
-      LineSeries<GraphData, String>(
-          // Bind data source
-          dataSource: <GraphData>[
-            GraphData(
-                xCoordinateName: 'Jan',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-                xCoordinateName: 'Feb',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-                xCoordinateName: 'Mar',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-                xCoordinateName: 'Apr',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-                xCoordinateName: 'Jun',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-                xCoordinateName: 'July',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-                xCoordinateName: 'Aug',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          ],
-          color: const Color(0xffC99700),
-          markerSettings: const MarkerSettings(isVisible: true),
-          dataLabelSettings: const DataLabelSettings(
-            isVisible: false,
-          ),
-          xValueMapper: (GraphData sales, _) => sales.xCoordinateName,
-          yValueMapper: (GraphData sales, _) => sales.yCoordinateValue),
-    ];
-
-    recommendationStackedColumns = <StackedColumnSeries<GraphData, String>>[
-      StackedColumnSeries<GraphData, String>(
-          legendIconType: LegendIconType.rectangle,
-          legendItemText: "Happily",
-          markerSettings: const MarkerSettings(),
-          // Bind data source
-          dataSource: <GraphData>[
-            GraphData(
-                xCoordinateName: 'Jan',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-                xCoordinateName: 'Feb',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-                xCoordinateName: 'Mar',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-                xCoordinateName: 'Apr',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-                xCoordinateName: 'Jun',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-                xCoordinateName: 'July',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-                xCoordinateName: 'Aug',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          ],
-          color: Colors.green,
-          xValueMapper: (GraphData sales, _) => sales.xCoordinateName,
-          yValueMapper: (GraphData sales, _) => sales.yCoordinateValue),
-      StackedColumnSeries<GraphData, String>(
-          legendIconType: LegendIconType.rectangle,
-          legendItemText: "Unhappy",
-          // Bind data source
-          dataSource: <GraphData>[
-            GraphData(
-                xCoordinateName: 'Jan',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-                xCoordinateName: 'Feb',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-                xCoordinateName: 'Mar',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-                xCoordinateName: 'Apr',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-                xCoordinateName: 'Jun',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-                xCoordinateName: 'July',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-                xCoordinateName: 'Aug',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          ],
-          color: Colors.deepOrangeAccent,
-          xValueMapper: (GraphData sales, _) => sales.xCoordinateName,
-          yValueMapper: (GraphData sales, _) => sales.yCoordinateValue),
-      StackedColumnSeries<GraphData, String>(
-          legendIconType: LegendIconType.rectangle,
-          legendItemText: "Maybe",
-          // Bind data source
-          dataSource: <GraphData>[
-            GraphData(
-                xCoordinateName: 'Jan',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-              xCoordinateName: 'Feb',
-              yCoordinateValue: Random().nextInt(100 - 10) + 10,
-            ),
-            GraphData(
-                xCoordinateName: 'Mar',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-                xCoordinateName: 'Apr',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-                xCoordinateName: 'Jun',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-                xCoordinateName: 'July',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-            GraphData(
-                xCoordinateName: 'Aug',
-                yCoordinateValue: Random().nextInt(100 - 10) + 10),
-          ],
-          color: Colors.orangeAccent,
-          xValueMapper: (GraphData sales, _) => sales.xCoordinateName,
-          yValueMapper: (GraphData sales, _) => sales.yCoordinateValue),
-    ];
+    //   StackedColumnSeries<GraphData, String>(
+    //       legendIconType: LegendIconType.rectangle,
+    //       legendItemText: "Maybe",
+    //       // Bind data source
+    //       dataSource: <GraphData>[
+    //         GraphData(
+    //             xCoordinateName: 'Jan',
+    //             yCoordinateValue: Random().nextInt(100 - 10) + 10),
+    //         GraphData(
+    //           xCoordinateName: 'Feb',
+    //           yCoordinateValue: Random().nextInt(100 - 10) + 10,
+    //         ),
+    //         GraphData(
+    //             xCoordinateName: 'Mar',
+    //             yCoordinateValue: Random().nextInt(100 - 10) + 10),
+    //         GraphData(
+    //             xCoordinateName: 'Apr',
+    //             yCoordinateValue: Random().nextInt(100 - 10) + 10),
+    //         GraphData(
+    //             xCoordinateName: 'Jun',
+    //             yCoordinateValue: Random().nextInt(100 - 10) + 10),
+    //         GraphData(
+    //             xCoordinateName: 'July',
+    //             yCoordinateValue: Random().nextInt(100 - 10) + 10),
+    //         GraphData(
+    //             xCoordinateName: 'Aug',
+    //             yCoordinateValue: Random().nextInt(100 - 10) + 10),
+    //       ],
+    //       color: Colors.orangeAccent,
+    //       xValueMapper: (GraphData sales, _) => sales.xCoordinateName,
+    //       yValueMapper: (GraphData sales, _) => sales.yCoordinateValue),
+    // ];
 
     graphSize = MediaQuery.of(context).size.height / 4;
-
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -412,16 +168,20 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                           padding: EdgeInsets.all(16.0),
                           child: Text("Select Location",
                               style: TextStyle(
-                                  color: Color(0xff383838), fontSize: 16)),
+                                  color: Color(0xff383838),
+                                  fontSize: 16)),
                         ),
                         Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 16),
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 16),
                           child: DropdownMenu<String>(
-                            width: MediaQuery.of(context).size.width - 32,
+                            width:
+                            MediaQuery.of(context).size.width - 32,
                             enableSearch: true,
                             inputDecorationTheme: InputDecorationTheme(
                                 border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(15))),
+                                    borderRadius:
+                                    BorderRadius.circular(15))),
                             requestFocusOnTap: true,
                             label: const Text('Select'),
                             initialSelection: "Select",
@@ -449,9 +209,10 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.symmetric(vertical: 16),
+                          margin: const EdgeInsets.symmetric(vertical: 16),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceEvenly,
                             children: [
                               Flexible(
                                   fit: FlexFit.loose,
@@ -459,15 +220,21 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                   child: OutlinedButton(
                                       style: ButtonStyle(
                                         backgroundColor:
-                                            MaterialStateProperty.all(type ==
-                                                    Filter_TYPE.WEEKLY
-                                                ? Theme.of(context).primaryColor
-                                                : Colors.transparent),
-                                        shape: MaterialStateProperty.all(
+                                        MaterialStateProperty.all(
+                                            type ==
+                                                Filter_TYPE
+                                                    .WEEKLY
+                                                ? Theme.of(context)
+                                                .primaryColor
+                                                : Colors
+                                                .transparent),
+                                        shape:
+                                        MaterialStateProperty.all(
                                             RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(
-                                                        10.0))),
+                                                BorderRadius
+                                                    .circular(
+                                                    10.0))),
                                       ),
                                       onPressed: () {
                                         setState(() {
@@ -478,10 +245,11 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                         "Weekly",
                                         style: TextStyle(
                                             fontSize: 12,
-                                            color: type == Filter_TYPE.WEEKLY
+                                            color: type ==
+                                                Filter_TYPE.WEEKLY
                                                 ? Colors.white
                                                 : Theme.of(context)
-                                                    .primaryColor),
+                                                .primaryColor),
                                       ))),
                               Flexible(
                                   fit: FlexFit.loose,
@@ -489,15 +257,21 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                   child: OutlinedButton(
                                       style: ButtonStyle(
                                         backgroundColor:
-                                            MaterialStateProperty.all(type ==
-                                                    Filter_TYPE.MONTHLY
-                                                ? Theme.of(context).primaryColor
-                                                : Colors.transparent),
-                                        shape: MaterialStateProperty.all(
+                                        MaterialStateProperty.all(
+                                            type ==
+                                                Filter_TYPE
+                                                    .MONTHLY
+                                                ? Theme.of(context)
+                                                .primaryColor
+                                                : Colors
+                                                .transparent),
+                                        shape:
+                                        MaterialStateProperty.all(
                                             RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(
-                                                        10.0))),
+                                                BorderRadius
+                                                    .circular(
+                                                    10.0))),
                                       ),
                                       onPressed: () {
                                         setState(() {
@@ -508,10 +282,11 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                         "Monthly",
                                         style: TextStyle(
                                             fontSize: 12,
-                                            color: type == Filter_TYPE.MONTHLY
+                                            color: type ==
+                                                Filter_TYPE.MONTHLY
                                                 ? Colors.white
                                                 : Theme.of(context)
-                                                    .primaryColor),
+                                                .primaryColor),
                                       ))),
                               Flexible(
                                   fit: FlexFit.loose,
@@ -519,15 +294,21 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                   child: OutlinedButton(
                                       style: ButtonStyle(
                                         backgroundColor:
-                                            MaterialStateProperty.all(type ==
-                                                    Filter_TYPE.YEARLY
-                                                ? Theme.of(context).primaryColor
-                                                : Colors.transparent),
-                                        shape: MaterialStateProperty.all(
+                                        MaterialStateProperty.all(
+                                            type ==
+                                                Filter_TYPE
+                                                    .YEARLY
+                                                ? Theme.of(context)
+                                                .primaryColor
+                                                : Colors
+                                                .transparent),
+                                        shape:
+                                        MaterialStateProperty.all(
                                             RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(
-                                                        10.0))),
+                                                BorderRadius
+                                                    .circular(
+                                                    10.0))),
                                       ),
                                       onPressed: () {
                                         setState(() {
@@ -538,10 +319,11 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                         "Yearly",
                                         style: TextStyle(
                                             fontSize: 12,
-                                            color: type == Filter_TYPE.YEARLY
+                                            color: type ==
+                                                Filter_TYPE.YEARLY
                                                 ? Colors.white
                                                 : Theme.of(context)
-                                                    .primaryColor),
+                                                .primaryColor),
                                       ))),
                               Flexible(
                                   fit: FlexFit.loose,
@@ -549,15 +331,19 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                   child: OutlinedButton(
                                       style: ButtonStyle(
                                         backgroundColor:
-                                            MaterialStateProperty.all(type ==
-                                                    Filter_TYPE.ALL
-                                                ? Theme.of(context).primaryColor
-                                                : Colors.transparent),
-                                        shape: MaterialStateProperty.all(
+                                        MaterialStateProperty.all(
+                                            type == Filter_TYPE.ALL
+                                                ? Theme.of(context)
+                                                .primaryColor
+                                                : Colors
+                                                .transparent),
+                                        shape:
+                                        MaterialStateProperty.all(
                                             RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(
-                                                        10.0))),
+                                                BorderRadius
+                                                    .circular(
+                                                    10.0))),
                                       ),
                                       onPressed: () {
                                         setState(() {
@@ -568,18 +354,56 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                         "All",
                                         style: TextStyle(
                                             fontSize: 12,
-                                            color: type == Filter_TYPE.ALL
+                                            color:
+                                            type == Filter_TYPE.ALL
                                                 ? Colors.white
                                                 : Theme.of(context)
-                                                    .primaryColor),
+                                                .primaryColor),
                                       ))),
                             ],
                           ),
                         ),
-                        getGraphs(),
-                        getReviews(),
+                        FutureBuilder(
+                          builder: (BuildContext context,
+                              AsyncSnapshot<dynamic> snapshot) {
+                            Widget toReturn;
+                            switch (snapshot.connectionState) {
+                              case ConnectionState.active:
+                                toReturn =
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(child: CircularProgressIndicator()),
+                                    );
+                                break;
+                              case ConnectionState.waiting:
+                                toReturn =
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(child: CircularProgressIndicator()),
+                                    );
+
+                                break;
+                              case ConnectionState.done:
+                                toReturn = Column(
+
+                                  children: [
+                                    getGraphs(),
+                                    getReviews(),
+                                  ],
+                                );
+                                break;
+                              case ConnectionState.none:
+                                toReturn =
+                                const Center(child: CircularProgressIndicator());
+                                break;
+                            }
+                            return toReturn;
+                          },
+                          future: getData("1515",type.name),
+                        ),
+
                       ],
-                    ),
+                    )
                   ),
                 );
               }),
@@ -1105,5 +929,110 @@ class _DashboardWidgetState extends State<DashboardWidget> {
         ),
       ],
     );
+  }
+
+  void fetchComments(Map<String, dynamic> responseData) {
+    Map<String, dynamic> commentData = responseData["commentsGraph"];
+
+    List<GraphData> comments = [];
+
+    commentData.forEach((key, value) {
+
+      comments.add(GraphData(yCoordinateValue: value, xCoordinateName: key));
+    });
+
+    commentsGraphColumns.add(ColumnSeries<GraphData, String>(
+      dataSource: comments,
+      color: Colors.lightGreen,
+      xValueMapper: (GraphData datum, _) {
+        return datum.xCoordinateName.toString();
+      },
+      yValueMapper: (GraphData datum, _) {
+        return int.parse(datum.yCoordinateValue);
+      },
+    ));
+
+  }
+
+  void fetchRatings(Map<String, dynamic> responseData) {
+    Map<String, dynamic> ratingData = responseData["ratingGraph"];
+
+    List<GraphData> ratings = [];
+
+
+    ratingData.forEach((key, value) {
+      ratings.add(GraphData(yCoordinateValue: value, xCoordinateName: key));
+    });
+
+    ratingGraphLine.add(LineSeries<GraphData, String>(
+      dataSource: ratings,
+      color: const Color(0xffC99700),
+      markerSettings: const MarkerSettings(isVisible: true),
+      dataLabelSettings: const DataLabelSettings(
+        isVisible: false,
+      ),
+      xValueMapper: (GraphData datum, _) {
+        return datum.xCoordinateName.toString();
+      },
+      yValueMapper: (GraphData datum, _) {
+        return datum.yCoordinateValue;
+      },
+    ));
+  }
+
+  void fetchRecommendation(Map<String, dynamic> responseData) {
+    Map<String, dynamic> recommendationData = responseData["recommendGraph"];
+
+    List<GraphData> happyRecommendations = [];
+    List<GraphData> notreallyRecommendations = [];
+    List<GraphData> maybeRecommendations = [];
+
+
+    recommendationData.forEach((key, value) {
+      happyRecommendations.add(
+          GraphData(xCoordinateName: key, yCoordinateValue: value["happily"]));
+      notreallyRecommendations.add(GraphData(
+          xCoordinateName: key, yCoordinateValue: value["not_really"]));
+      maybeRecommendations.add(
+          GraphData(xCoordinateName: key, yCoordinateValue: value["maybe"]));
+    });
+    recommendationStackedColumns.add(StackedColumnSeries<GraphData, String>(
+      legendIconType: LegendIconType.rectangle,
+      legendItemText: "Happily",
+      markerSettings: const MarkerSettings(),
+      dataSource: happyRecommendations,
+      color: Colors.green,
+      xValueMapper: (GraphData datum, _) {
+        return datum.xCoordinateName.toString();
+      },
+      yValueMapper: (GraphData datum, _) {
+        return int.parse(datum.yCoordinateValue);
+      },
+    ));
+
+    recommendationStackedColumns.add(StackedColumnSeries<GraphData, String>(
+      dataSource: notreallyRecommendations,
+      legendIconType: LegendIconType.rectangle,
+      legendItemText: "Unhappy",
+      color: Colors.deepOrangeAccent,
+      xValueMapper: (GraphData datum, _) {
+        return datum.xCoordinateName.toString();
+      },
+      yValueMapper: (GraphData datum, _) {
+        return int.parse(datum.yCoordinateValue);
+      },
+    ));
+    recommendationStackedColumns.add(StackedColumnSeries<GraphData, String>(
+      dataSource: maybeRecommendations,
+      legendIconType: LegendIconType.rectangle,
+      legendItemText: "Maybe",
+      color: Colors.orangeAccent,
+      xValueMapper: (GraphData datum, _) {
+        return datum.xCoordinateName.toString();
+      },
+      yValueMapper: (GraphData datum, _) {
+        return int.parse(datum.yCoordinateValue);
+      },
+    ));
   }
 }

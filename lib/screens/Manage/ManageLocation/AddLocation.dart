@@ -44,19 +44,19 @@ class _AddLocationState extends State<AddLocation>
   LocationDataModel? locationData;
 
   TextEditingController en_clientNameController =
-  TextEditingController(text: "");
+      TextEditingController(text: "");
   TextEditingController en_locationNameController =
-  TextEditingController(text: "");
+      TextEditingController(text: "");
   TextEditingController en_addressStreetController =
-  TextEditingController(text: "");
+      TextEditingController(text: "");
   TextEditingController en_cityController = TextEditingController(text: "");
   TextEditingController en_stateController = TextEditingController(text: "");
   TextEditingController en_zipController = TextEditingController(text: "");
   TextEditingController en_latitudeController = TextEditingController(text: "");
   TextEditingController en_longitudeController =
-  TextEditingController(text: "");
+      TextEditingController(text: "");
   TextEditingController en_descriptionController =
-  TextEditingController(text: "");
+      TextEditingController(text: "");
 
   List<Features> features = [];
 
@@ -96,7 +96,7 @@ class _AddLocationState extends State<AddLocation>
         .contains(languages.keys.elementAt(_controller!.index))) {
       log("ALREADY HAS CONTROLLERS");
       Map<String, TextEditingController>? controllers =
-      dataControllers[languages.keys.elementAt(_controller!.index)];
+          dataControllers[languages.keys.elementAt(_controller!.index)];
       en_clientNameController = controllers!["clientName"]!;
       en_locationNameController = controllers["locationName"]!;
       en_addressStreetController = controllers["address"]!;
@@ -140,25 +140,22 @@ class _AddLocationState extends State<AddLocation>
           Container(
               decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      ColorParser().hexToColor("#34A846"),
-                      ColorParser().hexToColor("#83C03D")
-                    ],
-                  )),
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  ColorParser().hexToColor("#34A846"),
+                  ColorParser().hexToColor("#83C03D")
+                ],
+              )),
               child: Column(children: [
                 // SizedBox(height: 105),
                 Padding(
                   padding: EdgeInsets.only(
-                      top: MediaQuery
-                          .of(context)
-                          .size
-                          .height / 7.5),
+                      top: MediaQuery.of(context).size.height / 7.5),
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                        Text(
                         "Add Location",
                         // "Select Location".tr(),
                         // "Select Location".language(context),
@@ -207,7 +204,7 @@ class _AddLocationState extends State<AddLocation>
                             for (int i = 0; i < languages.keys.length; i++)
                               Padding(
                                 padding:
-                                const EdgeInsets.symmetric(vertical: 8.0),
+                                    const EdgeInsets.symmetric(vertical: 8.0),
                                 child: Text(
                                   languages.values.elementAt(i).toUpperCase(),
                                   style: TextStyle(
@@ -217,10 +214,7 @@ class _AddLocationState extends State<AddLocation>
                               ),
                           ]),
                       Container(
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width,
+                        width: MediaQuery.of(context).size.width,
                         height: 1,
                         color: const Color(0x50aeaeae),
                         margin: const EdgeInsets.only(bottom: 16),
@@ -579,7 +573,7 @@ class _AddLocationState extends State<AddLocation>
                 borderRadius: const BorderRadius.all(Radius.circular(56))),
             child: Padding(
               padding:
-              const EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
+                  const EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
               child: const Text(
                 LocaleKeys.Park_Address,
                 style: TextStyle(
@@ -686,7 +680,7 @@ class _AddLocationState extends State<AddLocation>
                 borderRadius: const BorderRadius.all(Radius.circular(56))),
             child: Padding(
               padding:
-              const EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
+                  const EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
               child: const Text(
                 LocaleKeys.Park_Images,
                 style: TextStyle(
@@ -762,7 +756,7 @@ class _AddLocationState extends State<AddLocation>
                 borderRadius: const BorderRadius.all(Radius.circular(56))),
             child: Padding(
               padding:
-              const EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
+                  const EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
               child: const Text(
                 LocaleKeys.Park_Info,
                 style: TextStyle(
@@ -808,9 +802,7 @@ class _AddLocationState extends State<AddLocation>
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(showByMonth
-                            ? Theme
-                            .of(context)
-                            .primaryColor
+                            ? Theme.of(context).primaryColor
                             : Colors.transparent),
                         shape: MaterialStateProperty.all(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0))),
@@ -821,9 +813,7 @@ class _AddLocationState extends State<AddLocation>
                             fontSize: 12,
                             color: showByMonth
                                 ? Colors.white
-                                : Theme
-                                .of(context)
-                                .primaryColor),
+                                : Theme.of(context).primaryColor),
                       ),
                     ),
                     Padding(
@@ -838,9 +828,7 @@ class _AddLocationState extends State<AddLocation>
                             backgroundColor: MaterialStateProperty.all(
                                 showByMonth
                                     ? Colors.transparent
-                                    : Theme
-                                    .of(context)
-                                    .primaryColor),
+                                    : Theme.of(context).primaryColor),
                             shape: MaterialStateProperty.all(
                                 RoundedRectangleBorder(
                                     side: const BorderSide(width: 0.0),
@@ -851,35 +839,33 @@ class _AddLocationState extends State<AddLocation>
                                   fontSize: 12,
                                   color: !showByMonth
                                       ? Colors.white
-                                      : Theme
-                                      .of(context)
-                                      .primaryColor))),
+                                      : Theme.of(context).primaryColor))),
                     ),
                   ],
                 ),
                 showByMonth
                     ? GridView(
-                  padding: const EdgeInsets.only(top: 10),
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  gridDelegate:
-                  const SliverGridDelegateWithFixedCrossAxisCount(
-                      childAspectRatio: 2, crossAxisCount: 2),
-                  children: List.generate(12, (index) {
-                    return CheckboxListTile(
-                      contentPadding: EdgeInsets.zero,
-                      controlAffinity: ListTileControlAffinity.leading,
-                      value: isChecked,
-                      title: Text(DateFormat("MMMM").format(
-                          DateFormat("MM").parse("${(index + 1)}"))),
-                      onChanged: (value) {
-                        setState(() {
-                          isChecked = value!;
-                        });
-                      },
-                    );
-                  }),
-                )
+                        padding: const EdgeInsets.only(top: 10),
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                childAspectRatio: 2, crossAxisCount: 2),
+                        children: List.generate(12, (index) {
+                          return CheckboxListTile(
+                            contentPadding: EdgeInsets.zero,
+                            controlAffinity: ListTileControlAffinity.leading,
+                            value: isChecked,
+                            title: Text(DateFormat("MMMM").format(
+                                DateFormat("MM").parse("${(index + 1)}"))),
+                            onChanged: (value) {
+                              setState(() {
+                                isChecked = value!;
+                              });
+                            },
+                          );
+                        }),
+                      )
                     : const SizedBox()
               ],
             ),
@@ -896,7 +882,7 @@ class _AddLocationState extends State<AddLocation>
                 borderRadius: const BorderRadius.all(Radius.circular(56))),
             child: Padding(
               padding:
-              const EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
+                  const EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
               child: const Text(
                 LocaleKeys.Park_Availability,
                 style: TextStyle(
@@ -924,33 +910,36 @@ class _AddLocationState extends State<AddLocation>
     return Stack(
       children: [
         Container(
-          margin: const EdgeInsets.symmetric(vertical: 20),
-          decoration: BoxDecoration(
-              border: Border.all(
-                width: 1,
-                color: const Color(0xffc4c4c4),
-              ),
-              borderRadius: const BorderRadius.all(Radius.circular(15))),
-          child:GridView.extent(
-            shrinkWrap: true,
-            maxCrossAxisExtent: 150.0, // maximum item width
-            mainAxisSpacing: 8.0, // spacing between rows
-            crossAxisSpacing: 8.0, // spacing between columns
-            padding: EdgeInsets.symmetric(vertical: 36.0,horizontal: 8), // padding around the grid
-            physics: NeverScrollableScrollPhysics(),
-            children: features.map((item) {
-              return Container(
-                color: Colors.blue, // color of grid items
-                child: Center(
-                  child: Text(
-                    item.name!,
-                    style: TextStyle(fontSize: 18.0, color: Colors.white),
-                  ),
+            margin: const EdgeInsets.symmetric(vertical: 20),
+            decoration: BoxDecoration(
+                border: Border.all(
+                  width: 1,
+                  color: const Color(0xffc4c4c4),
                 ),
-              );
-            }).toList(),
-          )
-        ),
+                borderRadius: const BorderRadius.all(Radius.circular(15))),
+            child: GridView.extent(
+              shrinkWrap: true,
+              maxCrossAxisExtent: 150.0,
+              // maximum item width
+              mainAxisSpacing: 8.0,
+              // spacing between rows
+              crossAxisSpacing: 8.0,
+              // spacing between columns
+              padding: EdgeInsets.symmetric(vertical: 36.0, horizontal: 8),
+              // padding around the grid
+              physics: NeverScrollableScrollPhysics(),
+              children: features.map((item) {
+                return Container(
+                  color: Colors.blue, // color of grid items
+                  child: Center(
+                    child: Text(
+                      item.name!,
+                      style: TextStyle(fontSize: 18.0, color: Colors.white),
+                    ),
+                  ),
+                );
+              }).toList(),
+            )),
         Center(
           child: Container(
             decoration: BoxDecoration(
@@ -962,7 +951,7 @@ class _AddLocationState extends State<AddLocation>
                 borderRadius: const BorderRadius.all(Radius.circular(56))),
             child: Padding(
               padding:
-              const EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
+                  const EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
               child: const Text(
                 LocaleKeys.Park_Features,
                 style: TextStyle(
@@ -981,12 +970,12 @@ class _AddLocationState extends State<AddLocation>
     bool isEnglishFormFilled = false;
 
     TextEditingController? clientNameController =
-    TextEditingController(text: "");
+        TextEditingController(text: "");
     TextEditingController? locationNameController =
-    TextEditingController(text: "");
+        TextEditingController(text: "");
     TextEditingController? addressController = TextEditingController(text: "");
     TextEditingController? descriptionController =
-    TextEditingController(text: "");
+        TextEditingController(text: "");
 
     log("English Form Details :::");
     for (var element in dataControllers["en"]!.entries) {
@@ -1003,7 +992,7 @@ class _AddLocationState extends State<AddLocation>
         .contains(languages.keys.elementAt(_controller!.index))) {
       log("ALREADY HAS CONTROLLERS");
       Map<String, TextEditingController>? controllers =
-      dataControllers[languages.keys.elementAt(_controller!.index)];
+          dataControllers[languages.keys.elementAt(_controller!.index)];
       clientNameController = controllers!["clientName"];
       locationNameController = controllers["locationName"];
       addressController = controllers["address"];
@@ -1027,27 +1016,27 @@ class _AddLocationState extends State<AddLocation>
       children: [
         !isEnglishFormFilled
             ? Container(
-          margin: const EdgeInsets.only(bottom: 24),
-          decoration: BoxDecoration(
-              border: Border.all(width: 1.0, color: Colors.red),
-              borderRadius: BorderRadius.circular(10)),
-          child: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 20),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Please fill details in English first.",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: Colors.red,
-                      letterSpacing: 0.2),
-                )
-              ],
-            ),
-          ),
-        )
+                margin: const EdgeInsets.only(bottom: 24),
+                decoration: BoxDecoration(
+                    border: Border.all(width: 1.0, color: Colors.red),
+                    borderRadius: BorderRadius.circular(10)),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 20),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Please fill details in English first.",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.red,
+                            letterSpacing: 0.2),
+                      )
+                    ],
+                  ),
+                ),
+              )
             : const SizedBox(),
         Stack(
           children: [
@@ -1061,7 +1050,7 @@ class _AddLocationState extends State<AddLocation>
                   borderRadius: const BorderRadius.all(Radius.circular(15))),
               child: Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 48),
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 48),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -1170,7 +1159,7 @@ class _AddLocationState extends State<AddLocation>
                     borderRadius: const BorderRadius.all(Radius.circular(56))),
                 child: Padding(
                   padding:
-                  const EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
+                      const EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
                   child: const Text(
                     LocaleKeys.Park_Address,
                     style: TextStyle(
@@ -1195,7 +1184,7 @@ class _AddLocationState extends State<AddLocation>
                   borderRadius: const BorderRadius.all(Radius.circular(15))),
               child: Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 48),
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 48),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -1244,7 +1233,7 @@ class _AddLocationState extends State<AddLocation>
                     borderRadius: const BorderRadius.all(Radius.circular(56))),
                 child: Padding(
                   padding:
-                  const EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
+                      const EdgeInsets.symmetric(horizontal: 36.0, vertical: 5),
                   child: const Text(
                     LocaleKeys.Park_Info,
                     style: TextStyle(
@@ -1304,22 +1293,22 @@ class _AddLocationState extends State<AddLocation>
               language: languages.keys.elementAt(_controller!.index));
 
           otherLanguage.description = dataControllers[
-          languages.keys.elementAt(_controller!.index)]!["description"]!
+                  languages.keys.elementAt(_controller!.index)]!["description"]!
               .text;
           otherLanguage.locationName = dataControllers[languages.keys
-              .elementAt(_controller!.index)]!["locationName"]!
+                  .elementAt(_controller!.index)]!["locationName"]!
               .text;
           otherLanguage.clientName = dataControllers[
-          languages.keys.elementAt(_controller!.index)]!["clientName"]!
+                  languages.keys.elementAt(_controller!.index)]!["clientName"]!
               .text;
           otherLanguage.addressStreet = dataControllers[
-          languages.keys.elementAt(_controller!.index)]!["address"]!
+                  languages.keys.elementAt(_controller!.index)]!["address"]!
               .text;
 
           log("NEW LANGUAGE ${otherLanguage.toJson()}");
           if (locationData!.otherLanguages != null) {
             if (locationData!.otherLanguages!.any((element) =>
-            element.language ==
+                element.language ==
                 languages.keys.elementAt(_controller!.index))) {
               locationData!.otherLanguages!.add(otherLanguage);
             }
@@ -1352,8 +1341,8 @@ class _AddLocationState extends State<AddLocation>
     bool isFormFilled = true;
 
     for (var element
-    in dataControllers[languages.keys.elementAt(_controller!.index)]!
-        .entries) {
+        in dataControllers[languages.keys.elementAt(_controller!.index)]!
+            .entries) {
       log(element.key, error: element.value.text);
       if (element.value.text == "") {
         isFormFilled = false;

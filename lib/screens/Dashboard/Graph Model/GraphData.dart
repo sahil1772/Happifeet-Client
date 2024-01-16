@@ -1,7 +1,11 @@
-class GraphData{
+class GraphData {
   dynamic xCoordinateName;
-  int yCoordinateValue;
+  dynamic yCoordinateValue;
 
   String? groupName;
-  GraphData({required this.xCoordinateName, required this.yCoordinateValue,this.groupName});
+
+  GraphData(
+      {required this.xCoordinateName,
+      required this.yCoordinateValue,
+      this.groupName});
 }

@@ -1,6 +1,8 @@
+import 'package:happifeet_client_app/network/interface/InterfaceDashboard.dart';
 import 'package:happifeet_client_app/network/interface/InterfaceLocation.dart';
 import 'package:happifeet_client_app/network/services/AnnouncementService.dart';
 import 'package:happifeet_client_app/network/services/AssignedUserService.dart';
+import 'package:happifeet_client_app/network/services/DashboardService.dart';
 import 'package:happifeet_client_app/network/services/FeedbackService.dart';
 import 'package:happifeet_client_app/network/services/LocationService.dart';
 import 'package:happifeet_client_app/network/services/LoginService.dart';
@@ -27,7 +29,13 @@ class ApiFactory {
   InterfaceUsers? _interfaceUsers;
   InterfaceAnnouncement? _interfaceAnnouncement;
   InterfaceFeedback? _interfaceFeedback;
+  InterfaceDashboard? _interfaceDashboard;
 
+
+  InterfaceDashboard getDashboardService() {
+    _interfaceDashboard ??= DashboardService();
+    return _interfaceDashboard!;
+  }
 
 
   InterfaceFeedback getFeedbackService() {
