@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:happifeet_client_app/components/HappiFeetAppBar.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/screens/Dashboard/Graph%20Model/GraphData.dart';
+import 'package:happifeet_client_app/storage/shared_preferences.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
 import 'package:happifeet_client_app/utils/DeviceDimensions.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -49,6 +50,8 @@ class _DashboardWidgetState extends State<DashboardWidget> {
 
   @override
   void initState() {
+
+    SharedPref.instance.getUserData();
     getParks();
     super.initState();
   }
@@ -108,6 +111,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                   "assets/images/manage/manageBG.svg",
                 )),
             Container(
+              height: DeviceDimensions.getBottomSheetHeight(context, HEADER_AREA),
                 margin: EdgeInsets.only(
                     top: DeviceDimensions.getBottomSheetMargin(
                         context, HEADER_AREA)),
@@ -865,7 +869,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                           height: 20,
                                           errorBuilder:
                                               (context, error, stackTrace) {
-                                            log("ERROR OCCURED WHILE LOADING IMAGE $error => $stackTrace");
+
 
                                             return const SizedBox();
                                           },
