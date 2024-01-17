@@ -27,7 +27,7 @@ class NetworkClient implements InterceptorsWrapper {
         sendTimeout: const Duration(seconds: 90000),
         baseUrl: base_url,
         connectTimeout: const Duration(seconds: 10000),
-        receiveTimeout: const Duration(seconds: 10000),
+        receiveTimeout: const Duration(seconds: 10000),persistentConnection: true,
         contentType: "multipart/form-data"
       // headers: <String, dynamic>{"User-agent": Jiffy().dateTime}
     ),
