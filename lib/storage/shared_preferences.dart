@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:happifeet_client_app/model/Login/AccessPermissionData.dart';
 import 'package:happifeet_client_app/model/Login/UserData.dart';
+import 'package:happifeet_client_app/screens/Dashboard/dashboard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/Theme/ClientTheme.dart';
@@ -28,18 +29,26 @@ class SharedPref {
     log("data in setUserData ${userdata} ");
     userData = userdata;
     try {
-      prefs.setString("userData", userdata.toString());
-      try {
-        String loginDetails = prefs.getString("userData")!;
-        log("LOADING USER DATA =>> $loginDetails}");
-      } catch (e) {
-        log("Failed to load login Details =>>", error: e);
-      }
+      String user = json.encode(userdata);
+      prefs.setString("userData",user);
+
     } catch (e) {
-      log("Failed to save login Details =>>", error: e);
+      throw e;
+    }
+  }
+
+  Future<String> getClientId() async {
+    String? ClientID = "";
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      UserData data = UserData.fromJson(json.decode(prefs.getString("userData")!));
+      log("Client ID => ${data.user_id}");
+      ClientID = data.user_id;
+    } catch (e) {
+      throw e;
     }
 
-
+    return Future.value(ClientID);
   }
 
   getUserData() async {
@@ -47,7 +56,7 @@ class SharedPref {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       getuserData = prefs.getString("userData");
-      log("Fetched USer Data from Sessions =>  $getuserData");
+      log("Fetched User Data from Sessions =>  $getuserData");
 
       data = UserData.fromJson(json.decode(prefs.getString(getuserData!)!));
     } catch (e) {
@@ -114,9 +123,7 @@ class SharedPref {
       // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context)));
       Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (BuildContext context) => LoginPageWidget()
-              // BottomNavigationHappiFeet(userData: SharedPref.instance.getUserData()),
-              // BottomNavigationHappiFeet()
+          MaterialPageRoute(builder: (context) => DashboardWidget(),
               ));
     } else {
       // await prefs.setBool('seen', true);

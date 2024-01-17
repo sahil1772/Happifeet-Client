@@ -6,6 +6,7 @@ import 'package:happifeet_client_app/model/ApiResponse.dart';
 import 'package:happifeet_client_app/model/DashboardModels/DashboardResponse.dart';
 import 'package:happifeet_client_app/network/interface/InterfaceDashboard.dart';
 import 'package:happifeet_client_app/network/services/ApiService.dart';
+import 'package:happifeet_client_app/storage/shared_preferences.dart';
 
 class DashboardService implements InterfaceDashboard {
   @override
@@ -13,7 +14,7 @@ class DashboardService implements InterfaceDashboard {
     try {
       var map = {
         'task': "dashboard",
-        'client': 302,
+        'client': await SharedPref.instance.getClientId(),
         'park': parkId,
         'report_type': type,
       };

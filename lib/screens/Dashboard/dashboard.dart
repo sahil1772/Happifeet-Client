@@ -16,9 +16,9 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 class DashboardWidget extends StatefulWidget {
   const DashboardWidget({super.key});
 
-  gotoDashboard(BuildContext context){
-    Navigator.push(context, MaterialPageRoute(builder: (_) => DashboardWidget()));
-
+  gotoDashboard(BuildContext context) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (_) => const DashboardWidget()));
   }
 
   @override
@@ -50,8 +50,6 @@ class _DashboardWidgetState extends State<DashboardWidget> {
 
   @override
   void initState() {
-
-    SharedPref.instance.getUserData();
     getParks();
     super.initState();
   }
@@ -82,25 +80,29 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                   ],
                 )),
                 child: Container(
-                  color: Colors.red,
                   margin: EdgeInsets.only(
                       top: HappiFeetAppBar(
                               IsDashboard: false, isCitiyList: false)
                           .getAppBar(context)
                           .preferredSize
                           .height,
-                    bottom:DeviceDimensions.getBottomSheetHeight(context, HEADER_AREA)
-                  ),
-                  child: const Center(
-                    child: Text(
-                      "Dashboard",
-                      // "Select Location".tr(),
-                      // "Select Location".language(context),
-                      // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500),
+                      bottom: DeviceDimensions.getBottomSheetHeight(
+                              context, HEADER_AREA) +
+                          DeviceDimensions.BOTTOMSHEET_TOP_MARGIN),
+                  child: const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text(
+                        "Dashboard",
+                        // "Select Location".tr(),
+                        // "Select Location".language(context),
+                        // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500),
+                      ),
                     ),
                   ),
                 )),
@@ -111,7 +113,8 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                   "assets/images/manage/manageBG.svg",
                 )),
             Container(
-              height: DeviceDimensions.getBottomSheetHeight(context, HEADER_AREA),
+                height:
+                    DeviceDimensions.getBottomSheetHeight(context, HEADER_AREA),
                 margin: EdgeInsets.only(
                     top: DeviceDimensions.getBottomSheetMargin(
                         context, HEADER_AREA)),
@@ -869,8 +872,6 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                           height: 20,
                                           errorBuilder:
                                               (context, error, stackTrace) {
-
-
                                             return const SizedBox();
                                           },
                                         ),
@@ -1070,8 +1071,9 @@ class _DashboardWidgetState extends State<DashboardWidget> {
   }
 
   Future<void> getParks() async {
-    Response? dashboardResponse =
-        await ApiFactory().getDashboardService().getParks("302");
+    Response? dashboardResponse = await ApiFactory()
+        .getDashboardService()
+        .getParks(await SharedPref.instance.getClientId());
 
     Map<String, dynamic> responseData = json.decode(dashboardResponse!.data!);
 
