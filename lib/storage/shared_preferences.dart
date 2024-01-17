@@ -4,9 +4,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:happifeet_client_app/model/Login/AccessPermissionData.dart';
 import 'package:happifeet_client_app/model/Login/UserData.dart';
-import 'package:happifeet_client_app/screens/Dashboard/dashboard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../components/BottomNavigation.dart';
 import '../model/Theme/ClientTheme.dart';
 import '../screens/Login/LoginPage.dart';
 
@@ -56,7 +56,7 @@ class SharedPref {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       getuserData = prefs.getString("userData");
-      log("Fetched User Data from Sessions =>  $getuserData");
+      log("Fetched USer Data from Sessions =>  $getuserData");
 
       data = UserData.fromJson(json.decode(prefs.getString(getuserData!)!));
     } catch (e) {

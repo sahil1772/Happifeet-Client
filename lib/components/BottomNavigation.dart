@@ -22,7 +22,7 @@ class BottomNavigationHappiFeet extends StatefulWidget{
 
   goToBottomNavigation(BuildContext context,UserData userData){
 
-    Navigator.push(context, MaterialPageRoute(builder: (_) => BottomNavigationHappiFeet(userData: userData,)));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => BottomNavigationHappiFeet(userData: userData,)));
   }
 
 
@@ -33,7 +33,7 @@ class _BottomNavigationHappiFeetState extends State<BottomNavigationHappiFeet>{
 
   @override
   void initState() {
-    log("USER DATA --> ${widget.userData!.toJson()}");
+    // log("USER DATA --> ${widget.userData!.toJson()}");
     _controller = PersistentTabController(initialIndex: 0);
 
     setBoolForLogIn();
