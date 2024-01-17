@@ -4,9 +4,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:happifeet_client_app/model/Login/AccessPermissionData.dart';
 import 'package:happifeet_client_app/model/Login/UserData.dart';
-import 'package:happifeet_client_app/screens/Dashboard/dashboard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../components/BottomNavigation.dart';
 import '../model/Theme/ClientTheme.dart';
 import '../screens/Login/LoginPage.dart';
 
@@ -20,11 +20,12 @@ class SharedPref {
     return instance;
   }
 
+
   /// Store User data
   UserData userData = UserData();
   String? getuserData;
 
-  setUserData(UserData userdata) async {
+  setUserData(UserData userdata) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     log("data in setUserData ${userdata} ");
     userData = userdata;
@@ -51,25 +52,38 @@ class SharedPref {
     return Future.value(ClientID);
   }
 
-  getUserData() async {
+  Future<String> getClientType() async {
+    String? userType = "";
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      UserData data = UserData.fromJson(json.decode(prefs.getString("userData")!));
+      log("User Type => ${data.user_type}");
+      userType = data.user_type;
+    } catch (e) {
+      throw e;
+    }
+
+    return Future.value(userType);
+  }
+
+  Future<UserData?> getUserData() async {
     UserData? data;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       getuserData = prefs.getString("userData");
-      log("Fetched User Data from Sessions =>  $getuserData");
-
+      log("Fetched USer Data from Sessions =>  $getuserData");
       data = UserData.fromJson(json.decode(prefs.getString(getuserData!)!));
     } catch (e) {
       log("ERROR OCCURED ", error: e);
     }
 
-    return data;
+    return Future.value(data);
   }
 
   /// Access permission
   AccessPermissionData accessPermission = AccessPermissionData();
 
-  setAccessPermission(AccessPermissionData userdata) async {
+  setAccessPermission(AccessPermissionData userdata) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     log("data in setAccessPermission ${userdata} ");
     accessPermission = AccessPermissionData.fromJson(userdata.toJson());
@@ -77,7 +91,7 @@ class SharedPref {
     prefs?.setString("accessPermission", accessPermission.toString());
   }
 
-  AccessPermissionData getAccessPermission() {
+  AccessPermissionData getAccessPermission(){
     return this.accessPermission;
   }
 
@@ -105,7 +119,7 @@ class SharedPref {
 
   Future<bool?> getPermissionTrail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool? data = (prefs.getBool("trail") ?? false);
+    bool? data = (prefs.getBool("trail") ?? false );
     log("inside getPermissionTrail $data");
     return data;
   }
@@ -123,7 +137,7 @@ class SharedPref {
       // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context)));
       Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => DashboardWidget(),
+          MaterialPageRoute(builder: (context) => BottomNavigationHappiFeet(),
               ));
     } else {
       // await prefs.setBool('seen', true);
@@ -134,6 +148,9 @@ class SharedPref {
           ));
     }
   }
+
+
+
 
   ClientTheme clientTheme = ClientTheme();
 
