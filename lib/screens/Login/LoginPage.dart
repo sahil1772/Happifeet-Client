@@ -17,7 +17,8 @@ class LoginPageWidget extends StatefulWidget{
   const LoginPageWidget({super.key});
 
   gotoLogin(BuildContext context){
-    Navigator.push(context, MaterialPageRoute(builder: (_) => LoginPageWidget()));
+
+    Navigator.of(context,rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (_) => LoginPageWidget()));
   }
 
 
@@ -210,7 +211,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
                        SharedPref.instance.setUserData(response.data!);
 
                        setUserPermissions(response.data!);
-                       BottomNavigationHappiFeet().goToBottomNavigation(context,response.data!);
+                       BottomNavigationHappiFeet().goToBottomNavigation(context);
 
                      }else{
                        log("INVALID USERNAME IN LOGIN PAGE");

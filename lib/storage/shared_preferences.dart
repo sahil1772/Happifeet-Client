@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -51,19 +52,32 @@ class SharedPref {
     return Future.value(ClientID);
   }
 
-  getUserData() async {
+  Future<String> getClientType() async {
+    String? userType = "";
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      UserData data = UserData.fromJson(json.decode(prefs.getString("userData")!));
+      log("User Type => ${data.user_type}");
+      userType = data.user_type;
+    } catch (e) {
+      throw e;
+    }
+
+    return Future.value(userType);
+  }
+
+  Future<UserData?> getUserData() async {
     UserData? data;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       getuserData = prefs.getString("userData");
       log("Fetched USer Data from Sessions =>  $getuserData");
-
       data = UserData.fromJson(json.decode(prefs.getString(getuserData!)!));
     } catch (e) {
       log("ERROR OCCURED ", error: e);
     }
 
-    return data;
+    return Future.value(data);
   }
 
   /// Access permission
@@ -123,7 +137,7 @@ class SharedPref {
       // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context)));
       Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => DashboardWidget(),
+          MaterialPageRoute(builder: (context) => BottomNavigationHappiFeet(),
               ));
     } else {
       // await prefs.setBool('seen', true);

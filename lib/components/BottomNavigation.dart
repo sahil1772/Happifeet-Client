@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:happifeet_client_app/storage/shared_preferences.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,15 +16,14 @@ import '../screens/Profile/Profile.dart';
 import '../screens/Reports/Reports.dart';
 
 class BottomNavigationHappiFeet extends StatefulWidget{
-  UserData? userData;
 
-  BottomNavigationHappiFeet({super.key,this.userData});
+  BottomNavigationHappiFeet({super.key});
   @override
   State<BottomNavigationHappiFeet> createState() => _BottomNavigationHappiFeetState();
 
-  goToBottomNavigation(BuildContext context,UserData userData){
+  goToBottomNavigation(BuildContext context){
 
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => BottomNavigationHappiFeet(userData: userData,)));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => BottomNavigationHappiFeet()));
   }
 
 
@@ -31,12 +32,24 @@ class BottomNavigationHappiFeet extends StatefulWidget{
 class _BottomNavigationHappiFeetState extends State<BottomNavigationHappiFeet>{
   late PersistentTabController _controller;
 
+  String? userType = "";
+
   @override
   void initState() {
     // log("USER DATA --> ${widget.userData!.toJson()}");
     _controller = PersistentTabController(initialIndex: 0);
 
     setBoolForLogIn();
+
+    SharedPref.instance.getClientType().then((value)  {
+      userType = value;
+      log("USER TYPE ==> ",error: userType);
+      setState(() {
+
+      });
+    });
+
+
 
     /** Display with status and navigation bar **/
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
@@ -52,7 +65,7 @@ class _BottomNavigationHappiFeetState extends State<BottomNavigationHappiFeet>{
   List<Widget> _buildScreens() {
     return [
       const DashboardWidget(),
-      if(widget.userData!.user_type == "S")
+      if(userType == "S")
       const ManageWidget(),
       const ReportsWidget(),
       const ProfileWidget(),
@@ -74,7 +87,7 @@ class _BottomNavigationHappiFeetState extends State<BottomNavigationHappiFeet>{
         // activeColorPrimary: Colors.red,
         // activeColorSecondary: Colors.lightBlue,
       ),
-      if(widget.userData!.user_type == "S")
+      if(userType == "S")
       PersistentBottomNavBarItem(
         title: 'Manage',
         activeColorPrimary: CupertinoColors.destructiveRed,
