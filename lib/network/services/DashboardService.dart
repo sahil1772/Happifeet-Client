@@ -32,4 +32,27 @@ class DashboardService implements InterfaceDashboard {
       throw "Error Occurred for getParkAnalytics ${error}";
     }
   }
+
+  @override
+  Future<Response?> getParks(String? client_user_id) async {
+    try {
+      var map = {
+        'task': "locationlist",
+        'client': client_user_id
+      };
+
+      var response =
+          await NetworkClient().dio.post(base_url, data: FormData.fromMap(map));
+
+      if (response.statusCode == 200) {
+        //Return Success Response Object as BaseResponse Class Object
+        return response;
+      } else {
+        //Return Failure Response Object as BaseResponse Class Object
+        return null;
+      }
+    } on DioException catch (error) {
+      throw "Error Occurred for getParks ${error}";
+    }
+  }
 }

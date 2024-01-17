@@ -6,4 +6,6 @@ abstract class InterfaceDashboard{
 
   Future<Response?> getParkAnalytics(String? parkId,String? type);
 
+  Future<Response?> getParks(String? client_user_id);
+
 }

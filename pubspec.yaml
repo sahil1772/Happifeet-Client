@@ -91,6 +91,7 @@ flutter:
     - assets/images/manageUser/
     - assets/images/comments/
     - assets/images/status/
+    - assets/images/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

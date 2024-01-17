@@ -155,7 +155,7 @@ class _AddLocationState extends State<AddLocation>
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                        Text(
+                      Text(
                         "Add Location",
                         // "Select Location".tr(),
                         // "Select Location".language(context),

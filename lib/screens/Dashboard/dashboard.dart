@@ -9,6 +9,7 @@ import 'package:happifeet_client_app/components/HappiFeetAppBar.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/screens/Dashboard/Graph%20Model/GraphData.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
+import 'package:happifeet_client_app/utils/DeviceDimensions.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class DashboardWidget extends StatefulWidget {
@@ -26,6 +27,9 @@ class _DashboardWidgetState extends State<DashboardWidget> {
   int MAX = 100;
 
   Filter_TYPE type = Filter_TYPE.WEEKLY;
+  List<dynamic> locations = [];
+  List<dynamic> comments = [];
+  Map<String, dynamic> parks = {};
 
   List<ColumnSeries> commentsGraphColumns = <ColumnSeries<GraphData, String>>[
     // Bind data source
@@ -36,378 +40,530 @@ class _DashboardWidgetState extends State<DashboardWidget> {
   List<StackedColumnSeries> recommendationStackedColumns =
       <StackedColumnSeries<GraphData, String>>[];
 
+  String? selectedParkId = "";
+
   @override
   void initState() {
+    getParks();
     super.initState();
-  }
-
-  Future<Map<String, dynamic>?> getData(String? parkId,String? filterBy) async {
-    if (commentsGraphColumns != null) {
-      //Clearing Comments Data
-      commentsGraphColumns.clear();
-    }
-    if (ratingGraphLine != null) {
-      //Clearing Ratings Data
-      ratingGraphLine.clear();
-    }
-
-    if (recommendationStackedColumns != null) {
-      //Clearing Recommendation Data
-      recommendationStackedColumns.clear();
-    }
-
-    Response? dashboardResponse = await ApiFactory()
-        .getDashboardService()
-        .getParkAnalytics(parkId,filterBy!.toLowerCase());
-
-    Map<String, dynamic> responseData = json.decode(dashboardResponse!.data!);
-
-    fetchComments(responseData);
-    fetchRatings(responseData);
-    fetchRecommendation(responseData);
-
-    return dashboardResponse.data;
   }
 
   @override
   Widget build(BuildContext context) {
-    // recommendationStackedColumns = <StackedColumnSeries<GraphData, String>>[
+    graphSize = DeviceDimensions.getDeviceHeight(context) / 4;
+    double HEADER_AREA = 3.5;
 
-    //   StackedColumnSeries<GraphData, String>(
-    //       legendIconType: LegendIconType.rectangle,
-    //       legendItemText: "Maybe",
-    //       // Bind data source
-    //       dataSource: <GraphData>[
-    //         GraphData(
-    //             xCoordinateName: 'Jan',
-    //             yCoordinateValue: Random().nextInt(100 - 10) + 10),
-    //         GraphData(
-    //           xCoordinateName: 'Feb',
-    //           yCoordinateValue: Random().nextInt(100 - 10) + 10,
-    //         ),
-    //         GraphData(
-    //             xCoordinateName: 'Mar',
-    //             yCoordinateValue: Random().nextInt(100 - 10) + 10),
-    //         GraphData(
-    //             xCoordinateName: 'Apr',
-    //             yCoordinateValue: Random().nextInt(100 - 10) + 10),
-    //         GraphData(
-    //             xCoordinateName: 'Jun',
-    //             yCoordinateValue: Random().nextInt(100 - 10) + 10),
-    //         GraphData(
-    //             xCoordinateName: 'July',
-    //             yCoordinateValue: Random().nextInt(100 - 10) + 10),
-    //         GraphData(
-    //             xCoordinateName: 'Aug',
-    //             yCoordinateValue: Random().nextInt(100 - 10) + 10),
-    //       ],
-    //       color: Colors.orangeAccent,
-    //       xValueMapper: (GraphData sales, _) => sales.xCoordinateName,
-    //       yValueMapper: (GraphData sales, _) => sales.yCoordinateValue),
-    // ];
-
-    graphSize = MediaQuery.of(context).size.height / 4;
-
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      resizeToAvoidBottomInset: false,
-      appBar: HappiFeetAppBar(IsDashboard: true, isCitiyList: false)
-          .getAppBar(context),
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                colors: [
-                  ColorParser().hexToColor("#34A846"),
-                  ColorParser().hexToColor("#83C03D")
-                ],
-              )),
-              child: const Padding(
-                // padding: EdgeInsets.symmetric(vertical: 56.0, horizontal: 36),
-                padding: EdgeInsets.only(left: 20, top: 140),
-                child: Text(
-                  "Dashboard",
-                  // "Select Location".tr(),
-                  // "Select Location".language(context),
-                  // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500),
-                ),
-              )),
-          Positioned(
-              right: 0,
-              top: MediaQuery.of(context).size.height / 9.5,
-              child: SvgPicture.asset(
-                "assets/images/manage/manageBG.svg",
-              )),
-          DraggableScrollableSheet(
-              initialChildSize: 0.67,
-              minChildSize: 0.67,
-              maxChildSize: 0.67,
-              builder:
-                  (BuildContext context, ScrollController scrollController) {
-                return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 0),
-                  decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(25),
-                          topRight: Radius.circular(25)),
-                      color: Colors.white),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.all(16.0),
-                          child: Text("Select Location",
-                              style: TextStyle(
-                                  color: Color(0xff383838),
-                                  fontSize: 16)),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 16),
-                          child: DropdownMenu<String>(
-                            width:
-                            MediaQuery.of(context).size.width - 32,
-                            enableSearch: true,
-                            inputDecorationTheme: InputDecorationTheme(
-                                border: OutlineInputBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(15))),
-                            requestFocusOnTap: true,
-                            label: const Text('Select'),
-                            initialSelection: "Select",
-                            onSelected: (String? color) {
-                              setState(() {});
-                            },
-                            dropdownMenuEntries: const [
-                              DropdownMenuEntry<String>(
-                                value: "PARK 1",
-                                label: "PARK 1",
-                              ),
-                              DropdownMenuEntry<String>(
-                                value: "PARK 2",
-                                label: "PARK 2",
-                              ),
-                              DropdownMenuEntry<String>(
-                                value: "PARK 3",
-                                label: "PARK 3",
-                              ),
-                              DropdownMenuEntry<String>(
-                                value: "PARK 4",
-                                label: "PARK 4",
-                              )
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(vertical: 16),
-                          child: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Flexible(
-                                  fit: FlexFit.loose,
-                                  flex: 1,
-                                  child: OutlinedButton(
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                        MaterialStateProperty.all(
-                                            type ==
-                                                Filter_TYPE
-                                                    .WEEKLY
-                                                ? Theme.of(context)
-                                                .primaryColor
-                                                : Colors
-                                                .transparent),
-                                        shape:
-                                        MaterialStateProperty.all(
-                                            RoundedRectangleBorder(
-                                                borderRadius:
-                                                BorderRadius
-                                                    .circular(
-                                                    10.0))),
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          type = Filter_TYPE.WEEKLY;
-                                        });
-                                      },
-                                      child: Text(
-                                        "Weekly",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: type ==
-                                                Filter_TYPE.WEEKLY
-                                                ? Colors.white
-                                                : Theme.of(context)
-                                                .primaryColor),
-                                      ))),
-                              Flexible(
-                                  fit: FlexFit.loose,
-                                  flex: 1,
-                                  child: OutlinedButton(
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                        MaterialStateProperty.all(
-                                            type ==
-                                                Filter_TYPE
-                                                    .MONTHLY
-                                                ? Theme.of(context)
-                                                .primaryColor
-                                                : Colors
-                                                .transparent),
-                                        shape:
-                                        MaterialStateProperty.all(
-                                            RoundedRectangleBorder(
-                                                borderRadius:
-                                                BorderRadius
-                                                    .circular(
-                                                    10.0))),
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          type = Filter_TYPE.MONTHLY;
-                                        });
-                                      },
-                                      child: Text(
-                                        "Monthly",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: type ==
-                                                Filter_TYPE.MONTHLY
-                                                ? Colors.white
-                                                : Theme.of(context)
-                                                .primaryColor),
-                                      ))),
-                              Flexible(
-                                  fit: FlexFit.loose,
-                                  flex: 1,
-                                  child: OutlinedButton(
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                        MaterialStateProperty.all(
-                                            type ==
-                                                Filter_TYPE
-                                                    .YEARLY
-                                                ? Theme.of(context)
-                                                .primaryColor
-                                                : Colors
-                                                .transparent),
-                                        shape:
-                                        MaterialStateProperty.all(
-                                            RoundedRectangleBorder(
-                                                borderRadius:
-                                                BorderRadius
-                                                    .circular(
-                                                    10.0))),
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          type = Filter_TYPE.YEARLY;
-                                        });
-                                      },
-                                      child: Text(
-                                        "Yearly",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: type ==
-                                                Filter_TYPE.YEARLY
-                                                ? Colors.white
-                                                : Theme.of(context)
-                                                .primaryColor),
-                                      ))),
-                              Flexible(
-                                  fit: FlexFit.loose,
-                                  flex: 1,
-                                  child: OutlinedButton(
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                        MaterialStateProperty.all(
-                                            type == Filter_TYPE.ALL
-                                                ? Theme.of(context)
-                                                .primaryColor
-                                                : Colors
-                                                .transparent),
-                                        shape:
-                                        MaterialStateProperty.all(
-                                            RoundedRectangleBorder(
-                                                borderRadius:
-                                                BorderRadius
-                                                    .circular(
-                                                    10.0))),
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          type = Filter_TYPE.ALL;
-                                        });
-                                      },
-                                      child: Text(
-                                        "All",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color:
-                                            type == Filter_TYPE.ALL
-                                                ? Colors.white
-                                                : Theme.of(context)
-                                                .primaryColor),
-                                      ))),
-                            ],
-                          ),
-                        ),
-                        FutureBuilder(
-                          builder: (BuildContext context,
-                              AsyncSnapshot<dynamic> snapshot) {
-                            Widget toReturn;
-                            switch (snapshot.connectionState) {
-                              case ConnectionState.active:
-                                toReturn =
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Center(child: CircularProgressIndicator()),
-                                    );
-                                break;
-                              case ConnectionState.waiting:
-                                toReturn =
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Center(child: CircularProgressIndicator()),
-                                    );
-
-                                break;
-                              case ConnectionState.done:
-                                toReturn = Column(
-
-                                  children: [
-                                    getGraphs(),
-                                    getReviews(),
-                                  ],
-                                );
-                                break;
-                              case ConnectionState.none:
-                                toReturn =
-                                const Center(child: CircularProgressIndicator());
-                                break;
-                            }
-                            return toReturn;
-                          },
-                          future: getData("1515",type.name),
-                        ),
-
-                      ],
-                    )
+    return SafeArea(
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        resizeToAvoidBottomInset: false,
+        appBar: HappiFeetAppBar(IsDashboard: true, isCitiyList: false)
+            .getAppBar(context),
+        body: Stack(
+          fit: StackFit.expand,
+          children: [
+            Container(
+                height: DeviceDimensions.getHeaderSize(context, HEADER_AREA),
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [
+                    ColorParser().hexToColor("#34A846"),
+                    ColorParser().hexToColor("#83C03D")
+                  ],
+                )),
+                child: Container(
+                  color: Colors.red,
+                  margin: EdgeInsets.only(
+                      top: HappiFeetAppBar(
+                              IsDashboard: false, isCitiyList: false)
+                          .getAppBar(context)
+                          .preferredSize
+                          .height,
+                    bottom:DeviceDimensions.getBottomSheetHeight(context, HEADER_AREA)
                   ),
-                );
-              }),
-        ],
+                  child: const Center(
+                    child: Text(
+                      "Dashboard",
+                      // "Select Location".tr(),
+                      // "Select Location".language(context),
+                      // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                )),
+            Positioned(
+                right: 0,
+                top: MediaQuery.of(context).size.height / 9.5,
+                child: SvgPicture.asset(
+                  "assets/images/manage/manageBG.svg",
+                )),
+            Container(
+                margin: EdgeInsets.only(
+                    top: DeviceDimensions.getBottomSheetMargin(
+                        context, HEADER_AREA)),
+                padding: const EdgeInsets.symmetric(horizontal: 0),
+                decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(25),
+                        topRight: Radius.circular(25)),
+                    color: Colors.white),
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: parks.length > 0
+                      ? Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.all(16.0),
+                              child: Text("Select Location",
+                                  style: TextStyle(
+                                      color: Color(0xff383838), fontSize: 16)),
+                            ),
+                            Container(
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: DropdownMenu<String>(
+                                width: MediaQuery.of(context).size.width - 32,
+                                enableSearch: false,
+                                inputDecorationTheme: InputDecorationTheme(
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(15))),
+                                requestFocusOnTap: false,
+                                label: const Text('Select'),
+                                initialSelection: selectedParkId,
+                                onSelected: (String? park) {
+                                  selectedParkId = park;
+                                  log("Selected PARK => $park");
+                                  setState(() {});
+                                },
+                                dropdownMenuEntries: [
+                                  for (int i = 0; i < parks.keys.length; i++)
+                                    DropdownMenuEntry<String>(
+                                      value: parks.keys.elementAt(i),
+                                      label: parks.values.elementAt(i),
+                                    ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.symmetric(vertical: 16),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Flexible(
+                                      fit: FlexFit.loose,
+                                      flex: 1,
+                                      child: OutlinedButton(
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    type == Filter_TYPE.WEEKLY
+                                                        ? Theme.of(context)
+                                                            .primaryColor
+                                                        : Colors.transparent),
+                                            shape: MaterialStateProperty.all(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0))),
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              type = Filter_TYPE.WEEKLY;
+                                            });
+                                          },
+                                          child: Text(
+                                            "Weekly",
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color:
+                                                    type == Filter_TYPE.WEEKLY
+                                                        ? Colors.white
+                                                        : Theme.of(context)
+                                                            .primaryColor),
+                                          ))),
+                                  Flexible(
+                                      fit: FlexFit.loose,
+                                      flex: 1,
+                                      child: OutlinedButton(
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    type == Filter_TYPE.MONTHLY
+                                                        ? Theme.of(context)
+                                                            .primaryColor
+                                                        : Colors.transparent),
+                                            shape: MaterialStateProperty.all(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0))),
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              type = Filter_TYPE.MONTHLY;
+                                            });
+                                          },
+                                          child: Text(
+                                            "Monthly",
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color:
+                                                    type == Filter_TYPE.MONTHLY
+                                                        ? Colors.white
+                                                        : Theme.of(context)
+                                                            .primaryColor),
+                                          ))),
+                                  Flexible(
+                                      fit: FlexFit.loose,
+                                      flex: 1,
+                                      child: OutlinedButton(
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    type == Filter_TYPE.YEARLY
+                                                        ? Theme.of(context)
+                                                            .primaryColor
+                                                        : Colors.transparent),
+                                            shape: MaterialStateProperty.all(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0))),
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              type = Filter_TYPE.YEARLY;
+                                            });
+                                          },
+                                          child: Text(
+                                            "Yearly",
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color:
+                                                    type == Filter_TYPE.YEARLY
+                                                        ? Colors.white
+                                                        : Theme.of(context)
+                                                            .primaryColor),
+                                          ))),
+                                  Flexible(
+                                      fit: FlexFit.loose,
+                                      flex: 1,
+                                      child: OutlinedButton(
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    type == Filter_TYPE.ALL
+                                                        ? Theme.of(context)
+                                                            .primaryColor
+                                                        : Colors.transparent),
+                                            shape: MaterialStateProperty.all(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0))),
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              type = Filter_TYPE.ALL;
+                                            });
+                                          },
+                                          child: Text(
+                                            "All",
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: type == Filter_TYPE.ALL
+                                                    ? Colors.white
+                                                    : Theme.of(context)
+                                                        .primaryColor),
+                                          ))),
+                                ],
+                              ),
+                            ),
+                            FutureBuilder(
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<dynamic> snapshot) {
+                                Widget toReturn;
+                                switch (snapshot.connectionState) {
+                                  case ConnectionState.active:
+                                    toReturn = const Padding(
+                                      padding: EdgeInsets.all(64.0),
+                                      child: Center(
+                                          child: CircularProgressIndicator()),
+                                    );
+                                    break;
+                                  case ConnectionState.waiting:
+                                    toReturn = const Padding(
+                                      padding: EdgeInsets.all(64.0),
+                                      child: Center(
+                                          child: CircularProgressIndicator()),
+                                    );
+
+                                    break;
+                                  case ConnectionState.done:
+                                    toReturn = Column(
+                                      children: [
+                                        getGraphs(),
+                                        getReviews(),
+                                      ],
+                                    );
+                                    break;
+                                  case ConnectionState.none:
+                                    toReturn = const Padding(
+                                      padding: EdgeInsets.all(64.0),
+                                      child: Center(
+                                          child: CircularProgressIndicator()),
+                                    );
+                                    break;
+                                }
+                                return toReturn;
+                              },
+                              future: getData(selectedParkId, type.name),
+                            ),
+                          ],
+                        )
+                      : const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(56.0),
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
+                  // child: FutureBuilder(
+                  //   future: getParks(),
+                  //   builder: (context, snapshot) {
+                  //     Widget toReturn = SizedBox();
+                  //     switch(snapshot.connectionState){
+                  //       case ConnectionState.done:
+                  //         toReturn = Column(
+                  //           mainAxisSize: MainAxisSize.min,
+                  //           children: [
+                  //             const Padding(
+                  //               padding: EdgeInsets.all(16.0),
+                  //               child: Text("Select Location",
+                  //                   style: TextStyle(
+                  //                       color: Color(0xff383838), fontSize: 16)),
+                  //             ),
+                  //             Container(
+                  //               margin: const EdgeInsets.symmetric(horizontal: 16),
+                  //               child: DropdownMenu<String>(
+                  //                 width: MediaQuery.of(context).size.width - 32,
+                  //                 enableSearch: true,
+                  //                 inputDecorationTheme: InputDecorationTheme(
+                  //                     border: OutlineInputBorder(
+                  //                         borderRadius: BorderRadius.circular(15))),
+                  //                 requestFocusOnTap: true,
+                  //                 label: const Text('Select'),
+                  //                 initialSelection: "Select",
+                  //                 onSelected: (String? park) {
+                  //                   log("Selected PARK => $park");
+                  //                   setState(() {});
+                  //                 },
+                  //                 dropdownMenuEntries: [
+                  //                   for (int i = 0; i < parks.keys.length; i++)
+                  //                     DropdownMenuEntry<String>(
+                  //                       value: parks.keys.elementAt(i),
+                  //                       label: parks.values.elementAt(i),
+                  //                     ),
+                  //                 ],
+                  //               ),
+                  //             ),
+                  //             Container(
+                  //               margin: const EdgeInsets.symmetric(vertical: 16),
+                  //               child: Row(
+                  //                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //                 children: [
+                  //                   Flexible(
+                  //                       fit: FlexFit.loose,
+                  //                       flex: 1,
+                  //                       child: OutlinedButton(
+                  //                           style: ButtonStyle(
+                  //                             backgroundColor:
+                  //                             MaterialStateProperty.all(type ==
+                  //                                 Filter_TYPE.WEEKLY
+                  //                                 ? Theme.of(context).primaryColor
+                  //                                 : Colors.transparent),
+                  //                             shape: MaterialStateProperty.all(
+                  //                                 RoundedRectangleBorder(
+                  //                                     borderRadius:
+                  //                                     BorderRadius.circular(10.0))),
+                  //                           ),
+                  //                           onPressed: () {
+                  //                             setState(() {
+                  //                               type = Filter_TYPE.WEEKLY;
+                  //                             });
+                  //                           },
+                  //                           child: Text(
+                  //                             "Weekly",
+                  //                             style: TextStyle(
+                  //                                 fontSize: 12,
+                  //                                 color: type == Filter_TYPE.WEEKLY
+                  //                                     ? Colors.white
+                  //                                     : Theme.of(context).primaryColor),
+                  //                           ))),
+                  //                   Flexible(
+                  //                       fit: FlexFit.loose,
+                  //                       flex: 1,
+                  //                       child: OutlinedButton(
+                  //                           style: ButtonStyle(
+                  //                             backgroundColor:
+                  //                             MaterialStateProperty.all(type ==
+                  //                                 Filter_TYPE.MONTHLY
+                  //                                 ? Theme.of(context).primaryColor
+                  //                                 : Colors.transparent),
+                  //                             shape: MaterialStateProperty.all(
+                  //                                 RoundedRectangleBorder(
+                  //                                     borderRadius:
+                  //                                     BorderRadius.circular(10.0))),
+                  //                           ),
+                  //                           onPressed: () {
+                  //                             setState(() {
+                  //                               type = Filter_TYPE.MONTHLY;
+                  //                             });
+                  //                           },
+                  //                           child: Text(
+                  //                             "Monthly",
+                  //                             style: TextStyle(
+                  //                                 fontSize: 12,
+                  //                                 color: type == Filter_TYPE.MONTHLY
+                  //                                     ? Colors.white
+                  //                                     : Theme.of(context).primaryColor),
+                  //                           ))),
+                  //                   Flexible(
+                  //                       fit: FlexFit.loose,
+                  //                       flex: 1,
+                  //                       child: OutlinedButton(
+                  //                           style: ButtonStyle(
+                  //                             backgroundColor:
+                  //                             MaterialStateProperty.all(type ==
+                  //                                 Filter_TYPE.YEARLY
+                  //                                 ? Theme.of(context).primaryColor
+                  //                                 : Colors.transparent),
+                  //                             shape: MaterialStateProperty.all(
+                  //                                 RoundedRectangleBorder(
+                  //                                     borderRadius:
+                  //                                     BorderRadius.circular(10.0))),
+                  //                           ),
+                  //                           onPressed: () {
+                  //                             setState(() {
+                  //                               type = Filter_TYPE.YEARLY;
+                  //                             });
+                  //                           },
+                  //                           child: Text(
+                  //                             "Yearly",
+                  //                             style: TextStyle(
+                  //                                 fontSize: 12,
+                  //                                 color: type == Filter_TYPE.YEARLY
+                  //                                     ? Colors.white
+                  //                                     : Theme.of(context).primaryColor),
+                  //                           ))),
+                  //                   Flexible(
+                  //                       fit: FlexFit.loose,
+                  //                       flex: 1,
+                  //                       child: OutlinedButton(
+                  //                           style: ButtonStyle(
+                  //                             backgroundColor:
+                  //                             MaterialStateProperty.all(type ==
+                  //                                 Filter_TYPE.ALL
+                  //                                 ? Theme.of(context).primaryColor
+                  //                                 : Colors.transparent),
+                  //                             shape: MaterialStateProperty.all(
+                  //                                 RoundedRectangleBorder(
+                  //                                     borderRadius:
+                  //                                     BorderRadius.circular(10.0))),
+                  //                           ),
+                  //                           onPressed: () {
+                  //                             setState(() {
+                  //                               type = Filter_TYPE.ALL;
+                  //                             });
+                  //                           },
+                  //                           child: Text(
+                  //                             "All",
+                  //                             style: TextStyle(
+                  //                                 fontSize: 12,
+                  //                                 color: type == Filter_TYPE.ALL
+                  //                                     ? Colors.white
+                  //                                     : Theme.of(context).primaryColor),
+                  //                           ))),
+                  //                 ],
+                  //               ),
+                  //             ),
+                  //             FutureBuilder(
+                  //               builder: (BuildContext context,
+                  //                   AsyncSnapshot<dynamic> snapshot) {
+                  //                 Widget toReturn;
+                  //                 switch (snapshot.connectionState) {
+                  //                   case ConnectionState.active:
+                  //                     toReturn = const Padding(
+                  //                       padding: EdgeInsets.all(64.0),
+                  //                       child:
+                  //                       Center(child: CircularProgressIndicator()),
+                  //                     );
+                  //                     break;
+                  //                   case ConnectionState.waiting:
+                  //                     toReturn = const Padding(
+                  //                       padding: EdgeInsets.all(64.0),
+                  //                       child:
+                  //                       Center(child: CircularProgressIndicator()),
+                  //                     );
+                  //
+                  //                     break;
+                  //                   case ConnectionState.done:
+                  //                     toReturn = Column(
+                  //                       children: [
+                  //                         getGraphs(),
+                  //                         getReviews(),
+                  //                       ],
+                  //                     );
+                  //                     break;
+                  //                   case ConnectionState.none:
+                  //                     toReturn = const Padding(
+                  //                       padding: EdgeInsets.all(64.0),
+                  //                       child:
+                  //                       Center(child: CircularProgressIndicator()),
+                  //                     );
+                  //                     break;
+                  //                 }
+                  //                 return toReturn;
+                  //               },
+                  //               future: getData(selectedParkId, type.name),
+                  //             ),
+                  //           ],
+                  //         );
+                  //         break;
+                  //       case ConnectionState.waiting:
+                  //         toReturn = Center(child: Padding(
+                  //           padding: const EdgeInsets.all(56.0),
+                  //           child: CircularProgressIndicator(),
+                  //         ));
+                  //         break;
+                  //       case ConnectionState.none:
+                  //         toReturn = Center(child: Padding(
+                  //           padding: const EdgeInsets.all(56.0),
+                  //           child: CircularProgressIndicator(),
+                  //         ));
+                  //         break;
+                  //       case ConnectionState.active:
+                  //         toReturn = Center(child: Padding(
+                  //           padding: const EdgeInsets.all(56.0),
+                  //           child: CircularProgressIndicator(),
+                  //         ));
+                  //         break;
+                  //
+                  //     }
+                  //     return toReturn;
+                  //
+                  //   }
+                  // )),
+                ))
+          ],
+        ),
       ),
     );
   }
@@ -483,294 +639,76 @@ class _DashboardWidgetState extends State<DashboardWidget> {
           margin: const EdgeInsets.only(bottom: 24, left: 16, right: 16),
           child: Column(
             children: [
-              Column(
-                children: [
-                  Flex(
-                    direction: Axis.horizontal,
-                    children: [
-                      Flexible(
-                        fit: FlexFit.tight,
-                        flex: 2,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 16, horizontal: 16.0),
-                          child: Flex(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            direction: Axis.vertical,
-                            children: [
-                              Text(
-                                "Alfred B. Maclay",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Theme.of(context).primaryColor),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 5.0),
-                                child: Text(
-                                  "Thomasville Rd,\nTallahassee, FL 32309, USA",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      color:
-                                          ColorParser().hexToColor("#757575")),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Flexible(
-                        flex: 1,
-                        fit: FlexFit.tight,
-                        child: Container(
-                          margin: const EdgeInsets.only(
-                              top: 16, right: 16, bottom: 16),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border:
-                                  Border.all(color: const Color(0x15000000))),
-                          child: Flex(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            direction: Axis.vertical,
-                            children: [
-                              Text(
-                                "10",
-                                style: TextStyle(
-                                    fontSize: 28,
-                                    color: Theme.of(context).primaryColor),
-                              ),
-                              Text(
-                                "Total Feedback",
-                                softWrap: true,
+              for (int i = 0; i < locations.length; i++)
+                Flex(
+                  mainAxisSize: MainAxisSize.min,
+                  direction: Axis.horizontal,
+                  children: [
+                    Flexible(
+                      fit: FlexFit.tight,
+                      flex: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 16, horizontal: 16.0),
+                        child: Flex(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          direction: Axis.vertical,
+                          children: [
+                            Text(
+                              locations[i]["park_name"],
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context).primaryColor),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Text(
+                                locations[i]["address"],
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     fontSize: 14,
-                                    color: Theme.of(context).primaryColor),
-                                textAlign: TextAlign.center,
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  Container(
-                    height: 1,
-                    color: const Color(0x15000000),
-                  ),
-                  Flex(
-                    direction: Axis.horizontal,
-                    children: [
-                      Flexible(
-                        fit: FlexFit.tight,
-                        flex: 2,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 16, horizontal: 16.0),
-                          child: Flex(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            direction: Axis.vertical,
-                            children: [
-                              Text(
-                                "Alfred B. Maclay",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Theme.of(context).primaryColor),
+                                    color: ColorParser().hexToColor("#757575")),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 5.0),
-                                child: Text(
-                                  "Thomasville Rd,\nTallahassee, FL 32309, USA",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      color:
-                                          ColorParser().hexToColor("#757575")),
-                                ),
-                              )
-                            ],
-                          ),
+                            )
+                          ],
                         ),
                       ),
-                      Flexible(
-                        flex: 1,
-                        fit: FlexFit.tight,
-                        child: Container(
-                          margin: const EdgeInsets.only(
-                              top: 16, right: 16, bottom: 16),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border:
-                                  Border.all(color: const Color(0x15000000))),
-                          child: Flex(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            direction: Axis.vertical,
-                            children: [
-                              Text(
-                                "10",
-                                style: TextStyle(
-                                    fontSize: 28,
-                                    color: Theme.of(context).primaryColor),
-                              ),
-                              Text(
-                                "Total Feedback",
-                                softWrap: true,
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    color: Theme.of(context).primaryColor),
-                                textAlign: TextAlign.center,
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  Container(
-                    height: 1,
-                    color: const Color(0x15000000),
-                  ),
-                  Flex(
-                    direction: Axis.horizontal,
-                    children: [
-                      Flexible(
-                        fit: FlexFit.tight,
-                        flex: 2,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 16, horizontal: 16.0),
-                          child: Flex(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            direction: Axis.vertical,
-                            children: [
-                              Text(
-                                "Alfred B. Maclay",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Theme.of(context).primaryColor),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 5.0),
-                                child: Text(
-                                  "Thomasville Rd,\nTallahassee, FL 32309, USA",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      color:
-                                          ColorParser().hexToColor("#757575")),
-                                ),
-                              )
-                            ],
-                          ),
+                    ),
+                    Flexible(
+                      flex: 1,
+                      fit: FlexFit.tight,
+                      child: Container(
+                        margin: const EdgeInsets.only(
+                            top: 16, right: 16, bottom: 16),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: const Color(0x15000000))),
+                        child: Flex(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          direction: Axis.vertical,
+                          children: [
+                            Text(
+                              locations[i]["feedback_count"],
+                              style: TextStyle(
+                                  fontSize: 28,
+                                  color: Theme.of(context).primaryColor),
+                            ),
+                            Text(
+                              "Total Feedback",
+                              softWrap: true,
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Theme.of(context).primaryColor),
+                              textAlign: TextAlign.center,
+                            )
+                          ],
                         ),
                       ),
-                      Flexible(
-                        flex: 1,
-                        fit: FlexFit.tight,
-                        child: Container(
-                          margin: const EdgeInsets.only(
-                              top: 16, right: 16, bottom: 16),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border:
-                                  Border.all(color: const Color(0x15000000))),
-                          child: Flex(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            direction: Axis.vertical,
-                            children: [
-                              Text(
-                                "10",
-                                style: TextStyle(
-                                    fontSize: 28,
-                                    color: Theme.of(context).primaryColor),
-                              ),
-                              Text(
-                                "Total Feedback",
-                                softWrap: true,
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    color: Theme.of(context).primaryColor),
-                                textAlign: TextAlign.center,
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  Container(
-                    height: 1,
-                    color: const Color(0x15000000),
-                  ),
-                  Flex(
-                    direction: Axis.horizontal,
-                    children: [
-                      Flexible(
-                        fit: FlexFit.tight,
-                        flex: 2,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 16, horizontal: 16.0),
-                          child: Flex(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            direction: Axis.vertical,
-                            children: [
-                              Text(
-                                "Alfred B. Maclay",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Theme.of(context).primaryColor),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 5.0),
-                                child: Text(
-                                  "Thomasville Rd,\nTallahassee, FL 32309, USA",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      color:
-                                          ColorParser().hexToColor("#757575")),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Flexible(
-                        flex: 1,
-                        fit: FlexFit.tight,
-                        child: Container(
-                          margin: const EdgeInsets.only(
-                              top: 16, right: 16, bottom: 16),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border:
-                                  Border.all(color: const Color(0x15000000))),
-                          child: Flex(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            direction: Axis.vertical,
-                            children: [
-                              Text(
-                                "10",
-                                style: TextStyle(
-                                    fontSize: 28,
-                                    color: Theme.of(context).primaryColor),
-                              ),
-                              Text(
-                                "Total Feedback",
-                                softWrap: true,
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    color: Theme.of(context).primaryColor),
-                                textAlign: TextAlign.center,
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ],
-              )
+                    )
+                  ],
+                ),
             ],
           ),
         ),
@@ -795,138 +733,181 @@ class _DashboardWidgetState extends State<DashboardWidget> {
               style: TextStyle(
                   color: Theme.of(context).primaryColor, fontSize: 18)),
         ),
-        Card(
-          color: Colors.white,
-          surfaceTintColor: Colors.white,
-          elevation: 6,
-          margin: const EdgeInsets.only(bottom: 24, left: 16, right: 16),
-          child: Column(
+        SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
+          scrollDirection: Axis.horizontal,
+          child: Row(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
-                      style: TextStyle(color: Color(0xff757575), fontSize: 12),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10.0, bottom: 10),
-                      child: RatingBar.builder(
-                        initialRating: 0,
-                        minRating: 0,
-                        maxRating: 5,
-                        direction: Axis.horizontal,
-                        allowHalfRating: true,
-                        itemCount: 5,
-                        itemSize: 16,
-                        itemPadding: const EdgeInsets.symmetric(horizontal: 2),
-                        itemBuilder: (context, _) => const Icon(
-                          Icons.star,
-                          color: Colors.amber,
-                        ),
-                        onRatingUpdate: (rating) {},
-                      ),
-                    ),
-                    Text(
-                      "Will you recommend us ?",
-                      style: TextStyle(
-                          color: Theme.of(context).primaryColor, fontSize: 14),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 5.0),
-                      child: Text(
-                        "Maybe",
-                        style:
-                            TextStyle(color: Color(0xff757575), fontSize: 12),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                height: 1,
-                color: const Color(0x15000000),
-              ),
-              Flex(
-                direction: Axis.horizontal,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  const Expanded(
-                    flex: 2,
-                    child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10.0, horizontal: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "John Wick",
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xff757575)),
-                          ),
-                          Text(
-                            "Jan, 25, 2023",
-                            style: TextStyle(
-                                fontSize: 12, color: Color(0xff757575)),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      color: Colors.red,
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Center(
-                              child: Text(
-                                "View",
+              for (int commentIndex = 0;
+                  commentIndex < comments.length;
+                  commentIndex++)
+                Container(
+                  width: DeviceDimensions.getDeviceWidth(context),
+                  child: Card(
+                    color: Colors.white,
+                    surfaceTintColor: Colors.white,
+                    elevation: 6,
+                    margin:
+                        const EdgeInsets.only(bottom: 24, left: 16, right: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                comments[commentIndex]["description"],
+                                style: const TextStyle(
+                                    color: Color(0xff757575), fontSize: 12),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 10.0, bottom: 10),
+                                child: RatingBar.builder(
+                                  initialRating: double.parse(
+                                      comments[commentIndex]["rating"]),
+                                  minRating: double.parse(
+                                      comments[commentIndex]["rating"]),
+                                  maxRating: double.parse(
+                                      comments[commentIndex]["rating"]),
+                                  direction: Axis.horizontal,
+                                  allowHalfRating: false,
+                                  ignoreGestures: true,
+                                  tapOnlyMode: false,
+                                  itemCount: 5,
+                                  itemSize: 16,
+                                  itemPadding:
+                                      const EdgeInsets.symmetric(horizontal: 2),
+                                  itemBuilder: (context, _) => const Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                  ),
+                                  onRatingUpdate: (rating) {},
+                                ),
+                              ),
+                              Text(
+                                "Will you recommend us ?",
                                 style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xff757575)),
+                                    color: Theme.of(context).primaryColor,
+                                    fontSize: 14),
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.only(top: 5.0),
+                                child: Text(
+                                  "Maybe",
+                                  style: TextStyle(
+                                      color: Color(0xff757575), fontSize: 12),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          height: 1,
+                          color: const Color(0x15000000),
+                        ),
+                        Flex(
+                          direction: Axis.horizontal,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            const Flexible(
+                              fit: FlexFit.tight,
+                              flex: 2,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 10.0, horizontal: 16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "John Wick",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xff757575)),
+                                    ),
+                                    Text(
+                                      "Jan, 25, 2023",
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: Color(0xff757575)),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
+                            Flexible(
+                              fit: FlexFit.tight,
+                              flex: 1,
+                              child: Container(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10.0, horizontal: 16),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Center(
+                                        child: Image.asset(
+                                          "assets/images/comments/visible.svg",
+                                          width: 20,
+                                          height: 20,
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                            log("ERROR OCCURED WHILE LOADING IMAGE $error => $stackTrace");
+
+                                            return const SizedBox();
+                                          },
+                                        ),
+                                      ),
+                                      const Center(
+                                        child: Text(
+                                          "View",
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: Color(0xff757575)),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              fit: FlexFit.loose,
+                              flex: 2,
+                              child: Container(
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 10.0, horizontal: 16),
+                                  child: Center(
+                                    child: Text(
+                                      "Completed",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xff757575)),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
                           ],
-                        ),
-                      ),
+                        )
+                      ],
                     ),
                   ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      color: Colors.yellowAccent,
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 16),
-                        child: Center(
-                          child: Text(
-                            "Completed",
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xff757575)),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              )
+                ),
             ],
           ),
-        ),
+        )
       ],
     );
   }
@@ -937,7 +918,6 @@ class _DashboardWidgetState extends State<DashboardWidget> {
     List<GraphData> comments = [];
 
     commentData.forEach((key, value) {
-
       comments.add(GraphData(yCoordinateValue: value, xCoordinateName: key));
     });
 
@@ -951,14 +931,12 @@ class _DashboardWidgetState extends State<DashboardWidget> {
         return int.parse(datum.yCoordinateValue);
       },
     ));
-
   }
 
   void fetchRatings(Map<String, dynamic> responseData) {
     Map<String, dynamic> ratingData = responseData["ratingGraph"];
 
     List<GraphData> ratings = [];
-
 
     ratingData.forEach((key, value) {
       ratings.add(GraphData(yCoordinateValue: value, xCoordinateName: key));
@@ -986,7 +964,6 @@ class _DashboardWidgetState extends State<DashboardWidget> {
     List<GraphData> happyRecommendations = [];
     List<GraphData> notreallyRecommendations = [];
     List<GraphData> maybeRecommendations = [];
-
 
     recommendationData.forEach((key, value) {
       happyRecommendations.add(
@@ -1034,5 +1011,64 @@ class _DashboardWidgetState extends State<DashboardWidget> {
         return int.parse(datum.yCoordinateValue);
       },
     ));
+  }
+
+  void fetchLocationData(Map<String, dynamic> responseData) {
+    log("RUN TIME TYPE OF location_feedback_count => ${responseData["location_feedback_count"].runtimeType}");
+
+    locations = responseData["location_feedback_count"];
+
+    // List<LocationFeedback> locationFeedback = List<LocationFeedback>.from(json.decode(json.encode(responseData["location_feedback_count"]).toString()))
+    //     .map((model) => LocationFeedback.fromJson(model)));
+  }
+
+  void fetchCommentsData(Map<String, dynamic> responseData) {
+    log("RUN TIME TYPE OF feedback_list => ${responseData["feedback_list"].runtimeType}");
+
+    comments = responseData["feedback_list"];
+  }
+
+  Future<Map<String, dynamic>?> getData(
+      String? parkId, String? filterBy) async {
+    if (commentsGraphColumns != null) {
+      //Clearing Comments Data
+      commentsGraphColumns.clear();
+    }
+    if (ratingGraphLine != null) {
+      //Clearing Ratings Data
+      ratingGraphLine.clear();
+    }
+
+    if (recommendationStackedColumns != null) {
+      //Clearing Recommendation Data
+      recommendationStackedColumns.clear();
+    }
+
+    Response? dashboardResponse = await ApiFactory()
+        .getDashboardService()
+        .getParkAnalytics(parkId, filterBy!.toLowerCase());
+
+    Map<String, dynamic> responseData = json.decode(dashboardResponse!.data!);
+
+    fetchComments(responseData);
+    fetchRatings(responseData);
+    fetchRecommendation(responseData);
+
+    fetchLocationData(responseData);
+    fetchCommentsData(responseData);
+
+    return responseData;
+  }
+
+  Future<void> getParks() async {
+    Response? dashboardResponse =
+        await ApiFactory().getDashboardService().getParks("302");
+
+    Map<String, dynamic> responseData = json.decode(dashboardResponse!.data!);
+
+    parks = responseData!["location_list"];
+    selectedParkId = parks.keys.first;
+
+    setState(() {});
   }
 }
