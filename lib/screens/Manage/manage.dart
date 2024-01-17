@@ -23,22 +23,22 @@ class ManageWidget extends StatefulWidget{
 
 class _ManageWidgetState extends State<ManageWidget>{
    // List<PermissionData> data = new PermissionData() as List<PermissionData>;
-   bool? isSmtpAllowed  = false;
-   bool? isUsersAllowed  = false;
-   bool? isLocationAllowed = false;
-   bool? isAnnouncementAllowed  = false;
+   bool? isAnnouncement  = false;
+   bool? isparkInspection  = false;
+   bool? isactivityReport = false;
+   bool? istrail  = false;
 
    Future<void> checkPermissions() async {
 
-       isSmtpAllowed = await SharedPref.instance.getPermissionSmtp();
-       isLocationAllowed = await SharedPref.instance.getPermissionlocation();
-       isUsersAllowed = await SharedPref.instance.getPermissionUser();
-       isAnnouncementAllowed = await SharedPref.instance.getPermissionAnnouncement();
+     isAnnouncement = await SharedPref.instance.getPermissionAnnouncment();
+     isparkInspection = await SharedPref.instance.getPermissionParkInspection();
+     isactivityReport = await SharedPref.instance.getPermissionActivityReport();
+     istrail = await SharedPref.instance.getPermissionTrail();
 
-     log("value of isSmtpAllowed $isSmtpAllowed");
-     log("value of isLocationAllowed $isLocationAllowed");
-     log("value of isUsersAllowed $isUsersAllowed");
-     log("value of isAnnouncementAllowed $isAnnouncementAllowed");
+     log("value of isAnnouncement $isAnnouncement");
+     log("value of isparkInspection $isparkInspection");
+     log("value of isactivityReport $isactivityReport");
+     log("value of istrail $istrail");
      setState(() {
 
      });
@@ -47,7 +47,7 @@ class _ManageWidgetState extends State<ManageWidget>{
   void initState() {
     // TODO: implement initState
     // checkPermissions();
-    SharedPref.instance.setPermissions();
+    // SharedPref.instance.setPermissions();
 
     checkPermissions();
 
@@ -150,7 +150,7 @@ class _ManageWidgetState extends State<ManageWidget>{
                        shrinkWrap: true,
                        physics: const ScrollPhysics(),
                      children: [
-                       if(isLocationAllowed!)
+
                        InkWell(
                          onTap:(){
                            LocationListing().gotoManageLocation(context);
@@ -169,7 +169,7 @@ class _ManageWidgetState extends State<ManageWidget>{
                            ),
                          ),
                        ),
-                       if(isUsersAllowed!)
+
                          InkWell(
                            onTap: () {
                              const AssignedUserListing().goToAssignedUserListing(context);
@@ -188,7 +188,8 @@ class _ManageWidgetState extends State<ManageWidget>{
                              ),
                            ),
                          ),
-                       if(isAnnouncementAllowed!)
+
+                       if(isAnnouncement!)
                        InkWell(
                          onTap: (){
                       AnnouncementListingWidget().gotoAnnouncementListingPage(context);
@@ -207,7 +208,7 @@ class _ManageWidgetState extends State<ManageWidget>{
                            ),
                          ),
                        ),
-                       if(isSmtpAllowed!)
+
                        InkWell(
                          onTap:(){
                            const ManageSMTPDetails().goToManageSMTPPage(context);
@@ -240,6 +241,63 @@ class _ManageWidgetState extends State<ManageWidget>{
                                SvgPicture.asset("assets/images/manage/smtp.svg"),
                                const SizedBox(height: 5,),
                                Text("Manage Clients",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: Resources.colors.hfText),textAlign: TextAlign.center),
+                             ],
+                           ),
+                         ),
+                       ),
+                       if(isparkInspection!)
+                       InkWell(
+                         onTap:(){
+                           ClientListingWidget().gotoClientListingPage(context);
+                         },
+                         child: Container(
+                           decoration: BoxDecoration(border: Border.all(color: Colors.black12),borderRadius: const BorderRadius.all(Radius.circular(14),)),
+                           width: 150,
+                           height: 130,
+                           child: Column(
+                             mainAxisAlignment: MainAxisAlignment.center,
+                             children: [
+                               SvgPicture.asset("assets/images/manage/smtp.svg"),
+                               const SizedBox(height: 5,),
+                               Text("Park Inspection",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: Resources.colors.hfText),textAlign: TextAlign.center),
+                             ],
+                           ),
+                         ),
+                       ),
+                       if(isactivityReport!)
+                       InkWell(
+                         onTap:(){
+                           ClientListingWidget().gotoClientListingPage(context);
+                         },
+                         child: Container(
+                           decoration: BoxDecoration(border: Border.all(color: Colors.black12),borderRadius: const BorderRadius.all(Radius.circular(14),)),
+                           width: 150,
+                           height: 130,
+                           child: Column(
+                             mainAxisAlignment: MainAxisAlignment.center,
+                             children: [
+                               SvgPicture.asset("assets/images/manage/smtp.svg"),
+                               const SizedBox(height: 5,),
+                               Text("Activity Report",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: Resources.colors.hfText),textAlign: TextAlign.center),
+                             ],
+                           ),
+                         ),
+                       ),
+                       if(istrail!)
+                       InkWell(
+                         onTap:(){
+                           ClientListingWidget().gotoClientListingPage(context);
+                         },
+                         child: Container(
+                           decoration: BoxDecoration(border: Border.all(color: Colors.black12),borderRadius: const BorderRadius.all(Radius.circular(14),)),
+                           width: 150,
+                           height: 130,
+                           child: Column(
+                             mainAxisAlignment: MainAxisAlignment.center,
+                             children: [
+                               SvgPicture.asset("assets/images/manage/smtp.svg"),
+                               const SizedBox(height: 5,),
+                               Text("Manage Trail",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: Resources.colors.hfText),textAlign: TextAlign.center),
                              ],
                            ),
                          ),
