@@ -205,8 +205,10 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
 
                      log("RESPONSE LOGIN ${response.data}");
                      if(response.status == "1"){
-                       SharedPref.instance.setUserData(response.data!.access!);
                        log("VALID USERNMAE IN LOGIN PAGE");
+                       SharedPref.instance.setAccessPermission(response.data!.access!);
+                       SharedPref.instance.setUserData(response.data!);
+
                        setUserPermissions(response.data!);
                        BottomNavigationHappiFeet().goToBottomNavigation(context,response.data!);
 

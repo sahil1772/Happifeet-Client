@@ -19,19 +19,40 @@ class SharedPref {
     return instance;
   }
 
-  /// Access permission
-  AccessPermissionData userDataJson = AccessPermissionData();
 
-  setUserData(AccessPermissionData userdata) async{
+  /// Store User data
+  UserData userData = UserData();
+  String? getuserData;
+
+  setUserData(UserData userdata) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     log("data in setUserData ${userdata} ");
-    userDataJson = AccessPermissionData.fromJson(userdata.toJson());
+    userData = UserData.fromJson(userdata.toJson());
 
-    prefs?.setString("isLogIn", userDataJson.toString());
+    prefs?.setString("userData", userData.toString());
   }
 
-  AccessPermissionData getuserData(){
-    return this.userDataJson;
+  //  getUserData() async{
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   getuserData = userData.toString();
+  //   UserData? data = prefs.getString(getuserData);
+  //   log("inside getPermissionAnnouncment $data");
+  //   return data;
+  // }
+
+  /// Access permission
+  AccessPermissionData accessPermission = AccessPermissionData();
+
+  setAccessPermission(AccessPermissionData userdata) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    log("data in setAccessPermission ${userdata} ");
+    accessPermission = AccessPermissionData.fromJson(userdata.toJson());
+
+    prefs?.setString("accessPermission", accessPermission.toString());
+  }
+
+  AccessPermissionData getAccessPermission(){
+    return this.accessPermission;
   }
 
   getPermissionAnnouncment() async {
@@ -77,7 +98,8 @@ class SharedPref {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (BuildContext context) => LoginPageWidget(),
+            builder: (BuildContext context) => LoginPageWidget()
+                // BottomNavigationHappiFeet(userData: SharedPref.instance.getUserData()),
               // BottomNavigationHappiFeet()
           ));
     } else {
