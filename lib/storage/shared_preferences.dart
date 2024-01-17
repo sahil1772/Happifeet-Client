@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:happifeet_client_app/model/Login/AccessPermissionData.dart';
+import 'package:happifeet_client_app/model/Login/UserData.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../components/BottomNavigation.dart';
@@ -17,44 +19,68 @@ class SharedPref {
     return instance;
   }
 
+
+  /// Store User data
+  UserData userData = UserData();
+  String? getuserData;
+
+  setUserData(UserData userdata) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    log("data in setUserData ${userdata} ");
+    userData = UserData.fromJson(userdata.toJson());
+
+    prefs?.setString("userData", userData.toString());
+  }
+
+  //  getUserData() async{
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   getuserData = userData.toString();
+  //   UserData? data = prefs.getString(getuserData);
+  //   log("inside getPermissionAnnouncment $data");
+  //   return data;
+  // }
+
   /// Access permission
+  AccessPermissionData accessPermission = AccessPermissionData();
 
-  setPermissions() async {
+  setAccessPermission(AccessPermissionData userdata) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool("locationPermission", true);
-    prefs.setBool("usersPermission", true);
-    prefs.setBool("announcementPermission", true);
-    prefs.setBool("smtpPermission", true);
+    log("data in setAccessPermission ${userdata} ");
+    accessPermission = AccessPermissionData.fromJson(userdata.toJson());
 
-    log("inside setPermissions");
+    prefs?.setString("accessPermission", accessPermission.toString());
   }
 
-  getPermissionlocation() async {
+  AccessPermissionData getAccessPermission(){
+    return this.accessPermission;
+  }
+
+  getPermissionAnnouncment() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool? data = prefs.getBool("locationPermission");
-    log("inside getPermissionlocation $data");
+    bool? data = (prefs.getBool("announcement") ?? false);
+    log("inside getPermissionAnnouncment $data");
     return data;
   }
 
-  getPermissionUser() async {
+  getPermissionParkInspection() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool? data = prefs.getBool("usersPermission");
-    log("inside getPermissionUser $data");
+    bool? data = (prefs.getBool("parkInspection") ?? false);
+    log("inside getPermissionParkInspection $data");
     return data;
   }
 
-  getPermissionAnnouncement() async {
+  getPermissionActivityReport() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool? data = prefs.getBool("announcementPermission");
-    log("inside getPermissionAnnouncement $data");
+    bool? data = (prefs.getBool("activityReport") ?? false);
+    log("inside getPermissionActivityReport $data");
 
     return data;
   }
 
-  Future<bool?> getPermissionSmtp() async {
+  Future<bool?> getPermissionTrail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool? data = prefs.getBool("smtpPermission");
-    log("inside getPermissionSmtp $data");
+    bool? data = (prefs.getBool("trail") ?? false );
+    log("inside getPermissionTrail $data");
     return data;
   }
 
@@ -72,7 +98,9 @@ class SharedPref {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (BuildContext context) => BottomNavigationHappiFeet(),
+            builder: (BuildContext context) => LoginPageWidget()
+                // BottomNavigationHappiFeet(userData: SharedPref.instance.getUserData()),
+              // BottomNavigationHappiFeet()
           ));
     } else {
       // await prefs.setBool('seen', true);
@@ -84,19 +112,8 @@ class SharedPref {
     }
   }
 
-  // setLoginDetail(bool value) async{
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   log("data in login ${value} ");
-  //   prefs?.setBool("isLogIn", value);
-  // }
-  //
-  //
-  // getLoginDetail() async{
-  //   SharedPreferences prefs =  await SharedPreferences.getInstance();
-  //   bool? data =  prefs?.getBool("isLogIn");
-  //   log("Data in getLoginDetail ${data}");
-  //   return data;
-  // }
+
+
 
   ClientTheme clientTheme = ClientTheme();
 

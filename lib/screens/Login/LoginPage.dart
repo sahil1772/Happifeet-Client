@@ -6,13 +6,21 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:happifeet_client_app/screens/Login/ForgotPassword.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../components/BottomNavigation.dart';
+import '../../model/Login/UserData.dart';
 import '../../network/ApiFactory.dart';
 import '../../storage/shared_preferences.dart';
 
 class LoginPageWidget extends StatefulWidget{
   const LoginPageWidget({super.key});
+
+  gotoLogin(BuildContext context){
+    Navigator.push(context, MaterialPageRoute(builder: (_) => LoginPageWidget()));
+  }
+
+
 
   @override
   State<LoginPageWidget> createState() => _LoginPageWidgetState();
@@ -57,6 +65,33 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
   setEmailError(value) {
     emailerror = value;
   }
+
+  setUserPermissions(UserData data) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if(data.access!.announcement == "1"){
+      prefs.setBool("announcement", true);
+    }
+    if(data.access!.park_inspection == "1"){
+      prefs.setBool("parkInspection", true);
+    }
+    if(data.access!.activity_report == "1"){
+      prefs.setBool("activityReport", true);
+    }
+    if(data.access!.trail == "1"){
+      prefs.setBool("trail", true);
+    }
+
+
+
+
+
+    // prefs.setBool("locationPermission", true);
+    // prefs.setBool("usersPermission", true);
+    // prefs.setBool("announcementPermission", true);
+    // prefs.setBool("smtpPermission", true);
+  }
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -145,6 +180,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
                    children: [
                      InkWell(
                        onTap: () {
+
                          const ForgotPasswordWidget().goToForgotPasswordPage(context);
                        },
                          child: const Text("Forgot Password",style: TextStyle(color: Colors.red,fontSize: 14),)),
@@ -167,16 +203,20 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
                      
                      var response = await ApiFactory().getLoginService().sendLoginDetails("login",email!, password!);
 
-                     log("RESPONSE LOGIN ${response.status}");
-                     if(response.status == 1){
+                     log("RESPONSE LOGIN ${response.data}");
+                     if(response.status == "1"){
                        log("VALID USERNMAE IN LOGIN PAGE");
-                       BottomNavigationHappiFeet().goToBottomNavigation(context);
+                       SharedPref.instance.setAccessPermission(response.data!.access!);
+                       SharedPref.instance.setUserData(response.data!);
+
+                       setUserPermissions(response.data!);
+                       BottomNavigationHappiFeet().goToBottomNavigation(context,response.data!);
 
                      }else{
                        log("INVALID USERNAME IN LOGIN PAGE");
                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Invalid username or password")));
                      }
-                     SharedPref.instance.setPermissions();
+                     // SharedPref.instance.setPermissions();
 
 
 

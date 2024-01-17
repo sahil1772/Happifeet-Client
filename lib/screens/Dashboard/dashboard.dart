@@ -15,6 +15,11 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 class DashboardWidget extends StatefulWidget {
   const DashboardWidget({super.key});
 
+  gotoDashboard(BuildContext context){
+    Navigator.push(context, MaterialPageRoute(builder: (_) => DashboardWidget()));
+
+  }
+
   @override
   State<DashboardWidget> createState() => _DashboardWidgetState();
 }

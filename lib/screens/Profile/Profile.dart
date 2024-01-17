@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:happifeet_client_app/resources/resources.dart';
+import 'package:happifeet_client_app/screens/Login/LoginPage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../components/HappiFeetAppBar.dart';
 import '../../utils/ColorParser.dart';
@@ -19,6 +21,12 @@ class _ProfileWidgetState extends State<ProfileWidget>{
   var newPasswordController=TextEditingController();
   var confirmPasswordController=TextEditingController();
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+
+  void setBoolForLogOut() async {
+    /** update checkIfLoggedIn value in shared pref   **/
+    SharedPreferences prefs =  await SharedPreferences.getInstance();
+    prefs.setBool('loggedIn', false);
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -198,24 +206,45 @@ class _ProfileWidgetState extends State<ProfileWidget>{
                             const SizedBox(
                               height: 20,
                             ),
-                            SizedBox(
-                              height: 40,
-                              width: 170,
-                              child: ElevatedButton(
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  height: 40,
+                                  width: 170,
+                                  child: ElevatedButton(
 
-                                onPressed: () {
-                                  // AddLocation().gotoAddLocation(context);
-                                  if(_formkey.currentState!.validate()){
-                                    log("Validation Done");
-                                  }else{
-                                    log("Validation Unsuccessful");
-                                  }
-                                },
-                                style: ElevatedButton.styleFrom(backgroundColor: ColorParser().hexToColor("#1A7C52"),elevation: 0,shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
-                                child: Text("Save Changes",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),),
+                                    onPressed: () {
+                                      // AddLocation().gotoAddLocation(context);
+                                      if(_formkey.currentState!.validate()){
+                                        log("Validation Done");
+                                      }else{
+                                        log("Validation Unsuccessful");
+                                      }
+                                    },
+                                    style: ElevatedButton.styleFrom(backgroundColor: ColorParser().hexToColor("#1A7C52"),elevation: 0,shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
+                                    child: Text("Save Changes",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),),
 
-                              ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 40,
+                                  width: 170,
+                                  child: ElevatedButton(
+
+                                    onPressed: () {
+                                      LoginPageWidget().gotoLogin(context);
+                                      setBoolForLogOut();
+                                    },
+                                    style: ElevatedButton.styleFrom(backgroundColor: Colors.red,elevation: 0,shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
+                                    child: Text("Log Out",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),),
+
+                                  ),
+                                ),
+
+                              ],
                             ),
+
                           ],
                         ),
                       ),

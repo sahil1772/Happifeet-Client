@@ -1,6 +1,8 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
+import 'UserData.dart';
+
 part 'LoginData.g.dart';
 
 @JsonSerializable()
@@ -9,9 +11,11 @@ part 'LoginData.g.dart';
 class LoginData {
 String? status;
 String? msg;
+UserData? data;
   LoginData({
 this.status,
-    this.msg
+    this.msg,
+    this.data
 });
 
 factory LoginData.fromJson(Map<String,dynamic> json) => _$LoginDataFromJson(json);

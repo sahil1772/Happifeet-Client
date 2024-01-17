@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,17 +7,22 @@ import 'package:flutter_svg/svg.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../model/Login/UserData.dart';
 import '../screens/Dashboard/dashboard.dart';
 import '../screens/Manage/manage.dart';
 import '../screens/Profile/Profile.dart';
 import '../screens/Reports/Reports.dart';
 
 class BottomNavigationHappiFeet extends StatefulWidget{
+  UserData? userData;
+
+  BottomNavigationHappiFeet({super.key,this.userData});
   @override
   State<BottomNavigationHappiFeet> createState() => _BottomNavigationHappiFeetState();
 
-  goToBottomNavigation(BuildContext context){
-    Navigator.push(context, MaterialPageRoute(builder: (_) => BottomNavigationHappiFeet()));
+  goToBottomNavigation(BuildContext context,UserData userData){
+
+    Navigator.push(context, MaterialPageRoute(builder: (_) => BottomNavigationHappiFeet(userData: userData,)));
   }
 
 
@@ -26,7 +33,9 @@ class _BottomNavigationHappiFeetState extends State<BottomNavigationHappiFeet>{
 
   @override
   void initState() {
+    log("USER DATA --> ${widget.userData!.toJson()}");
     _controller = PersistentTabController(initialIndex: 0);
+
     setBoolForLogIn();
 
     /** Display with status and navigation bar **/
@@ -43,6 +52,7 @@ class _BottomNavigationHappiFeetState extends State<BottomNavigationHappiFeet>{
   List<Widget> _buildScreens() {
     return [
       const DashboardWidget(),
+      if(widget.userData!.user_type == "S")
       const ManageWidget(),
       const ReportsWidget(),
       const ProfileWidget(),
@@ -64,6 +74,7 @@ class _BottomNavigationHappiFeetState extends State<BottomNavigationHappiFeet>{
         // activeColorPrimary: Colors.red,
         // activeColorSecondary: Colors.lightBlue,
       ),
+      if(widget.userData!.user_type == "S")
       PersistentBottomNavBarItem(
         title: 'Manage',
         activeColorPrimary: CupertinoColors.destructiveRed,
