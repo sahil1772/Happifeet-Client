@@ -119,15 +119,15 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
                crossAxisAlignment: CrossAxisAlignment.center,
                // mainAxisAlignment: MainAxisAlignment.center,
                children: [
-                 const SizedBox(height: 80,),
+                 const SizedBox(height: 20,),
                  Center(child: Image.asset("assets/images/login/logo.png")),
-                 const SizedBox(height: 30,),
+                 const SizedBox(height: 20,),
                  TextField(
                    onChanged: (value){
                      setEmailError(EmailValidator.validate(value)
                          ? null
                          : "Please enter valid email");
-                     
+
                      setState(() {
                        email = value;
                      });
@@ -186,7 +186,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
                          child: const Text("Forgot Password",style: TextStyle(color: Colors.red,fontSize: 14),)),
                    ],
                  ),
-                 const SizedBox(height: 30,),
+                 const SizedBox(height: 20,),
                  ElevatedButton(
                    style: ElevatedButton.styleFrom(
                      fixedSize: const Size(320, 51),
@@ -200,7 +200,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
                        // ),
                    ),
                      onPressed: () async{
-                     
+
                      var response = await ApiFactory().getLoginService().sendLoginDetails("login",email!, password!);
 
                      log("RESPONSE LOGIN ${response.data}");

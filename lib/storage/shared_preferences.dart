@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -20,11 +19,12 @@ class SharedPref {
     return instance;
   }
 
+
   /// Store User data
   UserData userData = UserData();
   String? getuserData;
 
-  setUserData(UserData userdata) async {
+  setUserData(UserData userdata) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     log("data in setUserData ${userdata} ");
     userData = userdata;
@@ -69,7 +69,7 @@ class SharedPref {
   /// Access permission
   AccessPermissionData accessPermission = AccessPermissionData();
 
-  setAccessPermission(AccessPermissionData userdata) async {
+  setAccessPermission(AccessPermissionData userdata) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     log("data in setAccessPermission ${userdata} ");
     accessPermission = AccessPermissionData.fromJson(userdata.toJson());
@@ -77,7 +77,7 @@ class SharedPref {
     prefs?.setString("accessPermission", accessPermission.toString());
   }
 
-  AccessPermissionData getAccessPermission() {
+  AccessPermissionData getAccessPermission(){
     return this.accessPermission;
   }
 
@@ -105,7 +105,7 @@ class SharedPref {
 
   Future<bool?> getPermissionTrail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool? data = (prefs.getBool("trail") ?? false);
+    bool? data = (prefs.getBool("trail") ?? false );
     log("inside getPermissionTrail $data");
     return data;
   }
@@ -134,6 +134,9 @@ class SharedPref {
           ));
     }
   }
+
+
+
 
   ClientTheme clientTheme = ClientTheme();
 
