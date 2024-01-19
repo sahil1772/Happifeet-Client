@@ -8,18 +8,20 @@ part of 'AssignedUserData.dart';
 
 AssignedUserData _$AssignedUserDataFromJson(Map<String, dynamic> json) =>
     AssignedUserData(
-      client_name: json['client_name'] as String?,
-      number: json['number'] as String?,
-      email_address: json['email_address'] as String?,
-      noteremark: json['noteremark'] as String?,
-      status: json['status'] as String?,
+      id: json['id'] as String?,
+      name: json['name'] as String?,
+      contactno: json['contactno'] as String?,
+      emailid: json['emailid'] as String?,
+      note_remark: json['note_remark'] as String?,
+      is_active: json['is_active'] as String?,
     );
 
 Map<String, dynamic> _$AssignedUserDataToJson(AssignedUserData instance) =>
     <String, dynamic>{
-      'client_name': instance.client_name,
-      'number': instance.number,
-      'email_address': instance.email_address,
-      'noteremark': instance.noteremark,
-      'status': instance.status,
+      'id': instance.id,
+      'name': instance.name,
+      'contactno': instance.contactno,
+      'emailid': instance.emailid,
+      'note_remark': instance.note_remark,
+      'is_active': instance.is_active,
     };

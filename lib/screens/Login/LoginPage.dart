@@ -214,11 +214,11 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
                        setUserPermissions(response.data!);
                        BottomNavigationHappiFeet().goToBottomNavigation(context);
 
-                     }else{
-                       log("INVALID USERNAME IN LOGIN PAGE");
-                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Invalid username or password")));
-                     }
-                     // SharedPref.instance.setPermissions();
+                       }else{
+                         log("INVALID USERNAME IN LOGIN PAGE");
+                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Invalid username or password")));
+                       }
+                       // SharedPref.instance.setPermissions();
 
 
 

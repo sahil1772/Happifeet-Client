@@ -2,12 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../model/ClientUsers/ClientUserData.dart';
 import '../utils/ColorParser.dart';
 
 class ClientListingCard extends StatefulWidget{
-  int? index;
+  ClientUserData? clientUserData;
 
-  ClientListingCard({Key? key, this.index});
+  ClientListingCard({Key? key,this.clientUserData});
 
   @override
   State<ClientListingCard> createState() => _ClientListingCardState();
@@ -55,7 +56,7 @@ class _ClientListingCardState extends State<ClientListingCard>{
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Client ${widget.index! + 1}',
+                            widget.clientUserData!.client_name!,
                             // overflow: TextOverflow.ellipsis,
                             maxLines:1,
                             style: TextStyle(
@@ -64,16 +65,16 @@ class _ClientListingCardState extends State<ClientListingCard>{
                                 fontWeight: FontWeight.w500,
                                 letterSpacing: 0.5),
                           ),
-                          Text(
-                            'Working Team',
-                            // overflow: TextOverflow.ellipsis,
-                            maxLines:1,
-                            style: TextStyle(
-                                color:   ColorParser().hexToColor("#757575"),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                letterSpacing: 0.5),
-                          ),
+                          // Text(
+                          //   'Working Team',
+                          //   // overflow: TextOverflow.ellipsis,
+                          //   maxLines:1,
+                          //   style: TextStyle(
+                          //       color:   ColorParser().hexToColor("#757575"),
+                          //       fontSize: 14,
+                          //       fontWeight: FontWeight.w500,
+                          //       letterSpacing: 0.5),
+                          // ),
                           const SizedBox(
                             height: 15,
                           ),
@@ -85,8 +86,8 @@ class _ClientListingCardState extends State<ClientListingCard>{
                                 const SizedBox(
                                   width: 15,
                                 ),
-                                const Text(
-                                  'tester7701@gmail.com',
+                                 Text(
+                                  widget.clientUserData!.email_address!,
                                   softWrap: true,
                                   maxLines: 1,
                                   overflow: TextOverflow.clip,
@@ -106,8 +107,8 @@ class _ClientListingCardState extends State<ClientListingCard>{
                                 const SizedBox(
                                   width: 15,
                                 ),
-                                const Text(
-                                  '8788888888',
+                                 Text(
+                                  widget.clientUserData!.contact_no!,
                                   softWrap: true,
                                   maxLines: 1,
                                   overflow: TextOverflow.clip,

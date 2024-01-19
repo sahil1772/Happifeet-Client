@@ -1,10 +1,13 @@
 import 'dart:developer';
 
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:happifeet_client_app/model/SMTP/SmtpDetails.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
+import 'package:happifeet_client_app/storage/shared_preferences.dart';
 
 import '../../../components/HappiFeetAppBar.dart';
+import '../../../model/SMTP/SmtpDataModel.dart';
 import '../../../resources/resources.dart';
 import '../../../utils/ColorParser.dart';
 List<String> fieldOptions = ['Item 1','Item 2','Item 3',"Item 4"];
@@ -27,13 +30,15 @@ class _ManageSMTPDetailsState extends State<ManageSMTPDetails>{
   
 
   String? dropdownValueSelected = fieldOptions.first;
-  List<SmtpDetails> SmtpData = [];
+  SmtpDetails? SmtpData;
   TextEditingController smtphostController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController portController = TextEditingController();
   TextEditingController fromemailController = TextEditingController();
+  SmtpDataModel sendSmtpData = SmtpDataModel();
+  String? emailerror;
 
 
   @override
@@ -48,43 +53,63 @@ class _ManageSMTPDetailsState extends State<ManageSMTPDetails>{
   }
   
   void getSmtpDetail() async{
-    var response = await ApiFactory().getSMTPService().getSmtpDetails("smtp", "41");
+    var response = await ApiFactory().getSMTPService().getSmtpDetails("getSMTP",await SharedPref.instance.getClientId());
     SmtpData = response;
     setinitialData();
-    log("SMTP data in smtp page ${SmtpData.first}");
+    log("SMTP data in smtp page ${SmtpData!.toJson()}");
   }
 
    setinitialData() async{
-    if( SmtpData.first.smtp_host != null ){
-      smtphostController.text = SmtpData.first.smtp_host!;
+    if( SmtpData!.smtp_host != null ){
+      smtphostController.text = SmtpData!.smtp_host!;
+      // sendSmtpData!.smtpHost = SmtpData!.smtp_host!;
     }
 
-    if( SmtpData.first.email_from_name != null ){
-      emailController.text = SmtpData.first.email_from_name!;
+    if( SmtpData!.email_from_name != null ){
+      emailController.text = SmtpData!.email_from_name!;
+      // sendSmtpData!.email =SmtpData!.email_from_name!;
+
     }
-    if( SmtpData.first.smtp_username != null ){
-      usernameController.text = SmtpData.first.smtp_username!;
+    if( SmtpData!.smtp_username != null ){
+      usernameController.text = SmtpData!.smtp_username!;
+      // sendSmtpData!.username = SmtpData!.smtp_username!;
     }
-    if( SmtpData.first.smtp_password != null ){
-      passwordController.text = SmtpData.first.smtp_password!;
+    if( SmtpData!.smtp_password != null ){
+      passwordController.text = SmtpData!.smtp_password!;
+      // sendSmtpData!.password = SmtpData!.smtp_password!;
     }
-    if( SmtpData.first.smtp_port != null ){
-      portController.text = SmtpData.first.smtp_port!;
+    if( SmtpData!.smtp_port != null ){
+      portController.text = SmtpData!.smtp_port!;
+      // sendSmtpData!.port = SmtpData!.smtp_port!;
     }
-    if( SmtpData.first.from_email_id != null ){
-      fromemailController.text = SmtpData.first.from_email_id!;
+    if( SmtpData!.from_email_id != null ){
+      fromemailController.text = SmtpData!.from_email_id!;
+      // sendSmtpData!.fromEmail = SmtpData!.from_email_id!;
     }
-    if( SmtpData.first.smtp_security != null ){
-log("INSIDEIFFFFFFFFFFFFF");
+    if( SmtpData!.smtp_security != null ){
+log("INSIDEIFFFFFFFFFFFFF ${SmtpData!.smtp_security}");
+
      setState(() async{
-       dropdownValueSelected = SmtpData.first.smtp_security!;
+       dropdownValueSelected = SmtpData!.smtp_security!;
+       // sendSmtpData!.smtpSecurity = SmtpData!.smtp_security!;
        log("OHHHHHHHHH $dropdownValueSelected");
      });
+
+    }else{
+      dropdownValueSelected = fieldOptions.first;
     }
     setState(() {
 
     });
 
+  }
+
+  getEmailError() {
+    return emailerror;
+  }
+
+  setEmailError(value) {
+    emailerror = value;
   }
 
 
@@ -161,6 +186,9 @@ log("INSIDEIFFFFFFFFFFFFF");
                                controller: smtphostController,
 
                                  onChanged: (value){
+                                   smtphostController.text = value;
+
+                                   log("value in smtp host${smtphostController.text }");
 
                                  },
 
@@ -194,6 +222,15 @@ log("INSIDEIFFFFFFFFFFFFF");
                              TextField(
                                controller: emailController,
                                  onChanged: (value){
+                                   emailController.text = value;
+                                   sendSmtpData.email_from_name = value;
+
+                                   setEmailError(EmailValidator.validate(value)
+                                       ? null
+                                       : "Please enter valid email");
+                                   setState(() {
+
+                                   });
 
                                  },
 
@@ -203,7 +240,7 @@ log("INSIDEIFFFFFFFFFFFFF");
                                    // labelText: labelText,
                                    hintText: 'Email id',
                                    hintStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                                   // errorText: getEmailError(),
+                                   errorText: getEmailError(),
                                    focusedBorder: OutlineInputBorder(
                                        borderRadius: BorderRadius.circular(12),
                                        borderSide: BorderSide(
@@ -227,6 +264,8 @@ log("INSIDEIFFFFFFFFFFFFF");
                              TextField(
                                controller: usernameController,
                                  onChanged: (value){
+                                   usernameController.text = value;
+                                   sendSmtpData.smtp_username = value;
 
                                  },
 
@@ -260,6 +299,8 @@ log("INSIDEIFFFFFFFFFFFFF");
                              TextField(
                                controller: passwordController,
                                  onChanged: (value){
+                                   passwordController.text = value;
+                                   sendSmtpData!.smtp_password = value;
 
                                  },
 
@@ -293,6 +334,8 @@ log("INSIDEIFFFFFFFFFFFFF");
                              TextField(
                                controller: portController,
                                  onChanged: (value){
+                                   portController.text = value;
+                                   sendSmtpData.smtp_port = value;
 
                                  },
 
@@ -326,6 +369,8 @@ log("INSIDEIFFFFFFFFFFFFF");
                              TextField(
                                controller: fromemailController,
                                  onChanged: (value){
+                                   fromemailController.text = value;
+                                   sendSmtpData.from_email_id = value;
 
                                  },
 
@@ -393,6 +438,7 @@ log("INSIDEIFFFFFFFFFFFFF");
                                        setState(() {
                                          log("before ${value}");
                                          dropdownValueSelected = value!;
+                                         // sendSmtpData!.smtpSecurity = value;
                                          // ListOfFeedbackDetails.first.value = value;
                                          log("after ${dropdownValueSelected}");
                                        });
@@ -436,6 +482,28 @@ log("INSIDEIFFFFFFFFFFFFF");
                              // ),
                            ),
                            onPressed: () async{
+
+
+                             sendSmtpData.client_id = await SharedPref.instance.getClientId();
+                             sendSmtpData.smtp_host = smtphostController.text;
+                             sendSmtpData.email_from_name = emailController.text;
+                             sendSmtpData.smtp_username = usernameController.text;
+                             sendSmtpData.smtp_password = passwordController.text;
+                             sendSmtpData.smtp_port = portController.text;
+                             sendSmtpData.from_email_id = fromemailController.text;
+                             sendSmtpData.smtp_security = dropdownValueSelected;
+
+                             log("SMTP DATA TO SEND ${sendSmtpData!.toJson()}");
+
+
+                             var response = await ApiFactory().getSMTPService().sendSmtpDetails(sendSmtpData!);
+                             if(response.status == "1"){
+                               log("SMTP DATA SEND SUCCESSFILLY");
+                               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Data submitted successfully")));
+
+                             }else{
+                               log("Error in submitting smtp data");
+                             }
 
                            },
                            child: const Text("Submit",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: Colors.white)),),

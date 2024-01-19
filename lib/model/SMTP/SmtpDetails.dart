@@ -9,6 +9,7 @@ part 'SmtpDetails.g.dart';
 
 
 class SmtpDetails {
+  String? id;
   String? smtp_host;
   String? email_from_name;
   String? smtp_username;
@@ -20,6 +21,7 @@ class SmtpDetails {
 
 
 SmtpDetails({
+  this.id,
 this.smtp_host,
   this.email_from_name,
   this.smtp_username,
