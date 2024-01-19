@@ -38,19 +38,41 @@ class SharedPref {
     }
   }
 
+  Future<String> getUserId() async {
+    String? UserID = "";
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      UserData data = UserData.fromJson(json.decode(prefs.getString("userData")!));
+      log("User ID => ${data.user_id}");
+      UserID = data.user_id;
+
+    } catch (e) {
+      throw e;
+    }
+
+    return Future.value(UserID);
+  }
+
   Future<String> getClientId() async {
     String? ClientID = "";
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       UserData data = UserData.fromJson(json.decode(prefs.getString("userData")!));
-      log("Client ID => ${data.user_id}");
-      ClientID = data.user_id;
+      log("Client ID => ${data.client_id}");
+      ClientID = data.client_id;
+
     } catch (e) {
       throw e;
     }
 
     return Future.value(ClientID);
   }
+
+
+
+
+
+
 
   Future<String> getClientType() async {
     String? userType = "";

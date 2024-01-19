@@ -2,8 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/resources/resources.dart';
+import 'package:happifeet_client_app/screens/Dashboard/dashboard.dart';
 import 'package:happifeet_client_app/screens/Login/LoginPage.dart';
+import 'package:happifeet_client_app/storage/shared_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../components/HappiFeetAppBar.dart';
@@ -20,6 +23,7 @@ class ProfileWidget extends StatefulWidget{
 class _ProfileWidgetState extends State<ProfileWidget>{
   var newPasswordController=TextEditingController();
   var confirmPasswordController=TextEditingController();
+  var currentPassword = TextEditingController();
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
   void setBoolForLogOut() async {
@@ -104,8 +108,10 @@ class _ProfileWidgetState extends State<ProfileWidget>{
                                  Text("Current Password",style: TextStyle(fontSize:16,fontWeight: FontWeight.w500,color: Resources.colors.hfText),),
                                 const SizedBox(height: 8,),
                                 TextField(
+                                  controller: currentPassword,
 
                                     onChanged: (value){
+                                    currentPassword.text = value;
 
                                     },
 
@@ -139,6 +145,7 @@ class _ProfileWidgetState extends State<ProfileWidget>{
                                   controller: newPasswordController,
 
                                     onChanged: (value){
+                                      newPasswordController.text = value;
 
                                     },
 
@@ -173,6 +180,7 @@ class _ProfileWidgetState extends State<ProfileWidget>{
                                   controller: confirmPasswordController,
 
                                     onChanged: (value){
+                                    confirmPasswordController.text = value;
 
                                     },
                                     validator: (String? value){
@@ -214,10 +222,28 @@ class _ProfileWidgetState extends State<ProfileWidget>{
                                   width: 170,
                                   child: ElevatedButton(
 
-                                    onPressed: () {
+                                    onPressed: () async {
                                       // AddLocation().gotoAddLocation(context);
+
+
                                       if(_formkey.currentState!.validate()){
                                         log("Validation Done");
+                                        var response = await ApiFactory().getProfileService().sendPasswordDetails("changepassword", await SharedPref.instance.getUserId(),currentPassword.text, confirmPasswordController.text);
+                                        if(response.status == 1){
+                                          log("password successfully change!!");
+                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Password Change Successfully!")));
+                                          Future.delayed(
+                                              Duration(seconds: 2), () {
+                                            Navigator.of(context,rootNavigator: false).pushReplacement(MaterialPageRoute(builder: (_) => DashboardWidget()));
+                                          });
+                                        }else if(response.status == 0){
+                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Invalid old password")));
+                                        }else{
+                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Something went wroong")));
+                                        }
+
+
+
                                       }else{
                                         log("Validation Unsuccessful");
                                       }

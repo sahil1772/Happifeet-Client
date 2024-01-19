@@ -1,9 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageClients/AddClient.dart';
 
 import '../../../components/ClientListingCard.dart';
 import '../../../components/HappiFeetAppBar.dart';
+import '../../../model/ClientUsers/ClientUserData.dart';
+import '../../../storage/shared_preferences.dart';
 import '../../../utils/ColorParser.dart';
 
 class ClientListingWidget extends StatefulWidget{
@@ -19,6 +24,21 @@ class ClientListingWidget extends StatefulWidget{
 }
 
 class _ClientListingWidgetState extends State<ClientListingWidget>{
+  List<ClientUserData>? clientUserData;
+  Future? futureClientData;
+  @override
+  void initState() {
+    // TODO: implement initState
+    futureClientData = getClientUserData();
+    super.initState();
+  }
+
+  Future<void> getClientUserData() async{
+    var response = await ApiFactory().getClientService().getClientUserData("list_client_users", await SharedPref.instance.getUserId());
+    clientUserData = response;
+    log("CLIENT USER DATA ${clientUserData!.first.toJson()}");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -124,19 +144,32 @@ class _ClientListingWidgetState extends State<ClientListingWidget>{
                         ),
                         /**   listview builder     **/
 
-                        /**  Location Listing **/
+                        /**  Client user Listing **/
 
-                        Flexible(
-                          child: ListView.separated(
-                            padding: EdgeInsets.zero,
+                        FutureBuilder(
+                          future: futureClientData,
+                          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                            if(snapshot.connectionState == ConnectionState.done){
+                              return Flexible(
+                                child: ListView.separated(
+                                  padding: EdgeInsets.zero,
 
-                            physics: const ScrollPhysics(),
-                            itemCount: 10,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return  ClientListingCard(index: index);
-                            }, separatorBuilder: (BuildContext context, int index) { return const SizedBox(height: 8,); },
-                          ),
+                                  physics: const ScrollPhysics(),
+                                  itemCount: clientUserData!.length,
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) {
+                                    return  ClientListingCard(clientUserData: clientUserData![index]);
+                                  }, separatorBuilder: (BuildContext context, int index) { return const SizedBox(height: 8,); },
+                                ),
+                              );
+                            }else if(snapshot.connectionState == ConnectionState.waiting){
+                              return CircularProgressIndicator();
+                            }else{
+                              return Text("Something Went Wrong");
+                            }
+
+                          },
+
                         ),
                         const SizedBox(height: 50,),
                       ],

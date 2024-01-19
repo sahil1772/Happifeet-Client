@@ -11,23 +11,25 @@ part 'SmtpDataModel.g.dart';
 
 class SmtpDataModel {
 
-  String? smtpHost;
-  String? email;
-  String? username;
-  String? password;
-  String? port;
-  String? fromEmail;
-  String? smtpSecurity;
+  String? client_id;
+  String? smtp_host;
+  String? email_from_name;
+  String? smtp_username;
+  String? smtp_password;
+  String? smtp_port;
+  String? from_email_id;
+  String? smtp_security;
 
   SmtpDataModel(
   {
-    this.smtpHost,
-    this.email,
-    this.username,
-    this.password,
-    this.port,
-    this.fromEmail,
-    this.smtpSecurity
+ this.client_id,
+    this.smtp_host,
+    this.email_from_name,
+    this.smtp_username,
+    this.smtp_password,
+    this.smtp_port,
+    this.from_email_id,
+    this.smtp_security
 
 
 });

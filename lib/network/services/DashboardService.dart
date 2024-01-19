@@ -14,7 +14,7 @@ class DashboardService implements InterfaceDashboard {
     try {
       var map = {
         'task': "dashboard",
-        'client': await SharedPref.instance.getClientId(),
+        'client': await SharedPref.instance.getUserId(),
         'park': parkId,
         'report_type': type,
       };

@@ -18,8 +18,8 @@ class ProfileService implements InterfaceProfile{
       var map =  {
       "task" : task,
       "user_id" : user_id,
-        "oldPassword" :oldPassword,
-        "newPassword" : newPassword
+        "old_password" :oldPassword,
+        "new_password" : newPassword
 
     };
 
@@ -30,13 +30,13 @@ class ProfileService implements InterfaceProfile{
       log("this is response sending pass details ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        // var data = SuccessResponse.fromJson(json.decode(response.data));
-        var data = List<BaseResponse>.from(json
-            .decode(response.data)
-            .map((model) => BaseResponse.fromJson(model)));
+        var data = BaseResponse.fromJson(json.decode(response.data));
+        // var data = List<BaseResponse>.from(json
+        //     .decode(response.data)
+        //     .map((model) => BaseResponse.fromJson(model)));
 
         log("forgot password data send successfully");
-        return data.first;
+        return data;
       }
       else{
         log("forgot password data sending failed");

@@ -7,6 +7,7 @@ part of 'SmtpDetails.dart';
 // **************************************************************************
 
 SmtpDetails _$SmtpDetailsFromJson(Map<String, dynamic> json) => SmtpDetails(
+      id: json['id'] as String?,
       smtp_host: json['smtp_host'] as String?,
       email_from_name: json['email_from_name'] as String?,
       smtp_username: json['smtp_username'] as String?,
@@ -19,6 +20,7 @@ SmtpDetails _$SmtpDetailsFromJson(Map<String, dynamic> json) => SmtpDetails(
 
 Map<String, dynamic> _$SmtpDetailsToJson(SmtpDetails instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'smtp_host': instance.smtp_host,
       'email_from_name': instance.email_from_name,
       'smtp_username': instance.smtp_username,

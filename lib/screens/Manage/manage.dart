@@ -240,7 +240,7 @@ class _ManageWidgetState extends State<ManageWidget>{
                              children: [
                                SvgPicture.asset("assets/images/manage/smtp.svg"),
                                const SizedBox(height: 5,),
-                               Text("Manage Clients",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: Resources.colors.hfText),textAlign: TextAlign.center),
+                               Text("Manage Client Users",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: Resources.colors.hfText),textAlign: TextAlign.center),
                              ],
                            ),
                          ),

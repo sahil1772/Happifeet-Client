@@ -111,126 +111,129 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
      child: Scaffold(
        extendBodyBehindAppBar: true,
        resizeToAvoidBottomInset: false,
-       body: Stack(
-         children: [
-           SvgPicture.asset("assets/images/login/loginBG.svg",fit: BoxFit.fill,width: MediaQuery.of(context).size.width,),
-           Padding(
-             padding: const EdgeInsets.symmetric(horizontal: 22),
-             child: Column(
-               crossAxisAlignment: CrossAxisAlignment.center,
-               // mainAxisAlignment: MainAxisAlignment.center,
-               children: [
-                 const SizedBox(height: 20,),
-                 Center(child: Image.asset("assets/images/login/logo.png")),
-                 const SizedBox(height: 20,),
-                 TextField(
-                   onChanged: (value){
-                     setEmailError(EmailValidator.validate(value)
-                         ? null
-                         : "Please enter valid email");
+       body: GestureDetector(
+         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+         child: Stack(
+           children: [
+             SvgPicture.asset("assets/images/login/loginBG.svg",fit: BoxFit.fill,width: MediaQuery.of(context).size.width,),
+             Padding(
+               padding: const EdgeInsets.symmetric(horizontal: 22),
+               child: Column(
+                 crossAxisAlignment: CrossAxisAlignment.center,
+                 // mainAxisAlignment: MainAxisAlignment.center,
+                 children: [
+                   const SizedBox(height: 20,),
+                   Center(child: Image.asset("assets/images/login/logo.png")),
+                   const SizedBox(height: 20,),
+                   TextField(
+                     onChanged: (value){
+                       setEmailError(EmailValidator.validate(value)
+                           ? null
+                           : "Please enter valid email");
 
-                     setState(() {
-                       email = value;
-                     });
-                   },
-
-                     decoration: InputDecoration(
-                       filled: true,
-                       fillColor: Colors.white,
-                       // labelText: labelText,
-                       hintText: 'Email',
-                       hintStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                       errorText: getEmailError(),
-                       focusedBorder: OutlineInputBorder(
-                         borderRadius: BorderRadius.circular(12),
-                           borderSide: BorderSide(
-                               color: ColorParser().hexToColor("#D7D7D7"), width: 1)),
-                       enabledBorder: OutlineInputBorder(
-                           borderRadius: BorderRadius.circular(12),
-                           borderSide: BorderSide(
-                               width: 1, color: ColorParser().hexToColor("#D7D7D7"))),
-                     )
-                 ),
-                 const SizedBox(height: 30,),
-                 TextField(
-                   onChanged: (value){
-                     password = value;
-                   },
-                    obscureText: true,
-                     decoration: InputDecoration(
-                       filled: true,
-                       fillColor: Colors.white,
-                       // labelText: labelText,
-
-                       hintText: 'Password',
-                       hintStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                       // errorText: getEmailError(),
-                       focusedBorder: OutlineInputBorder(
-                           borderRadius: BorderRadius.circular(12),
-                           borderSide: BorderSide(
-                               color: ColorParser().hexToColor("#D7D7D7"), width: 1)),
-                       enabledBorder: OutlineInputBorder(
-                           borderRadius: BorderRadius.circular(12),
-                           borderSide: BorderSide(
-                               width: 1, color: ColorParser().hexToColor("#D7D7D7"))),
-                     )
-                 ),
-                 const SizedBox(height: 15,),
-                 Row(
-                   mainAxisAlignment: MainAxisAlignment.end,
-                   children: [
-                     InkWell(
-                       onTap: () {
-
-                         const ForgotPasswordWidget().goToForgotPasswordPage(context);
-                       },
-                         child: const Text("Forgot Password",style: TextStyle(color: Colors.red,fontSize: 14),)),
-                   ],
-                 ),
-                 const SizedBox(height: 20,),
-                 ElevatedButton(
-                   style: ElevatedButton.styleFrom(
-                     fixedSize: const Size(320, 51),
-                       backgroundColor: ColorParser().hexToColor("#01825C"),
-
-                       // shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                       //     RoundedRectangleBorder(
-                       //         borderRadius: BorderRadius.circular(12.0),
-                       //         // side: BorderSide(color: Colors.red)
-                       //     )
-                       // ),
-                   ),
-                     onPressed: () async{
-
-                     var response = await ApiFactory().getLoginService().sendLoginDetails("login",email!, password!);
-
-                     log("RESPONSE LOGIN ${response.data}");
-                     if(response.status == "1"){
-                       log("VALID USERNMAE IN LOGIN PAGE");
-                       SharedPref.instance.setAccessPermission(response.data!.access!);
-                       SharedPref.instance.setUserData(response.data!);
-
-                       setUserPermissions(response.data!);
-                       BottomNavigationHappiFeet().goToBottomNavigation(context);
-
-                     }else{
-                       log("INVALID USERNAME IN LOGIN PAGE");
-                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Invalid username or password")));
-                     }
-                     // SharedPref.instance.setPermissions();
-
-
-
-                     // OtpPageWidget().goToOtpPage(context);
-
-
+                       setState(() {
+                         email = value;
+                       });
                      },
-                     child: const Text("Login",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: Colors.white)),)
-                 // SvgPicture.asset("assets/images/login/logo.svg"),
-               ],
+
+                       decoration: InputDecoration(
+                         filled: true,
+                         fillColor: Colors.white,
+                         // labelText: labelText,
+                         hintText: 'Email',
+                         hintStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                         errorText: getEmailError(),
+                         focusedBorder: OutlineInputBorder(
+                           borderRadius: BorderRadius.circular(12),
+                             borderSide: BorderSide(
+                                 color: ColorParser().hexToColor("#D7D7D7"), width: 1)),
+                         enabledBorder: OutlineInputBorder(
+                             borderRadius: BorderRadius.circular(12),
+                             borderSide: BorderSide(
+                                 width: 1, color: ColorParser().hexToColor("#D7D7D7"))),
+                       )
+                   ),
+                   const SizedBox(height: 30,),
+                   TextField(
+                     onChanged: (value){
+                       password = value;
+                     },
+                      obscureText: true,
+                       decoration: InputDecoration(
+                         filled: true,
+                         fillColor: Colors.white,
+                         // labelText: labelText,
+
+                         hintText: 'Password',
+                         hintStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                         // errorText: getEmailError(),
+                         focusedBorder: OutlineInputBorder(
+                             borderRadius: BorderRadius.circular(12),
+                             borderSide: BorderSide(
+                                 color: ColorParser().hexToColor("#D7D7D7"), width: 1)),
+                         enabledBorder: OutlineInputBorder(
+                             borderRadius: BorderRadius.circular(12),
+                             borderSide: BorderSide(
+                                 width: 1, color: ColorParser().hexToColor("#D7D7D7"))),
+                       )
+                   ),
+                   const SizedBox(height: 15,),
+                   Row(
+                     mainAxisAlignment: MainAxisAlignment.end,
+                     children: [
+                       InkWell(
+                         onTap: () {
+
+                           const ForgotPasswordWidget().goToForgotPasswordPage(context);
+                         },
+                           child: const Text("Forgot Password",style: TextStyle(color: Colors.red,fontSize: 14),)),
+                     ],
+                   ),
+                   const SizedBox(height: 20,),
+                   ElevatedButton(
+                     style: ElevatedButton.styleFrom(
+                       fixedSize: const Size(320, 51),
+                         backgroundColor: ColorParser().hexToColor("#01825C"),
+
+                         // shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                         //     RoundedRectangleBorder(
+                         //         borderRadius: BorderRadius.circular(12.0),
+                         //         // side: BorderSide(color: Colors.red)
+                         //     )
+                         // ),
+                     ),
+                       onPressed: () async{
+
+                       var response = await ApiFactory().getLoginService().sendLoginDetails("login",email!, password!);
+
+                       log("RESPONSE LOGIN ${response.data}");
+                       if(response.status == "1"){
+                         log("VALID USERNMAE IN LOGIN PAGE");
+                         SharedPref.instance.setAccessPermission(response.data!.access!);
+                         SharedPref.instance.setUserData(response.data!);
+
+                         setUserPermissions(response.data!);
+                         BottomNavigationHappiFeet().goToBottomNavigation(context);
+
+                       }else{
+                         log("INVALID USERNAME IN LOGIN PAGE");
+                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Invalid username or password")));
+                       }
+                       // SharedPref.instance.setPermissions();
+
+
+
+                       // OtpPageWidget().goToOtpPage(context);
+
+
+                       },
+                       child: const Text("Login",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: Colors.white)),)
+                   // SvgPicture.asset("assets/images/login/logo.svg"),
+                 ],
+               ),
              ),
-           ),
-         ],
+           ],
+         ),
        ),
      ),
    );

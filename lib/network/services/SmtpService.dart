@@ -18,11 +18,11 @@ class SmtpService implements InterfaceSmtp {
    try{
      var map = data.toJson();
 
-     map.addAll({"task": "smtp"});
+     map.addAll({"task": "updateSMTP"});
 
      var response = await NetworkClient()
          .dio
-         .post(base_url, data: FormData.fromMap(data.toJson()));
+         .post(base_url, data: FormData.fromMap(map));
 
 
      //Checking for successful response
@@ -36,8 +36,8 @@ class SmtpService implements InterfaceSmtp {
      }
 
    }on DioException catch (error) {
-     log("EXCEPTION IN getSmtpDetails ${error.response}");
-     throw "exeption caught IN getSmtpDetails";
+     log("EXCEPTION IN sendSmtpDetails ${error.response}");
+     throw "exeption caught IN sendSmtpDetails";
    }
 
   }
@@ -51,11 +51,11 @@ class SmtpService implements InterfaceSmtp {
   /** get SMTP data **/
 
   @override
-  Future<List<SmtpDetails>> getSmtpDetails(String task, String user_id) async {
+  Future<SmtpDetails> getSmtpDetails(String task, String client_id) async {
     try {
       var map = {
         'task': task,
-        'user_id': user_id,
+        'client_id': client_id,
       };
 
       var response =
@@ -63,10 +63,10 @@ class SmtpService implements InterfaceSmtp {
       log("this is response of forgot password $response");
 
       if (response.statusCode == 200) {
-        // var data = BaseResponse.fromJson(json.decode(response.data));
-        var data = List<SmtpDetails>.from(json
-            .decode(response.data)
-            .map((model) => SmtpDetails.fromJson(model)));
+        var data = SmtpDetails.fromJson(json.decode(response.data));
+        // var data = List<SmtpDetails>.from(json
+        //     .decode(response.data)
+        //     .map((model) => SmtpDetails.fromJson(model)));
 
         log("forgot password data send successfully");
         return data;
