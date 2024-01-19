@@ -16,5 +16,16 @@
   "Latitude": "纬度*",
   "Longitude": "经度*",
   "Main_City_Location": "主要城市位置",
-  "Title" : "标题"
+  "Title" : "标题",
+  "Enter_Address" : "输入地址",
+  "Enter_Location" : "输入位置",
+  "Street" : "街道 *",
+  "Provide_Valid_Data" : "请提供有效数据！",
+  "Enter_Street": "进入街道",
+  "Enter_City": "输入城市",
+  "Please_Fill_English": "请先用英文填写详细信息。",
+  "Other_features": "其他特性",
+  "Add_More": "添加更多+"
+
+
 }

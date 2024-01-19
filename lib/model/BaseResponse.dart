@@ -6,10 +6,11 @@ part 'BaseResponse.g.dart';
 class BaseResponse {
   dynamic status;
   String? msg;
+  dynamic park_id;
 
   BaseResponse(
       {this.status,
-        this.msg});
+        this.msg,this.park_id});
 
   factory BaseResponse.fromJson(Map<String, dynamic> json) =>
       _$BaseResponseFromJson(json);

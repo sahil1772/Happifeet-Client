@@ -19,5 +19,14 @@ abstract class  LocaleKeys {
   static const Longitude = 'Longitude';
   static const Main_City_Location = 'Main_City_Location';
   static const Title = 'Title';
+  static const Enter_Address = 'Enter_Address';
+  static const Enter_Location = 'Enter_Location';
+  static const Street = 'Street';
+  static const Provide_Valid_Data = 'Provide_Valid_Data';
+  static const Enter_Street = 'Enter_Street';
+  static const Enter_City = 'Enter_City';
+  static const Please_Fill_English = 'Please_Fill_English';
+  static const Other_features = 'Other_features';
+  static const Add_More = 'Add_More';
 
 }

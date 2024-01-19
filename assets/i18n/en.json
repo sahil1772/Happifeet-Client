@@ -15,5 +15,15 @@
   "Description": "Description *",
   "Latitude": "Latitude *",
   "Longitude": "Longitude *",
-  "Main_City_Location": "Main City Location"
+  "Main_City_Location": "Main City Location",
+  "Title" : "Title",
+  "Enter_Address" : "Enter Address",
+  "Enter_Location" : "Enter Location",
+  "Street" : "Street *",
+  "Provide_Valid_Data" : "Please provide valid data!",
+  "Enter_Street": "Enter Street",
+  "Enter_City": "Enter City",
+  "Please_Fill_English": "Please fill details in English first.",
+  "Other_features": "Other Features",
+  "Add_More": "Add More +"
 }

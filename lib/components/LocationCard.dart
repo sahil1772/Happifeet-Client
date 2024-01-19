@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:happifeet_client_app/model/Location/LocationDataModel.dart';
+import 'package:happifeet_client_app/screens/Manage/ManageLocation/AddLocation.dart';
 
 import '../model/Location/LocationData.dart';
 
@@ -54,7 +56,7 @@ class _LocationCardState extends State<LocationCard>{
                   child: SizedBox(
                     width: 100,
                     height: 100,
-                    child: SvgPicture.asset("assets/images/location/locationImg.svg"),
+                    child: Image.network(widget.locationDetails!.image!),
                     // child: Image.asset(widget.city!.location_image!),
                   ),
                   // color: Theme.of(context).primaryColor,
@@ -124,7 +126,10 @@ class _LocationCardState extends State<LocationCard>{
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SvgPicture.asset("assets/images/location/editing.svg"),
+                    InkWell(onTap: () {
+                      log("Editing Park ID => ${ widget.locationDetails!.park_id!}");
+                      AddLocation.gotoAddLocation(context, true, widget.locationDetails!.park_id!);
+                    },child: SvgPicture.asset("assets/images/location/editing.svg")),
                     SizedBox(height: 5,),
                     Divider(color: Colors.grey.shade200),
                     SvgPicture.asset("assets/images/location/delete.svg"),

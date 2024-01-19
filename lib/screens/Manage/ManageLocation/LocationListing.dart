@@ -211,7 +211,7 @@ class _ManageLocationWidgetState extends State<LocationListing>{
             child: ElevatedButton(
 
               onPressed: () {
-                AddLocation().gotoAddLocation(context);
+                AddLocation.gotoAddLocation(context,false,null);
               },
               style: ElevatedButton.styleFrom(backgroundColor: ColorParser().hexToColor("#1A7C52"),elevation: 0),
               child: Text("Add Location",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),),

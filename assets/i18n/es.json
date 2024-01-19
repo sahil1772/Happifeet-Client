@@ -7,8 +7,8 @@
   "Park_Address": "Dirección del parque",
   "Client_Name": "Nombre del Cliente *",
   "Main_Site": "Sitio principal",
-  "Location_Name": "Nombre del lugar *",
-  "Address_Street": "Nombre de la calle *",
+  "Location_Name": "Parque Nombre *",
+  "Address_Street": "DIRECCIÓN *",
   "City": "Ciudad *",
   "State": "Estado *",
   "Zip": "Código postal *",
@@ -16,5 +16,14 @@
   "Latitude": "Latitud *",
   "Longitude": "Longitud *",
   "Main_City_Location": "Ubicación de la ciudad principal",
-  "Title" : "título"
+  "Title": "título",
+  "Enter_Address": "Ingresa la direccion",
+  "Enter_Location": "Ingrese la ubicación",
+  "Street": "Calle *",
+  "Provide_Valid_Data": "¡Por favor proporcione datos válidos!",
+  "Enter_Street": "Ingrese a la calle",
+  "Enter_City": "Ingrese la ciudad",
+  "Please_Fill_English": "Primero complete los detalles en inglés.",
+  "Other_features": "Otras características",
+  "Add_More": "Añadir más +"
 }

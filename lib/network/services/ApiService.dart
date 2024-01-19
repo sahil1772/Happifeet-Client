@@ -4,7 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 // var base_url = "http://demo.imageonline.in/keephappifeet/statistics/mobileApi.php";
-var base_url = "https://demo.imageonline.in/keephappifeet/statistics/mobileClientApi.php";
+var base_url =
+    "https://demo.imageonline.in/keephappifeet/statistics/mobileClientApi.php";
 // var base_url = "http://192.168.4.9:82/keephappifeet/statistics/mobileApi.php";
 // var base_url = "https://dev2.imageonline.co.in/keephappifeet/statistics/mobileApi.php";
 
@@ -27,10 +28,11 @@ class NetworkClient implements InterceptorsWrapper {
         sendTimeout: const Duration(seconds: 90000),
         baseUrl: base_url,
         connectTimeout: const Duration(seconds: 10000),
-        receiveTimeout: const Duration(seconds: 10000),persistentConnection: true,
+        receiveTimeout: const Duration(seconds: 10000),
+        persistentConnection: true,
         contentType: "multipart/form-data"
-      // headers: <String, dynamic>{"User-agent": Jiffy().dateTime}
-    ),
+        // headers: <String, dynamic>{"User-agent": Jiffy().dateTime}
+        ),
   );
 
   void addInterceptor() {
@@ -87,6 +89,8 @@ class NetworkClient implements InterceptorsWrapper {
   @override
   void onResponse(
       Response<dynamic> response, ResponseInterceptorHandler handler) {
+
+    print(response);
     return handler.next(response);
   }
 }

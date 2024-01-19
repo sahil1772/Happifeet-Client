@@ -1,3 +1,4 @@
+import 'package:image_picker/image_picker.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'LocationDataModel.g.dart';
@@ -28,26 +29,28 @@ class LocationDataModel {
 
 
 /** OLD **/
-  String? language;
-  String? clientName;
-  String? mainSite;
+
+  String? id;
   String? locationName;
   String? addressStreet;
   String? city;
   String? state;
+  String? street;
   String? zip;
   String? latitude;
   String? longitude;
   String? mainCityLocation;
-  List<String>? parkImages;
-  List<String>? galleryImages;
+
   String? description;
   String? parkAvailability;
   String? startDate;
   String? endDate;
+  String? reservationlink;
+  String? status;
   List<String>? parkAvailabilityMonths;
-  List<String>? parkFeatures;
-  List<LocationDataModel>? otherLanguages = [];
+  List<String?>? parkFeatures;
+  List<String?>? otherFeatures;
+
 
 
   LocationDataModel(
@@ -73,9 +76,8 @@ class LocationDataModel {
     //     this.features,
     //     this.status
 
-        required this.language,
-      this.clientName,
-      this.mainSite,
+
+      this.id,
       this.locationName,
       this.addressStreet,
       this.city,
@@ -84,15 +86,17 @@ class LocationDataModel {
       this.latitude,
       this.longitude,
       this.mainCityLocation,
-      this.parkImages,
-      this.galleryImages,
+
       this.description,
       this.parkAvailability,
       this.startDate,
       this.endDate,
       this.parkAvailabilityMonths,
       this.parkFeatures,
-      this.otherLanguages
+      this.reservationlink,
+      this.status,
+      this.otherFeatures,
+
       //
       });
 

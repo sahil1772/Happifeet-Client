@@ -18,7 +18,7 @@ class LoginPageWidget extends StatefulWidget{
 
   gotoLogin(BuildContext context){
 
-    Navigator.of(context,rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (_) => LoginPageWidget()));
+    Navigator.of(context,rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (_) => const LoginPageWidget()));
   }
 
 
@@ -209,13 +209,14 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
                        log("VALID USERNMAE IN LOGIN PAGE");
                        SharedPref.instance.setAccessPermission(response.data!.access!);
                        SharedPref.instance.setUserData(response.data!);
+                       SharedPref.instance.setLanguages(response.data!.language!);
 
                        setUserPermissions(response.data!);
                        BottomNavigationHappiFeet().goToBottomNavigation(context);
 
                      }else{
                        log("INVALID USERNAME IN LOGIN PAGE");
-                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Invalid username or password")));
+                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Invalid username or password")));
                      }
                      // SharedPref.instance.setPermissions();
 

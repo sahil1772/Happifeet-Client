@@ -1073,7 +1073,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
   Future<void> getParks() async {
     Response? dashboardResponse = await ApiFactory()
         .getDashboardService()
-        .getParks(await SharedPref.instance.getClientId());
+        .getParks(await SharedPref.instance.getUserId());
 
     Map<String, dynamic> responseData = json.decode(dashboardResponse!.data!);
 

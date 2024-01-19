@@ -7,6 +7,8 @@ import 'package:happifeet_client_app/model/Location/Features.dart';
 import 'package:happifeet_client_app/model/Location/LocationDataModel.dart';
 import 'package:happifeet_client_app/network/interface/InterfaceLocation.dart';
 import 'package:happifeet_client_app/network/services/ApiService.dart';
+import 'package:happifeet_client_app/storage/shared_preferences.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../model/Location/LocationData.dart';
 
@@ -36,48 +38,21 @@ class LocationService implements InterfaceLocation {
     }
   }
 
-  /** Update location data **/
-  Future<BaseResponse> updateLocationData(LocationDataModel data) async {
-    //Converting LocationData Object to Map<String,dynamic>
-    var updDataMap = data.toJson();
-    //Adding task to Map
-    updDataMap.addAll({"task": "update_location"});
-
-    //Calling Post API
-    var response = await NetworkClient()
-        .dio
-        .post(base_url, data: FormData.fromMap(data.toJson()));
-
-    //Checking for successful response
-    if (response.statusCode == 200) {
-      //Return Success Response Object as BaseResponse Class Object
-      var data = BaseResponse.fromJson(json.decode(response.data));
-      return data;
-    } else {
-      //Return Failure Response Object as BaseResponse Class Object
-      return BaseResponse(
-          status: response.statusCode, msg: response.statusMessage);
-    }
-  }
 
   /** Edit Location Data **/
 
   @override
-  Future<List<LocationDataModel>> editLocationData(
-      String task, String park_id) async {
+  Future<LocationDataModel> editLocationData(Map<String,String> map) async {
     try {
-      var map = {'task': task, 'park_id': park_id};
+      map.addAll({'task': "edit_location"}) ;
 
-      var response =
-          await NetworkClient().dio.get(base_url, queryParameters: map);
+      var response = await NetworkClient()
+          .dio
+          .get(base_url, queryParameters: map, data: FormData.fromMap(map));
 
       if (response.statusCode == 200) {
-        List<LocationDataModel> data = List<LocationDataModel>.from(json
-            .decode(response.data)
-            .map((model) => LocationDataModel.fromJson(model)));
-        log(
-          "response done for getLocationListService ${data.toString()}",
-        );
+        LocationDataModel data = LocationDataModel.fromJson(json.decode(response.data!));
+
         return data;
       } else {
         log("response other than 200 for LocationData");
@@ -85,24 +60,38 @@ class LocationService implements InterfaceLocation {
       }
     } on DioException catch (error) {
       log("EXCEPTION IN editLocationData ${error.response}");
-      throw "exeption caught IN editLocationData";
+      throw error;
     }
   }
 
   /** Submit location data **/
   @override
-  Future<BaseResponse> submitLocationData(LocationDataModel data) async {
+  Future<BaseResponse> submitLocationData(LocationDataModel data,
+      XFile? locationImage, List<XFile>? galleryImages) async {
     //Converting LocationData Object to Map<String,dynamic>
-    Map paramMap = data.toJson();
+    Map<String, dynamic> paramMap = data.toJson();
     //Adding task to Map
-    paramMap.addAll({"task": "add_location"});
+    paramMap.addAll({"task": "submit_location"});
+    paramMap.addAll({"user_id": await SharedPref.instance.getUserId()});
+    paramMap.addAll({"parkFeatures": data.parkFeatures});
+
+    var formData = FormData.fromMap(paramMap, ListFormat.multiCompatible);
+
+    formData.files.add(MapEntry(
+        "parkImages", await MultipartFile.fromFile(locationImage!.path)));
+
+    for (var file in galleryImages!) {
+      formData.files.add(
+        MapEntry("galleryImages[${galleryImages!.indexOf(file)}]",
+            await MultipartFile.fromFile(file.path)),
+      );
+    }
+    log("PARAM MAP $formData");
 
     // var  paramMap = {"task":task};
 
     //Calling Post API
-    var response = await NetworkClient()
-        .dio
-        .post(base_url, data: FormData.fromMap(data.toJson()));
+    var response = await NetworkClient().dio.post(base_url, data: formData);
 
     //Checking for successful response
     if (response.statusCode == 200) {
@@ -122,10 +111,11 @@ class LocationService implements InterfaceLocation {
     try {
       var map = {
         'task': task,
+        'client': await SharedPref.instance.getUserId(),
       };
 
       var response =
-          await NetworkClient().dio.get(base_url, queryParameters: map);
+          await NetworkClient().dio.post(base_url, data: FormData.fromMap(map));
       log("this is response of LocationData  ${response}");
 
       if (response.statusCode == 200) {
@@ -135,7 +125,7 @@ class LocationService implements InterfaceLocation {
         log(
           "response done for getLocationListService ${data.toString()}",
         );
-        return data.sublist(0, 10);
+        return data;
       } else {
         log("response other than 200 for LocationData");
         throw "response other than 200 for LocationData";
@@ -160,7 +150,7 @@ class LocationService implements InterfaceLocation {
       };
 
       var response =
-          await NetworkClient().dio.get(base_url, queryParameters: map);
+          await NetworkClient().dio.post(base_url, queryParameters: map);
 
       if (response.statusCode == 200) {
         List<Features> data = List<Features>.from(json
@@ -176,4 +166,74 @@ class LocationService implements InterfaceLocation {
       log("ERROR OCCURED ON FUCTION CALL getFeatures $error");
     }
   }
+
+  @override
+  Future<BaseResponse> submitLocationLanguageData(
+      LocationDataModel data, String parkId, String lang) async {
+    Map<String, dynamic> paramMap = data.toJson();
+    //Adding task to Map
+    paramMap.addAll({"task": "update_location_lang"});
+    paramMap.addAll({"user_id": await SharedPref.instance.getUserId()});
+    paramMap.addAll({"park_id": parkId});
+    paramMap.addAll({"lang": lang});
+
+    log("PARAM MAP $paramMap");
+
+    // var  paramMap = {"task":task};
+
+    //Calling Post API
+    var response = await NetworkClient().dio.post(base_url,
+        data: FormData.fromMap(paramMap, ListFormat.multiCompatible));
+
+    //Checking for successful response
+    if (response.statusCode == 200) {
+      //Return Success Response Object as BaseResponse Class Object
+      var data = BaseResponse.fromJson(json.decode(response.data));
+      return data;
+    } else {
+      //Return Failure Response Object as BaseResponse Class Object
+      return BaseResponse(
+          status: response.statusCode, msg: response.statusMessage);
+    }
+  }
+
+  @override
+  Future<BaseResponse> updateLocationData(LocationDataModel data, XFile? locationImage, List<XFile>? galleryImages) async {
+    Map<String, dynamic> paramMap = data.toJson();
+    //Adding task to Map
+    paramMap.addAll({"task": "update_location"});
+    paramMap.addAll({"user_id": await SharedPref.instance.getUserId()});
+    paramMap.addAll({"parkFeatures": data.parkFeatures});
+
+    var formData = FormData.fromMap(paramMap, ListFormat.multiCompatible);
+
+    formData.files.add(MapEntry(
+        "parkImages", await MultipartFile.fromFile(locationImage!.path)));
+
+    for (var file in galleryImages!) {
+    formData.files.add(
+    MapEntry("galleryImages[${galleryImages!.indexOf(file)}]",
+    await MultipartFile.fromFile(file.path)),
+    );
+    }
+    log("PARAM MAP $formData");
+
+    // var  paramMap = {"task":task};
+
+    //Calling Post API
+    var response = await NetworkClient().dio.post(base_url, data: formData);
+
+    //Checking for successful response
+    if (response.statusCode == 200) {
+    //Return Success Response Object as BaseResponse Class Object
+    var data = BaseResponse.fromJson(json.decode(response.data));
+    return data;
+    } else {
+    //Return Failure Response Object as BaseResponse Class Object
+    return BaseResponse(
+    status: response.statusCode, msg: response.statusMessage);
+    }
+  }
+
+
 }

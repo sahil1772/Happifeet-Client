@@ -20,29 +20,51 @@ class SharedPref {
     return instance;
   }
 
-
   /// Store User data
   UserData userData = UserData();
   String? getuserData;
 
-  setUserData(UserData userdata) async{
+  setUserData(UserData userdata) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     log("data in setUserData ${userdata} ");
     userData = userdata;
     try {
       String user = json.encode(userdata);
-      prefs.setString("userData",user);
-
+      prefs.setString("userData", user);
     } catch (e) {
       throw e;
     }
   }
 
-  Future<String> getClientId() async {
+  setLanguages(Map<String, dynamic> languages) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      prefs.setString("languages", json.encode(languages));
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<Map<String,dynamic>> getLanguageList() async {
+    Map<String,dynamic> languages = {};
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      languages = json.decode(prefs.getString("languages")!);
+    } catch (e) {
+      throw e;
+    }
+
+    return Future.value(languages);
+  }
+
+
+
+  Future<String> getUserId() async {
     String? ClientID = "";
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      UserData data = UserData.fromJson(json.decode(prefs.getString("userData")!));
+      UserData data =
+          UserData.fromJson(json.decode(prefs.getString("userData")!));
       log("Client ID => ${data.user_id}");
       ClientID = data.user_id;
     } catch (e) {
@@ -56,7 +78,8 @@ class SharedPref {
     String? userType = "";
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      UserData data = UserData.fromJson(json.decode(prefs.getString("userData")!));
+      UserData data =
+          UserData.fromJson(json.decode(prefs.getString("userData")!));
       log("User Type => ${data.user_type}");
       userType = data.user_type;
     } catch (e) {
@@ -83,7 +106,7 @@ class SharedPref {
   /// Access permission
   AccessPermissionData accessPermission = AccessPermissionData();
 
-  setAccessPermission(AccessPermissionData userdata) async{
+  setAccessPermission(AccessPermissionData userdata) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     log("data in setAccessPermission ${userdata} ");
     accessPermission = AccessPermissionData.fromJson(userdata.toJson());
@@ -91,7 +114,7 @@ class SharedPref {
     prefs?.setString("accessPermission", accessPermission.toString());
   }
 
-  AccessPermissionData getAccessPermission(){
+  AccessPermissionData getAccessPermission() {
     return this.accessPermission;
   }
 
@@ -119,7 +142,7 @@ class SharedPref {
 
   Future<bool?> getPermissionTrail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool? data = (prefs.getBool("trail") ?? false );
+    bool? data = (prefs.getBool("trail") ?? false);
     log("inside getPermissionTrail $data");
     return data;
   }
@@ -137,8 +160,9 @@ class SharedPref {
       // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context)));
       Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => BottomNavigationHappiFeet(),
-              ));
+          MaterialPageRoute(
+            builder: (context) => BottomNavigationHappiFeet(),
+          ));
     } else {
       // await prefs.setBool('seen', true);
       Navigator.pushReplacement(
@@ -148,9 +172,6 @@ class SharedPref {
           ));
     }
   }
-
-
-
 
   ClientTheme clientTheme = ClientTheme();
 
