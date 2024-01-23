@@ -208,7 +208,11 @@ class _UserListingCardState extends State<UserListingCard> {
                                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("User Deleted Successfully")));
                                             Future.delayed(
                                                 Duration(seconds: 2), () {
-                                              AssignedUserListing().goToAssignedUserListing(context);
+                                              Navigator.pop(context,(){
+                                                setState(() {
+
+                                                });
+                                              });
                                             });
 
                                           }else{

@@ -16,9 +16,11 @@ class AssignedUserListing extends StatefulWidget {
   @override
   State<AssignedUserListing> createState() => _AssignedUserListingState();
 
-  goToAssignedUserListing(BuildContext context) {
+
+
+  goToAssignedUserListing(BuildContext context,Function? callback) {
     Navigator.push(context,
-        MaterialPageRoute(builder: (_) => const AssignedUserListing()));
+        MaterialPageRoute(builder: (_) => const AssignedUserListing())).then((value) => callback!());
   }
 }
 

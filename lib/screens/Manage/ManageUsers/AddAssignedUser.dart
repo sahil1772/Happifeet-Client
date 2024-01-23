@@ -473,7 +473,11 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("User data updated successfully")));
                                       Future.delayed(
                                           Duration(seconds: 2), () {
-                                        AssignedUserListing().goToAssignedUserListing(context);
+                                       Navigator.pop(context,(){
+                                         setState(() {
+
+                                         });
+                                       });
                                       });
                                     }else{
                                       log("USER DATA UPDATION FAILED");
@@ -492,7 +496,11 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
 
                                         Future.delayed(
                                             Duration(seconds: 3), () {
-                                          AssignedUserListing().goToAssignedUserListing(context);
+                                          Navigator.pop(context,(){
+                                            setState(() {
+
+                                            });
+                                          });
                                         });
 
                                       }else{
@@ -527,7 +535,7 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                 height: 50,
                               ),
 
-                              /** SUBMIT BUTTON **/
+
                             ],
                           ),
                         ),

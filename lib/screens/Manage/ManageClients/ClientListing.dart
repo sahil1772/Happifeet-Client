@@ -11,11 +11,15 @@ import '../../../model/ClientUsers/ClientUserData.dart';
 import '../../../storage/shared_preferences.dart';
 import '../../../utils/ColorParser.dart';
 
+Future? futureClientData;
 class ClientListingWidget extends StatefulWidget{
 
 
-  gotoClientListingPage(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (_) => ClientListingWidget()));
+  gotoClientListingPage(BuildContext context,Function? callback) async {
+    Navigator.push(context, MaterialPageRoute(builder: (_) => ClientListingWidget())).then((value) => callback!());
+
+
+
   }
 
   @override
@@ -25,7 +29,7 @@ class ClientListingWidget extends StatefulWidget{
 
 class _ClientListingWidgetState extends State<ClientListingWidget>{
   List<ClientUserData>? clientUserData;
-  Future? futureClientData;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -94,85 +98,89 @@ class _ClientListingWidgetState extends State<ClientListingWidget>{
                       color:  Colors.white),
                   // color: Colors.white,
                   child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
 
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        /** Search bar **/
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 26),
-                          child: Row(
-                            children: [
-                              Flexible(
-                                child: SizedBox(
-                                  height: 50,
-                                  width: 400,
-                                  child: TextField(
-                                      onChanged: (value) {
-                                        // filterSearchResults(value);
-                                      },
-                                      style: const TextStyle(fontSize: 16),
-                                      decoration: InputDecoration(
-                                        prefixIcon: const Icon(Icons.search),
-                                        prefixIconColor: ColorParser().hexToColor("#1A7C52"),
-                                        labelText: 'Search',
-                                        // labelText: widget.selectedLanguage == "1"
-                                        //     ? "Search".language(context)
-                                        //     : "Search",
-                                        labelStyle: TextStyle(color: ColorParser().hexToColor("#9E9E9E")),
+                    child: RefreshIndicator(
+                      onRefresh: () => getClientUserData() ,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          /** Search bar **/
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 26),
+                            child: Row(
+                              children: [
+                                Flexible(
+                                  child: SizedBox(
+                                    height: 50,
+                                    width: 400,
+                                    child: TextField(
+                                        onChanged: (value) {
+                                          // filterSearchResults(value);
+                                        },
+                                        style: const TextStyle(fontSize: 16),
+                                        decoration: InputDecoration(
+                                          prefixIcon: const Icon(Icons.search),
+                                          prefixIconColor: ColorParser().hexToColor("#1A7C52"),
+                                          labelText: 'Search',
+                                          // labelText: widget.selectedLanguage == "1"
+                                          //     ? "Search".language(context)
+                                          //     : "Search",
+                                          labelStyle: TextStyle(color: ColorParser().hexToColor("#9E9E9E")),
 
-                                        focusedBorder: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                              color: Colors.grey,
-                                              width: 1,
+                                          focusedBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                color: Colors.grey,
+                                                width: 1,
 
-                                            ),
-                                            borderRadius: BorderRadius.circular(10)
-                                        ),
-                                        enabledBorder: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                              width: 1,
-                                              color:  Colors.grey,),
-                                            borderRadius: BorderRadius.circular(10)
-                                        ),
-                                      )),
+                                              ),
+                                              borderRadius: BorderRadius.circular(10)
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                width: 1,
+                                                color:  Colors.grey,),
+                                              borderRadius: BorderRadius.circular(10)
+                                          ),
+                                        )),
+                                  ),
                                 ),
-                              ),
 
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        /**   listview builder     **/
+                          /**   listview builder     **/
 
-                        /**  Client user Listing **/
+                          /**  Client user Listing **/
 
-                        FutureBuilder(
-                          future: futureClientData,
-                          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                            if(snapshot.connectionState == ConnectionState.done){
-                              return Flexible(
-                                child: ListView.separated(
-                                  padding: EdgeInsets.zero,
+                          FutureBuilder(
+                            future: futureClientData,
+                            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                              if(snapshot.connectionState == ConnectionState.done){
+                                return Flexible(
+                                  child: ListView.separated(
+                                    padding: EdgeInsets.zero,
 
-                                  physics: const ScrollPhysics(),
-                                  itemCount: clientUserData!.length,
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, index) {
-                                    return  ClientListingCard(clientUserData: clientUserData![index]);
-                                  }, separatorBuilder: (BuildContext context, int index) { return const SizedBox(height: 8,); },
-                                ),
-                              );
-                            }else if(snapshot.connectionState == ConnectionState.waiting){
-                              return CircularProgressIndicator();
-                            }else{
-                              return Text("Something Went Wrong");
-                            }
+                                    physics: const ScrollPhysics(),
+                                    itemCount: clientUserData!.length,
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) {
+                                      return  ClientListingCard(clientUserData: clientUserData![index]);
+                                    }, separatorBuilder: (BuildContext context, int index) { return const SizedBox(height: 8,); },
+                                  ),
+                                );
+                              }else if(snapshot.connectionState == ConnectionState.waiting){
+                                return CircularProgressIndicator();
+                              }else{
+                                return Text("Something Went Wrong");
+                              }
 
-                          },
+                            },
 
-                        ),
-                        const SizedBox(height: 50,),
-                      ],
+                          ),
+                          const SizedBox(height: 50,),
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -188,7 +196,7 @@ class _ClientListingWidgetState extends State<ClientListingWidget>{
               child: ElevatedButton(
 
                 onPressed: () {
-                  AddClientWidget().gotoAddClientPage(context);
+                  AddClientWidget().gotoAddClientPage(context,null,false);
                 },
                 style: ElevatedButton.styleFrom(backgroundColor: ColorParser().hexToColor("#1A7C52"),elevation: 0),
                 child: const Text("Add Client",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),),

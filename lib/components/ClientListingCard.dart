@@ -1,8 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:happifeet_client_app/screens/Manage/ManageClients/AddClient.dart';
+import 'package:happifeet_client_app/screens/Manage/ManageClients/ClientListing.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 import '../model/ClientUsers/ClientUserData.dart';
+import '../network/ApiFactory.dart';
 import '../utils/ColorParser.dart';
 
 class ClientListingCard extends StatefulWidget{
@@ -16,6 +22,7 @@ class ClientListingCard extends StatefulWidget{
 }
 
 class _ClientListingCardState extends State<ClientListingCard>{
+  bool isEdit = true;
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -163,11 +170,55 @@ class _ClientListingCardState extends State<ClientListingCard>{
                   children: [
                     Divider(color: Colors.grey.shade200),
                     const SizedBox(height: 8,),
-                    SvgPicture.asset("assets/images/location/editing.svg"),
+                    InkWell(
+                      onTap: () {
+                        AddClientWidget().gotoAddClientPage(context,widget.clientUserData!.id, isEdit);
+                      },
+                        child: SvgPicture.asset("assets/images/location/editing.svg")),
                     const SizedBox(height: 8,),
                     Divider(color: Colors.grey.shade200),
                     const SizedBox(height: 8,),
-                    SvgPicture.asset("assets/images/location/delete.svg"),
+                    InkWell(
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (_) {
+                                return AlertDialog(
+                                  title: Text("Delete Client User"),
+                                  content: Text(
+                                      "Are you sure you want to delete this client user?"),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () async {
+                                          var response = await ApiFactory().getClientService().deleteClientUserData("delete_client_user", widget.clientUserData!.id!);
+                                          if(response.status == "1"){
+                                            log("Client User Deleted Successfully");
+                                            Navigator.of(context, rootNavigator: true).pop();
+                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Client User Deleted Successfully")));
+                                            Future.delayed(
+                                                Duration(seconds: 2), () {
+                                             Navigator.pop(context,(){
+                                               setState(() {
+
+                                               });
+                                             });
+                                            });
+
+                                          }else{
+                                            log("Error in client user delete");
+                                          }
+
+                                        }, child: Text("Yes")),
+                                    TextButton(
+                                        onPressed: () => Navigator.of(context,
+                                            rootNavigator: true)
+                                            .pop(),
+                                        child: Text("No")),
+                                  ],
+                                );
+                              });
+                        },
+                        child: SvgPicture.asset("assets/images/location/delete.svg")),
                     const SizedBox(height: 8,),
                     Divider(color: Colors.grey.shade200),
 
