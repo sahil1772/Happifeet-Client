@@ -15,12 +15,12 @@ import '../../model/Location/LocationData.dart';
 class LocationService implements InterfaceLocation {
   /** Delete location data **/
 
-  Future<BaseResponse> deleteLocationData(String task, String park_id) async {
+  Future<BaseResponse> deleteLocationData( String park_id) async {
     try {
-      var map = {"task": task, "park_id": park_id};
+      var map = {"task": "delete_location", "park_id": park_id};
 
       var response =
-          await NetworkClient().dio.get(base_url, queryParameters: map);
+          await NetworkClient().dio.post(base_url, data: FormData.fromMap(map));
 
       //Checking for successful response
       if (response.statusCode == 200) {

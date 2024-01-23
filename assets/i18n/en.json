@@ -25,5 +25,9 @@
   "Enter_City": "Enter City",
   "Please_Fill_English": "Please fill details in English first.",
   "Other_features": "Other Features",
-  "Add_More": "Add More +"
+  "Add_More": "Add More +",
+  "Trail_Name": "Trail Name*",
+  "Distance": "Distance*",
+  "Opening_Time": "Opening Time (Trial days & timing)*",
+  "Trail_Description": "Trail Description*"
 }

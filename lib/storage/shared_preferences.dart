@@ -62,7 +62,6 @@ class SharedPref {
 
 
   Future<String> getUserId() async {
-  Future<String> getUserId() async {
     String? UserID = "";
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();

@@ -201,7 +201,6 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
                        // ),
                    ),
                      onPressed: () async{
-
                      var response = await ApiFactory().getLoginService().sendLoginDetails("login",email!, password!);
 
                      log("RESPONSE LOGIN ${response.data}");

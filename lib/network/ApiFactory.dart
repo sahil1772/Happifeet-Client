@@ -1,5 +1,6 @@
 import 'package:happifeet_client_app/network/interface/InterfaceDashboard.dart';
 import 'package:happifeet_client_app/network/interface/InterfaceLocation.dart';
+import 'package:happifeet_client_app/network/interface/InterfaceTrails.dart';
 import 'package:happifeet_client_app/network/services/AnnouncementService.dart';
 import 'package:happifeet_client_app/network/services/AssignedUserService.dart';
 import 'package:happifeet_client_app/network/services/ClientUserService.dart';
@@ -9,6 +10,7 @@ import 'package:happifeet_client_app/network/services/LocationService.dart';
 import 'package:happifeet_client_app/network/services/LoginService.dart';
 import 'package:happifeet_client_app/network/services/ProfileService.dart';
 import 'package:happifeet_client_app/network/services/SmtpService.dart';
+import 'package:happifeet_client_app/network/services/TrailService.dart';
 
 import 'interface/InrerfaceFeedback.dart';
 import 'interface/InterfaceAnnouncement.dart';
@@ -36,10 +38,16 @@ class ApiFactory {
   InterfaceDashboard? _interfaceDashboard;
   InterfaceProfile? _interfaceProfile;
   InterfaceClientUsers? _interfaceClientUsers;
+  InterfaceTrails? _interfaceTrails;
 
   InterfaceClientUsers getClientService() {
     _interfaceClientUsers ??= ClientUserService();
     return _interfaceClientUsers!;
+  }
+
+  InterfaceTrails getTrailService(){
+    _interfaceTrails ??= TrailService();
+    return _interfaceTrails!;
   }
 
 

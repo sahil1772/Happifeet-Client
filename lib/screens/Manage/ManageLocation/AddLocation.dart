@@ -107,7 +107,7 @@ class _AddLocationState extends State<AddLocation>
 
   bool isChecked = false;
 
-  final ImagePicker picker = ImagePicker();
+  double HEADER_HEIGHT = 5;
 
   @override
   void initState() {
@@ -176,7 +176,7 @@ class _AddLocationState extends State<AddLocation>
         longitudeController = controllers["longitude"]!;
       } else {
         dataControllers.addAll({
-          "en": {
+        languages.keys.elementAt(_controller!.index): {
             "locationName": locationNameController,
             "address": addressNameController,
             "description": descriptionController,
@@ -199,113 +199,111 @@ class _AddLocationState extends State<AddLocation>
   @override
   Widget build(BuildContext context) {
     this.buildContext = context;
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      extendBodyBehindAppBar: true,
-      appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false)
-          .getAppBar(context),
-      body: Stack(
-        children: [
-          Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  ColorParser().hexToColor("#34A846"),
-                  ColorParser().hexToColor("#83C03D")
-                ],
-              )),
-              child: Column(children: [
-                // SizedBox(height: 105),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height / 7.5),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Add Location",
-                        // "Select Location".tr(),
-                        // "Select Location".language(context),
-                        // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ],
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        extendBodyBehindAppBar: true,
+        appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false)
+            .getAppBar(context),
+        body: Stack(
+          children: [
+            Container(
+                height: DeviceDimensions.getHeaderSize(context, HEADER_HEIGHT),
+                width: DeviceDimensions.getDeviceWidth(context),
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    ColorParser().hexToColor("#34A846"),
+                    ColorParser().hexToColor("#83C03D")
+                  ],
+                )),
+                child: Container(
+                  margin: EdgeInsets.only(
+                      top: HappiFeetAppBar(
+                              isCitiyList: false, IsDashboard: false)
+                          .getAppBar(context)
+                          .preferredSize
+                          .height,
+                      bottom: DeviceDimensions.BOTTOMSHEET_TOP_MARGIN),
+                  child: Center(
+                    child: const Text(
+                      "Add Location",
+                      // "Select Location".tr(),
+                      // "Select Location".language(context),
+                      // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500),
+                    ),
                   ),
-                ),
-              ])),
-          DraggableScrollableSheet(
-              initialChildSize: 0.8,
-              minChildSize: 0.8,
-              maxChildSize: 0.8,
-              builder:
-                  (BuildContext context, ScrollController scrollController) {
-                return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(25),
-                          topRight: Radius.circular(25)),
-                      color: Colors.white),
-                  // color: Colors.white,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: const Text(
-                          LocaleKeys.Select_Language,
-                          style: TextStyle(fontSize: 18),
-                        ).tr(),
-                      ),
-                      TabBar(
-                          indicatorSize: TabBarIndicatorSize.label,
-                          controller: _controller,
-                          indicatorWeight: 1,
-                          indicatorPadding: const EdgeInsets.all(0),
-                          labelColor: const Color(0xff49AC43),
-                          indicatorColor: const Color(0xff49AC43),
-                          tabs: [
-                            for (int i = 0; i < languages.keys.length; i++)
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8.0),
-                                child: Text(
-                                  languages.values.elementAt(i).toUpperCase(),
-                                  style: TextStyle(
-                                    fontSize: labelTextSize,
-                                  ),
-                                ),
+                )),
+            Container(
+              margin: EdgeInsets.only(
+                  top: DeviceDimensions.getBottomSheetMargin(
+                      context, HEADER_HEIGHT)),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(25),
+                      topRight: Radius.circular(25)),
+                  color: Colors.white),
+              // color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: const Text(
+                      LocaleKeys.Select_Language,
+                      style: TextStyle(fontSize: 18),
+                    ).tr(),
+                  ),
+                  TabBar(
+                      indicatorSize: TabBarIndicatorSize.label,
+                      controller: _controller,
+                      indicatorWeight: 1,
+                      indicatorPadding: const EdgeInsets.all(0),
+                      labelColor: const Color(0xff49AC43),
+                      indicatorColor: const Color(0xff49AC43),
+                      tabs: [
+                        for (int i = 0; i < languages.keys.length; i++)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Text(
+                              languages.values.elementAt(i).toUpperCase(),
+                              style: TextStyle(
+                                fontSize: labelTextSize,
                               ),
-                          ]),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 1,
-                        color: const Color(0x50aeaeae),
-                        margin: const EdgeInsets.only(bottom: 16),
-                      ),
-                      Flexible(
-                        fit: FlexFit.tight,
-                        flex: 1,
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              _controller!.index == 0
-                                  ? loadEnglishBody()
-                                  : otherLanguageFields(),
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                    ],
+                      ]),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 1,
+                    color: const Color(0x50aeaeae),
+                    margin: const EdgeInsets.only(bottom: 16),
                   ),
-                );
-              })
-        ],
+                  Flexible(
+                    fit: FlexFit.tight,
+                    flex: 1,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          _controller!.index == 0
+                              ? loadEnglishBody()
+                              : otherLanguageFields(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -2217,6 +2215,10 @@ class _AddLocationState extends State<AddLocation>
     }
   }
 
+  dabcd(Function dataCallback) {
+    dataCallback("abcd");
+  }
+
   Future<void> submit_English_Details() async {
     log("DATA TO SUBMIT ===============================================================");
     log("Location Name : ${locationNameController.text}");
@@ -2258,7 +2260,7 @@ class _AddLocationState extends State<AddLocation>
       return;
     }
 
-    if(!widget.isEdit!) {
+    if (!widget.isEdit!) {
       if (galleryImages!.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("Please select park gallery images.")));

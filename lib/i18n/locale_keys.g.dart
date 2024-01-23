@@ -28,5 +28,9 @@ abstract class  LocaleKeys {
   static const Please_Fill_English = 'Please_Fill_English';
   static const Other_features = 'Other_features';
   static const Add_More = 'Add_More';
+  static const Trail_Name = 'Trail_Name';
+  static const Distance = 'Distance';
+  static const Opening_Time = 'Opening_Time';
+  static const Trail_Description = 'Trail_Description';
 
 }

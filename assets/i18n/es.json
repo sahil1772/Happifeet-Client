@@ -25,5 +25,9 @@
   "Enter_City": "Ingrese la ciudad",
   "Please_Fill_English": "Primero complete los detalles en inglés.",
   "Other_features": "Otras características",
-  "Add_More": "Añadir más +"
+  "Add_More": "Añadir más +",
+  "Trail_Name": "Nombre del sendero*",
+  "Distance": "Distancia*",
+  "Opening_Time": "Horario de apertura (días de ruta y horarios)*",
+  "Trail_Description": "Descripción del sendero*"
 }

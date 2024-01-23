@@ -8,7 +8,7 @@ import '../../model/Location/LocationData.dart';
 
 abstract class InterfaceLocation{
 
-  Future<BaseResponse> deleteLocationData(String task,String park_id);
+  Future<BaseResponse> deleteLocationData(String park_id);
   Future<LocationDataModel> editLocationData(Map<String,String> park_id);
   Future<BaseResponse> submitLocationData(LocationDataModel data, XFile? locationImage, List<XFile>? galleryImages);
   Future<BaseResponse> updateLocationData(LocationDataModel data, XFile? locationImage, List<XFile>? galleryImages);
