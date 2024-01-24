@@ -16,11 +16,11 @@ class AnnouncementService implements InterfaceAnnouncement {
   /** list announcement **/
 
   @override
-  Future<List<AnnouncementData>> getAnnouncementList(String task, String user_id) async{
+  Future<List<AnnouncementData>> getAnnouncementList(String task, String client_id) async{
     try{
       var map = {
         'task': task,
-        'user_id':user_id
+        'client_id':client_id
       };
 
 
@@ -36,7 +36,7 @@ class AnnouncementService implements InterfaceAnnouncement {
         log(
           "response done for getAnnouncementList ${data.toString()}",
         );
-        return data.sublist(0,10);
+        return data;
       } else {
         log("response other than 200 for getAnnouncementList");
         throw "response other than 200 for getAnnouncementList";

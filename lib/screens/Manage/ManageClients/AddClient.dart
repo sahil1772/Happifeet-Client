@@ -55,27 +55,36 @@ class _AddClientWidgetState extends State<AddClientWidget> {
   String? emailerror;
   UpdateClientUser dataToUpdate = UpdateClientUser();
   bool? isRefresh;
+  late Future<EditClientUser?> apiResponse;
 
   @override
   void initState() {
     // TODO: implement initState
-    if (widget.isEdit!) {
-      log("FOR EDIT");
-      getClientDataForEdit();
-    } else {
-      log("FOR ADDD");
-    }
+    apiResponse = getClientData();
 
     super.initState();
   }
 
-  Future<void> getClientDataForEdit() async {
+  Future<EditClientUser?> getClientData() {
+    log("GET ASSIGNED USER DATA FOR EDIT");
+    if (widget.id == null) {
+      log("ID IS NULL");
+      return Future.value(null);
+    } else {
+      log("ID FOUND");
+      return getClientDataForEdit();
+    }
+  }
+
+  Future<EditClientUser?> getClientDataForEdit() async {
     var response = await ApiFactory()
         .getClientService()
         .editClientUserData("edit_client_users", widget.id!);
+
     editClientData = response;
     log("CLIENT EDIT DATA ${editClientData!.toJson()}");
     setInitialData();
+    return editClientData;
   }
 
   setInitialData() {
@@ -83,9 +92,9 @@ class _AddClientWidgetState extends State<AddClientWidget> {
       clinetNameController.text = editClientData!.client_name!;
     }
     if (editClientData!.email_address != null) {
-      setEmailError(EmailValidator.validate(editClientData!.email_address!)
-          ? null
-          : "Enter valid email id");
+      // setEmailError(EmailValidator.validate(editClientData!.email_address!)
+      //     ? null
+      //     : "Enter valid email id");
       emailController.text = editClientData!.email_address!;
     }
     if (editClientData!.contact_no != null) {
@@ -189,549 +198,648 @@ class _AddClientWidgetState extends State<AddClientWidget> {
                           horizontal: 10, vertical: 22),
                       child: Form(
                         key: _formkey,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
+                        child: FutureBuilder(
+                          future: apiResponse,
+                          builder: (BuildContext context,
+                              AsyncSnapshot<dynamic> snapshot) {
+                            Widget toReturnWidget;
+                            switch (snapshot.connectionState) {
+                              case ConnectionState.waiting:
+                                toReturnWidget = const Center(
+                                    child: Padding(
+                                  padding: EdgeInsets.all(56.0),
+                                  child: CircularProgressIndicator(),
+                                ));
+                                break;
+                              case ConnectionState.done:
+                                if (snapshot.data != null) {
+                                  log("Connection Done => ${snapshot.data!.toJson()}");
+                                }
+                                toReturnWidget = Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text("Client Name"),
-                                    Text(
-                                      " *",
-                                      style: TextStyle(color: Colors.red),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            const Text("Client Name"),
+                                            Text(
+                                              " *",
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                        TextFormField(
+                                            controller: clinetNameController,
+                                            validator: (value) {
+                                              if (value!.isEmpty) {
+                                                return 'Please enter value for this field';
+                                              }
+                                            },
+                                            onChanged: (value) {
+                                              clinetNameController.text = value;
+                                              addClientUser.client_name = value;
+                                            },
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor: Colors.white,
+                                              // labelText: labelText,
+                                              hintStyle: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400),
+                                              // errorText: getEmailError(),
+                                              focusedBorder: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  borderSide: BorderSide(
+                                                      color: ColorParser()
+                                                          .hexToColor(
+                                                              "#D7D7D7"),
+                                                      width: 1)),
+                                              enabledBorder: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  borderSide: BorderSide(
+                                                      width: 1,
+                                                      color: ColorParser()
+                                                          .hexToColor(
+                                                              "#D7D7D7"))),
+                                            )),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                TextFormField(
-                                    controller: clinetNameController,
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return 'Please enter value for this field';
-                                      }
-                                    },
-                                    onChanged: (value) {
-                                      clinetNameController.text = value;
-                                      addClientUser.client_name = value;
-                                    },
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      // labelText: labelText,
-                                      hintStyle: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400),
-                                      // errorText: getEmailError(),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          borderSide: BorderSide(
-                                              color: ColorParser()
-                                                  .hexToColor("#D7D7D7"),
-                                              width: 1)),
-                                      enabledBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          borderSide: BorderSide(
-                                              width: 1,
-                                              color: ColorParser()
-                                                  .hexToColor("#D7D7D7"))),
-                                    )),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    const Text("Email Id"),
-                                    Text(
-                                      " *",
-                                      style: TextStyle(color: Colors.red),
+                                    SizedBox(
+                                      height: 20,
                                     ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                TextFormField(
-                                    controller: emailController,
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return 'Please enter value for this field';
-                                      }
-                                    },
-                                    onChanged: (value) {
-                                      setEmailError(
-                                          EmailValidator.validate(value)
-                                              ? null
-                                              : "Please enter valid email");
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            const Text("Email Id"),
+                                            Text(
+                                              " *",
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                        TextFormField(
+                                            controller: emailController,
+                                            validator: (value) {
+                                              if (value!.isEmpty) {
+                                                return 'Please enter value for this field';
+                                              }
+                                            },
+                                            onChanged: (value) {
+                                              setEmailError(EmailValidator
+                                                      .validate(value)
+                                                  ? null
+                                                  : "Please enter valid email");
 
-                                      emailController.text = value;
-                                      addClientUser.email_address = value;
-                                    },
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      // labelText: labelText,
-                                      hintStyle: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400),
-                                      errorText: getEmailError(),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          borderSide: BorderSide(
-                                              color: ColorParser()
-                                                  .hexToColor("#D7D7D7"),
-                                              width: 1)),
-                                      enabledBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          borderSide: BorderSide(
-                                              width: 1,
-                                              color: ColorParser()
-                                                  .hexToColor("#D7D7D7"))),
-                                    )),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    const Text("Contact No"),
-                                    Text(
-                                      " *",
-                                      style: TextStyle(color: Colors.red),
+                                              emailController.text = value;
+                                              addClientUser.email_address =
+                                                  value;
+                                            },
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor: Colors.white,
+                                              // labelText: labelText,
+                                              hintStyle: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400),
+                                              errorText: getEmailError(),
+                                              focusedBorder: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  borderSide: BorderSide(
+                                                      color: ColorParser()
+                                                          .hexToColor(
+                                                              "#D7D7D7"),
+                                                      width: 1)),
+                                              enabledBorder: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  borderSide: BorderSide(
+                                                      width: 1,
+                                                      color: ColorParser()
+                                                          .hexToColor(
+                                                              "#D7D7D7"))),
+                                            )),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                TextFormField(
-                                    controller: contactNoController,
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return 'Please enter value for this field';
-                                      }
-                                    },
-                                    onChanged: (value) {
-                                      contactNoController.text = value;
-                                      addClientUser.contact_no = value;
-                                    },
-                                    keyboardType: TextInputType.number,
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      // labelText: labelText,
-                                      hintStyle: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400),
-                                      // errorText: getEmailError(),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          borderSide: BorderSide(
-                                              color: ColorParser()
-                                                  .hexToColor("#D7D7D7"),
-                                              width: 1)),
-                                      enabledBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          borderSide: BorderSide(
-                                              width: 1,
-                                              color: ColorParser()
-                                                  .hexToColor("#D7D7D7"))),
-                                    )),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    const Text("Username"),
-                                    Text(
-                                      " *",
-                                      style: TextStyle(color: Colors.red),
+                                    SizedBox(
+                                      height: 20,
                                     ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                TextFormField(
-                                    controller: usernameController,
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return 'Please enter value for this field';
-                                      }
-                                    },
-                                    onChanged: (value) {
-                                      usernameController.text = value;
-                                      addClientUser.username = value;
-                                    },
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      // labelText: labelText,
-                                      hintStyle: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400),
-                                      // errorText: getEmailError(),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          borderSide: BorderSide(
-                                              color: ColorParser()
-                                                  .hexToColor("#D7D7D7"),
-                                              width: 1)),
-                                      enabledBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          borderSide: BorderSide(
-                                              width: 1,
-                                              color: ColorParser()
-                                                  .hexToColor("#D7D7D7"))),
-                                    )),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            if (!widget.isEdit!)
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      const Text("Password"),
-                                      Text(
-                                        " *",
-                                        style: TextStyle(color: Colors.red),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            const Text("Contact No"),
+                                            Text(
+                                              " *",
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                        TextFormField(
+                                            controller: contactNoController,
+                                            validator: (value) {
+                                              if (value!.isEmpty) {
+                                                return 'Please enter value for this field';
+                                              }
+                                            },
+                                            onChanged: (value) {
+                                              contactNoController.text = value;
+                                              addClientUser.contact_no = value;
+                                            },
+                                            keyboardType: TextInputType.number,
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor: Colors.white,
+                                              // labelText: labelText,
+                                              hintStyle: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400),
+                                              // errorText: getEmailError(),
+                                              focusedBorder: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  borderSide: BorderSide(
+                                                      color: ColorParser()
+                                                          .hexToColor(
+                                                              "#D7D7D7"),
+                                                      width: 1)),
+                                              enabledBorder: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  borderSide: BorderSide(
+                                                      width: 1,
+                                                      color: ColorParser()
+                                                          .hexToColor(
+                                                              "#D7D7D7"))),
+                                            )),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            const Text("Username"),
+                                            Text(
+                                              " *",
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                        TextFormField(
+                                            controller: usernameController,
+                                            validator: (value) {
+                                              if (value!.isEmpty) {
+                                                return 'Please enter value for this field';
+                                              }
+                                            },
+                                            onChanged: (value) {
+                                              usernameController.text = value;
+                                              addClientUser.username = value;
+                                            },
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor: Colors.white,
+                                              // labelText: labelText,
+                                              hintStyle: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400),
+                                              // errorText: getEmailError(),
+                                              focusedBorder: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  borderSide: BorderSide(
+                                                      color: ColorParser()
+                                                          .hexToColor(
+                                                              "#D7D7D7"),
+                                                      width: 1)),
+                                              enabledBorder: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  borderSide: BorderSide(
+                                                      width: 1,
+                                                      color: ColorParser()
+                                                          .hexToColor(
+                                                              "#D7D7D7"))),
+                                            )),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    if (!widget.isEdit!)
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              const Text("Password"),
+                                              Text(
+                                                " *",
+                                                style: TextStyle(
+                                                    color: Colors.red),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 8,
+                                          ),
+                                          TextFormField(
+                                              controller: passwordController,
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
+                                                  return 'Please enter value for this field';
+                                                }
+                                              },
+                                              onChanged: (value) {
+                                                passwordController.text = value;
+                                              },
+                                              obscureText: true,
+                                              decoration: InputDecoration(
+                                                filled: true,
+                                                fillColor: Colors.white,
+                                                // labelText: labelText,
+                                                hintText: 'Password',
+                                                hintStyle: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                                // errorText: getEmailError(),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(12),
+                                                        borderSide: BorderSide(
+                                                            color: ColorParser()
+                                                                .hexToColor(
+                                                                    "#D7D7D7"),
+                                                            width: 1)),
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(12),
+                                                        borderSide: BorderSide(
+                                                            width: 1,
+                                                            color: ColorParser()
+                                                                .hexToColor(
+                                                                    "#D7D7D7"))),
+                                              )),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-                                  TextFormField(
-                                      controller: passwordController,
-                                      validator: (value) {
-                                        if (value!.isEmpty) {
-                                          return 'Please enter value for this field';
-                                        }
-                                      },
-                                      onChanged: (value) {
-                                        passwordController.text = value;
-                                      },
-                                      obscureText: true,
-                                      decoration: InputDecoration(
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        // labelText: labelText,
-                                        hintText: 'Password',
-                                        hintStyle: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400),
-                                        // errorText: getEmailError(),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            borderSide: BorderSide(
-                                                color: ColorParser()
-                                                    .hexToColor("#D7D7D7"),
-                                                width: 1)),
-                                        enabledBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            borderSide: BorderSide(
-                                                width: 1,
-                                                color: ColorParser()
-                                                    .hexToColor("#D7D7D7"))),
-                                      )),
-                                ],
-                              ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            if (!widget.isEdit!)
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      const Text("Confirm Password"),
-                                      Text(
-                                        " *",
-                                        style: TextStyle(color: Colors.red),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    if (!widget.isEdit!)
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              const Text("Confirm Password"),
+                                              Text(
+                                                " *",
+                                                style: TextStyle(
+                                                    color: Colors.red),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 8,
+                                          ),
+                                          TextFormField(
+                                              controller:
+                                                  confirmpasswordController,
+                                              onChanged: (value) {
+                                                confirmpasswordController.text =
+                                                    value;
+                                                addClientUser.password = value;
+                                              },
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
+                                                  return 'Please enter value for this field';
+                                                }
+                                                if (passwordController.text !=
+                                                    confirmpasswordController
+                                                        .text) {
+                                                  return "Password does not match";
+                                                }
+                                              },
+                                              decoration: InputDecoration(
+                                                filled: true,
+                                                fillColor: Colors.white,
+                                                // labelText: labelText,
+                                                hintText: 'Confirm Password',
+                                                hintStyle: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                                // errorText: getEmailError(),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(12),
+                                                        borderSide: BorderSide(
+                                                            color: ColorParser()
+                                                                .hexToColor(
+                                                                    "#D7D7D7"),
+                                                            width: 1)),
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(12),
+                                                        borderSide: BorderSide(
+                                                            width: 1,
+                                                            color: ColorParser()
+                                                                .hexToColor(
+                                                                    "#D7D7D7"))),
+                                              )),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-                                  TextFormField(
-                                      controller: confirmpasswordController,
-                                      onChanged: (value) {
-                                        confirmpasswordController.text = value;
-                                        addClientUser.password = value;
-                                      },
-                                      validator: (value) {
-                                        if (value!.isEmpty) {
-                                          return 'Please enter value for this field';
-                                        }
-                                        if (passwordController.text !=
-                                            confirmpasswordController.text) {
-                                          return "Password does not match";
-                                        }
-                                      },
-                                      decoration: InputDecoration(
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        // labelText: labelText,
-                                        hintText: 'Confirm Password',
-                                        hintStyle: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400),
-                                        // errorText: getEmailError(),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            borderSide: BorderSide(
-                                                color: ColorParser()
-                                                    .hexToColor("#D7D7D7"),
-                                                width: 1)),
-                                        enabledBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            borderSide: BorderSide(
-                                                width: 1,
-                                                color: ColorParser()
-                                                    .hexToColor("#D7D7D7"))),
-                                      )),
-                                ],
-                              ),
-                            if (!widget.isEdit!)
-                              SizedBox(
-                                height: 20,
-                              ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    const Text("Email Notification"),
-                                    Text(
-                                      " *",
-                                      style: TextStyle(color: Colors.red),
+                                    if (!widget.isEdit!)
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            const Text("Email Notification"),
+                                            Text(
+                                              " *",
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 290),
+                                          child: FlutterSwitch(
+                                              padding: 6,
+                                              width: 80,
+                                              height: 30,
+                                              activeColor: Colors.green,
+                                              showOnOff: true,
+                                              valueFontSize: 16,
+                                              activeText: "Yes",
+                                              inactiveText: "No",
+                                              value: emailNotification,
+                                              onToggle: (value) {
+                                                setState(() {
+                                                  log("toggle ${value}");
+                                                  if (value) {
+                                                    addClientUser
+                                                            .email_notification =
+                                                        "Y";
+                                                  } else {
+                                                    addClientUser
+                                                            .email_notification =
+                                                        "N";
+                                                  }
+                                                  emailNotification = value;
+                                                });
+                                              }),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 30,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            const Text("Status"),
+                                            Text(
+                                              " *",
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 250),
+                                          child: FlutterSwitch(
+                                              padding: 6,
+                                              width: 110,
+                                              height: 30,
+                                              activeColor: Colors.green,
+                                              showOnOff: true,
+                                              valueFontSize: 16,
+                                              activeText: "Active",
+                                              inactiveText: "InActive",
+                                              value: isActive,
+                                              onToggle: (value) {
+                                                setState(() {
+                                                  log("toggle ${value}");
+                                                  if (value) {
+                                                    addClientUser.status = "Y";
+                                                  } else {
+                                                    addClientUser.status = "N";
+                                                  }
+                                                  isActive = value;
+                                                });
+                                              }),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 30,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        SizedBox(
+                                          height: 40,
+                                          width: 170,
+                                          child: ElevatedButton(
+                                            onPressed: () async {
+                                              if (widget.isEdit!) {
+                                                /** IF UPDATING NEW USER **/
+                                                log("API CALLED FOR UPDATE USER ${widget.id}");
+                                                dataToUpdate.id = widget.id;
+                                                dataToUpdate.client_name =
+                                                    clinetNameController.text;
+                                                dataToUpdate.email_address =
+                                                    emailController.text;
+                                                dataToUpdate.contact_no =
+                                                    contactNoController.text;
+                                                dataToUpdate.username =
+                                                    usernameController.text;
+                                                dataToUpdate.password =
+                                                    confirmpasswordController
+                                                        .text;
+                                                if (emailNotification) {
+                                                  dataToUpdate
+                                                      .email_notifiction = "Y";
+                                                } else {
+                                                  dataToUpdate
+                                                      .email_notifiction = "N";
+                                                }
+
+                                                if (isActive) {
+                                                  dataToUpdate.status = "Y";
+                                                } else {
+                                                  dataToUpdate.status = "N";
+                                                }
+
+                                                if (_formkey.currentState!
+                                                    .validate()) {
+                                                  var response =
+                                                      await ApiFactory()
+                                                          .getClientService()
+                                                          .updateClientUserData(
+                                                              dataToUpdate);
+                                                  if (response.status == "1") {
+                                                    log("CLIENT DATA UPDATED SUCCESSFULLY!");
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(SnackBar(
+                                                            content: Text(
+                                                                "CLIENT data updated successfully")));
+                                                    Future.delayed(
+                                                        Duration(seconds: 2),
+                                                        () {
+                                                      Navigator.pop(
+                                                          context, [true]);
+                                                    });
+                                                  } else {
+                                                    log("CLIENT DATA UPDATION FAILED");
+                                                  }
+                                                } else {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(SnackBar(
+                                                          content: Text(
+                                                              "Please enter required field")));
+                                                }
+                                              } else {
+                                                /** IF ADDING NEW USER **/
+
+                                                log("API CALLED FOR ADD USER");
+                                                if (_formkey.currentState!
+                                                    .validate()) {
+                                                  var response =
+                                                      await ApiFactory()
+                                                          .getClientService()
+                                                          .submitClientUserData(
+                                                              addClientUser);
+                                                  if (response.status == "1") {
+                                                    log("USER DATA SUBMIT SUCCESS");
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(SnackBar(
+                                                            content: Text(
+                                                                "Data Submitted Successfully")));
+
+                                                    Future.delayed(
+                                                        Duration(seconds: 2),
+                                                        () {
+                                                      Navigator.pop(
+                                                          context, true);
+                                                    });
+                                                  } else {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(SnackBar(
+                                                            content: Text(
+                                                                "${response.msg}")));
+                                                  }
+                                                } else {
+                                                  log("Validation Unsuccessful");
+                                                }
+                                              }
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                                backgroundColor: ColorParser()
+                                                    .hexToColor("#1A7C52"),
+                                                elevation: 0,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                10)))),
+                                            child: Text(
+                                              "Submit",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 50,
                                     ),
                                   ],
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 290),
-                                  child: FlutterSwitch(
-                                      padding: 6,
-                                      width: 80,
-                                      height: 30,
-                                      activeColor: Colors.green,
-                                      showOnOff: true,
-                                      valueFontSize: 16,
-                                      activeText: "Yes",
-                                      inactiveText: "No",
-                                      value: emailNotification,
-                                      onToggle: (value) {
-                                        setState(() {
-                                          log("toggle ${value}");
-                                          if (value) {
-                                            addClientUser.email_notification =
-                                                "Y";
-                                          } else {
-                                            addClientUser.email_notification =
-                                                "N";
-                                          }
-                                          emailNotification = value;
-                                        });
-                                      }),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    const Text("Status"),
-                                    Text(
-                                      " *",
-                                      style: TextStyle(color: Colors.red),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 250),
-                                  child: FlutterSwitch(
-                                      padding: 6,
-                                      width: 110,
-                                      height: 30,
-                                      activeColor: Colors.green,
-                                      showOnOff: true,
-                                      valueFontSize: 16,
-                                      activeText: "Active",
-                                      inactiveText: "InActive",
-                                      value: isActive,
-                                      onToggle: (value) {
-                                        setState(() {
-                                          log("toggle ${value}");
-                                          if (value) {
-                                            addClientUser.status = "Y";
-                                          } else {
-                                            addClientUser.status = "N";
-                                          }
-                                          isActive = value;
-                                        });
-                                      }),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  height: 40,
-                                  width: 170,
-                                  child: ElevatedButton(
-                                    onPressed: () async {
-                                      if (widget.isEdit!) {
-                                        /** IF UPDATING NEW USER **/
-                                        log("API CALLED FOR UPDATE USER ${widget.id}");
-                                        dataToUpdate.id = widget.id;
-                                        dataToUpdate.client_name =
-                                            clinetNameController.text;
-                                        dataToUpdate.email_address =
-                                            emailController.text;
-                                        dataToUpdate.contact_no =
-                                            contactNoController.text;
-                                        dataToUpdate.username =
-                                            usernameController.text;
-                                        dataToUpdate.password =
-                                            confirmpasswordController.text;
-                                        if (emailNotification) {
-                                          dataToUpdate.email_notifiction = "Y";
-                                        } else {
-                                          dataToUpdate.email_notifiction = "N";
-                                        }
-
-                                        if (isActive) {
-                                          dataToUpdate.status = "Y";
-                                        } else {
-                                          dataToUpdate.status = "N";
-                                        }
-
-                                        if (_formkey.currentState!.validate()) {
-                                          var response = await ApiFactory()
-                                              .getClientService()
-                                              .updateClientUserData(
-                                                  dataToUpdate);
-                                          if (response.status == "1") {
-                                            log("CLIENT DATA UPDATED SUCCESSFULLY!");
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
-                                                    content: Text(
-                                                        "CLIENT data updated successfully")));
-                                            Future.delayed(Duration(seconds: 2),
-                                                () {
-                                              Navigator.pop(context, [true]);
-                                            });
-                                          } else {
-                                            log("CLIENT DATA UPDATION FAILED");
-                                          }
-                                        } else {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                                  content: Text(
-                                                      "Please enter required field")));
-                                        }
-                                      } else {
-                                        /** IF ADDING NEW USER **/
-
-                                        log("API CALLED FOR ADD USER");
-                                        if (_formkey.currentState!.validate()) {
-                                          var response = await ApiFactory()
-                                              .getClientService()
-                                              .submitClientUserData(
-                                                  addClientUser);
-                                          if (response.status == "1") {
-                                            log("USER DATA SUBMIT SUCCESS");
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
-                                                    content: Text(
-                                                        "Data Submitted Successfully")));
-
-                                            Future.delayed(Duration(seconds: 2),
-                                                () {
-                                              Navigator.pop(context, true);
-                                            });
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
-                                                    content: Text(
-                                                        "${response.msg}")));
-                                          }
-                                        } else {
-                                          log("Validation Unsuccessful");
-                                        }
-                                      }
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            ColorParser().hexToColor("#1A7C52"),
-                                        elevation: 0,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(10)))),
-                                    child: Text(
-                                      "Submit",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 50,
-                            ),
-                          ],
+                                );
+                                break;
+                              case ConnectionState.active:
+                                toReturnWidget = const Center(
+                                    child: Padding(
+                                  padding: EdgeInsets.all(56.0),
+                                  child: CircularProgressIndicator(),
+                                ));
+                                break;
+                              case ConnectionState.none:
+                                toReturnWidget = const Center(
+                                    child: Padding(
+                                  padding: EdgeInsets.all(56.0),
+                                  child: CircularProgressIndicator(),
+                                ));
+                                break;
+                            }
+                            return toReturnWidget;
+                          },
                         ),
                       ),
                     ),

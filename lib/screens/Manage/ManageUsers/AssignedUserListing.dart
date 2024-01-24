@@ -25,7 +25,8 @@ class AssignedUserListing extends StatefulWidget {
 }
 
 class _AssignedUserListingState extends State<AssignedUserListing> {
-  List<AssignedUserData>? assignedUserdata;
+  List<AssignedUserData> assignedUserdata = [];
+  List<AssignedUserData> assignedUserdataTemp = [];
   Future? userListing;
 
   @override
@@ -36,12 +37,36 @@ class _AssignedUserListingState extends State<AssignedUserListing> {
   }
 
   Future<void> getAssignedUserListing() async {
+    setState(() {
+
+    });
     var response = await ApiFactory().getUserService().getUserData(
         "list_assigned_users", await SharedPref.instance.getUserId());
-    assignedUserdata = response;
+setState(() {
+  assignedUserdata = response;
+  assignedUserdataTemp = response;
+});
     log("ASSIGNED USER LISTING ${assignedUserdata!.first.toJson()}");
 
 
+  }
+
+  filterSearchResults(String keyword) {
+    log("search keyword ${keyword}");
+
+    setState(() {
+      if (keyword.isEmpty) {
+        assignedUserdata = assignedUserdataTemp;
+      } else {
+        assignedUserdata = assignedUserdataTemp.where((element) {
+          return (element as AssignedUserData)
+              .name!
+              .toLowerCase()
+              .toString()
+              .contains(keyword.toLowerCase());
+        }).toList();
+      }
+    });
   }
 
   @override
@@ -119,7 +144,7 @@ class _AssignedUserListingState extends State<AssignedUserListing> {
                                     width: 400,
                                     child: TextField(
                                         onChanged: (value) {
-                                          // filterSearchResults(value);
+                                          filterSearchResults(value);
                                         },
                                         style: const TextStyle(fontSize: 16),
                                         decoration: InputDecoration(

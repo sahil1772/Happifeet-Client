@@ -1,10 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageAnnouncements/AddAnnouncement.dart';
+import 'package:happifeet_client_app/storage/shared_preferences.dart';
 
 import '../../../components/AnnouncementCard.dart';
 import '../../../components/HappiFeetAppBar.dart';
+import '../../../model/Announcement/AnnouncementData.dart';
 import '../../../utils/ColorParser.dart';
 
 class AnnouncementListingWidget extends StatefulWidget{
@@ -21,6 +26,48 @@ class AnnouncementListingWidget extends StatefulWidget{
 }
 
 class _AnnouncementListingWidgetState extends State<AnnouncementListingWidget>{
+  List<AnnouncementData> announcementlisting = [];
+  List<AnnouncementData> announcementlistingTemp = [];
+
+  Future? apiResponse;
+  @override
+  void initState() {
+    // TODO: implement initState
+    apiResponse = getAnnouncmentListing();
+    super.initState();
+  }
+  
+  getAnnouncmentListing() async {
+    setState(() {});
+    var response = await ApiFactory().getAnnouncementService().getAnnouncementList("getAnnoucement",await SharedPref.instance.getClientId());
+   setState(() {
+     announcementlisting = response;
+     announcementlistingTemp = response;
+   });
+    log("DATA IN RESPONSE OF ANNOUNCMEENMT LIST ${announcementlisting!.first.toJson()}");
+
+
+  }
+
+  filterSearchResults(String keyword) {
+    log("search keyword ${keyword}");
+
+    setState(() {
+      if (keyword.isEmpty) {
+        announcementlisting = announcementlistingTemp;
+      } else {
+        announcementlisting = announcementlistingTemp.where((element) {
+          return (element as AnnouncementData)
+              .title!
+              .toLowerCase()
+              .toString()
+              .contains(keyword.toLowerCase());
+        }).toList();
+      }
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,7 +149,7 @@ class _AnnouncementListingWidgetState extends State<AnnouncementListingWidget>{
                                   width: 400,
                                   child: TextField(
                                       onChanged: (value) {
-                                        // filterSearchResults(value);
+                                        filterSearchResults(value);
                                       },
                                       style: const TextStyle(fontSize: 16),
                                       decoration: InputDecoration(
@@ -157,21 +204,36 @@ class _AnnouncementListingWidgetState extends State<AnnouncementListingWidget>{
 
                         /**  Comments card Listing **/
 
-                        Flexible(
-                          child: ListView.separated(
-                            padding: EdgeInsets.zero,
+                        FutureBuilder(
+                          future: apiResponse,
+                          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done){
+                              return Flexible(
+                                child: ListView.separated(
+                                  padding: EdgeInsets.zero,
 
-                            physics: const ScrollPhysics(),
-                            itemCount: 10,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return AnnouncementCard();
-                            },
-                            separatorBuilder: (BuildContext context,
-                                int index) {
-                              return SizedBox(height: 8,);
-                            },
-                          ),
+                                  physics: const ScrollPhysics(),
+                                  itemCount: announcementlisting!.length,
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) {
+                                    return AnnouncementCard(announcemntData: announcementlisting![index],);
+                                  },
+                                  separatorBuilder: (BuildContext context,
+                                      int index) {
+                                    return SizedBox(height: 8,);
+                                  },
+                                ),
+                              );
+                            } else if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            } else {
+                              return Text("Something Went Wrong");
+                            }
+
+                          },
+
                         ),
                         SizedBox(height: 50,),
                       ],
