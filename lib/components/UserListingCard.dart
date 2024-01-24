@@ -197,7 +197,7 @@ class _UserListingCardState extends State<UserListingCard> {
                         onTap: () {
                           showDialog(
                               context: context,
-                              builder: (_) {
+                              builder: (context) {
                                 return AlertDialog(
                                   title: Text("Delete User"),
                                   content: Text(
@@ -208,16 +208,10 @@ class _UserListingCardState extends State<UserListingCard> {
                                           var response = await ApiFactory().getUserService().deleteUserData("delete_assigned_user", widget.assignedUserdata!.id!);
                                           if(response.status == "1"){
                                             log("User Deleted Successfully");
-                                            Navigator.of(context, rootNavigator: true).pop();
-                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("User Deleted Successfully")));
-                                            Future.delayed(
-                                                Duration(seconds: 2), () {
-                                              Navigator.pop(context,(){
-                                                setState(() {
+                                            Navigator.pop(context);
 
-                                                });
-                                              });
-                                            });
+                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("User Deleted Successfully")));
+
 
                                           }else{
                                             log("Error in user delete");

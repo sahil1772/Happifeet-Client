@@ -4,6 +4,6 @@ import '../../model/BaseResponse.dart';
 abstract class InterfaceAnnouncement{
 
 
-  Future<List<AnnouncementData>> getAnnouncementList(String task, String user_id);
+  Future<List<AnnouncementData>> getAnnouncementList(String task, String client_id);
 Future<BaseResponse> submitAnnouncementDetails(AnnouncementData data);
 }

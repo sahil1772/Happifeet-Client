@@ -27,7 +27,8 @@ class ClientListingWidget extends StatefulWidget {
 }
 
 class _ClientListingWidgetState extends State<ClientListingWidget> {
-  List<ClientUserData>? clientUserData;
+  List<ClientUserData> clientUserData =[];
+  List<ClientUserData> clientUserDataTemp =[];
 
   @override
   void initState() {
@@ -37,10 +38,34 @@ class _ClientListingWidgetState extends State<ClientListingWidget> {
   }
 
   Future<void> getClientUserData() async {
+    setState(() {
+
+    });
     var response = await ApiFactory().getClientService().getClientUserData(
         "list_client_users", await SharedPref.instance.getUserId());
-    clientUserData = response;
+   setState(() {
+     clientUserData = response;
+     clientUserDataTemp = response;
+   });
     log("CLIENT USER DATA ${clientUserData!.first.toJson()}");
+  }
+
+  filterSearchResults(String keyword) {
+    log("search keyword ${keyword}");
+
+    setState(() {
+      if (keyword.isEmpty) {
+        clientUserData = clientUserDataTemp;
+      } else {
+        clientUserData = clientUserDataTemp.where((element) {
+          return (element as ClientUserData)
+              .client_name!
+              .toLowerCase()
+              .toString()
+              .contains(keyword.toLowerCase());
+        }).toList();
+      }
+    });
   }
 
   @override
@@ -117,7 +142,7 @@ class _ClientListingWidgetState extends State<ClientListingWidget> {
                                     width: 400,
                                     child: TextField(
                                         onChanged: (value) {
-                                          // filterSearchResults(value);
+                                          filterSearchResults(value);
                                         },
                                         style: const TextStyle(fontSize: 16),
                                         decoration: InputDecoration(

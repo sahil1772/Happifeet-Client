@@ -51,31 +51,52 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
   UpdateAssignedUserData? dataForUpdation = UpdateAssignedUserData();
   String? emailerror;
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  late Future<AssignedUserData?> apiResponse;
 
   @override
   void initState() {
     // TODO: implement initState
 
-    if (widget.forEdit!) {
-      log("FOR EDIT");
-      getUserDataForEdit();
-    } else {
-      submitAssignedUserData.status = "N";
-      log("FOR ADDD");
-    }
+
+
+    apiResponse = getAssignedUserData();
+
+    // if (widget.forEdit!) {
+    //   log("FOR EDIT");
+    //    getUserDataForEdit();
+    // } else {
+    //   submitAssignedUserData.status = "N";
+    //   log("FOR ADDD");
+    // }
 
     log("ID IN ADD ASSIGNED USER ${widget.id}");
 
     super.initState();
   }
+  Future<AssignedUserData?> getAssignedUserData(){
+    log("GET ASSIGNED USER DATA FOR EDIT");
+    if(widget.id == null){
+      log("ID IS NULL");
+      return Future.value(null);
+    }else{
+      log("ID FOUND");
+      return getUserDataForEdit();
 
-  Future<void> getUserDataForEdit() async {
+    }
+
+  }
+
+  Future<AssignedUserData?> getUserDataForEdit() async {
     var response = await ApiFactory()
         .getUserService()
         .editUserData("edit_assigned_users", widget.id!);
+
+
     dataForEditing = response;
     log("DATA FOR EDIT --> ${dataForEditing!.toJson()}");
     setInitialData();
+    return dataForEditing;
+
   }
 
   setInitialData() {
@@ -119,6 +140,8 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
   setEmailError(value) {
     emailerror = value;
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -184,381 +207,420 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                             horizontal: 10, vertical: 22),
                         child: Form(
                           key: _formkey,
-                          child: Column(
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text("Name"),
-                                      Row(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Text(
-                                                " *",
-                                                style: TextStyle(
-                                                    color: Colors.red),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-                                  TextFormField(
-                                      controller: userNameController,
-                                      validator: (value) {
-                                        if (value!.isEmpty) {
-                                          return 'Please enter value for this field';
-                                        }
-                                      },
-                                      onChanged: (value) {
-                                        userNameController.text = value;
-                                        submitAssignedUserData.client_name =
-                                            value;
-                                      },
-                                      decoration: InputDecoration(
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        // labelText: labelText,
-                                        hintStyle: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400),
-                                        // errorText: getEmailError(),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            borderSide: BorderSide(
-                                                color: ColorParser()
-                                                    .hexToColor("#D7D7D7"),
-                                                width: 1)),
-                                        enabledBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            borderSide: BorderSide(
-                                                width: 1,
-                                                color: ColorParser()
-                                                    .hexToColor("#D7D7D7"))),
-                                      )),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      const Text("Contact No"),
-                                      Text(
-                                        " *",
-                                        style: TextStyle(color: Colors.red),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-                                  TextFormField(
-                                      controller: contactController,
-                                      validator: (value) {
-                                        if (value!.isEmpty) {
-                                          return 'Please enter value for this field';
-                                        }
-                                      },
-                                      onChanged: (value) {
-                                        contactController.text = value;
-                                        submitAssignedUserData.contact_no =
-                                            value;
-                                      },
-                                      keyboardType: TextInputType.number,
-                                      decoration: InputDecoration(
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        // labelText: labelText,
-                                        hintStyle: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400),
-                                        // errorText: getEmailError(),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            borderSide: BorderSide(
-                                                color: ColorParser()
-                                                    .hexToColor("#D7D7D7"),
-                                                width: 1)),
-                                        enabledBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            borderSide: BorderSide(
-                                                width: 1,
-                                                color: ColorParser()
-                                                    .hexToColor("#D7D7D7"))),
-                                      )),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Row(
-                                    children: [
-                                      Text("Email ID"),
-                                      Text(
-                                        " *",
-                                        style: TextStyle(color: Colors.red),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-                                  TextFormField(
-                                      controller: emailController,
-                                      validator: (value) {
-                                        if (value!.isEmpty) {
-                                          return 'Please enter value for this field';
-                                        }
-                                      },
-                                      onChanged: (value) {
-                                        setEmailError(
-                                            EmailValidator.validate(value)
-                                                ? null
-                                                : "Please enter valid email");
+                          child: FutureBuilder(
+                            future: apiResponse,
+                            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                              Widget toReturnWidget;
+                              switch(snapshot.connectionState){
+                                case ConnectionState.waiting:
+                                  toReturnWidget = const Center(
+                                      child: Padding(
+                                        padding: EdgeInsets.all(56.0),
+                                        child: CircularProgressIndicator(),
+                                      ));
+                                  break;
+                                case ConnectionState.done:
+                                  if (snapshot.data != null) {
+                                    log("Connection Done => ${snapshot.data!.toJson()}");
+                                  }
+                                  toReturnWidget = Column(
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text("Name"),
+                                            Row(
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      " *",
+                                                      style: TextStyle(
+                                                          color: Colors.red),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                        TextFormField(
+                                            controller: userNameController,
+                                            validator: (value) {
+                                              if (value!.isEmpty) {
+                                                return 'Please enter value for this field';
+                                              }
+                                            },
+                                            onChanged: (value) {
+                                              userNameController.text = value;
+                                              submitAssignedUserData.client_name =
+                                                  value;
+                                            },
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor: Colors.white,
+                                              // labelText: labelText,
+                                              hintStyle: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400),
+                                              // errorText: getEmailError(),
+                                              focusedBorder: OutlineInputBorder(
+                                                  borderRadius:
+                                                  BorderRadius.circular(12),
+                                                  borderSide: BorderSide(
+                                                      color: ColorParser()
+                                                          .hexToColor("#D7D7D7"),
+                                                      width: 1)),
+                                              enabledBorder: OutlineInputBorder(
+                                                  borderRadius:
+                                                  BorderRadius.circular(12),
+                                                  borderSide: BorderSide(
+                                                      width: 1,
+                                                      color: ColorParser()
+                                                          .hexToColor("#D7D7D7"))),
+                                            )),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            const Text("Contact No"),
+                                            Text(
+                                              " *",
+                                              style: TextStyle(color: Colors.red),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                        TextFormField(
+                                            controller: contactController,
+                                            validator: (value) {
+                                              if (value!.isEmpty) {
+                                                return 'Please enter value for this field';
+                                              }
+                                            },
+                                            onChanged: (value) {
+                                              contactController.text = value;
+                                              submitAssignedUserData.contact_no =
+                                                  value;
+                                            },
+                                            keyboardType: TextInputType.number,
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor: Colors.white,
+                                              // labelText: labelText,
+                                              hintStyle: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400),
+                                              // errorText: getEmailError(),
+                                              focusedBorder: OutlineInputBorder(
+                                                  borderRadius:
+                                                  BorderRadius.circular(12),
+                                                  borderSide: BorderSide(
+                                                      color: ColorParser()
+                                                          .hexToColor("#D7D7D7"),
+                                                      width: 1)),
+                                              enabledBorder: OutlineInputBorder(
+                                                  borderRadius:
+                                                  BorderRadius.circular(12),
+                                                  borderSide: BorderSide(
+                                                      width: 1,
+                                                      color: ColorParser()
+                                                          .hexToColor("#D7D7D7"))),
+                                            )),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        const Row(
+                                          children: [
+                                            Text("Email ID"),
+                                            Text(
+                                              " *",
+                                              style: TextStyle(color: Colors.red),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                        TextFormField(
+                                            controller: emailController,
+                                            validator: (value) {
+                                              if (value!.isEmpty) {
+                                                return 'Please enter value for this field';
+                                              }
+                                            },
+                                            onChanged: (value) {
+                                              setEmailError(
+                                                  EmailValidator.validate(value)
+                                                      ? null
+                                                      : "Please enter valid email");
 
-                                        emailController.text = value;
-                                        submitAssignedUserData.email_address =
-                                            value;
-                                        setState(() {});
-                                      },
-                                      decoration: InputDecoration(
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        // labelText: labelText,
-                                        hintStyle: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400),
-                                        errorText: getEmailError(),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            borderSide: BorderSide(
-                                                color: ColorParser()
-                                                    .hexToColor("#D7D7D7"),
-                                                width: 1)),
-                                        enabledBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            borderSide: BorderSide(
-                                                width: 1,
-                                                color: ColorParser()
-                                                    .hexToColor("#D7D7D7"))),
-                                      )),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      const Text("Remark"),
-                                      Text(
-                                        " *",
-                                        style: TextStyle(color: Colors.red),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-                                  TextFormField(
-                                      controller: remarkController,
-                                      validator: (value) {
-                                        if (value!.isEmpty) {
-                                          return 'Please enter value for this field';
-                                        }
-                                      },
-                                      onChanged: (value) {
-                                        remarkController.text = value;
-                                        submitAssignedUserData.note = value;
-                                      },
-                                      maxLines: 5,
-                                      decoration: InputDecoration(
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        // labelText: labelText,
-                                        hintStyle: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400),
-                                        // errorText: getEmailError(),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            borderSide: BorderSide(
-                                                color: ColorParser()
-                                                    .hexToColor("#D7D7D7"),
-                                                width: 1)),
-                                        enabledBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            borderSide: BorderSide(
-                                                width: 1,
-                                                color: ColorParser()
-                                                    .hexToColor("#D7D7D7"))),
-                                      )),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 30,
-                              ),
+                                              emailController.text = value;
+                                              submitAssignedUserData.email_address =
+                                                  value;
+                                              setState(() {});
+                                            },
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor: Colors.white,
+                                              // labelText: labelText,
+                                              hintStyle: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400),
+                                              errorText: getEmailError(),
+                                              focusedBorder: OutlineInputBorder(
+                                                  borderRadius:
+                                                  BorderRadius.circular(12),
+                                                  borderSide: BorderSide(
+                                                      color: ColorParser()
+                                                          .hexToColor("#D7D7D7"),
+                                                      width: 1)),
+                                              enabledBorder: OutlineInputBorder(
+                                                  borderRadius:
+                                                  BorderRadius.circular(12),
+                                                  borderSide: BorderSide(
+                                                      width: 1,
+                                                      color: ColorParser()
+                                                          .hexToColor("#D7D7D7"))),
+                                            )),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            const Text("Remark"),
+                                            Text(
+                                              " *",
+                                              style: TextStyle(color: Colors.red),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                        TextFormField(
+                                            controller: remarkController,
+                                            validator: (value) {
+                                              if (value!.isEmpty) {
+                                                return 'Please enter value for this field';
+                                              }
+                                            },
+                                            onChanged: (value) {
+                                              remarkController.text = value;
+                                              submitAssignedUserData.note = value;
+                                            },
+                                            maxLines: 5,
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor: Colors.white,
+                                              // labelText: labelText,
+                                              hintStyle: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400),
+                                              // errorText: getEmailError(),
+                                              focusedBorder: OutlineInputBorder(
+                                                  borderRadius:
+                                                  BorderRadius.circular(12),
+                                                  borderSide: BorderSide(
+                                                      color: ColorParser()
+                                                          .hexToColor("#D7D7D7"),
+                                                      width: 1)),
+                                              enabledBorder: OutlineInputBorder(
+                                                  borderRadius:
+                                                  BorderRadius.circular(12),
+                                                  borderSide: BorderSide(
+                                                      width: 1,
+                                                      color: ColorParser()
+                                                          .hexToColor("#D7D7D7"))),
+                                            )),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 30,
+                                    ),
 
-                              // SizedBox(
-                              //   height:60,
-                              //   width: 90,
-                              //   child: FittedBox(
-                              //     fit: BoxFit.fill,
-                              //     child: Switch(
-                              //         value: isActive,
-                              //         onChanged: (value){
-                              //         setState(() {
-                              //           isActive = value;
-                              //         });
-                              //         }),
-                              //   ),
-                              // ),
-                              // isActive ? Text("Active") : Text("Inactive"),
+                                    // SizedBox(
+                                    //   height:60,
+                                    //   width: 90,
+                                    //   child: FittedBox(
+                                    //     fit: BoxFit.fill,
+                                    //     child: Switch(
+                                    //         value: isActive,
+                                    //         onChanged: (value){
+                                    //         setState(() {
+                                    //           isActive = value;
+                                    //         });
+                                    //         }),
+                                    //   ),
+                                    // ),
+                                    // isActive ? Text("Active") : Text("Inactive"),
 
-                              Padding(
-                                padding: const EdgeInsets.only(right: 250),
-                                child: FlutterSwitch(
-                                    padding: 6,
-                                    width: 110,
-                                    height: 30,
-                                    activeColor: Colors.green,
-                                    showOnOff: true,
-                                    valueFontSize: 16,
-                                    activeText: "Active",
-                                    inactiveText: "InActive",
-                                    value: isActive,
-                                    onToggle: (value) {
-                                      setState(() {
-                                        log("toggle ${value}");
-                                        if (value) {
-                                          submitAssignedUserData.status = "Y";
-                                        } else {
-                                          submitAssignedUserData.status = "N";
-                                        }
-                                        isActive = value;
-                                      });
-                                    }),
-                              ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 250),
+                                      child: FlutterSwitch(
+                                          padding: 6,
+                                          width: 110,
+                                          height: 30,
+                                          activeColor: Colors.green,
+                                          showOnOff: true,
+                                          valueFontSize: 16,
+                                          activeText: "Active",
+                                          inactiveText: "InActive",
+                                          value: isActive,
+                                          onToggle: (value) {
+                                            setState(() {
+                                              log("toggle ${value}");
+                                              if (value) {
+                                                submitAssignedUserData.status = "Y";
+                                              } else {
+                                                submitAssignedUserData.status = "N";
+                                              }
+                                              isActive = value;
+                                            });
+                                          }),
+                                    ),
 
-                              SizedBox(
-                                height: 30,
-                              ),
+                                    SizedBox(
+                                      height: 30,
+                                    ),
 
-                              SizedBox(
-                                height: 40,
-                                width: 170,
-                                child: ElevatedButton(
-                                  onPressed: () async {
-                                    if (widget.forEdit!) {
-                                      /** IF UPDATING NEW USER **/
-                                      log("API CALLED FOR UPDATE USER ${widget.id}");
-                                      dataForUpdation!.id = widget.id;
-                                      dataForUpdation!.client_name =
-                                          userNameController.text;
-                                      dataForUpdation!.contact_no =
-                                          contactController.text;
-                                      dataForUpdation!.email_address =
-                                          emailController.text;
-                                      dataForUpdation!.note =
-                                          remarkController.text;
-                                      if (isActive) {
-                                        dataForUpdation!.status = "Y";
-                                      } else {
-                                        dataForUpdation!.status = "N";
-                                      }
+                                    SizedBox(
+                                      height: 40,
+                                      width: 170,
+                                      child: ElevatedButton(
+                                        onPressed: () async {
+                                          if (widget.forEdit!) {
+                                            /** IF UPDATING NEW USER **/
+                                            log("API CALLED FOR UPDATE USER ${widget.id}");
+                                            dataForUpdation!.id = widget.id;
+                                            dataForUpdation!.client_name =
+                                                userNameController.text;
+                                            dataForUpdation!.contact_no =
+                                                contactController.text;
+                                            dataForUpdation!.email_address =
+                                                emailController.text;
+                                            dataForUpdation!.note =
+                                                remarkController.text;
+                                            if (isActive) {
+                                              dataForUpdation!.status = "Y";
+                                            } else {
+                                              dataForUpdation!.status = "N";
+                                            }
 
-                                      var response = await ApiFactory()
-                                          .getUserService()
-                                          .updateUserData(dataForUpdation!);
-                                      if (response.status == "1") {
-                                        log("USER DATA UPDATED SUCCESSFULLY!");
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                                content: Text(
-                                                    "User data updated successfully")));
-                                        Future.delayed(Duration(seconds: 2),
-                                            () {
-                                              Navigator.pop(context, [true]);
-                                        });
-                                      } else {
-                                        log("USER DATA UPDATION FAILED");
-                                      }
-                                    } else {
-                                      /** IF ADDING NEW USER **/
-
-                                      log("API CALLED FOR ADD USER");
-                                      if (_formkey.currentState!.validate()) {
-
-                                        var response = await ApiFactory()
-                                            .getUserService()
-                                            .submitUserData(
-                                                submitAssignedUserData);
-                                        if (response.status == "1") {
-                                          log("USER DATA SUBMIT SUCCESS");
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
+                                            var response = await ApiFactory()
+                                                .getUserService()
+                                                .updateUserData(dataForUpdation!);
+                                            if (response.status == "1") {
+                                              log("USER DATA UPDATED SUCCESSFULLY!");
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(SnackBar(
                                                   content: Text(
-                                                      "Data Submitted Successfully")));
+                                                      "User data updated successfully")));
+                                              Future.delayed(Duration(seconds: 2),
+                                                      () {
+                                                    Navigator.pop(context, [true]);
+                                                  });
+                                            } else {
+                                              log("USER DATA UPDATION FAILED");
+                                            }
+                                          } else {
+                                            /** IF ADDING NEW USER **/
 
-                                          Future.delayed(Duration(seconds: 3),
-                                              () {
-                                                Navigator.pop(context, true);
-                                          });
-                                        } else {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                                  content: Text(
-                                                      "Please enter required field")));
-                                        }
-                                      }
-                                    }
+                                            log("API CALLED FOR ADD USER");
+                                            if (_formkey.currentState!.validate()) {
 
-                                    // AddLocation().gotoAddLocation(context);
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          ColorParser().hexToColor("#1A7C52"),
-                                      elevation: 0,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10)))),
-                                  child: Text(
-                                    "Submit",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 50,
-                              ),
-                            ],
+                                              var response = await ApiFactory()
+                                                  .getUserService()
+                                                  .submitUserData(
+                                                  submitAssignedUserData);
+                                              if (response.status == "1") {
+                                                log("USER DATA SUBMIT SUCCESS");
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                    content: Text(
+                                                        "Data Submitted Successfully")));
+
+                                                Future.delayed(Duration(seconds: 3),
+                                                        () {
+                                                      Navigator.pop(context, true);
+                                                    });
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                    content: Text(
+                                                        "Please enter required field")));
+                                              }
+                                            }
+                                          }
+
+                                          // AddLocation().gotoAddLocation(context);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                            ColorParser().hexToColor("#1A7C52"),
+                                            elevation: 0,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(10)))),
+                                        child: Text(
+                                          "Submit",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 50,
+                                    ),
+                                  ],
+                                );
+                                  break;
+                                case ConnectionState.active:
+                                  toReturnWidget = const Center(
+                                      child: Padding(
+                                        padding: EdgeInsets.all(56.0),
+                                        child: CircularProgressIndicator(),
+                                      ));
+                                  break;
+                                case ConnectionState.none:
+                                  toReturnWidget = const Center(
+                                      child: Padding(
+                                        padding: EdgeInsets.all(56.0),
+                                        child: CircularProgressIndicator(),
+                                      ));
+                                  break;
+
+
+                              }
+                              return toReturnWidget;
+
+                            },
+
                           ),
                         ),
                       ),
