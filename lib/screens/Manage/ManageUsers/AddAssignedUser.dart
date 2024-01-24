@@ -51,6 +51,7 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
   UpdateAssignedUserData? dataForUpdation = UpdateAssignedUserData();
   String? emailerror;
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  Future<AssignedUserData>? apiResponse;
 
   @override
   void initState() {
@@ -58,7 +59,7 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
 
     if (widget.forEdit!) {
       log("FOR EDIT");
-      getUserDataForEdit();
+       getUserDataForEdit();
     } else {
       submitAssignedUserData.status = "N";
       log("FOR ADDD");
