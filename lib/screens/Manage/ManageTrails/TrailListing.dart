@@ -3,44 +3,41 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
-import 'package:happifeet_client_app/screens/Manage/ManageClients/AddClient.dart';
+import 'package:happifeet_client_app/storage/shared_preferences.dart';
 
-import '../../../components/ClientListingCard.dart';
 import '../../../components/HappiFeetAppBar.dart';
-import '../../../model/ClientUsers/ClientUserData.dart';
-import '../../../storage/shared_preferences.dart';
+import '../../../components/TrailListingCard.dart';
+import '../../../model/Trails/TrailListingData.dart';
 import '../../../utils/ColorParser.dart';
 
-Future? futureClientData;
-
-class ClientListingWidget extends StatefulWidget {
-  gotoClientListingPage(BuildContext context) async {
-    Navigator.push(
-            context, MaterialPageRoute(builder: (_) => ClientListingWidget()))
-        .then((value) {
-      log("VALUE IN CALLBACK${value}");
-    });
-  }
+class TrailListing extends StatefulWidget {
+  const TrailListing({super.key});
 
   @override
-  State<ClientListingWidget> createState() => _ClientListingWidgetState();
+  State<TrailListing> createState() => _TrailListingState();
+
+  goToTrailListing(BuildContext context) {
+    Navigator.push(context, MaterialPageRoute(builder: (_) => TrailListing()));
+  }
 }
 
-class _ClientListingWidgetState extends State<ClientListingWidget> {
-  List<ClientUserData>? clientUserData;
+class _TrailListingState extends State<TrailListing> {
+  Future? trailListing;
+  List<TrailListingData>? trailList;
 
   @override
   void initState() {
     // TODO: implement initState
-    futureClientData = getClientUserData();
+    trailListing = getTrailListing();
     super.initState();
   }
 
-  Future<void> getClientUserData() async {
-    var response = await ApiFactory().getClientService().getClientUserData(
-        "list_client_users", await SharedPref.instance.getUserId());
-    clientUserData = response;
-    log("CLIENT USER DATA ${clientUserData!.first.toJson()}");
+  Future<void> getTrailListing() async {
+    var response = await ApiFactory()
+        .getTrailService()
+        .getTrailListing(await SharedPref.instance.getUserId());
+    trailList = response;
+    log("TRAIL LISTING DATA ${trailList!.first}");
   }
 
   @override
@@ -71,7 +68,7 @@ class _ClientListingWidgetState extends State<ClientListingWidget> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "List Assigned Client",
+                        "List Trails",
                         // "Select Location".tr(),
                         // "Select Location".language(context),
                         // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
@@ -98,10 +95,11 @@ class _ClientListingWidgetState extends State<ClientListingWidget> {
                           topRight: Radius.circular(25)),
                       color: Colors.white),
                   // color: Colors.white,
-                  child: SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    child: RefreshIndicator(
-                      onRefresh: () => getClientUserData(),
+                  child: RefreshIndicator(
+                    backgroundColor: Colors.white,
+                    color: ColorParser().hexToColor("#1A7C52"),
+                    onRefresh: () => getTrailListing(),
+                    child: SingleChildScrollView(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -154,30 +152,21 @@ class _ClientListingWidgetState extends State<ClientListingWidget> {
                           ),
                           /**   listview builder     **/
 
-                          /**  Client user Listing **/
+                          /**  TRAIL LISTING **/
 
                           FutureBuilder(
-                            future: futureClientData,
+                            future: trailListing,
                             builder: (BuildContext context,
                                 AsyncSnapshot<dynamic> snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.done) {
+                              if(snapshot.connectionState == ConnectionState.done){
                                 return Flexible(
                                   child: ListView.separated(
                                     padding: EdgeInsets.zero,
                                     physics: const ScrollPhysics(),
-                                    itemCount: clientUserData!.length,
+                                    itemCount: trailList!.length,
                                     shrinkWrap: true,
                                     itemBuilder: (context, index) {
-                                      return ClientListingCard(
-                                          clientUserData:
-                                              clientUserData![index],refreshCallback: (){
-                                            print("ADHKSAHGJKLSAHCBJKLSABFCJKAGBCHAVCIJH");
-                                            setState(() {
-                                              futureClientData = getClientUserData();
-
-                                            });
-                                      },);
+                                      return TrailListingCard(trailList: trailList![index],);
                                     },
                                     separatorBuilder:
                                         (BuildContext context, int index) {
@@ -186,13 +175,19 @@ class _ClientListingWidgetState extends State<ClientListingWidget> {
                                       );
                                     },
                                   ),
+
+                                  // else if(snapshot.connectionState == ConnectionState.waiting){
+                                  //   return CircularProgressIndicator();
+                                  // }else{
+                                  //   return Text("Something Went Wrong");
+                                  // }
                                 );
-                              } else if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
+                              }else if(snapshot.connectionState == ConnectionState.waiting){
                                 return CircularProgressIndicator();
-                              } else {
+                              }else{
                                 return Text("Something Went Wrong");
                               }
+
                             },
                           ),
                           const SizedBox(
@@ -214,19 +209,13 @@ class _ClientListingWidgetState extends State<ClientListingWidget> {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
-                  AddClientWidget().gotoAddClientPage(context, null, false,(){
-                    setState(() {
-                      print("REFRESH KARTOY BHAVAAAAAAAAAAAAAAAaaaa");
-                      futureClientData = getClientUserData();
-
-                    });
-                  });
+                  // AddAssignedUserWidget().goToAddAssignedUser(context,null,false);
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: ColorParser().hexToColor("#1A7C52"),
                     elevation: 0),
                 child: const Text(
-                  "Add Client",
+                  "Add User",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,

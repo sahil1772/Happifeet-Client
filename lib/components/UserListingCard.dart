@@ -11,8 +11,9 @@ import '../screens/Manage/ManageUsers/AssignedUserListing.dart';
 
 class UserListingCard extends StatefulWidget {
   AssignedUserData? assignedUserdata;
+  Function? refreshCallback;
 
-  UserListingCard({super.key, this.assignedUserdata});
+  UserListingCard({super.key, this.assignedUserdata,this.refreshCallback});
 
   @override
   State<UserListingCard> createState() => _UserListingCardState();
@@ -178,7 +179,10 @@ class _UserListingCardState extends State<UserListingCard> {
                     InkWell(
                         onTap: () {
                           AddAssignedUserWidget().goToAddAssignedUser(
-                              context, widget.assignedUserdata!.id, forEdit);
+                              context, widget.assignedUserdata!.id, forEdit,(){
+                                log("CALLBACK FROM USER LISTING CARD");
+                                widget.refreshCallback!();
+                          });
                         },
                         child: SvgPicture.asset(
                             "assets/images/location/editing.svg")),
@@ -208,7 +212,11 @@ class _UserListingCardState extends State<UserListingCard> {
                                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("User Deleted Successfully")));
                                             Future.delayed(
                                                 Duration(seconds: 2), () {
-                                              AssignedUserListing().goToAssignedUserListing(context);
+                                              Navigator.pop(context,(){
+                                                setState(() {
+
+                                                });
+                                              });
                                             });
 
                                           }else{

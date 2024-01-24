@@ -180,7 +180,7 @@ class _ManageWidgetState extends State<ManageWidget> {
                               InkWell(
                                 onTap: () {
                                   const AssignedUserListing()
-                                      .goToAssignedUserListing(context);
+                                      .goToAssignedUserListing(context,null);
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -375,8 +375,7 @@ class _ManageWidgetState extends State<ManageWidget> {
                               if (istrail!)
                                 InkWell(
                                   onTap: () {
-                                    AddTrail
-                                        .goToAddTrail(context,true,"55");
+                                   TrailListing().goToTrailListing(context);
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(

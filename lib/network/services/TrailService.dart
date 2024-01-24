@@ -3,11 +3,11 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:happifeet_client_app/model/BaseResponse.dart';
+
 import 'package:happifeet_client_app/model/TrailPayload.dart';
 import 'package:happifeet_client_app/network/interface/InterfaceTrails.dart';
 import 'package:happifeet_client_app/network/services/ApiService.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
-import 'package:image_picker/image_picker.dart';
 
 class TrailService implements InterfaceTrails {
   @override
@@ -36,8 +36,7 @@ class TrailService implements InterfaceTrails {
   }
 
   @override
-  Future<BaseResponse> submitTrailData(TrailPayload payload, XFile? trailImage,
-      List<XFile>? galleryImages) async {
+  Future<BaseResponse> submitTrailData(TrailPayload payload) async {
     try {
       var map = payload.toJson();
       map.addAll({
@@ -169,4 +168,40 @@ class TrailService implements InterfaceTrails {
       throw error;
     }
   }
+
+
+  /** GET TRAIL LISTING **/
+  @override
+  Future<List<TrailListingData>> getTrailListing(String? client_id) async {
+    try {
+      var map ={
+        'task': "list_trail",
+        'client_id': client_id,
+
+      };
+
+      var response = await NetworkClient()
+          .dio
+          .post(base_url, queryParameters:map);
+
+      if (response.statusCode == 200) {
+
+        List<TrailListingData> data = List<TrailListingData>.from(json
+            .decode(response.data)
+            .map((model) => TrailListingData.fromJson(model)));
+
+
+        return data;
+      } else {
+        log("response other than 200 for getTrailListing");
+        throw "response other than 200 for getTrailListing";
+      }
+    } on DioException catch (error) {
+      log("EXCEPTION IN getTrailListing ${error.response}");
+      throw error;
+    }
+  }
+
+
+
 }

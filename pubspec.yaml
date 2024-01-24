@@ -93,6 +93,7 @@ flutter:
     - assets/images/comments/
     - assets/images/status/
     - assets/images/
+    - assets/images/trails/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
