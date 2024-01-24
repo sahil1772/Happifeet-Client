@@ -109,6 +109,8 @@ class _AddLocationState extends State<AddLocation>
 
   double HEADER_HEIGHT = 5;
 
+  Future<LocationDataModel?>? apiResponse=null;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -148,6 +150,8 @@ class _AddLocationState extends State<AddLocation>
 
       _controller!.addListener(() {
         setState(() {
+
+          apiResponse = getLocationData(widget.parkId!);
           // context.setLocale(Locale("en"));
           log("CONTROLLER INDEX ${languages.keys.elementAt(_controller!.index)}");
           if (_controller!.indexIsChanging) {
@@ -176,7 +180,7 @@ class _AddLocationState extends State<AddLocation>
         longitudeController = controllers["longitude"]!;
       } else {
         dataControllers.addAll({
-        languages.keys.elementAt(_controller!.index): {
+          "en": {
             "locationName": locationNameController,
             "address": addressNameController,
             "description": descriptionController,
@@ -188,6 +192,8 @@ class _AddLocationState extends State<AddLocation>
           }
         });
       }
+
+      apiResponse = getLocationData(widget.parkId!);
       setState(() {
         context.setLocale(Locale(languages.keys.elementAt(0)));
       });
@@ -370,7 +376,7 @@ class _AddLocationState extends State<AddLocation>
     return Form(
       key: _form,
       child: FutureBuilder<LocationDataModel?>(
-          future: getLocationData(widget.parkId),
+          future: apiResponse,
           builder: (context, snapshot) {
             Widget toReturnWidget;
             switch (snapshot.connectionState) {
@@ -385,76 +391,6 @@ class _AddLocationState extends State<AddLocation>
                 if (snapshot.data != null) {
                   log("Connection Done => ${snapshot.data!.toJson()}");
 
-                  locationData = snapshot.data;
-                  locationNameController.text = locationData!.locationName!;
-                  addressNameController.text = locationData!.addressStreet!;
-                  cityController.text = locationData!.city!;
-                  stateController.text = locationData!.state!;
-                  zipController.text = locationData!.zip!;
-                  descriptionController.text = locationData!.description!;
-                  isMainCity =
-                      locationData!.mainCityLocation! == "1" ? true : false;
-                  latitudeController.text = locationData!.latitude!;
-                  longitudeController.text = locationData!.longitude!;
-                  reserveLinkController.text = locationData!.reservationlink!;
-                  isChecked = locationData!.status! == "Y" ? true : false;
-                  selectedFeaturesID = locationData!.parkFeatures!;
-                  selectedMonths = locationData!.parkAvailabilityMonths!;
-
-                  if (languages.keys.elementAt(_controller!.index) == "en") {
-                    otherFeaturesWidgets = {};
-                    List<String?> otherFeatures =
-                        locationData!.otherFeatures == null
-                            ? []
-                            : locationData!.otherFeatures!;
-                    List<TextField> otherFeaturesFields =
-                        locationData!.otherFeatures == null
-                            ? [
-                                TextField(
-                                  controller: TextEditingController(),
-                                  decoration: InputDecoration(
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                        color: Color(0xffc4c4c4),
-                                      ),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 16),
-                                    border: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                        color: Color(0xffc4c4c4),
-                                      ),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                )
-                              ]
-                            : [];
-                    otherFeatures.forEach((element) {
-                      otherFeaturesFields.add(TextField(
-                        controller: TextEditingController(text: element),
-                        decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Color(0xffc4c4c4),
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 16),
-                          border: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Color(0xffc4c4c4),
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ));
-                    });
-
-                    otherFeaturesWidgets.addAll({"en": otherFeaturesFields});
-                  }
                 }
                 toReturnWidget = Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1544,7 +1480,7 @@ class _AddLocationState extends State<AddLocation>
     return Form(
       key: _form,
       child: FutureBuilder<LocationDataModel?>(
-        future: getLocationData(widget.parkId),
+        future: apiResponse,
         builder: (context, snapshot) {
           Widget toReturnWidget;
           switch (snapshot.connectionState) {
@@ -1559,68 +1495,6 @@ class _AddLocationState extends State<AddLocation>
               if (snapshot.data != null) {
                 log("Connection Done => ${snapshot.data!.toJson()}");
 
-                locationData = snapshot.data;
-                locationNameController!.text = locationData!.locationName!;
-                addressController!.text = locationData!.addressStreet!;
-                descriptionController!.text = locationData!.description!;
-                streetController!.text = locationData!.state!;
-                cityController!.text = locationData!.city!;
-
-                otherFeaturesWidgets = {};
-                List<String?> otherFeatures =
-                    locationData!.otherFeatures == null
-                        ? []
-                        : locationData!.otherFeatures!;
-                List<TextField> otherFeaturesFields =
-                    locationData!.otherFeatures == null
-                        ? [
-                            TextField(
-                              controller: TextEditingController(),
-                              decoration: InputDecoration(
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                    color: Color(0xffc4c4c4),
-                                  ),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 16),
-                                border: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                    color: Color(0xffc4c4c4),
-                                  ),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                            )
-                          ]
-                        : [];
-                otherFeatures.forEach((element) {
-                  otherFeaturesFields.add(TextField(
-                    controller: TextEditingController(text: element),
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0xffc4c4c4),
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 16),
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0xffc4c4c4),
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ));
-                });
-
-                otherFeaturesWidgets.addAll({
-                  languages.keys.elementAt(_controller!.index):
-                      otherFeaturesFields
-                });
               }
               toReturnWidget = Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -2334,6 +2208,160 @@ class _AddLocationState extends State<AddLocation>
     }
     LocationDataModel data =
         await ApiFactory().getLocationService().editLocationData(params);
+
+    if(languages.keys.elementAt(_controller!.index)=="en"){
+      locationData = data;
+      locationNameController.text = locationData!.locationName!;
+      addressNameController.text = locationData!.addressStreet!;
+      cityController.text = locationData!.city!;
+      stateController.text = locationData!.state!;
+      zipController.text = locationData!.zip!;
+      descriptionController.text = locationData!.description!;
+      isMainCity =
+      locationData!.mainCityLocation! == "1" ? true : false;
+      latitudeController.text = locationData!.latitude!;
+      longitudeController.text = locationData!.longitude!;
+      reserveLinkController.text = locationData!.reservationlink!;
+      isChecked = locationData!.status! == "Y" ? true : false;
+      selectedFeaturesID = locationData!.parkFeatures!;
+      selectedMonths = locationData!.parkAvailabilityMonths!;
+
+      if (languages.keys.elementAt(_controller!.index) == "en") {
+        otherFeaturesWidgets = {};
+        List<String?> otherFeatures =
+        locationData!.otherFeatures == null || locationData!.otherFeatures!.isEmpty
+            ? []
+            : locationData!.otherFeatures!;
+        List<TextField> otherFeaturesFields =
+        locationData!.otherFeatures == null || locationData!.otherFeatures!.isEmpty
+            ? [
+          TextField(
+            controller: TextEditingController(),
+            decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Color(0xffc4c4c4),
+                ),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 10, vertical: 16),
+              border: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Color(0xffc4c4c4),
+                ),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          )
+        ]
+            : [];
+        otherFeatures.forEach((element) {
+          otherFeaturesFields.add(TextField(
+            controller: TextEditingController(text: element),
+            decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Color(0xffc4c4c4),
+                ),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 10, vertical: 16),
+              border: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Color(0xffc4c4c4),
+                ),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ));
+        });
+
+        otherFeaturesWidgets.addAll({"en": otherFeaturesFields});
+      }
+    }
+    else{
+      locationData = data;
+
+
+      otherFeaturesWidgets = {};
+      List<String?> otherFeatures =
+      locationData!.otherFeatures == null || locationData!.otherFeatures!.isEmpty
+          ? []
+          : locationData!.otherFeatures!;
+      List<TextField> otherFeaturesFields =
+      locationData!.otherFeatures == null || locationData!.otherFeatures!.isEmpty
+          ? [
+        TextField(
+          controller: TextEditingController(),
+          decoration: InputDecoration(
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(
+                color: Color(0xffc4c4c4),
+              ),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+                horizontal: 10, vertical: 16),
+            border: OutlineInputBorder(
+              borderSide: const BorderSide(
+                color: Color(0xffc4c4c4),
+              ),
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        )
+      ]
+          : [];
+      otherFeatures.forEach((element) {
+        otherFeaturesFields.add(TextField(
+          controller: TextEditingController(text: element),
+          decoration: InputDecoration(
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(
+                color: Color(0xffc4c4c4),
+              ),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+                horizontal: 10, vertical: 16),
+            border: OutlineInputBorder(
+              borderSide: const BorderSide(
+                color: Color(0xffc4c4c4),
+              ),
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        ));
+      });
+
+      otherFeaturesWidgets.addAll({
+        languages.keys.elementAt(_controller!.index):
+        otherFeaturesFields
+      });
+      if(dataControllers.containsKey(languages.keys.elementAt(_controller!.index))){
+        dataControllers[languages.keys.elementAt(_controller!.index)]!["locationName"]!.text = locationData!.locationName!;
+        dataControllers[languages.keys.elementAt(_controller!.index)]!["address"]!.text = locationData!.addressStreet!;
+        dataControllers[languages.keys.elementAt(_controller!.index)]!["street"]!.text = locationData!.street!;
+        dataControllers[languages.keys.elementAt(_controller!.index)]!["city"]!.text = locationData!.city!;
+        dataControllers[languages.keys.elementAt(_controller!.index)]!["description"]!.text = locationData!.description!;
+
+
+      }
+      else{
+        dataControllers.addAll({
+          languages.keys.elementAt(_controller!.index): {
+            "locationName": TextEditingController(text: locationData!.locationName!),
+            "address": TextEditingController(text: locationData!.addressStreet!),
+            "street": TextEditingController(text: locationData!.street!),
+            "city": TextEditingController(text: locationData!.city!),
+            "description": TextEditingController(text: locationData!.description!)
+          }
+        });
+      }
+
+    }
 
     return Future.value(data);
   }

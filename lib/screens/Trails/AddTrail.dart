@@ -32,8 +32,7 @@ class AddTrail extends StatefulWidget {
 class _AddTrailState extends State<AddTrail>
     with SingleTickerProviderStateMixin {
 // FORM VARIABLE USED FOR VALIDATIONS -- TRAILS
-  static final _englishform = GlobalKey<FormState>(debugLabel: "TRAIL_ENGLISH");
-  static final _otherLangform = GlobalKey<FormState>(debugLabel: "TRAIL_OTHER");
+  final _form = GlobalKey<FormState>();
 
   //IMAGE PICKER INSTANCE TO USE FOR PICKING FROM CAMERA OR GALLERY  -- TRAILS
   final ImagePicker _picker = ImagePicker();
@@ -62,16 +61,19 @@ class _AddTrailState extends State<AddTrail>
   BuildContext? buildContext;
 
   //Controllers for English Form
-  TextEditingController trailNameController = TextEditingController();
-  TextEditingController trailDescriptionController = TextEditingController();
-  TextEditingController trailDistanceController = TextEditingController();
-  TextEditingController trailOpeningController = TextEditingController();
-  TextEditingController trailOpening2Controller = TextEditingController();
+  TextEditingController trailNameController = new TextEditingController();
+  TextEditingController trailDescriptionController =
+      new TextEditingController();
+  TextEditingController trailDistanceController = new TextEditingController();
+  TextEditingController trailOpeningController = new TextEditingController();
+  TextEditingController trailOpening2Controller = new TextEditingController();
 
   List<Difficulty> difficulties = [];
 
   String? selectedDifficultyID = "";
   bool isChecked = true;
+
+  Future<TrailPayload?>? response;
 
   @override
   void initState() {
@@ -93,54 +95,15 @@ class _AddTrailState extends State<AddTrail>
                     ? "es"
                     : languages.keys.elementAt(_controller!.index)));
           } else {
-            log("INSIDE ELSE OF LISTENER => ${_controller!.index}");
+            log("INSIDE ELSE OF LISTENER${_controller!.index}");
             context.setLocale(Locale(
                 languages.keys.elementAt(_controller!.index) == "spa"
                     ? "es"
                     : languages.keys.elementAt(_controller!.index)));
           }
-
-          getTrailData().then((value) {
-            if(value==null){
-              return;
-            }
-            if ( languages.keys.elementAt(_controller!.index)=="en") {
-               trailNameController.text = value!.trailName!;
-               trailDistanceController.text = value.trailDistance!;
-               trailDescriptionController.text = value.trailDescription!;
-               trailOpeningController.text = value.trailOpeningTime!;
-               trailOpening2Controller.text = value.trailOpeningTime2!;
-               selectedDifficultyID = value.trailDifficulty!;
-            } else {
-              if( dataControllers.containsKey(languages.keys.elementAt(_controller!.index))){
-                dataControllers[languages.keys.elementAt(_controller!.index)]!["trailName"]!.text = value!.trailName!;
-                dataControllers[languages.keys.elementAt(_controller!.index)]!["trailDistance"]!.text = value.trailDistance!;
-                dataControllers[languages.keys.elementAt(_controller!.index)]!["trailDesc"]!.text = value.trailDescription!;
-                dataControllers[languages.keys.elementAt(_controller!.index)]!["trailOpen_1"]!.text = value.trailOpeningTime!;
-                dataControllers[languages.keys.elementAt(_controller!.index)]!["trailOpen_2"]!.text = value.trailOpeningTime2!;
-
-              }
-              else{
-                dataControllers.addAll({
-                  languages.keys.elementAt(_controller!.index): {
-                    "trailName": TextEditingController(text:  value!.trailName!),
-                    "trailDesc": TextEditingController(text:  value.trailDescription!),
-                    "trailDistance": TextEditingController(text:  value.trailDistance!),
-                    "trailOpen_1": TextEditingController(text:  value.trailOpeningTime!),
-                    "trailOpen_2": TextEditingController(text:  value.trailOpeningTime2!),
-                  },
-                });
-              }
-
-            }
-
-
-          });
-
+          response = getTrailData();
         });
       });
-
-
 
       if (dataControllers.containsKey("en")) {
         trailNameController = dataControllers["en"]!["trailName"]!;
@@ -149,7 +112,6 @@ class _AddTrailState extends State<AddTrail>
         trailOpeningController = dataControllers["en"]!["trailOpen_1"]!;
         trailOpening2Controller = dataControllers["en"]!["trailOpen_2"]!;
       } else {
-        print("DOESNOT HAVE ENGLISH CONTROLLERS. ADDING....");
         dataControllers.addAll({
           "en": {
             "trailName": trailNameController,
@@ -164,51 +126,9 @@ class _AddTrailState extends State<AddTrail>
       difficulties.add(Difficulty(name: "Easy", id: "Easy"));
       difficulties.add(Difficulty(name: "Moderate", id: "Moderate"));
       difficulties.add(Difficulty(name: "Difficult", id: "Difficult"));
-
-      getTrailData().then((value) {
-        if(value==null){
-          return;
-        }
-        if ( languages.keys.elementAt(_controller!.index)=="en") {
-          trailNameController.text = value!.trailName!;
-          trailDistanceController.text = value.trailDistance!;
-          trailDescriptionController.text = value.trailDescription!;
-          trailOpeningController.text = value.trailOpeningTime!;
-          trailOpening2Controller.text = value.trailOpeningTime2!;
-          selectedDifficultyID = value.trailDifficulty!;
-        } else {
-          if( dataControllers.containsKey(languages.keys.elementAt(_controller!.index))){
-            dataControllers[languages.keys.elementAt(_controller!.index)]!["trailName"]!.text = value!.trailName!;
-            dataControllers[languages.keys.elementAt(_controller!.index)]!["trailDistance"]!.text = value.trailDistance!;
-            dataControllers[languages.keys.elementAt(_controller!.index)]!["trailDesc"]!.text = value.trailDescription!;
-            dataControllers[languages.keys.elementAt(_controller!.index)]!["trailOpen_1"]!.text = value.trailOpeningTime!;
-            dataControllers[languages.keys.elementAt(_controller!.index)]!["trailOpen_2"]!.text = value.trailOpeningTime2!;
-
-          }
-          else{
-            dataControllers.addAll({
-              languages.keys.elementAt(_controller!.index): {
-                "trailName": TextEditingController(text:  value!.trailName!),
-                "trailDesc": TextEditingController(text:  value.trailDescription!),
-                "trailDistance": TextEditingController(text:  value.trailDistance!),
-                "trailOpen_1": TextEditingController(text:  value.trailOpeningTime!),
-                "trailOpen_2": TextEditingController(text:  value.trailOpeningTime2!),
-              },
-            });
-          }
-
-        }
-
-
-      });
-
+      response = getTrailData();
       setState(() {});
     });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   @override
@@ -333,472 +253,535 @@ class _AddTrailState extends State<AddTrail>
 
   Widget loadEnglishBody() {
     return Form(
-      key: _englishform,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // ===========================  Todo ==> Location Name
-          Container(
-              child: Padding(
-            padding: const EdgeInsets.only(top: 16.0, bottom: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Trail Name*",
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.w700),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: TextFormField(
-                    validator: (text) {
-                      if (text!.isEmpty) {
-                        return "Enter valid Trail name!";
-                      }
-                      return null;
-                    },
-                    controller: trailNameController,
-                    decoration: InputDecoration(
-                      hintText: "Enter Trail",
-                      hintStyle: const TextStyle(
-                          color: Color(0xffabaaaa), fontSize: 13),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0xffc4c4c4),
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 16),
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0xffc4c4c4),
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          )),
-          // =========================== Todo ==>  Distance
-          Container(
-              child: Padding(
-            padding: const EdgeInsets.only(top: 16.0, bottom: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Distance *",
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.w700),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: TextFormField(
-                    validator: (text) {
-                      if (text!.isEmpty) {
-                        return "Enter valid distance!";
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.phone,
-                    controller: trailDistanceController,
-                    decoration: InputDecoration(
-                      hintText: "Enter Zip*",
-                      hintStyle: const TextStyle(
-                          color: Color(0xffabaaaa), fontSize: 13),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0xffc4c4c4),
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 16),
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0xffc4c4c4),
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          )),
-          // =========================== Todo ==>  Opening Time (Trial days & timing)
-          Container(
-              child: Padding(
-            padding: const EdgeInsets.only(top: 16.0, bottom: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Opening Time (Trial days & timing) *",
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.w700),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Flexible(
-                        fit: FlexFit.loose,
-                        child: TextFormField(
-                          validator: (text) {
-                            if (text!.isEmpty) {
-                              return "Enter valid opening time!";
-                            }
-                            return null;
-                          },
-                          controller: trailOpeningController,
-                          decoration: InputDecoration(
-                            hintText: "Enter Trail",
-                            hintStyle: const TextStyle(
-                                color: Color(0xffabaaaa), fontSize: 13),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                color: Color(0xffc4c4c4),
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 16),
-                            border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                color: Color(0xffc4c4c4),
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Flexible(
-                        fit: FlexFit.loose,
-                        child: TextFormField(
-                          controller: trailOpening2Controller,
-                          decoration: InputDecoration(
-                            hintText: "Enter Trail",
-                            hintStyle: const TextStyle(
-                                color: Color(0xffabaaaa), fontSize: 13),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                color: Color(0xffc4c4c4),
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 16),
-                            border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                color: Color(0xffc4c4c4),
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          )),
-          // =========================== Todo ==>  Location(Images / Photos)
-          Container(
-              child: Padding(
-            padding: const EdgeInsets.only(top: 16.0, bottom: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Location (Images / Photos)",
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.w700),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: Container(
-                    height: 64,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: const Color(0xffc4c4c4),
-                      ),
-                    ),
+      key: _form,
+      child: FutureBuilder<TrailPayload?>(
+          future: response,
+          builder: (context, snapshot) {
+            Widget toReturnWidget;
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+                toReturnWidget = const Center(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Flexible(
-                              fit: FlexFit.loose,
-                              child: Text(
-                                locationImage == null
-                                    ? "No File Selected"
-                                    : locationImage!.name,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 16.0),
-                              child: OutlinedButton(
-                                  onPressed: () {
-                                    _showBottomSheet(1);
-                                  },
-                                  child: const Text("Choose File"),
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Colors.transparent),
-                                    shape: MaterialStateProperty.all(
-                                        RoundedRectangleBorder(
-                                            side: BorderSide(
-                                                width: 0.0,
-                                                color: Theme.of(context)
-                                                    .primaryColor),
-                                            borderRadius:
-                                                BorderRadius.circular(10.0))),
-                                  )),
-                            ),
-                          ]),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          )),
-          // =========================== Todo ==>  Gallery(Images / Photos)
-          Container(
-              child: Padding(
-            padding: const EdgeInsets.only(top: 16.0, bottom: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  padding: EdgeInsets.all(56.0),
+                  child: CircularProgressIndicator(),
+                ));
+                break;
+              case ConnectionState.done:
+                if (snapshot.data != null) {
+                  log("Connection Done => ${snapshot.data!.toJson()}");
+                }
+                toReturnWidget = Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
-                      "Gallery (Images / Photos)",
-                      style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w700),
-                    ),
-                    Text(
-                      "(Only 5 allowed)",
-                      style: TextStyle(fontSize: 12, color: Colors.black),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: Container(
-                    height: 64,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: const Color(0xffc4c4c4),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Flexible(
-                              fit: FlexFit.loose,
-                              child: Text(
-                                galleryImages!.isEmpty
-                                    ? "No File Selected"
-                                    : "${galleryImages!.length == 1 ? galleryImages!.first.name : "${galleryImages!.length} ${galleryImages!.length == 1 ? "File" : "Files"} Selected"}",
-                                overflow: TextOverflow.ellipsis,
+                    // ===========================  Todo ==> Location Name
+                    Container(
+                        child: Padding(
+                      padding: const EdgeInsets.only(top: 16.0, bottom: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Trail Name*",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10.0),
+                            child: TextFormField(
+                              validator: (text) {
+                                if (text!.isEmpty) {
+                                  return "Enter valid Trail name!";
+                                }
+                                return null;
+                              },
+                              controller: trailNameController,
+                              decoration: InputDecoration(
+                                hintText: "Enter Trail",
+                                hintStyle: const TextStyle(
+                                    color: Color(0xffabaaaa), fontSize: 13),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                    color: Color(0xffc4c4c4),
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 16),
+                                border: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                    color: Color(0xffc4c4c4),
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 16.0),
-                              child: OutlinedButton(
-                                  onPressed: () {
-                                    if (galleryImages!.length >= 5) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(const SnackBar(
-                                              content: Text(
-                                                  "Only 5 images are allowed")));
-                                    } else {
-                                      _showBottomSheet(2);
-                                    }
-                                  },
-                                  child: const Text("Choose File"),
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Colors.transparent),
-                                    shape: MaterialStateProperty.all(
-                                        RoundedRectangleBorder(
-                                            side: BorderSide(
-                                                width: 0.0,
-                                                color: Theme.of(context)
-                                                    .primaryColor),
-                                            borderRadius:
-                                                BorderRadius.circular(10.0))),
-                                  )),
-                            ),
-                          ]),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          )),
-          // ===========================  Todo ==> Description
-          Container(
-              child: Padding(
-            padding: const EdgeInsets.only(top: 16.0, bottom: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Trail Description*",
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.w700),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: TextFormField(
-                    validator: (text) {
-                      if (text!.isEmpty) {
-                        return "Enter valid address!";
-                      }
-                      return null;
-                    },
-                    controller: trailDescriptionController,
-                    minLines: 3,
-                    maxLines: 10,
-                    decoration: InputDecoration(
-                      hintText: "Enter Address",
-                      hintStyle: const TextStyle(
-                          color: Color(0xffabaaaa), fontSize: 13),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0xffc4c4c4),
-                        ),
-                        borderRadius: BorderRadius.circular(10),
+                          ),
+                        ],
                       ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 16),
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0xffc4c4c4),
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          )),
-          // =========================== Todo ==>  Difficulty Level
-          Container(
-              child: Padding(
-            padding: const EdgeInsets.only(top: 16.0, bottom: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Difficulty Level*",
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.w700),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: DropdownMenu<String>(
-                    width: DeviceDimensions.getDeviceWidth(context) - 32,
-                    enableSearch: false,
-                    inputDecorationTheme: InputDecorationTheme(
-                        alignLabelWithHint: true,
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(color: Color(0xffc4c4c4))),
-                        border: OutlineInputBorder(
-                            borderSide:
-                                const BorderSide(color: Color(0xffc4c4c4)),
-                            borderRadius: BorderRadius.circular(10))),
-                    requestFocusOnTap: false,
-                    label: const Text('Select'),
-                    initialSelection: selectedDifficultyID,
-                    onSelected: (String? difficulty) {
-                      selectedDifficultyID = difficulty;
-                      log("Selected PARK => $difficulty");
-                    },
-                    dropdownMenuEntries: [
-                      for (int i = 0; i < difficulties.length; i++)
-                        DropdownMenuEntry<String>(
-                          value: difficulties[i].id!,
-                          label: difficulties[i].name!,
-                        ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          )),
-          // =========================== Todo ==>  Status
-          Container(
-              child: Padding(
-            padding: const EdgeInsets.only(top: 16.0, bottom: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Status",
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.w700),
-                ),
-                Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        FlutterSwitch(
-                          width: 120,
-                          value: isChecked,
-                          activeColor: Colors.green,
-                          showOnOff: true,
-                          valueFontSize: 16,
-                          activeText: "Active",
-                          inactiveText: "InActive",
-                          onToggle: (bool value) {
-                            isChecked = value;
-                            setState(() {});
-                          },
-                        ),
-                      ],
                     )),
-              ],
-            ),
-          )),
+                    // =========================== Todo ==>  Distance
+                    Container(
+                        child: Padding(
+                      padding: const EdgeInsets.only(top: 16.0, bottom: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Distance *",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10.0),
+                            child: TextFormField(
+                              validator: (text) {
+                                if (text!.isEmpty) {
+                                  return "Enter valid distance!";
+                                }
+                                return null;
+                              },
+                              keyboardType: TextInputType.phone,
+                              controller: trailDistanceController,
+                              decoration: InputDecoration(
+                                hintText: "Enter Zip*",
+                                hintStyle: const TextStyle(
+                                    color: Color(0xffabaaaa), fontSize: 13),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                    color: Color(0xffc4c4c4),
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 16),
+                                border: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                    color: Color(0xffc4c4c4),
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
+                    // =========================== Todo ==>  Opening Time (Trial days & timing)
+                    Container(
+                        child: Padding(
+                      padding: const EdgeInsets.only(top: 16.0, bottom: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Opening Time (Trial days & timing) *",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Flexible(
+                                  fit: FlexFit.loose,
+                                  child: TextFormField(
+                                    validator: (text) {
+                                      if (text!.isEmpty) {
+                                        return "Enter valid opening time!";
+                                      }
+                                      return null;
+                                    },
+                                    controller: trailOpeningController,
+                                    decoration: InputDecoration(
+                                      hintText: "Enter Trail",
+                                      hintStyle: const TextStyle(
+                                          color: Color(0xffabaaaa),
+                                          fontSize: 13),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: const BorderSide(
+                                          color: Color(0xffc4c4c4),
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 16),
+                                      border: OutlineInputBorder(
+                                        borderSide: const BorderSide(
+                                          color: Color(0xffc4c4c4),
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Flexible(
+                                  fit: FlexFit.loose,
+                                  child: TextFormField(
+                                    controller: trailOpening2Controller,
+                                    decoration: InputDecoration(
+                                      hintText: "Enter Trail",
+                                      hintStyle: const TextStyle(
+                                          color: Color(0xffabaaaa),
+                                          fontSize: 13),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: const BorderSide(
+                                          color: Color(0xffc4c4c4),
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 16),
+                                      border: OutlineInputBorder(
+                                        borderSide: const BorderSide(
+                                          color: Color(0xffc4c4c4),
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
+                    // =========================== Todo ==>  Location(Images / Photos)
+                    Container(
+                        child: Padding(
+                      padding: const EdgeInsets.only(top: 16.0, bottom: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Location (Images / Photos)",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10.0),
+                            child: Container(
+                              height: 64,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: const Color(0xffc4c4c4),
+                                ),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10.0),
+                                child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Flexible(
+                                        fit: FlexFit.loose,
+                                        child: Text(
+                                          locationImage == null
+                                              ? "No File Selected"
+                                              : locationImage!.name,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 16.0),
+                                        child: OutlinedButton(
+                                            onPressed: () {
+                                              _showBottomSheet(1);
+                                            },
+                                            child: const Text("Choose File"),
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.transparent),
+                                              shape: MaterialStateProperty.all(
+                                                  RoundedRectangleBorder(
+                                                      side: BorderSide(
+                                                          width: 0.0,
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .primaryColor),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0))),
+                                            )),
+                                      ),
+                                    ]),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
+                    // =========================== Todo ==>  Gallery(Images / Photos)
+                    Container(
+                        child: Padding(
+                      padding: const EdgeInsets.only(top: 16.0, bottom: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Gallery (Images / Photos)",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                              Text(
+                                "(Only 5 allowed)",
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.black),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10.0),
+                            child: Container(
+                              height: 64,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: const Color(0xffc4c4c4),
+                                ),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10.0),
+                                child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Flexible(
+                                        fit: FlexFit.loose,
+                                        child: Text(
+                                          galleryImages!.isEmpty
+                                              ? "No File Selected"
+                                              : "${galleryImages!.length == 1 ? galleryImages!.first.name : "${galleryImages!.length} ${galleryImages!.length == 1 ? "File" : "Files"} Selected"}",
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 16.0),
+                                        child: OutlinedButton(
+                                            onPressed: () {
+                                              if (galleryImages!.length >= 5) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(const SnackBar(
+                                                        content: Text(
+                                                            "Only 5 images are allowed")));
+                                              } else {
+                                                _showBottomSheet(2);
+                                              }
+                                            },
+                                            child: const Text("Choose File"),
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.transparent),
+                                              shape: MaterialStateProperty.all(
+                                                  RoundedRectangleBorder(
+                                                      side: BorderSide(
+                                                          width: 0.0,
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .primaryColor),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0))),
+                                            )),
+                                      ),
+                                    ]),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
+                    // ===========================  Todo ==> Description
+                    Container(
+                        child: Padding(
+                      padding: const EdgeInsets.only(top: 16.0, bottom: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Trail Description*",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10.0),
+                            child: TextFormField(
+                              validator: (text) {
+                                if (text!.isEmpty) {
+                                  return "Enter valid address!";
+                                }
+                                return null;
+                              },
+                              controller: trailDescriptionController,
+                              minLines: 3,
+                              maxLines: 10,
+                              decoration: InputDecoration(
+                                hintText: "Enter Address",
+                                hintStyle: const TextStyle(
+                                    color: Color(0xffabaaaa), fontSize: 13),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                    color: Color(0xffc4c4c4),
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 16),
+                                border: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                    color: Color(0xffc4c4c4),
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
+                    // =========================== Todo ==>  Difficulty Level
+                    Container(
+                        child: Padding(
+                      padding: const EdgeInsets.only(top: 16.0, bottom: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Difficulty Level*",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10.0),
+                            child: DropdownMenu<String>(
+                              width:
+                                  DeviceDimensions.getDeviceWidth(context) - 32,
+                              enableSearch: false,
+                              inputDecorationTheme: InputDecorationTheme(
+                                  alignLabelWithHint: true,
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.never,
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide:
+                                          BorderSide(color: Color(0xffc4c4c4))),
+                                  border: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          color: Color(0xffc4c4c4)),
+                                      borderRadius: BorderRadius.circular(10))),
+                              requestFocusOnTap: false,
+                              label: const Text('Select'),
+                              initialSelection: selectedDifficultyID,
+                              onSelected: (String? difficulty) {
+                                selectedDifficultyID = difficulty;
+                                log("Selected PARK => $difficulty");
+                              },
+                              dropdownMenuEntries: [
+                                for (int i = 0; i < difficulties.length; i++)
+                                  DropdownMenuEntry<String>(
+                                    value: difficulties[i].id!,
+                                    label: difficulties[i].name!,
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
+                    // =========================== Todo ==>  Status
+                    Container(
+                        child: Padding(
+                      padding: const EdgeInsets.only(top: 16.0, bottom: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Status",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          Padding(
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  FlutterSwitch(
+                                    width: 120,
+                                    value: isChecked,
+                                    activeColor: Colors.green,
+                                    showOnOff: true,
+                                    valueFontSize: 16,
+                                    activeText: "Active",
+                                    inactiveText: "InActive",
+                                    onToggle: (bool value) {
+                                      isChecked = value!;
+                                      setState(() {});
+                                    },
+                                  ),
+                                ],
+                              )),
+                        ],
+                      ),
+                    )),
 
-          Padding(
-            padding: const EdgeInsets.only(bottom: 56.0, top: 16),
-            child: ElevatedButton(
-                onPressed: () {
-                  submit_English_Details();
-                },
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16.0),
-                  child: Text("Submit"),
-                )),
-          )
-        ],
-      ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 56.0, top: 16),
+                      child: ElevatedButton(
+                          onPressed: () {
+                            submit_English_Details();
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16.0),
+                            child: Text("Submit"),
+                          )),
+                    )
+                  ],
+                );
+                break;
+              case ConnectionState.active:
+                toReturnWidget = const Center(
+                    child: Padding(
+                  padding: EdgeInsets.all(56.0),
+                  child: CircularProgressIndicator(),
+                ));
+                break;
+              case ConnectionState.none:
+                toReturnWidget = const Center(
+                    child: Padding(
+                  padding: EdgeInsets.all(56.0),
+                  child: CircularProgressIndicator(),
+                ));
+                break;
+            }
+
+            return toReturnWidget;
+          }),
     );
   }
 
@@ -850,258 +833,349 @@ class _AddTrailState extends State<AddTrail>
       });
     }
     return Form(
-      key: _otherLangform,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // ===========================  Todo ==> Location Name
-          Container(
-              child: Padding(
-            padding: const EdgeInsets.only(top: 16.0, bottom: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  LocaleKeys.Trail_Name,
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.w700),
-                ).tr(),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: TextFormField(
-                    validator: (text) {
-                      if (text!.isEmpty) {
-                        return "Enter valid Trail name!";
-                      }
-                      return null;
-                    },
-                    controller: otherLang_trailNameController,
-                    decoration: InputDecoration(
-                      hintText: "Enter Trail",
-                      hintStyle: const TextStyle(
-                          color: Color(0xffabaaaa), fontSize: 13),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0xffc4c4c4),
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 16),
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0xffc4c4c4),
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          )),
-          // =========================== Todo ==>  Distance
-          Container(
-              child: Padding(
-            padding: const EdgeInsets.only(top: 16.0, bottom: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  LocaleKeys.Distance,
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.w700),
-                ).tr(),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: TextFormField(
-                    validator: (text) {
-                      if (text!.isEmpty) {
-                        return "Enter valid city!";
-                      }
-                      return null;
-                    },
-                    controller: otherLang_trailDistanceController,
-                    decoration: InputDecoration(
-                      hintText: "Enter Zip*",
-                      hintStyle: const TextStyle(
-                          color: Color(0xffabaaaa), fontSize: 13),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0xffc4c4c4),
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 16),
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0xffc4c4c4),
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          )),
-          // =========================== Todo ==>  Opening Time (Trial days & timing)
-          Container(
-              child: Padding(
-            padding: const EdgeInsets.only(top: 16.0, bottom: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  LocaleKeys.Opening_Time,
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.w700),
-                ).tr(),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        key: _form,
+        child: FutureBuilder<TrailPayload?>(
+            future: response,
+            builder: (context, snapshot) {
+              Widget toReturnWidget;
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  toReturnWidget = const Center(
+                      child: Padding(
+                    padding: EdgeInsets.all(56.0),
+                    child: CircularProgressIndicator(),
+                  ));
+                  break;
+                case ConnectionState.done:
+                  if (snapshot.data != null) {
+                    log("Connection Done => ${snapshot.data!.toJson()}");
+                  }
+                  toReturnWidget = Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Flexible(
-                        child: TextFormField(
-                          validator: (text) {
-                            if (text!.isEmpty) {
-                              return "Enter valid Trail name!";
-                            }
-                            return null;
-                          },
-                          controller: otherLang_trailOpenTime_1_Controller,
-                          decoration: InputDecoration(
-                            hintText: "Enter Trail",
-                            hintStyle: const TextStyle(
-                                color: Color(0xffabaaaa), fontSize: 13),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                color: Color(0xffc4c4c4),
+                      // ===========================  Todo ==> Location Name
+                      Container(
+                          child: Padding(
+                        padding: const EdgeInsets.only(top: 16.0, bottom: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              LocaleKeys.Trail_Name,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w700),
+                            ).tr(),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: TextFormField(
+                                validator: (text) {
+                                  if (text!.isEmpty) {
+                                    return "Enter valid Trail name!";
+                                  }
+                                  return null;
+                                },
+                                controller: otherLang_trailNameController,
+                                decoration: InputDecoration(
+                                  hintText: "Enter Trail",
+                                  hintStyle: const TextStyle(
+                                      color: Color(0xffabaaaa), fontSize: 13),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                      color: Color(0xffc4c4c4),
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 16),
+                                  border: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                      color: Color(0xffc4c4c4),
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
                               ),
-                              borderRadius: BorderRadius.circular(10),
                             ),
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 16),
-                            border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                color: Color(0xffc4c4c4),
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
+                          ],
                         ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Flexible(
-                        child: TextFormField(
-                          controller: otherLang_trailOpenTime_2Controller,
-                          decoration: InputDecoration(
-                            hintText: "Enter Trail",
-                            hintStyle: const TextStyle(
-                                color: Color(0xffabaaaa), fontSize: 13),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                color: Color(0xffc4c4c4),
+                      )),
+                      // =========================== Todo ==>  Distance
+                      Container(
+                          child: Padding(
+                        padding: const EdgeInsets.only(top: 16.0, bottom: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              LocaleKeys.Distance,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w700),
+                            ).tr(),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: TextFormField(
+                                validator: (text) {
+                                  if (text!.isEmpty) {
+                                    return "Enter valid city!";
+                                  }
+                                  return null;
+                                },
+                                controller: otherLang_trailDistanceController,
+                                decoration: InputDecoration(
+                                  hintText: "Enter Zip*",
+                                  hintStyle: const TextStyle(
+                                      color: Color(0xffabaaaa), fontSize: 13),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                      color: Color(0xffc4c4c4),
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 16),
+                                  border: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                      color: Color(0xffc4c4c4),
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
                               ),
-                              borderRadius: BorderRadius.circular(10),
                             ),
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 16),
-                            border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                color: Color(0xffc4c4c4),
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
+                          ],
                         ),
+                      )),
+                      // =========================== Todo ==>  Opening Time (Trial days & timing)
+                      Container(
+                          child: Padding(
+                        padding: const EdgeInsets.only(top: 16.0, bottom: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              LocaleKeys.Opening_Time,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w700),
+                            ).tr(),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Flexible(
+                                    child: TextFormField(
+                                      validator: (text) {
+                                        if (text!.isEmpty) {
+                                          return "Enter valid Trail name!";
+                                        }
+                                        return null;
+                                      },
+                                      controller:
+                                          otherLang_trailOpenTime_1_Controller,
+                                      decoration: InputDecoration(
+                                        hintText: "Enter Trail",
+                                        hintStyle: const TextStyle(
+                                            color: Color(0xffabaaaa),
+                                            fontSize: 13),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                            color: Color(0xffc4c4c4),
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 10, vertical: 16),
+                                        border: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                            color: Color(0xffc4c4c4),
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Flexible(
+                                    child: TextFormField(
+                                      controller:
+                                          otherLang_trailOpenTime_2Controller,
+                                      decoration: InputDecoration(
+                                        hintText: "Enter Trail",
+                                        hintStyle: const TextStyle(
+                                            color: Color(0xffabaaaa),
+                                            fontSize: 13),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                            color: Color(0xffc4c4c4),
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 10, vertical: 16),
+                                        border: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                            color: Color(0xffc4c4c4),
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      )),
+                      // ===========================  Todo ==> Description
+                      Container(
+                          child: Padding(
+                        padding: const EdgeInsets.only(top: 16.0, bottom: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              LocaleKeys.Trail_Description,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w700),
+                            ).tr(),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: TextFormField(
+                                validator: (text) {
+                                  if (text!.isEmpty) {
+                                    return "Enter valid address!";
+                                  }
+                                  return null;
+                                },
+                                controller:
+                                    otherLang_trailDescriptionController,
+                                minLines: 3,
+                                maxLines: 10,
+                                decoration: InputDecoration(
+                                  hintText: "Enter Address",
+                                  hintStyle: const TextStyle(
+                                      color: Color(0xffabaaaa), fontSize: 13),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                      color: Color(0xffc4c4c4),
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 16),
+                                  border: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                      color: Color(0xffc4c4c4),
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )),
+
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 56.0, top: 16),
+                        child: ElevatedButton(
+                            onPressed: () {
+                              submit_Other_Language_DATA();
+                            },
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 16.0),
+                              child: Text("Submit"),
+                            )),
                       )
                     ],
-                  ),
-                ),
-              ],
-            ),
-          )),
-          // ===========================  Todo ==> Description
-          Container(
-              child: Padding(
-            padding: const EdgeInsets.only(top: 16.0, bottom: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  LocaleKeys.Trail_Description,
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.w700),
-                ).tr(),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: TextFormField(
-                    validator: (text) {
-                      if (text!.isEmpty) {
-                        return "Enter valid address!";
-                      }
-                      return null;
-                    },
-                    controller: otherLang_trailDescriptionController,
-                    minLines: 3,
-                    maxLines: 10,
-                    decoration: InputDecoration(
-                      hintText: "Enter Address",
-                      hintStyle: const TextStyle(
-                          color: Color(0xffabaaaa), fontSize: 13),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0xffc4c4c4),
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 16),
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0xffc4c4c4),
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          )),
-
-          Padding(
-            padding: const EdgeInsets.only(bottom: 56.0, top: 16),
-            child: ElevatedButton(
-                onPressed: () {
-                  submit_Other_Language_DATA();
-                },
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16.0),
-                  child: Text("Submit"),
-                )),
-          )
-        ],
-      ),
-    );
+                  );
+                  break;
+                case ConnectionState.active:
+                  toReturnWidget = const Center(
+                      child: Padding(
+                    padding: EdgeInsets.all(56.0),
+                    child: CircularProgressIndicator(),
+                  ));
+                  break;
+                case ConnectionState.none:
+                  toReturnWidget = const Center(
+                      child: Padding(
+                    padding: EdgeInsets.all(56.0),
+                    child: CircularProgressIndicator(),
+                  ));
+                  break;
+              }
+              return toReturnWidget;
+            }));
   }
 
-  Future<TrailPayload?> getTrailData() {
-    if(widget.trailId==null){
+  Future<TrailPayload?> getTrailData() async {
+    if (widget.trailId == null) {
       return Future.value(null);
     }
+    Map<String, String> params = {"trail_id": widget.trailId!};
+    if (languages.keys.elementAt(_controller!.index) != "en") {
+      params.addAll({
+        "lang": languages.keys.elementAt(_controller!.index) == "es"
+            ? "spa"
+            : languages.keys.elementAt(_controller!.index)
+      });
+    }
+    TrailPayload data =
+        await ApiFactory().getTrailService().getTrailDetails(params);
 
-    return ApiFactory().getTrailService().getTrailDetails(widget.trailId);
+    if (languages.keys.elementAt(_controller!.index) == "en") {
+      trailNameController.text = data.trailName!;
+      trailDistanceController.text = data.trailDistance!;
+      trailDescriptionController.text = data.trailDescription!;
+      trailOpeningController.text = data.trailOpeningTime!;
+      trailOpening2Controller.text = data.trailOpeningTime2!;
 
+      selectedDifficultyID = data.trailDifficulty!;
+    } else {
+      if (dataControllers.keys
+          .contains(languages.keys.elementAt(_controller!.index))) {
+        log("ALREADY HAS CONTROLLERS");
+        Map<String, TextEditingController>? controllers =
+            dataControllers[languages.keys.elementAt(_controller!.index)];
+        controllers!["trailName"]!.text = data.trailName!;
+        controllers["trailDistance"]!.text = data.trailDistance!;
+        controllers["trailDesc"]!.text = data.trailDescription!;
+        controllers["trailOpen_1"]!.text = data.trailOpeningTime!;
+        controllers["trailOpen_2"]!.text = data.trailOpeningTime2!;
+      } else {
+        log("DOESN'T HAVE CONTROLLERS");
+        dataControllers.addAll({
+          languages.keys.elementAt(_controller!.index): {
+            "trailName": TextEditingController(text: data.trailName!),
+            "trailDistance": TextEditingController(text: data.trailDistance!),
+            "trailDesc": TextEditingController(text: data.trailDescription!),
+            "trailOpen_1": TextEditingController(text: data.trailOpeningTime!),
+            "trailOpen_2": TextEditingController(text: data.trailOpeningTime2!)
+          }
+        });
+      }
+    }
+
+    return data;
   }
 
   Future<void> submit_English_Details() async {
-    bool isFormValid = _englishform.currentState!.validate();
+    bool isFormValid = _form.currentState!.validate();
 
     if (!isFormValid) {
       ScaffoldMessenger.of(buildContext!).showSnackBar(
@@ -1118,8 +1192,17 @@ class _AddTrailState extends State<AddTrail>
         trailOpeningTime: trailOpeningController.text,
         trailOpeningTime2: trailOpening2Controller.text);
 
-    BaseResponse response =
-        await ApiFactory().getTrailService().submitTrailData(payload);
+    if (widget.isEdit!) {
+      payload.trail_id = widget.trailId;
+    }
+
+    BaseResponse response = widget.isEdit!
+        ? await ApiFactory()
+            .getTrailService()
+            .updateTrailData(payload, locationImage, galleryImages)
+        : await ApiFactory()
+            .getTrailService()
+            .submitTrailData(payload, locationImage, galleryImages);
     if (response.status == "1") {
       trailId = response.trail_id.toString();
       int currentIndex = _controller!.index;
@@ -1240,7 +1323,7 @@ class _AddTrailState extends State<AddTrail>
   }
 
   Future<void> submit_Other_Language_DATA() async {
-    final isValid = _otherLangform.currentState!.validate();
+    final isValid = _form.currentState!.validate();
     TrailPayload payload = TrailPayload();
     if (!isValid) {
       return;

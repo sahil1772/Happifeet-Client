@@ -3,11 +3,11 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:happifeet_client_app/model/BaseResponse.dart';
-
 import 'package:happifeet_client_app/model/TrailPayload.dart';
 import 'package:happifeet_client_app/network/interface/InterfaceTrails.dart';
 import 'package:happifeet_client_app/network/services/ApiService.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
+import 'package:image_picker/image_picker.dart';
 
 class TrailService implements InterfaceTrails {
   @override
@@ -36,7 +36,8 @@ class TrailService implements InterfaceTrails {
   }
 
   @override
-  Future<BaseResponse> submitTrailData(TrailPayload payload) async {
+  Future<BaseResponse> submitTrailData(TrailPayload payload, XFile? trailImage,
+      List<XFile>? galleryImages) async {
     try {
       var map = payload.toJson();
       map.addAll({
@@ -44,9 +45,22 @@ class TrailService implements InterfaceTrails {
         'user_id': await SharedPref.instance.getUserId()
       });
 
-      var response = await NetworkClient()
-          .dio
-          .post(base_url, data: FormData.fromMap(map));
+      var formData = FormData.fromMap(map, ListFormat.multiCompatible);
+
+      if (trailImage != null)
+        formData.files.add(MapEntry(
+            "parkImages", await MultipartFile.fromFile(trailImage!.path)));
+
+      if (galleryImages!.length > 0)
+        for (var file in galleryImages!) {
+          formData.files.add(
+            MapEntry("galleryImages[${galleryImages!.indexOf(file)}]",
+                await MultipartFile.fromFile(file.path)),
+          );
+        }
+
+      var response =
+          await NetworkClient().dio.post(base_url, data: FormData.fromMap(map));
 
       if (response.statusCode == 200) {
         BaseResponse data = BaseResponse.fromJson(json.decode(response.data!));
@@ -63,7 +77,8 @@ class TrailService implements InterfaceTrails {
   }
 
   @override
-  Future<BaseResponse> submitOtherLanguageTrailData(TrailPayload payload) async {
+  Future<BaseResponse> submitOtherLanguageTrailData(
+      TrailPayload payload) async {
     try {
       var map = payload.toJson();
       map.addAll({
@@ -71,9 +86,8 @@ class TrailService implements InterfaceTrails {
         'user_id': await SharedPref.instance.getUserId()
       });
 
-      var response = await NetworkClient()
-          .dio
-          .post(base_url, data: FormData.fromMap(map));
+      var response =
+          await NetworkClient().dio.post(base_url, data: FormData.fromMap(map));
 
       if (response.statusCode == 200) {
         BaseResponse data = BaseResponse.fromJson(json.decode(response.data!));
@@ -90,20 +104,60 @@ class TrailService implements InterfaceTrails {
   }
 
   @override
-  Future<TrailPayload> getTrailDetails(String? trailId) async {
+  Future<TrailPayload> getTrailDetails(Map<String, String> params) async {
     try {
-      var map ={
+      var map = {
         'task': "edit_trail",
         'client_id': await SharedPref.instance.getUserId(),
-        'trail_id': trailId,
       };
+      map.addAll(params);
 
-      var response = await NetworkClient()
-          .dio
-          .post(base_url, data: FormData.fromMap(map));
+      var response =
+          await NetworkClient().dio.post(base_url, data: FormData.fromMap(map));
 
       if (response.statusCode == 200) {
         TrailPayload data = TrailPayload.fromJson(json.decode(response.data!));
+
+        return data;
+      } else {
+        log("response other than 200 for LocationData");
+        throw "response other than 200 for LocationData";
+      }
+    } on DioException catch (error) {
+      log("EXCEPTION IN editLocationData ${error.response}");
+      throw error;
+    }
+  }
+
+  @override
+  Future<BaseResponse> updateTrailData(TrailPayload payload, XFile? trailImage,
+      List<XFile>? galleryImages) async {
+    try {
+      var map = payload.toJson();
+      map.addAll({
+        'task': "update_trail",
+        'user_id': await SharedPref.instance.getUserId()
+      });
+
+      var formData = FormData.fromMap(map, ListFormat.multiCompatible);
+
+      if (trailImage != null)
+        formData.files.add(MapEntry(
+            "parkImages", await MultipartFile.fromFile(trailImage!.path)));
+
+      if (galleryImages!.length > 0)
+        for (var file in galleryImages!) {
+          formData.files.add(
+            MapEntry("galleryImages[${galleryImages!.indexOf(file)}]",
+                await MultipartFile.fromFile(file.path)),
+          );
+        }
+
+      var response =
+          await NetworkClient().dio.post(base_url, data: FormData.fromMap(map));
+
+      if (response.statusCode == 200) {
+        BaseResponse data = BaseResponse.fromJson(json.decode(response.data!));
 
         return data;
       } else {
