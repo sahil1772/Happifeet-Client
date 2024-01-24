@@ -7,7 +7,7 @@ import 'package:happifeet_client_app/screens/Manage/ManageAnnouncements/Announce
 import 'package:happifeet_client_app/screens/Manage/ManageClients/ClientListing.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageLocation/LocationListing.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageSMTP/manage_smtp_details.dart';
-import 'package:happifeet_client_app/screens/Trails/AddTrail.dart';
+import 'package:happifeet_client_app/screens/Manage/ManageTrails/TrailListing.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
 
 import '../../components/HappiFeetAppBar.dart';
@@ -375,7 +375,7 @@ class _ManageWidgetState extends State<ManageWidget> {
                               if (istrail!)
                                 InkWell(
                                   onTap: () {
-                                   TrailListing().goToTrailListing(context);
+                                   TrailListing.goToTrailListing(context);
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(

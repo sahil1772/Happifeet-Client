@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageClients/AddClient.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageClients/ClientListing.dart';
+import 'package:happifeet_client_app/screens/Manage/ManageTrails/AddTrail.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import '../model/ClientUsers/ClientUserData.dart';
@@ -28,6 +29,7 @@ class _TrailListingCardState extends State<TrailListingCard>{
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        AddTrail.goToAddTrail(context, true, widget.trailList!.trail_id!);
       },
       child: Container(
         width: MediaQuery.of(context).size.width,

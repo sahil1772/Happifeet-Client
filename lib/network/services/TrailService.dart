@@ -3,11 +3,13 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:happifeet_client_app/model/BaseResponse.dart';
+import 'package:happifeet_client_app/model/Trails/TrailListingData.dart';
+import 'package:happifeet_client_app/model/Trails/TrailPayload.dart';
 
-import 'package:happifeet_client_app/model/TrailPayload.dart';
 import 'package:happifeet_client_app/network/interface/InterfaceTrails.dart';
 import 'package:happifeet_client_app/network/services/ApiService.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
+import 'package:image_picker/image_picker.dart';
 
 class TrailService implements InterfaceTrails {
   @override
@@ -36,7 +38,8 @@ class TrailService implements InterfaceTrails {
   }
 
   @override
-  Future<BaseResponse> submitTrailData(TrailPayload payload) async {
+  Future<BaseResponse> submitTrailData(TrailPayload payload, XFile? trailImage,
+      List<XFile>? galleryImages) async {
     try {
       var map = payload.toJson();
       map.addAll({
@@ -129,8 +132,7 @@ class TrailService implements InterfaceTrails {
   }
 
   @override
-  Future<BaseResponse> updateTrailData(TrailPayload payload, XFile? trailImage,
-      List<XFile>? galleryImages) async {
+  Future<BaseResponse> updateTrailData(TrailPayload payload, XFile? trailImage, List<XFile>? galleryImages) async {
     try {
       var map = payload.toJson();
       map.addAll({

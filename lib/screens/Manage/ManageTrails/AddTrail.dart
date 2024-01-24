@@ -1335,7 +1335,7 @@ class _AddTrailState extends State<AddTrail>
           dataControllers[languages.keys.elementAt(_controller!.index)];
 
       payload.lang = languages.keys.elementAt(_controller!.index);
-      payload.trail_id = trailId;
+      payload.trail_id = widget.trailId ?? trailId;
       payload.trailName = controllers!["trailName"]!.text;
       payload.trailDistance = controllers["trailDistance"]!.text;
       payload.trailDescription = controllers["trailDesc"]!.text;

@@ -1,8 +1,8 @@
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
+import 'package:happifeet_client_app/screens/Manage/ManageTrails/AddTrail.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
 
 import '../../../components/HappiFeetAppBar.dart';
@@ -16,7 +16,7 @@ class TrailListing extends StatefulWidget {
   @override
   State<TrailListing> createState() => _TrailListingState();
 
-  goToTrailListing(BuildContext context) {
+  static goToTrailListing(BuildContext context) {
     Navigator.push(context, MaterialPageRoute(builder: (_) => TrailListing()));
   }
 }
@@ -158,7 +158,8 @@ class _TrailListingState extends State<TrailListing> {
                             future: trailListing,
                             builder: (BuildContext context,
                                 AsyncSnapshot<dynamic> snapshot) {
-                              if(snapshot.connectionState == ConnectionState.done){
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
                                 return Flexible(
                                   child: ListView.separated(
                                     padding: EdgeInsets.zero,
@@ -166,7 +167,9 @@ class _TrailListingState extends State<TrailListing> {
                                     itemCount: trailList!.length,
                                     shrinkWrap: true,
                                     itemBuilder: (context, index) {
-                                      return TrailListingCard(trailList: trailList![index],);
+                                      return TrailListingCard(
+                                        trailList: trailList![index],
+                                      );
                                     },
                                     separatorBuilder:
                                         (BuildContext context, int index) {
@@ -182,12 +185,12 @@ class _TrailListingState extends State<TrailListing> {
                                   //   return Text("Something Went Wrong");
                                   // }
                                 );
-                              }else if(snapshot.connectionState == ConnectionState.waiting){
+                              } else if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
                                 return CircularProgressIndicator();
-                              }else{
+                              } else {
                                 return Text("Something Went Wrong");
                               }
-
                             },
                           ),
                           const SizedBox(
@@ -209,13 +212,13 @@ class _TrailListingState extends State<TrailListing> {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
-                  // AddAssignedUserWidget().goToAddAssignedUser(context,null,false);
+                  AddTrail.goToAddTrail(context, false, null);
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: ColorParser().hexToColor("#1A7C52"),
                     elevation: 0),
                 child: const Text(
-                  "Add User",
+                  "Add Trail",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,

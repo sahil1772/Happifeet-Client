@@ -109,7 +109,7 @@ class _AddLocationState extends State<AddLocation>
 
   double HEADER_HEIGHT = 5;
 
-  Future<LocationDataModel?>? apiResponse=null;
+  Future<LocationDataModel?>? apiResponse;
 
   @override
   void initState() {
@@ -2198,6 +2198,7 @@ class _AddLocationState extends State<AddLocation>
     if (park_id == null) {
       return Future.value(null);
     }
+
     Map<String, String> params = {"park_id": park_id};
     if (languages.keys.elementAt(_controller!.index) != "en") {
       params.addAll({
