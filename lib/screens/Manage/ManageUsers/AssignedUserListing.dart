@@ -20,7 +20,7 @@ class AssignedUserListing extends StatefulWidget {
 
   goToAssignedUserListing(BuildContext context,Function? callback) {
     Navigator.push(context,
-        MaterialPageRoute(builder: (_) => const AssignedUserListing())).then((value) => callback!());
+        MaterialPageRoute(builder: (_) => const AssignedUserListing()));
   }
 }
 
@@ -170,7 +170,13 @@ class _AssignedUserListingState extends State<AssignedUserListing> {
                                     itemCount: assignedUserdata!.length,
                                     shrinkWrap: true,
                                     itemBuilder: (context, index) {
-                                      return  UserListingCard(assignedUserdata: assignedUserdata![index],);
+                                      return  UserListingCard(assignedUserdata: assignedUserdata![index],refreshCallback:(){
+                                        log("CARD REFRESHED ON EDIT");
+                                       setState(() {
+                                         userListing = getAssignedUserListing();
+                                       });
+
+                                      });
                                     },
                                     separatorBuilder:
                                         (BuildContext context, int index) {
@@ -207,7 +213,13 @@ class _AssignedUserListingState extends State<AssignedUserListing> {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
-                  AddAssignedUserWidget().goToAddAssignedUser(context,null,false);
+                  AddAssignedUserWidget().goToAddAssignedUser(context,null,false,(){
+                    log("UPDATE USER LISTING ON BACK!!");
+                   setState(() {
+                     userListing = getAssignedUserListing();
+                   });
+
+                  });
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: ColorParser().hexToColor("#1A7C52"),

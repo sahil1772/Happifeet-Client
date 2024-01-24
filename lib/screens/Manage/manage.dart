@@ -7,11 +7,12 @@ import 'package:happifeet_client_app/screens/Manage/ManageAnnouncements/Announce
 import 'package:happifeet_client_app/screens/Manage/ManageClients/ClientListing.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageLocation/LocationListing.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageSMTP/manage_smtp_details.dart';
-import 'package:happifeet_client_app/screens/Trails/AddTrail.dart';
+import 'package:happifeet_client_app/screens/Manage/ManageTrails/TrailListing.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
 
 import '../../components/HappiFeetAppBar.dart';
 import '../../utils/ColorParser.dart';
+import 'ManageTrails/AddTrail.dart';
 import 'ManageUsers/AssignedUserListing.dart';
 
 class ManageWidget extends StatefulWidget {
@@ -180,7 +181,7 @@ class _ManageWidgetState extends State<ManageWidget> {
                               InkWell(
                                 onTap: () {
                                   const AssignedUserListing()
-                                      .goToAssignedUserListing(context);
+                                      .goToAssignedUserListing(context,null);
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -375,8 +376,7 @@ class _ManageWidgetState extends State<ManageWidget> {
                               if (istrail!)
                                 InkWell(
                                   onTap: () {
-                                    AddTrail
-                                        .goToAddTrail(context,true,"41");
+                                   TrailListing().goToTrailListing(context);
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(

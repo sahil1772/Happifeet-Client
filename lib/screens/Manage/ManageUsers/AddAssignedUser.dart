@@ -19,11 +19,21 @@ class AddAssignedUserWidget extends StatefulWidget {
   String? id;
   bool? forEdit;
 
-  AddAssignedUserWidget({Key? key,this.id,this.forEdit});
+  AddAssignedUserWidget({Key? key, this.id, this.forEdit});
 
-  goToAddAssignedUser(BuildContext context,  String? id,bool forEdit) {
+  goToAddAssignedUser(
+      BuildContext context, String? id, bool forEdit, Function? callback) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (_) => AddAssignedUserWidget(id: id,forEdit: forEdit,)));
+        context,
+        MaterialPageRoute(
+            builder: (_) => AddAssignedUserWidget(
+                  id: id,
+                  forEdit: forEdit,
+                ))).then((value) {
+                  log("callback called in goToAddAssignedUser!");
+                  callback!();
+    }
+    );
   }
 
   @override
@@ -45,52 +55,53 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
   @override
   void initState() {
     // TODO: implement initState
-    if(widget.forEdit!){
+
+    if (widget.forEdit!) {
       log("FOR EDIT");
       getUserDataForEdit();
-    }else{
+    } else {
+      submitAssignedUserData.status = "N";
       log("FOR ADDD");
     }
 
     log("ID IN ADD ASSIGNED USER ${widget.id}");
 
-
     super.initState();
   }
 
-  Future<void> getUserDataForEdit()async {
-    var response = await ApiFactory().getUserService().editUserData("edit_assigned_users", widget.id!);
+  Future<void> getUserDataForEdit() async {
+    var response = await ApiFactory()
+        .getUserService()
+        .editUserData("edit_assigned_users", widget.id!);
     dataForEditing = response;
     log("DATA FOR EDIT --> ${dataForEditing!.toJson()}");
     setInitialData();
-
   }
 
-  setInitialData(){
-    if(dataForEditing!.name != null){
+  setInitialData() {
+    if (dataForEditing!.name != null) {
       userNameController.text = dataForEditing!.name!;
     }
-    if(dataForEditing!.contactno != null){
+    if (dataForEditing!.contactno != null) {
       contactController.text = dataForEditing!.contactno!;
     }
-    if(dataForEditing!.emailid != null){
+    if (dataForEditing!.emailid != null) {
       emailController.text = dataForEditing!.emailid!;
     }
-    if(dataForEditing!.note_remark != null){
+    if (dataForEditing!.note_remark != null) {
       remarkController.text = dataForEditing!.note_remark!;
     }
-    if(dataForEditing!.is_active != null){
-    if(dataForEditing!.is_active == "Y"){
-      setState(() {
-        isActive = true;
-      });
-    }else{
-      setState(() {
-        isActive = false;
-      });
+    if (dataForEditing!.is_active != null) {
+      if (dataForEditing!.is_active == "Y") {
+        setState(() {
+          isActive = true;
+        });
+      } else {
+        setState(() {
+          isActive = false;
+        });
+      }
     }
-    }
-
 
     //
     //   submitAssignedUserData.user_id = await SharedPref.instance.getUserId();
@@ -99,7 +110,6 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
     // submitAssignedUserData.email_address =  emailController.text ;
     // submitAssignedUserData.note =  remarkController.text;
     // submitAssignedUserData.status = isActive.toString();
-
   }
 
   getEmailError() {
@@ -109,7 +119,6 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
   setEmailError(value) {
     emailerror = value;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -189,7 +198,8 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                             children: [
                                               Text(
                                                 " *",
-                                                style: TextStyle(color: Colors.red),
+                                                style: TextStyle(
+                                                    color: Colors.red),
                                               ),
                                             ],
                                           ),
@@ -202,14 +212,15 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                   ),
                                   TextFormField(
                                       controller: userNameController,
-                                      validator: (value){
-                                        if(value!.isEmpty){
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
                                           return 'Please enter value for this field';
                                         }
                                       },
                                       onChanged: (value) {
                                         userNameController.text = value;
-                                        submitAssignedUserData.client_name = value;
+                                        submitAssignedUserData.client_name =
+                                            value;
                                       },
                                       decoration: InputDecoration(
                                         filled: true,
@@ -220,13 +231,15 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                             fontWeight: FontWeight.w400),
                                         // errorText: getEmailError(),
                                         focusedBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                             borderSide: BorderSide(
                                                 color: ColorParser()
                                                     .hexToColor("#D7D7D7"),
                                                 width: 1)),
                                         enabledBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                             borderSide: BorderSide(
                                                 width: 1,
                                                 color: ColorParser()
@@ -254,15 +267,17 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                   ),
                                   TextFormField(
                                       controller: contactController,
-                                      validator: (value){
-                                        if(value!.isEmpty){
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
                                           return 'Please enter value for this field';
                                         }
                                       },
                                       onChanged: (value) {
                                         contactController.text = value;
-                                        submitAssignedUserData.contact_no = value;
+                                        submitAssignedUserData.contact_no =
+                                            value;
                                       },
+                                      keyboardType: TextInputType.number,
                                       decoration: InputDecoration(
                                         filled: true,
                                         fillColor: Colors.white,
@@ -272,13 +287,15 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                             fontWeight: FontWeight.w400),
                                         // errorText: getEmailError(),
                                         focusedBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                             borderSide: BorderSide(
                                                 color: ColorParser()
                                                     .hexToColor("#D7D7D7"),
                                                 width: 1)),
                                         enabledBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                             borderSide: BorderSide(
                                                 width: 1,
                                                 color: ColorParser()
@@ -306,21 +323,21 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                   ),
                                   TextFormField(
                                       controller: emailController,
-                                      validator: (value){
-                                        if(value!.isEmpty){
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
                                           return 'Please enter value for this field';
                                         }
                                       },
                                       onChanged: (value) {
-                                        setEmailError(EmailValidator.validate(value)
-                                            ? null
-                                            : "Please enter valid email");
+                                        setEmailError(
+                                            EmailValidator.validate(value)
+                                                ? null
+                                                : "Please enter valid email");
 
                                         emailController.text = value;
-                                        submitAssignedUserData.email_address = value;
-                                        setState(() {
-
-                                        });
+                                        submitAssignedUserData.email_address =
+                                            value;
+                                        setState(() {});
                                       },
                                       decoration: InputDecoration(
                                         filled: true,
@@ -331,13 +348,15 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                             fontWeight: FontWeight.w400),
                                         errorText: getEmailError(),
                                         focusedBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                             borderSide: BorderSide(
                                                 color: ColorParser()
                                                     .hexToColor("#D7D7D7"),
                                                 width: 1)),
                                         enabledBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                             borderSide: BorderSide(
                                                 width: 1,
                                                 color: ColorParser()
@@ -365,8 +384,8 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                   ),
                                   TextFormField(
                                       controller: remarkController,
-                                      validator: (value){
-                                        if(value!.isEmpty){
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
                                           return 'Please enter value for this field';
                                         }
                                       },
@@ -384,13 +403,15 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                             fontWeight: FontWeight.w400),
                                         // errorText: getEmailError(),
                                         focusedBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                             borderSide: BorderSide(
                                                 color: ColorParser()
                                                     .hexToColor("#D7D7D7"),
                                                 width: 1)),
                                         enabledBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(12),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                             borderSide: BorderSide(
                                                 width: 1,
                                                 color: ColorParser()
@@ -421,7 +442,7 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                               Padding(
                                 padding: const EdgeInsets.only(right: 250),
                                 child: FlutterSwitch(
-                                  padding: 6,
+                                    padding: 6,
                                     width: 110,
                                     height: 30,
                                     activeColor: Colors.green,
@@ -433,9 +454,9 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                     onToggle: (value) {
                                       setState(() {
                                         log("toggle ${value}");
-                                        if(value){
+                                        if (value) {
                                           submitAssignedUserData.status = "Y";
-                                        }else{
+                                        } else {
                                           submitAssignedUserData.status = "N";
                                         }
                                         isActive = value;
@@ -452,66 +473,69 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                 width: 170,
                                 child: ElevatedButton(
                                   onPressed: () async {
-
-                                  if(widget.forEdit!){
-                                    /** IF UPDATING NEW USER **/
-                                    log("API CALLED FOR UPDATE USER ${widget.id}");
-                                    dataForUpdation!.id = widget.id;
-                                    dataForUpdation!.client_name = userNameController.text;
-                                    dataForUpdation!.contact_no = contactController.text;
-                                    dataForUpdation!.email_address = emailController.text;
-                                    dataForUpdation!.note = remarkController.text;
-                                    if(isActive){
-                                      dataForUpdation!.status = "Y";
-                                    }else{
-                                      dataForUpdation!.status = "N";
-                                    }
-
-                                    var response = await ApiFactory().getUserService().updateUserData(dataForUpdation!);
-                                    if(response.status == "1"){
-                                      log("USER DATA UPDATED SUCCESSFULLY!");
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("User data updated successfully")));
-                                      Future.delayed(
-                                          Duration(seconds: 2), () {
-                                       Navigator.pop(context,(){
-                                         setState(() {
-
-                                         });
-                                       });
-                                      });
-                                    }else{
-                                      log("USER DATA UPDATION FAILED");
-                                    }
-
-                                  }else{
-                                    /** IF ADDING NEW USER **/
-
-                                    log("API CALLED FOR ADD USER");
-                                    if(_formkey.currentState!.validate()){
-
-                                      var response = await ApiFactory().getUserService().submitUserData(submitAssignedUserData);
-                                      if(response.status == "1"){
-                                        log("USER DATA SUBMIT SUCCESS");
-                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Data Submitted Successfully")));
-
-                                        Future.delayed(
-                                            Duration(seconds: 3), () {
-                                          Navigator.pop(context,(){
-                                            setState(() {
-
-                                            });
-                                          });
-                                        });
-
-                                      }else{
-                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please enter required field")));
+                                    if (widget.forEdit!) {
+                                      /** IF UPDATING NEW USER **/
+                                      log("API CALLED FOR UPDATE USER ${widget.id}");
+                                      dataForUpdation!.id = widget.id;
+                                      dataForUpdation!.client_name =
+                                          userNameController.text;
+                                      dataForUpdation!.contact_no =
+                                          contactController.text;
+                                      dataForUpdation!.email_address =
+                                          emailController.text;
+                                      dataForUpdation!.note =
+                                          remarkController.text;
+                                      if (isActive) {
+                                        dataForUpdation!.status = "Y";
+                                      } else {
+                                        dataForUpdation!.status = "N";
                                       }
 
+                                      var response = await ApiFactory()
+                                          .getUserService()
+                                          .updateUserData(dataForUpdation!);
+                                      if (response.status == "1") {
+                                        log("USER DATA UPDATED SUCCESSFULLY!");
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content: Text(
+                                                    "User data updated successfully")));
+                                        Future.delayed(Duration(seconds: 2),
+                                            () {
+                                              Navigator.pop(context, [true]);
+                                        });
+                                      } else {
+                                        log("USER DATA UPDATION FAILED");
+                                      }
+                                    } else {
+                                      /** IF ADDING NEW USER **/
+
+                                      log("API CALLED FOR ADD USER");
+                                      if (_formkey.currentState!.validate()) {
+
+                                        var response = await ApiFactory()
+                                            .getUserService()
+                                            .submitUserData(
+                                                submitAssignedUserData);
+                                        if (response.status == "1") {
+                                          log("USER DATA SUBMIT SUCCESS");
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: Text(
+                                                      "Data Submitted Successfully")));
+
+                                          Future.delayed(Duration(seconds: 3),
+                                              () {
+                                                Navigator.pop(context, true);
+                                          });
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: Text(
+                                                      "Please enter required field")));
+                                        }
+                                      }
                                     }
-
-
-                                  }
-
 
                                     // AddLocation().gotoAddLocation(context);
                                   },
@@ -534,8 +558,6 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                               SizedBox(
                                 height: 50,
                               ),
-
-
                             ],
                           ),
                         ),

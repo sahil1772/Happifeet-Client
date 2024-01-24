@@ -8,22 +8,21 @@ import 'package:happifeet_client_app/screens/Manage/ManageClients/ClientListing.
 import 'package:loader_overlay/loader_overlay.dart';
 
 import '../model/ClientUsers/ClientUserData.dart';
+import '../model/Trails/TrailListingData.dart';
 import '../network/ApiFactory.dart';
 import '../utils/ColorParser.dart';
 
-class ClientListingCard extends StatefulWidget{
-  ClientUserData? clientUserData;
+class TrailListingCard extends StatefulWidget{
+  TrailListingData? trailList;
 
-  Function? refreshCallback;
-
-  ClientListingCard({Key? key,this.clientUserData,this.refreshCallback});
+  TrailListingCard({Key? key,this.trailList});
 
   @override
-  State<ClientListingCard> createState() => _ClientListingCardState();
-  
+  State<TrailListingCard> createState() => _TrailListingCardState();
+
 }
 
-class _ClientListingCardState extends State<ClientListingCard>{
+class _TrailListingCardState extends State<TrailListingCard>{
   bool isEdit = true;
   @override
   Widget build(BuildContext context) {
@@ -65,7 +64,7 @@ class _ClientListingCardState extends State<ClientListingCard>{
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            widget.clientUserData!.client_name!,
+                            widget.trailList!.trail_name!,
                             // overflow: TextOverflow.ellipsis,
                             maxLines:1,
                             style: TextStyle(
@@ -91,12 +90,12 @@ class _ClientListingCardState extends State<ClientListingCard>{
                             padding: const EdgeInsets.symmetric(vertical: 1.0),
                             child: Row(
                               children: [
-                                SvgPicture.asset("assets/images/manageUser/mail.svg"),
+                                SvgPicture.asset("assets/images/trails/clock.svg"),
                                 const SizedBox(
                                   width: 15,
                                 ),
-                                 Text(
-                                  widget.clientUserData!.email_address!,
+                                Text(
+                                  widget.trailList!.opening_time!,
                                   softWrap: true,
                                   maxLines: 1,
                                   overflow: TextOverflow.clip,
@@ -112,12 +111,12 @@ class _ClientListingCardState extends State<ClientListingCard>{
                             padding: const EdgeInsets.symmetric(vertical: 1.0),
                             child: Row(
                               children: [
-                                SvgPicture.asset("assets/images/manageUser/call.svg"),
+                                SvgPicture.asset("assets/images/trails/clock.svg"),
                                 const SizedBox(
                                   width: 15,
                                 ),
-                                 Text(
-                                  widget.clientUserData!.contact_no!,
+                                Text(
+                                  widget.trailList!.opening_time2!,
                                   softWrap: true,
                                   maxLines: 1,
                                   overflow: TextOverflow.clip,
@@ -129,13 +128,19 @@ class _ClientListingCardState extends State<ClientListingCard>{
                           const SizedBox(
                             height: 15,
                           ),
-                          const Padding(
+                           Padding(
                             padding: EdgeInsets.symmetric(vertical: 1.0),
                             child: Row(
                               children: [
 
                                 Text(
-                                  'Note* Lorem ipsum dolor sit amet',
+                                  "Distance : ",
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                Text(
+                                  widget.trailList!.distance!,
                                   softWrap: true,
                                   maxLines: 1,
                                   overflow: TextOverflow.clip,
@@ -173,12 +178,9 @@ class _ClientListingCardState extends State<ClientListingCard>{
                     Divider(color: Colors.grey.shade200),
                     const SizedBox(height: 8,),
                     InkWell(
-                      onTap: () {
-                        AddClientWidget().gotoAddClientPage(context,widget.clientUserData!.id, isEdit,(){
-                          print("CARD VARUN ALOO BHAVAAAAA");
-                          widget.refreshCallback!();
-                        });
-                      },
+                        onTap: () {
+
+                        },
                         child: SvgPicture.asset("assets/images/location/editing.svg")),
                     const SizedBox(height: 8,),
                     Divider(color: Colors.grey.shade200),
@@ -195,23 +197,23 @@ class _ClientListingCardState extends State<ClientListingCard>{
                                   actions: [
                                     TextButton(
                                         onPressed: () async {
-                                          var response = await ApiFactory().getClientService().deleteClientUserData("delete_client_user", widget.clientUserData!.id!);
-                                          if(response.status == "1"){
-                                            log("Client User Deleted Successfully");
-                                            Navigator.of(context, rootNavigator: true).pop();
-                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Client User Deleted Successfully")));
-                                            Future.delayed(
-                                                Duration(seconds: 2), () {
-                                             Navigator.pop(context,(){
-                                               setState(() {
-
-                                               });
-                                             });
-                                            });
-
-                                          }else{
-                                            log("Error in client user delete");
-                                          }
+                                          // var response = await ApiFactory().getClientService().deleteClientUserData("delete_client_user", widget.clientUserData!.id!);
+                                          // if(response.status == "1"){
+                                          //   log("Client User Deleted Successfully");
+                                          //   Navigator.of(context, rootNavigator: true).pop();
+                                          //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Client User Deleted Successfully")));
+                                          //   Future.delayed(
+                                          //       Duration(seconds: 2), () {
+                                          //     Navigator.pop(context,(){
+                                          //       setState(() {
+                                          //
+                                          //       });
+                                          //     });
+                                          //   });
+                                          //
+                                          // }else{
+                                          //   log("Error in client user delete");
+                                          // }
 
                                         }, child: Text("Yes")),
                                     TextButton(

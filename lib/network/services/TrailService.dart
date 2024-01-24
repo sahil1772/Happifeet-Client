@@ -4,10 +4,12 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:happifeet_client_app/model/BaseResponse.dart';
 
-import 'package:happifeet_client_app/model/TrailPayload.dart';
+import 'package:happifeet_client_app/model/Trails/TrailPayload.dart';
 import 'package:happifeet_client_app/network/interface/InterfaceTrails.dart';
 import 'package:happifeet_client_app/network/services/ApiService.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
+
+import '../../model/Trails/TrailListingData.dart';
 
 class TrailService implements InterfaceTrails {
   @override
@@ -89,13 +91,15 @@ class TrailService implements InterfaceTrails {
     }
   }
 
+
+  /** GET TRAIL DATA FOR EDIT **/
   @override
-  Future<TrailPayload> getTrailDetails(String? trailId) async {
+  Future<TrailPayload> getTrailDetails(String? client_id) async {
     try {
       var map ={
         'task': "edit_trail",
-        'client_id': await SharedPref.instance.getUserId(),
-        'trail_id': trailId,
+        'client_id': await SharedPref.instance.getClientId(),
+
       };
 
       var response = await NetworkClient()
@@ -115,4 +119,40 @@ class TrailService implements InterfaceTrails {
       throw error;
     }
   }
+
+
+  /** GET TRAIL LISTING **/
+  @override
+  Future<List<TrailListingData>> getTrailListing(String? client_id) async {
+    try {
+      var map ={
+        'task': "list_trail",
+        'client_id': client_id,
+
+      };
+
+      var response = await NetworkClient()
+          .dio
+          .post(base_url, queryParameters:map);
+
+      if (response.statusCode == 200) {
+
+        List<TrailListingData> data = List<TrailListingData>.from(json
+            .decode(response.data)
+            .map((model) => TrailListingData.fromJson(model)));
+
+
+        return data;
+      } else {
+        log("response other than 200 for getTrailListing");
+        throw "response other than 200 for getTrailListing";
+      }
+    } on DioException catch (error) {
+      log("EXCEPTION IN getTrailListing ${error.response}");
+      throw error;
+    }
+  }
+
+
+
 }

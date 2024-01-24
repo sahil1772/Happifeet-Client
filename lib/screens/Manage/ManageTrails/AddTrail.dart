@@ -7,7 +7,7 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'package:happifeet_client_app/components/HappiFeetAppBar.dart';
 import 'package:happifeet_client_app/i18n/locale_keys.g.dart';
 import 'package:happifeet_client_app/model/BaseResponse.dart';
-import 'package:happifeet_client_app/model/TrailPayload.dart';
+import 'package:happifeet_client_app/model/Trails/TrailPayload.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
