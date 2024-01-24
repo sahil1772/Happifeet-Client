@@ -151,7 +151,7 @@ class _AddLocationState extends State<AddLocation>
       _controller!.addListener(() {
         setState(() {
 
-          apiResponse = getLocationData(widget.parkId!);
+          apiResponse = getLocationData(widget.parkId);
           // context.setLocale(Locale("en"));
           log("CONTROLLER INDEX ${languages.keys.elementAt(_controller!.index)}");
           if (_controller!.indexIsChanging) {
@@ -193,7 +193,7 @@ class _AddLocationState extends State<AddLocation>
         });
       }
 
-      apiResponse = getLocationData(widget.parkId!);
+      apiResponse = getLocationData(widget.parkId);
       setState(() {
         context.setLocale(Locale(languages.keys.elementAt(0)));
       });

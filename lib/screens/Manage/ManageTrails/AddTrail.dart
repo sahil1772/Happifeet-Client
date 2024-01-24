@@ -20,9 +20,9 @@ class AddTrail extends StatefulWidget {
   bool? isEdit;
   String? trailId;
 
-  static goToAddTrail(BuildContext context, bool? isEdit, String? trailId) {
+  static goToAddTrail(BuildContext context, bool? isEdit, String? trailId,Function? refreshCallback) {
     Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
-        builder: (_) => AddTrail(isEdit: isEdit, trailId: trailId)));
+        builder: (_) => AddTrail(isEdit: isEdit, trailId: trailId))).then((value) => refreshCallback!());
   }
 
   @override
@@ -55,7 +55,7 @@ class _AddTrailState extends State<AddTrail>
   //DISPLAY VARIABLES
   double? labelTextSize = 12.0;
   double? fontLabelTextSize = 14.0;
-  double HEADER_HEIGHT = 5.0;
+
 
   //SCOPED CONTEXT
   BuildContext? buildContext;
@@ -133,14 +133,15 @@ class _AddTrailState extends State<AddTrail>
 
   @override
   Widget build(BuildContext context) {
+    double HEADER_HEIGHT = 4;
     buildContext = context;
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        extendBodyBehindAppBar: true,
-        appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false)
-            .getAppBar(context),
-        body: Stack(
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      extendBodyBehindAppBar: true,
+      appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false)
+          .getAppBar(context),
+      body: SafeArea(top: false,
+        child: Stack(
           children: [
             Container(
                 height: DeviceDimensions.getHeaderSize(context, HEADER_HEIGHT),
@@ -155,13 +156,7 @@ class _AddTrailState extends State<AddTrail>
                   ],
                 )),
                 child: Container(
-                  margin: EdgeInsets.only(
-                      top: HappiFeetAppBar(
-                              isCitiyList: false, IsDashboard: false)
-                          .getAppBar(context)
-                          .preferredSize
-                          .height,
-                      bottom: DeviceDimensions.BOTTOMSHEET_TOP_MARGIN),
+                  margin: DeviceDimensions.getHeaderEdgeInsets(context),
                   child: const Center(
                     child: Text(
                       "Add Trail",
@@ -1188,7 +1183,7 @@ class _AddTrailState extends State<AddTrail>
         trailDistance: trailDistanceController.text,
         trailName: trailNameController.text,
         trailDifficulty: selectedDifficultyID,
-        status: isChecked ? "1" : "0",
+        status: isChecked ? "Y" : "N",
         trailOpeningTime: trailOpeningController.text,
         trailOpeningTime2: trailOpening2Controller.text);
 

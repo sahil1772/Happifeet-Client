@@ -1,9 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageTrails/AddTrail.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
+import 'package:happifeet_client_app/utils/DeviceDimensions.dart';
 
 import '../../../components/HappiFeetAppBar.dart';
 import '../../../components/TrailListingCard.dart';
@@ -22,7 +21,7 @@ class TrailListing extends StatefulWidget {
 }
 
 class _TrailListingState extends State<TrailListing> {
-  Future? trailListing;
+  Future<List<TrailListingData>?>? trailListing;
   List<TrailListingData>? trailList;
 
   @override
@@ -32,177 +31,184 @@ class _TrailListingState extends State<TrailListing> {
     super.initState();
   }
 
-  Future<void> getTrailListing() async {
-    var response = await ApiFactory()
+  Future<List<TrailListingData>> getTrailListing() async {
+    // var response = await ApiFactory()
+    //     .getTrailService()
+    //     .getTrailListing(await SharedPref.instance.getUserId());
+    // trailList = response;
+    // log("TRAIL LISTING DATA ${trailList!.first}");
+    return ApiFactory()
         .getTrailService()
         .getTrailListing(await SharedPref.instance.getUserId());
-    trailList = response;
-    log("TRAIL LISTING DATA ${trailList!.first}");
   }
 
   @override
   Widget build(BuildContext context) {
+    double HEADER_HEIGHT = 4.0;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
       appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false)
           .getAppBar(context),
-      body: Stack(
-        children: [
-          Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  ColorParser().hexToColor("#34A846"),
-                  ColorParser().hexToColor("#83C03D")
-                ],
-              )),
-              child: Column(children: [
-                // SizedBox(height: 105),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height / 8),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+      body: SafeArea(
+        top: false,
+        child: Stack(
+          children: [
+            Container(
+                height: DeviceDimensions.getHeaderSize(context, HEADER_HEIGHT),
+                width: DeviceDimensions.getDeviceWidth(context),
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    ColorParser().hexToColor("#34A846"),
+                    ColorParser().hexToColor("#83C03D")
+                  ],
+                )),
+                child: Container(
+                  margin: DeviceDimensions.getHeaderEdgeInsets(context),
+                  child: const Center(
+                    child: Text(
+                      "List Trails",
+                      // "Select Location".tr(),
+                      // "Select Location".language(context),
+                      // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                )),
+            Container(
+              height:
+                  DeviceDimensions.getBottomSheetHeight(context, HEADER_HEIGHT),
+              margin: EdgeInsets.only(
+                  top: DeviceDimensions.getBottomSheetMargin(
+                      context, HEADER_HEIGHT)),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(25),
+                      topRight: Radius.circular(25)),
+                  color: Colors.white),
+              // color: Colors.white,
+              child: RefreshIndicator(
+                backgroundColor: Colors.white,
+                color: ColorParser().hexToColor("#1A7C52"),
+                onRefresh: () => getTrailListing(),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        "List Trails",
-                        // "Select Location".tr(),
-                        // "Select Location".language(context),
-                        // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500),
+                      /** Search bar **/
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 26),
+                        child: Row(
+                          children: [
+                            Flexible(
+                              child: SizedBox(
+                                height: 50,
+                                width: 400,
+                                child: TextField(
+                                    onChanged: (value) {
+                                      // filterSearchResults(value);
+                                    },
+                                    style: const TextStyle(fontSize: 16),
+                                    decoration: InputDecoration(
+                                      prefixIcon: const Icon(Icons.search),
+                                      prefixIconColor:
+                                          ColorParser().hexToColor("#1A7C52"),
+                                      labelText: 'Search',
+                                      // labelText: widget.selectedLanguage == "1"
+                                      //     ? "Search".language(context)
+                                      //     : "Search",
+                                      labelStyle: TextStyle(
+                                          color: ColorParser()
+                                              .hexToColor("#9E9E9E")),
+
+                                      focusedBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                            color: Colors.grey,
+                                            width: 1,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      enabledBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                            width: 1,
+                                            color: Colors.grey,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                    )),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      /**   listview builder     **/
+
+                      /**  TRAIL LISTING **/
+
+                      FutureBuilder<List<TrailListingData>?>(
+                        future: trailListing,
+                        builder: (BuildContext context,
+                            AsyncSnapshot<dynamic> snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            trailList = snapshot.data;
+
+                            return Flexible(
+                              child: ListView.separated(
+                                padding: EdgeInsets.zero,
+                                physics: const ScrollPhysics(),
+                                itemCount: trailList!.length,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  return TrailListingCard(
+                                    trailList: trailList![index],
+                                    callback: () {
+                                      trailListing = getTrailListing();
+                                      setState(() {});
+                                    },
+                                  );
+                                },
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
+                                  return const SizedBox(
+                                    height: 8,
+                                  );
+                                },
+                              ),
+
+                              // else if(snapshot.connectionState == ConnectionState.waiting){
+                              //   return CircularProgressIndicator();
+                              // }else{
+                              //   return Text("Something Went Wrong");
+                              // }
+                            );
+                          } else if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return CircularProgressIndicator();
+                          } else {
+                            return Text("Something Went Wrong");
+                          }
+                        },
+                      ),
+                      const SizedBox(
+                        height: 50,
                       ),
                     ],
                   ),
                 ),
-              ])),
-          DraggableScrollableSheet(
-              initialChildSize: 0.8,
-              minChildSize: 0.8,
-              maxChildSize: 0.8,
-              builder:
-                  (BuildContext context, ScrollController scrollController) {
-                return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(25),
-                          topRight: Radius.circular(25)),
-                      color: Colors.white),
-                  // color: Colors.white,
-                  child: RefreshIndicator(
-                    backgroundColor: Colors.white,
-                    color: ColorParser().hexToColor("#1A7C52"),
-                    onRefresh: () => getTrailListing(),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          /** Search bar **/
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 26),
-                            child: Row(
-                              children: [
-                                Flexible(
-                                  child: SizedBox(
-                                    height: 50,
-                                    width: 400,
-                                    child: TextField(
-                                        onChanged: (value) {
-                                          // filterSearchResults(value);
-                                        },
-                                        style: const TextStyle(fontSize: 16),
-                                        decoration: InputDecoration(
-                                          prefixIcon: const Icon(Icons.search),
-                                          prefixIconColor: ColorParser()
-                                              .hexToColor("#1A7C52"),
-                                          labelText: 'Search',
-                                          // labelText: widget.selectedLanguage == "1"
-                                          //     ? "Search".language(context)
-                                          //     : "Search",
-                                          labelStyle: TextStyle(
-                                              color: ColorParser()
-                                                  .hexToColor("#9E9E9E")),
-
-                                          focusedBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                color: Colors.grey,
-                                                width: 1,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          enabledBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                width: 1,
-                                                color: Colors.grey,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                        )),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          /**   listview builder     **/
-
-                          /**  TRAIL LISTING **/
-
-                          FutureBuilder(
-                            future: trailListing,
-                            builder: (BuildContext context,
-                                AsyncSnapshot<dynamic> snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.done) {
-                                return Flexible(
-                                  child: ListView.separated(
-                                    padding: EdgeInsets.zero,
-                                    physics: const ScrollPhysics(),
-                                    itemCount: trailList!.length,
-                                    shrinkWrap: true,
-                                    itemBuilder: (context, index) {
-                                      return TrailListingCard(
-                                        trailList: trailList![index],
-                                      );
-                                    },
-                                    separatorBuilder:
-                                        (BuildContext context, int index) {
-                                      return const SizedBox(
-                                        height: 8,
-                                      );
-                                    },
-                                  ),
-
-                                  // else if(snapshot.connectionState == ConnectionState.waiting){
-                                  //   return CircularProgressIndicator();
-                                  // }else{
-                                  //   return Text("Something Went Wrong");
-                                  // }
-                                );
-                              } else if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return CircularProgressIndicator();
-                              } else {
-                                return Text("Something Went Wrong");
-                              }
-                            },
-                          ),
-                          const SizedBox(
-                            height: 50,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              })
-        ],
+              ),
+            )
+          ],
+        ),
       ),
       bottomSheet: Container(
         height: 50,
@@ -212,7 +218,10 @@ class _TrailListingState extends State<TrailListing> {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
-                  AddTrail.goToAddTrail(context, false, null);
+                  AddTrail.goToAddTrail(context, false, null, () {
+                    trailListing = getTrailListing();
+                    setState(() {});
+                  });
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: ColorParser().hexToColor("#1A7C52"),

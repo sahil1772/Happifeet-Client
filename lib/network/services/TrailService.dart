@@ -49,20 +49,22 @@ class TrailService implements InterfaceTrails {
 
       var formData = FormData.fromMap(map, ListFormat.multiCompatible);
 
-      if (trailImage != null)
+      if (trailImage != null) {
         formData.files.add(MapEntry(
-            "parkImages", await MultipartFile.fromFile(trailImage!.path)));
+            "trailListingImage", await MultipartFile.fromFile(trailImage.path)));
+      }
 
-      if (galleryImages!.length > 0)
-        for (var file in galleryImages!) {
+      if (galleryImages!.isNotEmpty) {
+        for (var file in galleryImages) {
           formData.files.add(
-            MapEntry("galleryImages[${galleryImages!.indexOf(file)}]",
+            MapEntry("trailDetailImages[${galleryImages.indexOf(file)}]",
                 await MultipartFile.fromFile(file.path)),
           );
         }
+      }
 
       var response =
-          await NetworkClient().dio.post(base_url, data: FormData.fromMap(map));
+          await NetworkClient().dio.post(base_url, data: formData);
 
       if (response.statusCode == 200) {
         BaseResponse data = BaseResponse.fromJson(json.decode(response.data!));
@@ -200,6 +202,35 @@ class TrailService implements InterfaceTrails {
       }
     } on DioException catch (error) {
       log("EXCEPTION IN getTrailListing ${error.response}");
+      throw error;
+    }
+  }
+
+  @override
+  Future<BaseResponse> deleteTrail(String? trailId) async {
+    try {
+      var map ={
+        'task': "delete_trail",
+        'trail_id': trailId,
+
+      };
+
+      var response = await NetworkClient()
+          .dio
+          .post(base_url, queryParameters:map);
+
+      if (response.statusCode == 200) {
+
+       BaseResponse response1=  BaseResponse.fromJson(json.decode(response.data!));
+
+
+        return response1 ;
+      } else {
+        log("response other than 200 for deleteTrail");
+        throw "response other than 200 for deleteTrail";
+      }
+    } on DioException catch (error) {
+      log("EXCEPTION IN deleteTrail ${error.response}");
       throw error;
     }
   }

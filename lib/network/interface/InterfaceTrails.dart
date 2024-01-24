@@ -7,6 +7,8 @@ import '../../model/Trails/TrailListingData.dart';
 abstract class InterfaceTrails{
   Future<List<TrailPayload>> getTrails();
 
+  Future<BaseResponse> deleteTrail(String? trailId);
+
   Future<BaseResponse> submitTrailData(TrailPayload payload,XFile? trailImage,List<XFile>? galleryImages);
 
   Future<BaseResponse> updateTrailData(TrailPayload payload,XFile? trailImage,List<XFile>? galleryImages);
