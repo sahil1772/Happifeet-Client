@@ -211,7 +211,7 @@ class _ManageWidgetState extends State<ManageWidget> {
                               if (isAnnouncement!)
                                 InkWell(
                                   onTap: () {
-                                    AnnouncementListingWidget()
+                                    AnnouncementListingWidget
                                         .gotoAnnouncementListingPage(context);
                                   },
                                   child: Container(

@@ -1,8 +1,6 @@
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageAnnouncements/AddAnnouncement.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
@@ -12,41 +10,41 @@ import '../../../components/HappiFeetAppBar.dart';
 import '../../../model/Announcement/AnnouncementData.dart';
 import '../../../utils/ColorParser.dart';
 
-class AnnouncementListingWidget extends StatefulWidget{
-
-
-  gotoAnnouncementListingPage(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (_) => AnnouncementListingWidget()));
+class AnnouncementListingWidget extends StatefulWidget {
+  static gotoAnnouncementListingPage(BuildContext context) {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (_) => AnnouncementListingWidget()));
   }
 
-
   @override
-  State<AnnouncementListingWidget> createState() => _AnnouncementListingWidgetState();
-  
+  State<AnnouncementListingWidget> createState() =>
+      _AnnouncementListingWidgetState();
 }
 
-class _AnnouncementListingWidgetState extends State<AnnouncementListingWidget>{
+class _AnnouncementListingWidgetState extends State<AnnouncementListingWidget> {
   List<AnnouncementData> announcementlisting = [];
   List<AnnouncementData> announcementlistingTemp = [];
 
   Future? apiResponse;
+
   @override
   void initState() {
     // TODO: implement initState
     apiResponse = getAnnouncmentListing();
     super.initState();
   }
-  
+
   getAnnouncmentListing() async {
     setState(() {});
-    var response = await ApiFactory().getAnnouncementService().getAnnouncementList("getAnnoucement",await SharedPref.instance.getClientId());
-   setState(() {
-     announcementlisting = response;
-     announcementlistingTemp = response;
-   });
+    var response = await ApiFactory()
+        .getAnnouncementService()
+        .getAnnouncementList(
+            "getAnnoucement", await SharedPref.instance.getClientId());
+    setState(() {
+      announcementlisting = response;
+      announcementlistingTemp = response;
+    });
     log("DATA IN RESPONSE OF ANNOUNCMEENMT LIST ${announcementlisting!.first.toJson()}");
-
-
   }
 
   filterSearchResults(String keyword) {
@@ -67,7 +65,6 @@ class _AnnouncementListingWidgetState extends State<AnnouncementListingWidget>{
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,37 +73,33 @@ class _AnnouncementListingWidgetState extends State<AnnouncementListingWidget>{
       appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false)
           .getAppBar(context),
       body:
-      // locationDetails.isEmpty ? CircularProgressIndicator() :
-      Stack(
+          // locationDetails.isEmpty ? CircularProgressIndicator() :
+          Stack(
         children: [
           Container(
               decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      ColorParser().hexToColor("#34A846"),
-                      ColorParser().hexToColor("#83C03D")
-                    ],
-                  )),
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  ColorParser().hexToColor("#34A846"),
+                  ColorParser().hexToColor("#83C03D")
+                ],
+              )),
               child: Column(children: [
                 // SizedBox(height: 105),
                 Padding(
-                  padding: EdgeInsets.only(top: MediaQuery
-                      .of(context)
-                      .size
-                      .height / 8),
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height / 8),
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-
                         "List Announcement",
                         // "Select Location".tr(),
                         // "Select Location".language(context),
                         // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
                         style: TextStyle(
-
                             color: Colors.white,
                             fontSize: 20,
                             fontWeight: FontWeight.w500),
@@ -116,7 +109,6 @@ class _AnnouncementListingWidgetState extends State<AnnouncementListingWidget>{
                 ),
               ])),
           DraggableScrollableSheet(
-
               initialChildSize: 0.8,
               minChildSize: 0.8,
               maxChildSize: 0.8,
@@ -131,7 +123,6 @@ class _AnnouncementListingWidgetState extends State<AnnouncementListingWidget>{
                       color: Colors.white),
                   // color: Colors.white,
                   child: SingleChildScrollView(
-
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -140,7 +131,8 @@ class _AnnouncementListingWidgetState extends State<AnnouncementListingWidget>{
                           // padding: const EdgeInsets.symmetric(
                           //     horizontal: 8, vertical: 26),
 
-                          padding: const EdgeInsets.only(left: 8,top: 20,right: 8,bottom: 20),
+                          padding: const EdgeInsets.only(
+                              left: 8, top: 20, right: 8, bottom: 20),
                           child: Row(
                             children: [
                               Flexible(
@@ -164,41 +156,36 @@ class _AnnouncementListingWidgetState extends State<AnnouncementListingWidget>{
                                         //         "assets/images/comments/filter.svg")),
                                         prefixIconConstraints: BoxConstraints(
                                             minHeight: 30, minWidth: 60),
-                                        prefixIconColor: ColorParser()
-                                            .hexToColor("#1A7C52"),
+                                        prefixIconColor:
+                                            ColorParser().hexToColor("#1A7C52"),
                                         labelText: 'Search',
                                         // labelText: widget.selectedLanguage == "1"
                                         //     ? "Search".language(context)
                                         //     : "Search",
                                         labelStyle: TextStyle(
-                                            color: ColorParser().hexToColor(
-                                                "#9E9E9E")),
+                                            color: ColorParser()
+                                                .hexToColor("#9E9E9E")),
 
                                         focusedBorder: OutlineInputBorder(
                                             borderSide: const BorderSide(
                                               color: Colors.grey,
                                               width: 1,
-
                                             ),
-                                            borderRadius: BorderRadius.circular(
-                                                10)
-                                        ),
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
                                         enabledBorder: OutlineInputBorder(
                                             borderSide: const BorderSide(
                                               width: 1,
-                                              color: Colors.grey,),
-                                            borderRadius: BorderRadius.circular(
-                                                10)
-                                        ),
+                                              color: Colors.grey,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
                                       )),
                                 ),
                               ),
-
                             ],
                           ),
                         ),
-
-
 
                         /**   listview builder     **/
 
@@ -206,22 +193,27 @@ class _AnnouncementListingWidgetState extends State<AnnouncementListingWidget>{
 
                         FutureBuilder(
                           future: apiResponse,
-                          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                          builder: (BuildContext context,
+                              AsyncSnapshot<dynamic> snapshot) {
                             if (snapshot.connectionState ==
-                                ConnectionState.done){
+                                ConnectionState.done) {
                               return Flexible(
                                 child: ListView.separated(
                                   padding: EdgeInsets.zero,
-
                                   physics: const ScrollPhysics(),
                                   itemCount: announcementlisting!.length,
                                   shrinkWrap: true,
                                   itemBuilder: (context, index) {
-                                    return AnnouncementCard(announcemntData: announcementlisting![index],);
+                                    return AnnouncementCard(
+                                      announcemntData:
+                                          announcementlisting![index],
+                                    );
                                   },
-                                  separatorBuilder: (BuildContext context,
-                                      int index) {
-                                    return SizedBox(height: 8,);
+                                  separatorBuilder:
+                                      (BuildContext context, int index) {
+                                    return SizedBox(
+                                      height: 8,
+                                    );
                                   },
                                 ),
                               );
@@ -231,11 +223,11 @@ class _AnnouncementListingWidgetState extends State<AnnouncementListingWidget>{
                             } else {
                               return Text("Something Went Wrong");
                             }
-
                           },
-
                         ),
-                        SizedBox(height: 50,),
+                        SizedBox(
+                          height: 50,
+                        ),
                       ],
                     ),
                   ),
@@ -250,20 +242,25 @@ class _AnnouncementListingWidgetState extends State<AnnouncementListingWidget>{
           children: [
             Expanded(
               child: ElevatedButton(
-
                 onPressed: () {
                   // AddLocation().gotoAddLocation(context);
                   AddAnnouncementWidget().gotoAddAnnouncementPage(context);
                 },
-                style: ElevatedButton.styleFrom(backgroundColor: ColorParser().hexToColor("#1A7C52"),elevation: 0),
-                child: Text("Add Announcement",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),),
-
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: ColorParser().hexToColor("#1A7C52"),
+                    elevation: 0),
+                child: Text(
+                  "Add Announcement",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500),
+                ),
               ),
             ),
           ],
         ),
       ),
-
     );
   }
 }
