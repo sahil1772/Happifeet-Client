@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageAnnouncements/AddAnnouncement.dart';
@@ -207,6 +208,12 @@ class _AnnouncementListingWidgetState extends State<AnnouncementListingWidget> {
                                     return AnnouncementCard(
                                       announcemntData:
                                           announcementlisting![index],
+                                      callback: () {
+                                        setState(() {
+                                          context.setLocale(const Locale("en"));
+                                          apiResponse = getAnnouncmentListing();
+                                        });
+                                      },
                                     );
                                   },
                                   separatorBuilder:
@@ -244,7 +251,13 @@ class _AnnouncementListingWidgetState extends State<AnnouncementListingWidget> {
               child: ElevatedButton(
                 onPressed: () {
                   // AddLocation().gotoAddLocation(context);
-                  AddAnnouncementWidget().gotoAddAnnouncementPage(context);
+                  AddAnnouncementWidget.gotoAddAnnouncementPage(
+                      context, false, null, () {
+                    setState(() {
+                      context.setLocale(const Locale("en"));
+                      apiResponse = getAnnouncmentListing();
+                    });
+                  });
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: ColorParser().hexToColor("#1A7C52"),

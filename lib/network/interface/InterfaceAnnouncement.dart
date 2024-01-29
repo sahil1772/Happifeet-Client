@@ -9,5 +9,7 @@ abstract class InterfaceAnnouncement {
 
   Future<BaseResponse> submitAnnouncementDetails(AnnouncementData data,XFile? announcmentImage);
 
-  Future<BaseResponse> submitOtherLanguageAnnouncementDetails(AnnouncementData data);
+
+  Future<AnnouncementData?>? getAnnouncementDetails(String? announcementId);
+
 }

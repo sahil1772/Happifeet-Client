@@ -51,18 +51,30 @@ class AnnouncementService implements InterfaceAnnouncement {
 
   /** Submit announcement details **/
   @override
-  Future<BaseResponse> submitAnnouncementDetails(AnnouncementData data,XFile? announcmentImage) async {
+  Future<BaseResponse> submitAnnouncementDetails(
+      AnnouncementData data, XFile? announcmentImage) async {
     try {
-      var map = data.toJson();
+      Map<String,dynamic> map = {};
 
       map.addAll({
         "task": "add_announcement",
-        "client_id": await SharedPref.instance.getUserId()
+        "client_user_id": await SharedPref.instance.getUserId(),
+        "client_id": await SharedPref.instance.getClientId(),
+        "title": data.title,
+        "description": data.description,
       });
+
+      if (data.annoucement_lang_cols != null)
+        data.annoucement_lang_cols!.forEach((key, value) {
+          map.addAll({
+            "title_$key": value.title,
+            "description$key": value.description
+          });
+        });
 
       var response = await NetworkClient()
           .dio
-          .post(base_url, data: FormData.fromMap(data.toJson()));
+          .post(base_url, data: FormData.fromMap(map));
 
       //Checking for successful response
       if (response.statusCode == 200) {
@@ -81,8 +93,37 @@ class AnnouncementService implements InterfaceAnnouncement {
   }
 
   @override
-  Future<BaseResponse> submitOtherLanguageAnnouncementDetails(AnnouncementData data) {
-    // TODO: implement submitOtherLanguageAnnouncementDetails
-    throw UnimplementedError();
+  Future<AnnouncementData?>? getAnnouncementDetails(String? announcementId) async {
+    try {
+      Map<String,dynamic> map = {};
+
+      map.addAll({
+        "task": "getAnnoucement_detail",
+        "announcement_id": announcementId,
+      });
+
+      var response = await NetworkClient()
+          .dio
+          .post(base_url, data: FormData.fromMap(map));
+
+      //Checking for successful response
+      if (response.statusCode == 200) {
+        List<AnnouncementData> dataList = List<AnnouncementData>.from(json
+            .decode(response.data)
+            .map((model) => AnnouncementData.fromJson(model)));
+        //Return Success Response Object as BaseResponse Class Object
+        var data = dataList.first;
+        return data;
+      } else {
+        //Return Failure Response Object as BaseResponse Class Object
+     return null;
+      }
+    } on DioException catch (error) {
+      log("EXCEPTION IN submitAnnouncementDetails ${error.response}");
+      throw "exeption caught IN submitAnnouncementDetails";
+      return null;
+    }
   }
+
+
 }

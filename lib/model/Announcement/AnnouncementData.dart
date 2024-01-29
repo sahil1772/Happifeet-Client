@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:happifeet_client_app/model/BaseResponse.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'AnnouncementDetailLangWise.dart';
@@ -7,7 +8,7 @@ import 'AnnouncementDetailLangWise.dart';
 part 'AnnouncementData.g.dart';
 
 @JsonSerializable()
-class AnnouncementData {
+class AnnouncementData extends BaseResponse {
   String? id;
   String? client_id;
   String? client_user_id;
