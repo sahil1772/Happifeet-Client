@@ -79,13 +79,21 @@ class _ReportsWidgetState extends State<ReportsWidget>{
                       child: Column(
                         children: [
                           /** First Row **/
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          GridView(
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 0,
+                                crossAxisSpacing: 20,
+
+                            ),
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            physics: ScrollPhysics(),
                             children: [
                               InkWell(
-                                onTap : (){
-                                  CommentsWidget().gotoCommentsWidget(context);
-                                },
+                                      onTap : (){
+                                        CommentsWidget().gotoCommentsWidget(context);
+                                      },
                                 child: Container(
                                   decoration: BoxDecoration(border: Border.all(color: Colors.black12,),borderRadius: const BorderRadius.all(Radius.circular(14))),
                                   width: 180,
@@ -95,15 +103,15 @@ class _ReportsWidgetState extends State<ReportsWidget>{
                                     children: [
                                       SvgPicture.asset("assets/images/reports/comments.svg"),
                                       const SizedBox(height: 5,),
-                                       Text("Comments",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: Resources.colors.hfText),textAlign: TextAlign.center),
+                                      Text("Comments",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: Resources.colors.hfText),textAlign: TextAlign.center),
                                     ],
                                   ),
                                 ),
                               ),
                               InkWell(
-                                onTap: (){
-                                  StatusWidget().gotoStatusPage(context);
-                                },
+                                      onTap: (){
+                                        StatusWidget().gotoStatusPage(context);
+                                      },
                                 child: Container(
                                   decoration: BoxDecoration(border: Border.all(color: Colors.black12),borderRadius: const BorderRadius.all(Radius.circular(14),)),
                                   width: 180,
@@ -113,13 +121,55 @@ class _ReportsWidgetState extends State<ReportsWidget>{
                                     children: [
                                       SvgPicture.asset("assets/images/reports/status.svg"),
                                       const SizedBox(height: 5,),
-                                       Text("Status",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: Resources.colors.hfText),textAlign: TextAlign.center),
+                                      Text("Status",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: Resources.colors.hfText),textAlign: TextAlign.center),
                                     ],
                                   ),
                                 ),
                               ),
                             ],
                           ),
+
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          //   children: [
+                          //     InkWell(
+                          //       onTap : (){
+                          //         CommentsWidget().gotoCommentsWidget(context);
+                          //       },
+                          //       child: Container(
+                          //         decoration: BoxDecoration(border: Border.all(color: Colors.black12,),borderRadius: const BorderRadius.all(Radius.circular(14))),
+                          //         width: 180,
+                          //         height: 160,
+                          //         child: Column(
+                          //           mainAxisAlignment: MainAxisAlignment.center,
+                          //           children: [
+                          //             SvgPicture.asset("assets/images/reports/comments.svg"),
+                          //             const SizedBox(height: 5,),
+                          //              Text("Comments",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: Resources.colors.hfText),textAlign: TextAlign.center),
+                          //           ],
+                          //         ),
+                          //       ),
+                          //     ),
+                          //     InkWell(
+                          //       onTap: (){
+                          //         StatusWidget().gotoStatusPage(context);
+                          //       },
+                          //       child: Container(
+                          //         decoration: BoxDecoration(border: Border.all(color: Colors.black12),borderRadius: const BorderRadius.all(Radius.circular(14),)),
+                          //         width: 180,
+                          //         height: 160,
+                          //         child: Column(
+                          //           mainAxisAlignment: MainAxisAlignment.center,
+                          //           children: [
+                          //             SvgPicture.asset("assets/images/reports/status.svg"),
+                          //             const SizedBox(height: 5,),
+                          //              Text("Status",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: Resources.colors.hfText),textAlign: TextAlign.center),
+                          //           ],
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
                           /** Second Row **/
                           const SizedBox(
                             height: 20,

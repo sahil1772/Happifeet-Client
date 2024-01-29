@@ -217,54 +217,60 @@ class _ProfileWidgetState extends State<ProfileWidget>{
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                SizedBox(
-                                  height: 40,
-                                  width: 170,
-                                  child: ElevatedButton(
-
-                                    onPressed: () async {
-                                      // AddLocation().gotoAddLocation(context);
-
-
-                                      if(_formkey.currentState!.validate()){
-                                        log("Validation Done");
-                                        var response = await ApiFactory().getProfileService().sendPasswordDetails("changepassword", await SharedPref.instance.getUserId(),currentPassword.text, confirmPasswordController.text);
-                                        if(response.status == 1){
-                                          log("password successfully change!!");
-                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Password Change Successfully!")));
-                                          Future.delayed(
-                                              Duration(seconds: 2), () {
-                                            Navigator.of(context,rootNavigator: false).pushReplacement(MaterialPageRoute(builder: (_) => DashboardWidget()));
-                                          });
-                                        }else if(response.status == 0){
-                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Invalid old password")));
+                                Expanded(
+                                  child: SizedBox(
+                                    height: 40,
+                                  
+                                    child: ElevatedButton(
+                                  
+                                      onPressed: () async {
+                                        // AddLocation().gotoAddLocation(context);
+                                  
+                                  
+                                        if(_formkey.currentState!.validate()){
+                                          log("Validation Done");
+                                          var response = await ApiFactory().getProfileService().sendPasswordDetails("changepassword", await SharedPref.instance.getUserId(),currentPassword.text, confirmPasswordController.text);
+                                          if(response.status == 1){
+                                            log("password successfully change!!");
+                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Password Change Successfully!")));
+                                            Future.delayed(
+                                                Duration(seconds: 2), () {
+                                              Navigator.of(context,rootNavigator: false).pushReplacement(MaterialPageRoute(builder: (_) => DashboardWidget()));
+                                            });
+                                          }else if(response.status == 0){
+                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Invalid old password")));
+                                          }else{
+                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Something went wroong")));
+                                          }
+                                  
+                                  
+                                  
                                         }else{
-                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Something went wroong")));
+                                          log("Validation Unsuccessful");
                                         }
-
-
-
-                                      }else{
-                                        log("Validation Unsuccessful");
-                                      }
-                                    },
-                                    style: ElevatedButton.styleFrom(backgroundColor: ColorParser().hexToColor("#1A7C52"),elevation: 0,shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
-                                    child: Text("Save Changes",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),),
-
+                                      },
+                                      style: ElevatedButton.styleFrom(backgroundColor: ColorParser().hexToColor("#1A7C52"),elevation: 0,shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
+                                      child: Text("Save Changes",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),),
+                                  
+                                    ),
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 40,
-                                  width: 170,
-                                  child: ElevatedButton(
+                                SizedBox(width: 20,),
 
-                                    onPressed: () {
-                                      LoginPageWidget().gotoLogin(context);
-                                      setBoolForLogOut();
-                                    },
-                                    style: ElevatedButton.styleFrom(backgroundColor: Colors.red,elevation: 0,shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
-                                    child: Text("Log Out",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),),
-
+                                Expanded(
+                                  child: SizedBox(
+                                    height: 40,
+                                  
+                                    child: ElevatedButton(
+                                  
+                                      onPressed: () {
+                                        LoginPageWidget().gotoLogin(context);
+                                        setBoolForLogOut();
+                                      },
+                                      style: ElevatedButton.styleFrom(backgroundColor: Colors.red,elevation: 0,shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
+                                      child: Text("Log Out",style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.w500),),
+                                  
+                                    ),
                                   ),
                                 ),
 

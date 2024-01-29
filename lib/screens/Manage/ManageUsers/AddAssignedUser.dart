@@ -230,7 +230,9 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                       children: [
                                         Row(
                                           children: [
-                                            Text("Name"),
+                                            Text("Name", style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w700),),
                                             Row(
                                               children: [
                                                 Row(
@@ -294,7 +296,9 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                       children: [
                                         Row(
                                           children: [
-                                            const Text("Contact No"),
+                                            const Text("Contact No", style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w700),),
                                             Text(
                                               " *",
                                               style: TextStyle(color: Colors.red),
@@ -350,7 +354,9 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                       children: [
                                         const Row(
                                           children: [
-                                            Text("Email ID"),
+                                            Text("Email ID", style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w700),),
                                             Text(
                                               " *",
                                               style: TextStyle(color: Colors.red),
@@ -411,7 +417,9 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                       children: [
                                         Row(
                                           children: [
-                                            const Text("Remark"),
+                                            const Text("Remark", style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w700),),
                                             Text(
                                               " *",
                                               style: TextStyle(color: Colors.red),
@@ -462,46 +470,77 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                       height: 30,
                                     ),
 
-                                    // SizedBox(
-                                    //   height:60,
-                                    //   width: 90,
-                                    //   child: FittedBox(
-                                    //     fit: BoxFit.fill,
-                                    //     child: Switch(
-                                    //         value: isActive,
-                                    //         onChanged: (value){
+
+
+                                    Container(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 16.0, bottom: 10),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              const Text(
+                                                "Status",
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.w700),
+                                              ),
+                                              Padding(
+                                                  padding: const EdgeInsets.only(top: 10.0),
+                                                  child: Row(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    children: [
+                                                      FlutterSwitch(
+                                                        width: 120,
+                                                        value: isActive,
+                                                        activeColor: Colors.green,
+                                                        showOnOff: true,
+                                                        valueFontSize: 16,
+                                                        activeText: "Active",
+                                                        inactiveText: "InActive",
+                                                          onToggle: (value) {
+                                                            setState(() {
+                                                              log("toggle ${value}");
+                                                              if (value) {
+                                                                submitAssignedUserData.status = "Y";
+                                                              } else {
+                                                                submitAssignedUserData.status = "N";
+                                                              }
+                                                              isActive = value;
+                                                            });
+                                                          }
+                                                      ),
+                                                    ],
+                                                  )),
+                                            ],
+                                          ),
+                                        )),
+
+                                    // Padding(
+                                    //   padding: const EdgeInsets.only(right: 250),
+                                    //   child: FlutterSwitch(
+                                    //       padding: 6,
+                                    //       width: 110,
+                                    //       height: 30,
+                                    //       activeColor: Colors.green,
+                                    //       showOnOff: true,
+                                    //       valueFontSize: 16,
+                                    //       activeText: "Active",
+                                    //       inactiveText: "InActive",
+                                    //       value: isActive,
+                                    //       onToggle: (value) {
                                     //         setState(() {
+                                    //           log("toggle ${value}");
+                                    //           if (value) {
+                                    //             submitAssignedUserData.status = "Y";
+                                    //           } else {
+                                    //             submitAssignedUserData.status = "N";
+                                    //           }
                                     //           isActive = value;
                                     //         });
-                                    //         }),
-                                    //   ),
+                                    //       }
+                                    //       ),
                                     // ),
-                                    // isActive ? Text("Active") : Text("Inactive"),
-
-                                    Padding(
-                                      padding: const EdgeInsets.only(right: 250),
-                                      child: FlutterSwitch(
-                                          padding: 6,
-                                          width: 110,
-                                          height: 30,
-                                          activeColor: Colors.green,
-                                          showOnOff: true,
-                                          valueFontSize: 16,
-                                          activeText: "Active",
-                                          inactiveText: "InActive",
-                                          value: isActive,
-                                          onToggle: (value) {
-                                            setState(() {
-                                              log("toggle ${value}");
-                                              if (value) {
-                                                submitAssignedUserData.status = "Y";
-                                              } else {
-                                                submitAssignedUserData.status = "N";
-                                              }
-                                              isActive = value;
-                                            });
-                                          }),
-                                    ),
 
                                     SizedBox(
                                       height: 30,

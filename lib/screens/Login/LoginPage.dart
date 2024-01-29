@@ -107,7 +107,8 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
 
     // SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
-   return SafeArea(
+   return GestureDetector(
+     onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
      child: Scaffold(
        extendBodyBehindAppBar: true,
        resizeToAvoidBottomInset: false,

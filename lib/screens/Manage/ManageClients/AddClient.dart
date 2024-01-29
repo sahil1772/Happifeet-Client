@@ -595,101 +595,112 @@ class _AddClientWidgetState extends State<AddClientWidget> {
                                       SizedBox(
                                         height: 20,
                                       ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            const Text("Email Notification"),
-                                            Text(
-                                              " *",
-                                              style:
-                                                  TextStyle(color: Colors.red),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 8,
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 290),
-                                          child: FlutterSwitch(
-                                              padding: 6,
-                                              width: 80,
-                                              height: 30,
-                                              activeColor: Colors.green,
-                                              showOnOff: true,
-                                              valueFontSize: 16,
-                                              activeText: "Yes",
-                                              inactiveText: "No",
-                                              value: emailNotification,
-                                              onToggle: (value) {
-                                                setState(() {
-                                                  log("toggle ${value}");
-                                                  if (value) {
-                                                    addClientUser
-                                                            .email_notification =
-                                                        "Y";
-                                                  } else {
-                                                    addClientUser
-                                                            .email_notification =
-                                                        "N";
-                                                  }
-                                                  emailNotification = value;
-                                                });
-                                              }),
-                                        ),
-                                      ],
-                                    ),
+
+                                    Container(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 16.0, bottom: 10),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  const Text("Email Notification", style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight: FontWeight.w700),),
+                                                  Text(
+                                                    " *",
+                                                    style:
+                                                    TextStyle(color: Colors.red),
+                                                  ),
+                                                ],
+                                              ),
+                                              Padding(
+                                                  padding: const EdgeInsets.only(top: 10.0),
+                                                  child: Row(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    children: [
+                                                      FlutterSwitch(
+                                                          width: 120,
+                                                          value: emailNotification,
+                                                          activeColor: Colors.green,
+                                                          showOnOff: true,
+                                                          valueFontSize: 16,
+                                                          activeText: "Active",
+                                                          inactiveText: "InActive",
+                                                          onToggle: (value) {
+                                                            setState(() {
+                                                              log("toggle ${value}");
+                                                              if (value) {
+                                                                addClientUser
+                                                                    .email_notification =
+                                                                "Y";
+                                                              } else {
+                                                                addClientUser
+                                                                    .email_notification =
+                                                                "N";
+                                                              }
+                                                              emailNotification = value;
+                                                            });
+                                                          }
+                                                      ),
+                                                    ],
+                                                  )),
+                                            ],
+                                          ),
+                                        )),
                                     SizedBox(
-                                      height: 30,
+                                      height: 20,
                                     ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            const Text("Status"),
-                                            Text(
-                                              " *",
-                                              style:
-                                                  TextStyle(color: Colors.red),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 8,
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 250),
-                                          child: FlutterSwitch(
-                                              padding: 6,
-                                              width: 110,
-                                              height: 30,
-                                              activeColor: Colors.green,
-                                              showOnOff: true,
-                                              valueFontSize: 16,
-                                              activeText: "Active",
-                                              inactiveText: "InActive",
-                                              value: isActive,
-                                              onToggle: (value) {
-                                                setState(() {
-                                                  log("toggle ${value}");
-                                                  if (value) {
-                                                    addClientUser.status = "Y";
-                                                  } else {
-                                                    addClientUser.status = "N";
-                                                  }
-                                                  isActive = value;
-                                                });
-                                              }),
-                                        ),
-                                      ],
-                                    ),
+                                    Container(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 16.0, bottom: 10),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  const Text("Status", style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight: FontWeight.w700),),
+                                                  Text(
+                                                    " *",
+                                                    style:
+                                                    TextStyle(color: Colors.red),
+                                                  ),
+                                                ],
+                                              ),
+                                              Padding(
+                                                  padding: const EdgeInsets.only(top: 10.0),
+                                                  child: Row(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    children: [
+                                                      FlutterSwitch(
+                                                          width: 120,
+                                                          value: isActive,
+                                                          activeColor: Colors.green,
+                                                          showOnOff: true,
+                                                          valueFontSize: 16,
+                                                          activeText: "Active",
+                                                          inactiveText: "InActive",
+                                                          onToggle: (value) {
+                                                            setState(() {
+                                                              log("toggle ${value}");
+                                                              if (value) {
+                                                                addClientUser.status = "Y";
+                                                              } else {
+                                                                addClientUser.status = "N";
+                                                              }
+                                                              isActive = value;
+                                                            });
+                                                          }
+                                                      ),
+                                                    ],
+                                                  )),
+                                            ],
+                                          ),
+                                        )),
                                     SizedBox(
                                       height: 30,
                                     ),
