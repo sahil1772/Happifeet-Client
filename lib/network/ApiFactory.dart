@@ -6,6 +6,7 @@ import 'package:happifeet_client_app/network/services/AssignedUserService.dart';
 import 'package:happifeet_client_app/network/services/ClientUserService.dart';
 import 'package:happifeet_client_app/network/services/DashboardService.dart';
 import 'package:happifeet_client_app/network/services/FeedbackService.dart';
+import 'package:happifeet_client_app/network/services/FeedbackStatusService.dart';
 import 'package:happifeet_client_app/network/services/LocationService.dart';
 import 'package:happifeet_client_app/network/services/LoginService.dart';
 import 'package:happifeet_client_app/network/services/ProfileService.dart';
@@ -15,6 +16,7 @@ import 'package:happifeet_client_app/network/services/TrailService.dart';
 import 'interface/InrerfaceFeedback.dart';
 import 'interface/InterfaceAnnouncement.dart';
 import 'interface/InterfaceClientUsers.dart';
+import 'interface/InterfaceFeedbackStatus.dart';
 import 'interface/InterfaceLogin.dart';
 import 'interface/InterfaceProfile.dart';
 import 'interface/InterfaceSmtp.dart';
@@ -39,6 +41,13 @@ class ApiFactory {
   InterfaceProfile? _interfaceProfile;
   InterfaceClientUsers? _interfaceClientUsers;
   InterfaceTrails? _interfaceTrails;
+  InterfaceFeedbackStatus? _interfaceFeedbackStatus;
+
+  InterfaceFeedbackStatus getFeedbackStatusService() {
+    _interfaceFeedbackStatus ??= FeedbackStatusService();
+    return _interfaceFeedbackStatus!;
+  }
+
 
   InterfaceClientUsers getClientService() {
     _interfaceClientUsers ??= ClientUserService();

@@ -1,10 +1,16 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:happifeet_client_app/network/ApiFactory.dart';
+import 'package:happifeet_client_app/storage/shared_preferences.dart';
 import 'package:happifeet_client_app/utils/DeviceDimensions.dart';
 
 import '../../components/HappiFeetAppBar.dart';
 import '../../components/StatusCard.dart';
+import '../../model/FeedbackStatus/FeedbackStatusData.dart';
 import '../../utils/ColorParser.dart';
+import 'StatusDetailPage.dart';
 import 'StatusFilterpage.dart';
 
 class StatusWidget extends StatefulWidget {
@@ -20,6 +26,40 @@ class StatusWidget extends StatefulWidget {
 }
 
 class _StatusWidgetState extends State<StatusWidget> {
+  List<FeedbackStatusData>? getStatusData;
+  Future<List<FeedbackStatusData>>? apiResposne;
+  int resolvedCount = 0;
+  int pendingCount = 0;
+  String totalFeedback = "0";
+  @override
+  void initState() {
+    // TODO: implement initState
+    apiResposne =  getFeedbackStatusData();
+
+    super.initState();
+  }
+  
+  Future<List<FeedbackStatusData>>? getFeedbackStatusData() async {
+    var response  =  ApiFactory().getFeedbackStatusService().getFeedbackStatusListing("feedback_status_report_list", await SharedPref.instance.getUserId());
+    getStatusData = await response;
+    log("FEEDBACK STATUS DATA --> ${getStatusData!.first.toJson()}");
+    if(getStatusData!.first.status == "Resolved"){
+      resolvedCount++;
+      log("resolvedCount${resolvedCount}");
+    }
+    if(getStatusData!.first.status == "Pending"){
+      setState(() {
+        pendingCount++;
+      });
+      log("pendingCount${pendingCount}");
+    }
+    setState(() {
+      totalFeedback = getStatusData!.length.toString();
+      log("totalFeedback${totalFeedback.toString()}");
+    });
+    return getStatusData!;
+
+  }
   @override
   Widget build(BuildContext context) {
     double HEADER_HEIGHT = 4;
@@ -98,7 +138,7 @@ class _StatusWidgetState extends State<StatusWidget> {
                                     prefixIcon: InkWell(
                                         onTap: () {
                                           Navigator.of(context)
-                                              .push(_createRoute());
+                                              .push(_createRouteForFliterPage());
                                         },
                                         child: SvgPicture.asset(
                                             "assets/images/comments/filter.svg")),
@@ -148,11 +188,11 @@ class _StatusWidgetState extends State<StatusWidget> {
                                 color: ColorParser().hexToColor("#F85100"),
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              child: const Column(
+                              child:  Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "10",
+                                    totalFeedback,
                                     style: TextStyle(
                                         fontSize: 28,
                                         fontWeight: FontWeight.w500,
@@ -181,14 +221,14 @@ class _StatusWidgetState extends State<StatusWidget> {
                             child: Container(
                               height: 100,
                               decoration: BoxDecoration(
-                                color: ColorParser().hexToColor("#1A7B51"),
+                                color: ColorParser().hexToColor("#C99700"),
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              child: const Column(
+                              child:  Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "2",
+                                    resolvedCount.toString(),
                                     style: TextStyle(
                                         fontSize: 28,
                                         fontWeight: FontWeight.w500,
@@ -219,14 +259,14 @@ class _StatusWidgetState extends State<StatusWidget> {
                             child: Container(
                               height: 100,
                               decoration: BoxDecoration(
-                                color: ColorParser().hexToColor("#CEB02E"),
+                                color: ColorParser().hexToColor("#FF9002"),
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              child: const Column(
+                              child:  Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "8",
+                                    pendingCount.toString(),
                                     style: TextStyle(
                                         fontSize: 28,
                                         fontWeight: FontWeight.w500,
@@ -259,15 +299,35 @@ class _StatusWidgetState extends State<StatusWidget> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          // OutlinedButton(
+                          //     onPressed: () {},
+                          //     // style: OutlinedButton.styleFrom(
+                          //     //   // shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))),
+                          //     //   side: BorderSide(
+                          //     //     color:  Resources.colors.buttonColorDark,
+                          //     //   ),
+                          //     // ),
+                          //     style: ButtonStyle(
+                          //       shape: MaterialStateProperty.all(
+                          //           RoundedRectangleBorder(
+                          //               borderRadius:
+                          //                   BorderRadius.circular(10.0))),
+                          //     ),
+                          //     child: Row(
+                          //       children: [
+                          //         SvgPicture.asset(
+                          //             "assets/images/status/pdf.svg"),
+                          //         const SizedBox(
+                          //           width: 10,
+                          //         ),
+                          //         const Text("Export to PDF"),
+                          //       ],
+                          //     )),
                           OutlinedButton(
                               onPressed: () {},
-                              // style: OutlinedButton.styleFrom(
-                              //   // shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))),
-                              //   side: BorderSide(
-                              //     color:  Resources.colors.buttonColorDark,
-                              //   ),
-                              // ),
                               style: ButtonStyle(
+
+                                backgroundColor: MaterialStateProperty.all(ColorParser().hexToColor("#49AC43")),
                                 shape: MaterialStateProperty.all(
                                     RoundedRectangleBorder(
                                         borderRadius:
@@ -276,29 +336,11 @@ class _StatusWidgetState extends State<StatusWidget> {
                               child: Row(
                                 children: [
                                   SvgPicture.asset(
-                                      "assets/images/status/pdf.svg"),
+                                      "assets/images/status/excel.svg",colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),),
                                   const SizedBox(
                                     width: 10,
                                   ),
-                                  const Text("Export to PDF"),
-                                ],
-                              )),
-                          OutlinedButton(
-                              onPressed: () {},
-                              style: ButtonStyle(
-                                shape: MaterialStateProperty.all(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0))),
-                              ),
-                              child: Row(
-                                children: [
-                                  SvgPicture.asset(
-                                      "assets/images/status/excel.svg"),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  const Text("Export to Excel"),
+                                  const Text("Export to Excel",style: TextStyle(color: Colors.white),),
                                 ],
                               )),
                         ],
@@ -309,21 +351,39 @@ class _StatusWidgetState extends State<StatusWidget> {
 
                     /**  Comments card Listing **/
 
-                    Flexible(
-                      child: ListView.separated(
-                        padding: EdgeInsets.zero,
-                        physics: const ScrollPhysics(),
-                        itemCount: 10,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return StatusCard();
-                        },
-                        separatorBuilder: (BuildContext context, int index) {
-                          return const SizedBox(
-                            height: 8,
-                          );
-                        },
-                      ),
+                    FutureBuilder<List<FeedbackStatusData>?>(
+                      future: apiResposne,
+                      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                        if(snapshot.connectionState == ConnectionState.done){
+                          if(snapshot.hasData){
+                            return Flexible(
+                              child: ListView.separated(
+                                padding: EdgeInsets.zero,
+                                physics: const ScrollPhysics(),
+                                itemCount: getStatusData!.length,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  return StatusCard(getStatusData: getStatusData![index]);
+                                },
+                                separatorBuilder: (BuildContext context, int index) {
+                                  return const SizedBox(
+                                    height: 8,
+                                  );
+                                },
+                              ),
+                            );
+                          }else{
+                            return Text("Something Went Wrong!");
+                          }
+
+                        }else if(snapshot.connectionState == ConnectionState.waiting){
+                          return CircularProgressIndicator();
+                        }else{
+                          return Text("Something Went Wrong");
+                        }
+
+                      },
+
                     ),
                     const SizedBox(
                       height: 50,
@@ -338,7 +398,7 @@ class _StatusWidgetState extends State<StatusWidget> {
     );
   }
 
-  Route _createRoute() {
+  Route _createRouteForFliterPage() {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) =>
           StatusFilterpageWidget(),
@@ -358,4 +418,7 @@ class _StatusWidgetState extends State<StatusWidget> {
       },
     );
   }
+
+
+
 }

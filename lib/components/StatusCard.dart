@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../model/FeedbackStatus/FeedbackStatusData.dart';
 import '../resources/resources.dart';
+import '../screens/Reports/StatusDetailPage.dart';
 
 class StatusCard extends StatefulWidget {
+  FeedbackStatusData? getStatusData;
+
+  StatusCard({Key? key,this.getStatusData});
+
   @override
   State<StatusCard> createState() => _StatusCardState();
 }
@@ -50,7 +56,7 @@ class _StatusCardState extends State<StatusCard> {
                               width: 10,
                             ),
                             Text(
-                              "Tallahassee, FL 32309, USA",
+                              widget.getStatusData!.park_name ?? "",
                               style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
@@ -80,7 +86,12 @@ class _StatusCardState extends State<StatusCard> {
                         SizedBox(
                           height: 16,
                         ),
-                        SvgPicture.asset("assets/images/comments/visible.svg"),
+                        InkWell(
+                          onTap: (){
+                            Navigator.of(context)
+                                .push(_createRouteForStatusDetail(widget.getStatusData!.id!));
+                          },
+                            child: SvgPicture.asset("assets/images/comments/visible.svg")),
                         SizedBox(
                           height: 16,
                         ),
@@ -105,15 +116,16 @@ class _StatusCardState extends State<StatusCard> {
                             "Assigned By",
                             style: TextStyle(
                                 fontSize: 13,
-                                fontWeight: FontWeight.w300,
-                                color: Resources.colors.hfText),
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 3.0),
-                            child: Text("1",
+                            child: Text(
+                                widget.getStatusData!.assigned_by ?? "",
                                 style: TextStyle(
                                     fontSize: 14,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w300,
                                     color: Resources.colors.hfText)),
                           ),
                           SizedBox(
@@ -122,14 +134,15 @@ class _StatusCardState extends State<StatusCard> {
                           Text("Feedback Date",
                               style: TextStyle(
                                   fontSize: 13,
-                                  fontWeight: FontWeight.w300,
-                                  color: Resources.colors.hfText)),
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black)),
                           Padding(
                             padding: const EdgeInsets.only(top: 3.0),
-                            child: Text("09, Jan 2023",
+                            child: Text(
+                                widget.getStatusData!.add_date ?? "",
                                 style: TextStyle(
                                     fontSize: 14,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w300,
                                     color: Resources.colors.hfText)),
                           ),
                           SizedBox(
@@ -138,14 +151,14 @@ class _StatusCardState extends State<StatusCard> {
                           Text("Days Taken to Resolve",
                               style: TextStyle(
                                   fontSize: 13,
-                                  fontWeight: FontWeight.w300,
-                                  color: Resources.colors.hfText)),
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black)),
                           Padding(
                             padding: const EdgeInsets.only(top: 3.0),
-                            child: Text("3",
+                            child: Text(widget.getStatusData!.diff_cnt ?? "",
                                 style: TextStyle(
                                     fontSize: 14,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w500,
                                     color: Resources.colors.hfText)),
                           ),
                         ],
@@ -165,17 +178,17 @@ class _StatusCardState extends State<StatusCard> {
                             child: Text("Assigned To",
                                 style: TextStyle(
                                     fontSize: 13,
-                                    fontWeight: FontWeight.w300,
-                                    color: Resources.colors.hfText)),
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black)),
                           ),
                           Align(
                             alignment: Alignment.centerRight,
                             child: Padding(
                               padding: const EdgeInsets.only(top: 3.0),
-                              child: Text("Test",
+                              child: Text(widget.getStatusData!.assigned_to ?? "",
                                   style: TextStyle(
                                       fontSize: 14,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w300,
                                       color: Resources.colors.hfText)),
                             ),
                           ),
@@ -187,17 +200,17 @@ class _StatusCardState extends State<StatusCard> {
                             child: Text("Last Updated Date",
                                 style: TextStyle(
                                     fontSize: 13,
-                                    fontWeight: FontWeight.w300,
-                                    color: Resources.colors.hfText)),
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black)),
                           ),
                           Align(
                             alignment: Alignment.centerRight,
                             child: Padding(
                               padding: const EdgeInsets.only(top: 3.0),
-                              child: Text("09 Jan, 2023",
+                              child: Text(widget.getStatusData!.new_date ?? "",
                                   style: TextStyle(
                                       fontSize: 14,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w300,
                                       color: Resources.colors.hfText)),
                             ),
                           ),
@@ -216,7 +229,7 @@ class _StatusCardState extends State<StatusCard> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)))),
                             child: Text(
-                              "Completed",
+                              widget.getStatusData!.status ?? "",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 14,
@@ -245,4 +258,26 @@ class _StatusCardState extends State<StatusCard> {
       ),
     );
   }
+  Route _createRouteForStatusDetail(String report_id) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          StatusDetailPage(report_id: report_id),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(1.0, 0.0);
+        const end = Offset.zero;
+        const curve = Curves.easeIn;
+        final tween = Tween(begin: begin, end: end);
+        final curvedAnimation = CurvedAnimation(
+          parent: animation,
+          curve: curve,
+        );
+        return SlideTransition(
+          position: tween.animate(curvedAnimation),
+          child: child,
+        );
+      },
+    );
+  }
 }
+
+
