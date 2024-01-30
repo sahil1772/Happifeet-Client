@@ -9,8 +9,9 @@ import 'package:happifeet_client_app/storage/shared_preferences.dart';
 import '../../../components/HappiFeetAppBar.dart';
 import '../../../model/SMTP/SmtpDataModel.dart';
 import '../../../resources/resources.dart';
+import '../../../storage/runtime_storage.dart';
 import '../../../utils/ColorParser.dart';
-List<String> fieldOptions = ['Item 1','Item 2','Item 3',"Item 4"];
+List<String> fieldOptions = ['ssl','tls'];
 class ManageSMTPDetails extends StatefulWidget{
   const ManageSMTPDetails({super.key});
 
@@ -129,14 +130,17 @@ log("INSIDEIFFFFFFFFFFFFF ${SmtpData!.smtp_security}");
                  gradient: LinearGradient(
                    begin: Alignment.topLeft,
                    end: Alignment.bottomRight,
-                   colors: [ColorParser().hexToColor("#34A846"),ColorParser().hexToColor("#83C03D") ],
+                   colors: [
+                     ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                     ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                   ],
                  )),
              child: Column(
                  children: [
                // SizedBox(height: 105),
                Padding(
                  padding:  EdgeInsets.only(top: MediaQuery.of(context).size.height/8),
-                 child: const Row(
+                 child:  Row(
                    mainAxisAlignment: MainAxisAlignment.center,
                    children: [
                      Text(
@@ -147,7 +151,7 @@ log("INSIDEIFFFFFFFFFFFFF ${SmtpData!.smtp_security}");
                        // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
                        style: TextStyle(
 
-                           color:  Colors.white,
+                           color:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_text_color!),
                            fontSize: 20,
                            fontWeight: FontWeight.w500),
                      ),
@@ -180,7 +184,7 @@ log("INSIDEIFFFFFFFFFFFFF ${SmtpData!.smtp_security}");
                          Column(
                            crossAxisAlignment: CrossAxisAlignment.start,
                            children: [
-                             const Text("SMTP Host"),
+                             const Text("SMTP Host",style: TextStyle(color: Colors.black),),
                              const SizedBox(height: 8,),
                              TextField(
                                controller: smtphostController,
@@ -217,7 +221,7 @@ log("INSIDEIFFFFFFFFFFFFF ${SmtpData!.smtp_security}");
                          Column(
                            crossAxisAlignment: CrossAxisAlignment.start,
                            children: [
-                             const Text("Email id"),
+                             const Text("Email id",style: TextStyle(color: Colors.black),),
                              const SizedBox(height: 8,),
                              TextField(
                                controller: emailController,
@@ -259,7 +263,7 @@ log("INSIDEIFFFFFFFFFFFFF ${SmtpData!.smtp_security}");
                          Column(
                            crossAxisAlignment: CrossAxisAlignment.start,
                            children: [
-                             const Text("Username"),
+                             const Text("Username",style: TextStyle(color: Colors.black),),
                              const SizedBox(height: 8,),
                              TextField(
                                controller: usernameController,
@@ -294,7 +298,7 @@ log("INSIDEIFFFFFFFFFFFFF ${SmtpData!.smtp_security}");
                          Column(
                            crossAxisAlignment: CrossAxisAlignment.start,
                            children: [
-                             const Text("Password"),
+                             const Text("Password",style: TextStyle(color: Colors.black),),
                              const SizedBox(height: 8,),
                              TextField(
                                controller: passwordController,
@@ -329,7 +333,7 @@ log("INSIDEIFFFFFFFFFFFFF ${SmtpData!.smtp_security}");
                          Column(
                            crossAxisAlignment: CrossAxisAlignment.start,
                            children: [
-                             const Text("Port"),
+                             const Text("Port",style: TextStyle(color: Colors.black),),
                              const SizedBox(height: 8,),
                              TextField(
                                controller: portController,
@@ -364,7 +368,7 @@ log("INSIDEIFFFFFFFFFFFFF ${SmtpData!.smtp_security}");
                          Column(
                            crossAxisAlignment: CrossAxisAlignment.start,
                            children: [
-                             const Text("From Email"),
+                             const Text("From Email",style: TextStyle(color: Colors.black),),
                              const SizedBox(height: 8,),
                              TextField(
                                controller: fromemailController,
@@ -399,7 +403,7 @@ log("INSIDEIFFFFFFFFFFFFF ${SmtpData!.smtp_security}");
                          Column(
                            crossAxisAlignment: CrossAxisAlignment.start,
                            children: [
-                             const Text("Connection Security"),
+                             const Text("Connection Security",style: TextStyle(color: Colors.black),),
                              const SizedBox(height: 8,),
                              Container(
                                child: SizedBox(
@@ -472,7 +476,7 @@ log("INSIDEIFFFFFFFFFFFFF ${SmtpData!.smtp_security}");
                          ElevatedButton(
                            style: ElevatedButton.styleFrom(
                              fixedSize: const Size(320, 51),
-                             backgroundColor: ColorParser().hexToColor("#01825C"),
+                             backgroundColor: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
 
                              // shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                              //     RoundedRectangleBorder(

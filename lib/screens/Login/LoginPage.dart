@@ -210,6 +210,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
                        SharedPref.instance.setAccessPermission(response.data!.access!);
                        SharedPref.instance.setUserData(response.data!);
                        SharedPref.instance.setLanguages(response.data!.language!);
+                       SharedPref.instance.saveTheme(response.data!.theme_data!);
 
                        setUserPermissions(response.data!);
                        BottomNavigationHappiFeet().goToBottomNavigation(context);

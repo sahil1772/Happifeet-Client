@@ -13,6 +13,8 @@ ClientTheme _$ClientThemeFromJson(Map<String, dynamic> json) => ClientTheme(
       button_text_color: json['button_text_color'] as String?,
       search_filter_border: json['search_filter_border'] as String?,
       top_title_background_color: json['top_title_background_color'] as String?,
+      top_title_background_color_second:
+          json['top_title_background_color_second'] as String?,
       top_title_text_color: json['top_title_text_color'] as String?,
       title_color_on_listing: json['title_color_on_listing'] as String?,
       body_text_color: json['body_text_color'] as String?,
@@ -30,6 +32,8 @@ Map<String, dynamic> _$ClientThemeToJson(ClientTheme instance) =>
       'button_text_color': instance.button_text_color,
       'search_filter_border': instance.search_filter_border,
       'top_title_background_color': instance.top_title_background_color,
+      'top_title_background_color_second':
+          instance.top_title_background_color_second,
       'top_title_text_color': instance.top_title_text_color,
       'title_color_on_listing': instance.title_color_on_listing,
       'body_text_color': instance.body_text_color,

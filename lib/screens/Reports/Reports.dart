@@ -1,14 +1,20 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:happifeet_client_app/model/Theme/ClientTheme.dart';
 import 'package:happifeet_client_app/screens/Reports/Comments.dart';
 import 'package:happifeet_client_app/screens/Reports/Status.dart';
+import 'package:happifeet_client_app/storage/runtime_storage.dart';
 
 import '../../components/HappiFeetAppBar.dart';
 import '../../resources/resources.dart';
+import '../../storage/shared_preferences.dart';
 import '../../utils/ColorParser.dart';
 
 class ReportsWidget extends StatefulWidget{
-  const ReportsWidget({super.key});
+  ClientTheme?  clientTheme;
+   ReportsWidget({super.key,this.clientTheme});
 
   @override
   State<ReportsWidget> createState() => _ReportsWidgetState();
@@ -16,6 +22,16 @@ class ReportsWidget extends StatefulWidget{
 }
 
 class _ReportsWidgetState extends State<ReportsWidget>{
+  ClientTheme? theme;
+  @override
+  void initState() {
+    // TODO: implement initState
+    SharedPref.instance.getCityTheme().then((value) {
+      log("THEME IN REPORTS PAGE ${value}");
+      theme = value;
+      } );
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -32,8 +48,8 @@ class _ReportsWidgetState extends State<ReportsWidget>{
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
                   colors: [
-                    ColorParser().hexToColor("#34A846"),
-                    ColorParser().hexToColor("#83C03D")
+                    ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                    ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)
                   ],
                 )),
             child: const Padding(

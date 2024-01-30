@@ -20,10 +20,18 @@ AnnouncementData _$AnnouncementDataFromJson(Map<String, dynamic> json) =>
             k, AnnouncementDetailLangWise.fromJson(e as Map<String, dynamic>)),
       ),
       created_at: json['created_at'] as String?,
-    );
+    )
+      ..status = json['status']
+      ..msg = json['msg'] as String?
+      ..park_id = json['park_id']
+      ..trail_id = json['trail_id'];
 
 Map<String, dynamic> _$AnnouncementDataToJson(AnnouncementData instance) =>
     <String, dynamic>{
+      'status': instance.status,
+      'msg': instance.msg,
+      'park_id': instance.park_id,
+      'trail_id': instance.trail_id,
       'id': instance.id,
       'client_id': instance.client_id,
       'client_user_id': instance.client_user_id,

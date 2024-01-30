@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:happifeet_client_app/model/Login/AccessPermissionData.dart';
 import 'package:happifeet_client_app/model/Login/UserData.dart';
+import 'package:happifeet_client_app/storage/runtime_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../components/BottomNavigation.dart';
@@ -24,6 +25,7 @@ class SharedPref {
   /// Store User data
   UserData userData = UserData();
   String? getuserData;
+  ClientTheme? theme;
 
   setUserData(UserData userdata) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -174,10 +176,20 @@ class SharedPref {
     if (isLogin) {
       log("inside LoggedIn");
       // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context)));
+
+
+
+
+        RuntimeStorage.instance.clientTheme = ClientTheme.fromJson(json.decode(prefs.getString("current_city_theme")!)) ;
+    log("Theme if logged in${RuntimeStorage.instance.clientTheme}");
+
+
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => BottomNavigationHappiFeet(),
               ));
+
+
     } else {
       // await prefs.setBool('seen', true);
       Navigator.pushReplacement(
@@ -192,6 +204,7 @@ class SharedPref {
 
 
   ClientTheme clientTheme = ClientTheme();
+  ClientTheme getClientTheme = ClientTheme();
 
   createTheme(String key, String values) {
     switch (key) {
@@ -209,6 +222,9 @@ class SharedPref {
         break;
       case "top_title_background_color":
         clientTheme.top_title_background_color = values;
+        break;
+      case "top_title_background_color_second":
+        clientTheme.top_title_background_color_second = values;
         break;
       case "top_title_text_color":
         clientTheme.top_title_text_color = values;
@@ -234,8 +250,19 @@ class SharedPref {
     }
   }
 
-  ClientTheme getCityTheme() {
-    return clientTheme;
+
+
+  Future<ClientTheme> getCityTheme() async {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    clientTheme = ClientTheme.fromJson(json.decode(prefs.getString("current_city_theme")!));
+
+     // getClientTheme = ClientTheme.fromJson(json.decode(prefs.getString("current_city_theme")!));
+
+    log(" GET CLIENT THEME -->> ${this.clientTheme.toJson()}");
+
+    return this.clientTheme;
   }
 
   saveTheme(Map<String, dynamic> value) async {
@@ -244,9 +271,20 @@ class SharedPref {
     log("DATA IN saveTheme ${value['text_color']}");
 
     clientTheme = ClientTheme.fromJson(value);
-
-    prefs.setString("current_city_theme", clientTheme.toString());
-
+    log("SAVE THEME -->> ${clientTheme.toJson()}");
+    prefs.setString("current_city_theme", json.encode(clientTheme));
+    RuntimeStorage.instance.clientTheme = ClientTheme.fromJson(json.decode(prefs.getString("current_city_theme")!)) ;
+log("save theme in runtime at logged in${RuntimeStorage.instance.clientTheme!.toJson()}");
     // log("CURRENT THEME ${(prefs.get("current_city_theme") as CityTheme).toJson()}");
+  }
+
+
+  getTheme() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    log("PRINT CURRENT THEME ${prefs.get("current_theme")}");
+
+    return prefs.getString("current_city_theme");
+
+
   }
 }

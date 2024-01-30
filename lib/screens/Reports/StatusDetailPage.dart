@@ -274,6 +274,38 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                                         color: Resources.colors.hfText))
                               ],
                             ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Assigned By",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black)),
+                                Text(
+                                "ABC",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w300,
+                                        color: Resources.colors.hfText))
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Assigned To",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black)),
+                                Text(
+                                    "ABC",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w300,
+                                        color: Resources.colors.hfText))
+                              ],
+                            ),
                           ],
                         );
                       }
@@ -286,145 +318,90 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                 },
               ),
 
-              /** OLD CODE  **/
-              //  Padding(
-              //   padding: EdgeInsets.symmetric(vertical: 24),
-              //   child: Column(
-              //     children: [
-              //       Row(
-              //         crossAxisAlignment: CrossAxisAlignment.start,
+            /** COMMENTS **/
+              SizedBox(
+                height: 24,
+              ),
+              Text("Comments",
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black)),
+              SizedBox(
+                height: 8,
+              ),
+
+              if(getStatusDetails!.first.comment!.length == null || getStatusDetails!.first.comment!.isEmpty)
+              ListView.builder(
+                shrinkWrap: true,
+                  itemCount: getStatusDetails!.first.comment!.length,
+                  itemBuilder: (BuildContext context, int index){
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+
+                    children: [
+                      Column(
+                       crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Added Date", style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black)),
+                          Text(getStatusDetails!.first.comment![index].added_date!),
+                          SizedBox(height: 20,),
+                        ],
+                      ),
+                      SizedBox(width: 20,),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Status", style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black)),
+                          Text(getStatusDetails!.first.comment![index].status!),
+                          SizedBox(height: 20,),
+                        ],
+                      ),
+                      SizedBox(width: 20,),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Comment", style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black)),
+                          Text(getStatusDetails!.first.comment![index].comment!),
+                          SizedBox(height: 20,),
+                        ],
+                      ),
+                    ],
+                  );
+
+                  }),
+
+              // GridView.builder(
+              //     gridDelegate:  const SliverGridDelegateWithFixedCrossAxisCount(
+              //     crossAxisCount: 2,
+              //     mainAxisSpacing: 0,
+              //     // crossAxisSpacing: 15,
+              //     // mainAxisExtent: 80
+              //     ),
+              //   shrinkWrap: true,
+              //   physics: ScrollPhysics(),
+              //   itemBuilder: (BuildContext context, int index) {
+              //       return Column(
               //         children: [
-              //           Column(
-              //             crossAxisAlignment: CrossAxisAlignment.start,
-              //             children: [
-              //               Text("Location Name", style: TextStyle(
-              //                   fontSize: 16,
-              //                   fontWeight: FontWeight.w500,
-              //                   color: Colors.black)),
-              //               Text("401107",  style: TextStyle(
-              //                   fontSize: 16,
-              //                   fontWeight: FontWeight.w300,
-              //                   color: Resources.colors.hfText))
-              //             ],
-              //           ),
-              //           SizedBox(width: 20,),
-              //           Column(
-              //             crossAxisAlignment: CrossAxisAlignment.start,
-              //             children: [
-              //               Text("Share Anonymously",style: TextStyle(
-              //                   fontSize: 16,
-              //                   fontWeight: FontWeight.w500,
-              //                   color: Colors.black)),
-              //               Text("yes",style: TextStyle(
-              //                   fontSize: 16,
-              //                   fontWeight: FontWeight.w300,
-              //                   color: Resources.colors.hfText))
-              //             ],
-              //           ),
+              //           Text(),
+              //           Text()
               //         ],
-              //       ),
-              //       SizedBox(height: 10,),
-              //       Row(
-              //         crossAxisAlignment: CrossAxisAlignment.start,
-              //         children: [
-              //           Column(
-              //             crossAxisAlignment: CrossAxisAlignment.start,
-              //             children: [
-              //               Text("User Name", style: TextStyle(
-              //                   fontSize: 16,
-              //                   fontWeight: FontWeight.w500,
-              //                   color: Colors.black)),
-              //               Text("Maybe",  style: TextStyle(
-              //                   fontSize: 16,
-              //                   fontWeight: FontWeight.w300,
-              //                   color: Resources.colors.hfText))
-              //             ],
-              //           ),
-              //           SizedBox(width: 20,),
-              //           Column(
-              //             crossAxisAlignment: CrossAxisAlignment.start,
-              //             children: [
-              //               Text("Email Address", style: TextStyle(
-              //                   fontSize: 16,
-              //                   fontWeight: FontWeight.w500,
-              //                   color: Colors.black)),
-              //               Text("Test",  style: TextStyle(
-              //                   fontSize: 16,
-              //                   fontWeight: FontWeight.w300,
-              //                   color: Resources.colors.hfText))
-              //             ],
-              //           ),
-              //         ],
-              //       ),
-              //       SizedBox(height: 10,),
-              //       Row(
-              //         crossAxisAlignment: CrossAxisAlignment.start,
-              //         children: [
-              //           Column(
-              //             crossAxisAlignment: CrossAxisAlignment.start,
-              //             children: [
-              //               Text("Question here For Test", style: TextStyle(
-              //                   fontSize: 16,
-              //                   fontWeight: FontWeight.w500,
-              //                   color: Colors.black)),
-              //               Text("Maybe",  style: TextStyle(
-              //                   fontSize: 16,
-              //                   fontWeight: FontWeight.w300,
-              //                   color: Resources.colors.hfText))
-              //             ],
-              //           ),
-              //           SizedBox(width: 20,),
-              //           Column(
-              //             crossAxisAlignment: CrossAxisAlignment.start,
-              //             children: [
-              //               Text("When At the Park How Safe You fee", style: TextStyle(
-              //                   fontSize: 16,
-              //                   fontWeight: FontWeight.w500,
-              //                   color: Colors.black)),
-              //               Text("4",  style: TextStyle(
-              //                   fontSize: 16,
-              //                   fontWeight: FontWeight.w300,
-              //                   color: Resources.colors.hfText))
-              //             ],
-              //           ),
-              //         ],
-              //       ),
-              //       SizedBox(height: 10,),
-              //       Row(
-              //         crossAxisAlignment: CrossAxisAlignment.start,
-              //         children: [
-              //           Column(
-              //             crossAxisAlignment: CrossAxisAlignment.start,
-              //             children: [
-              //               Text("Tell us what made you Happi / Sad today ?", style: TextStyle(
-              //                   fontSize: 16,
-              //                   fontWeight: FontWeight.w500,
-              //                   color: Colors.black)),
-              //               Text("Test",  style: TextStyle(
-              //                   fontSize: 16,
-              //                   fontWeight: FontWeight.w300,
-              //                   color: Resources.colors.hfText))
-              //             ],
-              //           ),
-              //           SizedBox(width: 20,),
-              //           Column(
-              //             crossAxisAlignment: CrossAxisAlignment.start,
-              //             children: [
-              //               Text("Rate Quality Of Your Experience", style: TextStyle(
-              //                   fontSize: 16,
-              //                   fontWeight: FontWeight.w500,
-              //                   color: Colors.black)),
-              //               Text("Good",  style: TextStyle(
-              //                   fontSize: 16,
-              //                   fontWeight: FontWeight.w300,
-              //                   color: Resources.colors.hfText))
-              //             ],
-              //           ),
-              //         ],
-              //       ),
-              //     ],
-              //   ),
+              //       );
+              //   },
+              //
               // ),
+
+
+
 
               /** SELECT LANG **/
               SizedBox(

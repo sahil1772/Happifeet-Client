@@ -13,6 +13,7 @@ import 'package:happifeet_client_app/storage/shared_preferences.dart';
 import '../../../components/HappiFeetAppBar.dart';
 import '../../../model/AssignedUsers/AssignedUserData.dart';
 import '../../../model/AssignedUsers/SubmitAssignedUserData.dart';
+import '../../../storage/runtime_storage.dart';
 import '../../../utils/ColorParser.dart';
 
 class AddAssignedUserWidget extends StatefulWidget {
@@ -161,8 +162,8 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    ColorParser().hexToColor("#34A846"),
-                    ColorParser().hexToColor("#83C03D")
+                    ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                    ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)
                   ],
                 )),
                 child: Column(children: [
@@ -179,7 +180,7 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                           // "Select Location".language(context),
                           // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
                           style: TextStyle(
-                              color: Colors.white,
+                              color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_text_color!),
                               fontSize: 20,
                               fontWeight: FontWeight.w500),
                         ),
@@ -231,7 +232,7 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                         Row(
                                           children: [
                                             Text("Name", style: TextStyle(
-                                                color: Colors.black,
+                                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                                                 fontWeight: FontWeight.w700),),
                                             Row(
                                               children: [
@@ -296,8 +297,8 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                       children: [
                                         Row(
                                           children: [
-                                            const Text("Contact No", style: TextStyle(
-                                                color: Colors.black,
+                                             Text("Contact No", style: TextStyle(
+                                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                                                 fontWeight: FontWeight.w700),),
                                             Text(
                                               " *",
@@ -352,10 +353,10 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        const Row(
+                                         Row(
                                           children: [
                                             Text("Email ID", style: TextStyle(
-                                                color: Colors.black,
+                                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                                                 fontWeight: FontWeight.w700),),
                                             Text(
                                               " *",
@@ -417,8 +418,8 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                       children: [
                                         Row(
                                           children: [
-                                            const Text("Remark", style: TextStyle(
-                                                color: Colors.black,
+                                             Text("Remark", style: TextStyle(
+                                                color:ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                                                 fontWeight: FontWeight.w700),),
                                             Text(
                                               " *",
@@ -478,10 +479,10 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              const Text(
+                                               Text(
                                                 "Status",
                                                 style: TextStyle(
-                                                    color: Colors.black,
+                                                    color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                                                     fontWeight: FontWeight.w700),
                                               ),
                                               Padding(
@@ -493,7 +494,7 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                                       FlutterSwitch(
                                                         width: 120,
                                                         value: isActive,
-                                                        activeColor: Colors.green,
+                                                        activeColor: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                                                         showOnOff: true,
                                                         valueFontSize: 16,
                                                         activeText: "Active",
@@ -619,7 +620,7 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                         },
                                         style: ElevatedButton.styleFrom(
                                             backgroundColor:
-                                            ColorParser().hexToColor("#1A7C52"),
+                                            ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                                             elevation: 0,
                                             shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.all(

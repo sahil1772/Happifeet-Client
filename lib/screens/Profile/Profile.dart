@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:happifeet_client_app/model/Theme/ClientTheme.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/resources/resources.dart';
 import 'package:happifeet_client_app/screens/Dashboard/dashboard.dart';
@@ -10,10 +11,12 @@ import 'package:happifeet_client_app/storage/shared_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../components/HappiFeetAppBar.dart';
+import '../../storage/runtime_storage.dart';
 import '../../utils/ColorParser.dart';
 
 class ProfileWidget extends StatefulWidget{
-  const ProfileWidget({super.key});
+  ClientTheme? clientTheme;
+   ProfileWidget({super.key,this.clientTheme});
 
   @override
   State<ProfileWidget> createState() => _ProfileWidgetState();
@@ -47,8 +50,8 @@ class _ProfileWidgetState extends State<ProfileWidget>{
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
                   colors: [
-                    ColorParser().hexToColor("#34A846"),
-                    ColorParser().hexToColor("#83C03D")
+                    ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                    ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)
                   ],
                 )),
             child: const Padding(

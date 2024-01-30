@@ -4,6 +4,8 @@ import 'dart:core';
 
 import 'package:json_annotation/json_annotation.dart';
 
+import 'CommentsData.dart';
+
 part 'FeedbackStatusDetails.g.dart';
 
 @JsonSerializable()
@@ -22,6 +24,7 @@ class FeedbackStatusDetails{
   String? descrpt;
   String? how_safe_feel;
   String? zip_code_live;
+  List<CommentsData>? comment;
 
 
   FeedbackStatusDetails(
@@ -38,7 +41,8 @@ class FeedbackStatusDetails{
       this.recommend,
       this.descrpt,
       this.how_safe_feel,
-      this.zip_code_live});
+      this.zip_code_live,
+      this.comment});
 
   factory FeedbackStatusDetails.fromJson(Map<String, dynamic> json) =>
       _$FeedbackStatusDetailsFromJson(json);

@@ -8,14 +8,17 @@ import 'package:happifeet_client_app/screens/Manage/ManageClients/ClientListing.
 import 'package:happifeet_client_app/screens/Manage/ManageLocation/LocationListing.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageSMTP/manage_smtp_details.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageTrails/TrailListing.dart';
+import 'package:happifeet_client_app/storage/runtime_storage.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
 
 import '../../components/HappiFeetAppBar.dart';
+import '../../model/Theme/ClientTheme.dart';
 import '../../utils/ColorParser.dart';
 import 'ManageUsers/AssignedUserListing.dart';
 
 class ManageWidget extends StatefulWidget {
-  const ManageWidget({super.key});
+  ClientTheme?  clientTheme;
+   ManageWidget({super.key,this.clientTheme});
 
   @override
   State<ManageWidget> createState() => _ManageWidgetState();
@@ -27,6 +30,7 @@ class _ManageWidgetState extends State<ManageWidget> {
   bool? isparkInspection = false;
   bool? isactivityReport = false;
   bool? istrail = false;
+  ClientTheme? theme;
 
   Future<void> checkPermissions() async {
     isAnnouncement = await SharedPref.instance.getPermissionAnnouncment();
@@ -47,7 +51,12 @@ class _ManageWidgetState extends State<ManageWidget> {
     // checkPermissions();
     // SharedPref.instance.setPermissions();
 
-    checkPermissions();
+    SharedPref.instance.getCityTheme().then((value) {
+      theme = value;
+      checkPermissions();} );
+
+
+
 
     super.initState();
   }
@@ -85,8 +94,9 @@ class _ManageWidgetState extends State<ManageWidget> {
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
               colors: [
-                ColorParser().hexToColor("#34A846"),
-                ColorParser().hexToColor("#83C03D")
+                ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)
+
               ],
             )),
             child: const Padding(
@@ -114,6 +124,7 @@ class _ManageWidgetState extends State<ManageWidget> {
               top: MediaQuery.of(context).size.height / 9.5,
               child: SvgPicture.asset(
                 "assets/images/manage/manageBG.svg",
+
               )),
           DraggableScrollableSheet(
               initialChildSize: 0.67,
@@ -163,7 +174,8 @@ class _ManageWidgetState extends State<ManageWidget> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       SvgPicture.asset(
-                                          "assets/images/manage/location.svg"),
+                                          "assets/images/manage/location.svg",
+                                      ),
                                       const SizedBox(
                                         height: 5,
                                       ),

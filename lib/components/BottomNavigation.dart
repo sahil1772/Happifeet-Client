@@ -5,7 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:happifeet_client_app/model/Theme/ClientTheme.dart';
+import 'package:happifeet_client_app/storage/runtime_storage.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
+import 'package:happifeet_client_app/utils/ColorParser.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,8 +34,8 @@ class BottomNavigationHappiFeet extends StatefulWidget{
 
 class _BottomNavigationHappiFeetState extends State<BottomNavigationHappiFeet>{
   late PersistentTabController _controller;
-
   String? userType = "";
+
 
   @override
   void initState() {
@@ -40,6 +43,8 @@ class _BottomNavigationHappiFeetState extends State<BottomNavigationHappiFeet>{
     _controller = PersistentTabController(initialIndex: 0);
 
     setBoolForLogIn();
+
+
 
     SharedPref.instance.getClientType().then((value)  {
       userType = value;
@@ -66,9 +71,10 @@ class _BottomNavigationHappiFeetState extends State<BottomNavigationHappiFeet>{
     return [
       const DashboardWidget(),
       if(userType == "S")
-      const ManageWidget(),
-      const ReportsWidget(),
-      const ProfileWidget(),
+       ManageWidget(),
+       ReportsWidget(),
+       ProfileWidget(),
+
 
     ];
   }
@@ -77,11 +83,11 @@ class _BottomNavigationHappiFeetState extends State<BottomNavigationHappiFeet>{
     return [
       PersistentBottomNavBarItem(
         title: 'Dashboard',
-        activeColorPrimary: CupertinoColors.destructiveRed,
+        activeColorPrimary: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
         inactiveColorPrimary: CupertinoColors.inactiveGray,
         // textStyle: TextStyle(color: ColorParser().hexToColor(SharedPref().getCityTheme().body_text_color!)),
         icon: SvgPicture.asset("assets/images/bottomSheet/dashboard.svg",
-          colorFilter: const ColorFilter.mode(Colors.red, BlendMode.srcIn),),
+          colorFilter:  ColorFilter.mode(ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!), BlendMode.srcIn),),
         inactiveIcon:  SvgPicture.asset("assets/images/bottomSheet/dashboard.svg",
           colorFilter: const ColorFilter.mode(Colors.grey, BlendMode.srcIn),),
         // activeColorPrimary: Colors.red,
@@ -90,11 +96,11 @@ class _BottomNavigationHappiFeetState extends State<BottomNavigationHappiFeet>{
       if(userType == "S")
       PersistentBottomNavBarItem(
         title: 'Manage',
-        activeColorPrimary: CupertinoColors.destructiveRed,
+        activeColorPrimary:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
         inactiveColorPrimary: CupertinoColors.inactiveGray,
         // textStyle: TextStyle(color: ColorParser().hexToColor(SharedPref().getCityTheme().body_text_color!)),
         icon: SvgPicture.asset("assets/images/bottomSheet/manage.svg",
-          colorFilter: const ColorFilter.mode(Colors.red, BlendMode.srcIn),),
+          colorFilter:  ColorFilter.mode( ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!), BlendMode.srcIn),),
         inactiveIcon:  SvgPicture.asset("assets/images/bottomSheet/manage.svg",
           colorFilter: const ColorFilter.mode(Colors.grey, BlendMode.srcIn),),
         // activeColorPrimary: Colors.red,
@@ -102,11 +108,11 @@ class _BottomNavigationHappiFeetState extends State<BottomNavigationHappiFeet>{
       ),
       PersistentBottomNavBarItem(
         title: 'Reports',
-        activeColorPrimary: CupertinoColors.destructiveRed,
+        activeColorPrimary:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
         inactiveColorPrimary: CupertinoColors.inactiveGray,
         // textStyle: TextStyle(color: ColorParser().hexToColor(SharedPref().getCityTheme().body_text_color!)),
         icon: SvgPicture.asset("assets/images/bottomSheet/report.svg",
-          colorFilter: const ColorFilter.mode(Colors.red, BlendMode.srcIn),),
+          colorFilter:  ColorFilter.mode( ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!), BlendMode.srcIn),),
         inactiveIcon:  SvgPicture.asset("assets/images/bottomSheet/report.svg",
           colorFilter: const ColorFilter.mode(Colors.grey, BlendMode.srcIn),),
         // activeColorPrimary: Colors.red,
@@ -114,11 +120,11 @@ class _BottomNavigationHappiFeetState extends State<BottomNavigationHappiFeet>{
       ),
       PersistentBottomNavBarItem(
         title: 'Profile',
-        activeColorPrimary: CupertinoColors.destructiveRed,
+        activeColorPrimary:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
         inactiveColorPrimary: CupertinoColors.inactiveGray,
         // textStyle: TextStyle(color: ColorParser().hexToColor(SharedPref().getCityTheme().body_text_color!)),
         icon: SvgPicture.asset("assets/images/bottomSheet/profile.svg",
-          colorFilter: const ColorFilter.mode(Colors.red, BlendMode.srcIn),),
+          colorFilter:  ColorFilter.mode( ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!), BlendMode.srcIn),),
         inactiveIcon:  SvgPicture.asset("assets/images/bottomSheet/profile.svg",
           colorFilter: const ColorFilter.mode(Colors.grey, BlendMode.srcIn),),
         // activeColorPrimary: Colors.red,
