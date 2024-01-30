@@ -16,6 +16,7 @@ class UserData {
   String? client_id;
   AccessPermissionData? access;
   Map<String,dynamic>? language;
+  Map<String, dynamic>? theme_data;
 
   UserData({
     this.parent_user_id,
@@ -25,6 +26,7 @@ class UserData {
     this.client_id,
     this.access,
     this.language,
+    this.theme_data
 
   });
 

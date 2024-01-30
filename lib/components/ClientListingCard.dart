@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageClients/AddClient.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageClients/ClientListing.dart';
+import 'package:happifeet_client_app/storage/runtime_storage.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import '../model/ClientUsers/ClientUserData.dart';
@@ -69,7 +70,7 @@ class _ClientListingCardState extends State<ClientListingCard>{
                             // overflow: TextOverflow.ellipsis,
                             maxLines:1,
                             style: TextStyle(
-                                color:   ColorParser().hexToColor("#01825C"),
+                                color:   ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                                 letterSpacing: 0.5),
@@ -100,7 +101,7 @@ class _ClientListingCardState extends State<ClientListingCard>{
                                   softWrap: true,
                                   maxLines: 1,
                                   overflow: TextOverflow.clip,
-                                  style: TextStyle(color: Colors.grey ),
+                                  style: TextStyle(color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!), ),
                                 ),
                               ],
                             ),
@@ -121,7 +122,7 @@ class _ClientListingCardState extends State<ClientListingCard>{
                                   softWrap: true,
                                   maxLines: 1,
                                   overflow: TextOverflow.clip,
-                                  style: TextStyle(color:  Colors.grey ),
+                                  style: TextStyle(color:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!), ),
                                 ),
                               ],
                             ),
@@ -129,7 +130,7 @@ class _ClientListingCardState extends State<ClientListingCard>{
                           const SizedBox(
                             height: 15,
                           ),
-                          const Padding(
+                           Padding(
                             padding: EdgeInsets.symmetric(vertical: 1.0),
                             child: Row(
                               children: [
@@ -139,7 +140,7 @@ class _ClientListingCardState extends State<ClientListingCard>{
                                   softWrap: true,
                                   maxLines: 1,
                                   overflow: TextOverflow.clip,
-                                  style: TextStyle(color:  Colors.grey ),
+                                  style: TextStyle(color:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!), ),
                                 ),
                               ],
                             ),

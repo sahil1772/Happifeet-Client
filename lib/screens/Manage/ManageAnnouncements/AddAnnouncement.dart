@@ -13,6 +13,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../components/HappiFeetAppBar.dart';
 import '../../../i18n/locale_keys.g.dart';
+import '../../../storage/runtime_storage.dart';
 import '../../../utils/ColorParser.dart';
 
 class AddAnnouncementWidget extends StatefulWidget {
@@ -124,20 +125,23 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    ColorParser().hexToColor("#34A846"),
-                    ColorParser().hexToColor("#83C03D")
+                    ColorParser().hexToColor(RuntimeStorage
+                        .instance.clientTheme!.top_title_background_color!),
+                    ColorParser().hexToColor(RuntimeStorage
+                        .instance.clientTheme!.top_title_background_color!)
                   ],
                 )),
                 child: Container(
                   margin: DeviceDimensions.getHeaderEdgeInsets(context),
-                  child: const Center(
+                  child: Center(
                     child: Text(
                       "Add Announcement",
                       // "Select Location".tr(),
                       // "Select Location".language(context),
                       // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
                       style: TextStyle(
-                          color: Colors.white,
+                          color: ColorParser().hexToColor(RuntimeStorage
+                              .instance.clientTheme!.top_title_text_color!),
                           fontSize: 20,
                           fontWeight: FontWeight.w500),
                     ),
@@ -161,9 +165,13 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: const Text(
+                    child: Text(
                       LocaleKeys.Select_Language,
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: ColorParser().hexToColor(RuntimeStorage
+                            .instance.clientTheme!.top_title_background_color!),
+                      ),
                     ).tr(),
                   ),
                   TabBar(
@@ -171,8 +179,10 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
                       controller: _controller,
                       indicatorWeight: 1,
                       indicatorPadding: const EdgeInsets.all(0),
-                      labelColor: const Color(0xff49AC43),
-                      indicatorColor: const Color(0xff49AC43),
+                      labelColor: ColorParser().hexToColor(RuntimeStorage
+                          .instance.clientTheme!.top_title_background_color!),
+                      indicatorColor: ColorParser().hexToColor(RuntimeStorage
+                          .instance.clientTheme!.top_title_background_color!),
                       tabs: [
                         for (int i = 0; i < languages.keys.length; i++)
                           Padding(
@@ -226,8 +236,7 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
             padding: const EdgeInsets.only(bottom: 16.0),
             child: Text(
               LocaleKeys.Title,
-              style: TextStyle(
-                  fontSize: labelTextSize, color: const Color(0xff757575)),
+              style: TextStyle(fontSize: labelTextSize, color: Colors.black),
             ).tr(),
           ),
           Padding(
@@ -264,8 +273,7 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
             padding: const EdgeInsets.only(bottom: 16.0),
             child: Text(
               "Upload Image",
-              style: TextStyle(
-                  fontSize: labelTextSize, color: const Color(0xff757575)),
+              style: TextStyle(fontSize: labelTextSize, color: Colors.black),
             ).tr(),
           ),
           Padding(
@@ -281,11 +289,29 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
                 padding: const EdgeInsets.only(
                     left: 10, top: 10, right: 200, bottom: 10),
                 child: OutlinedButton(
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                            side: BorderSide(
+                              width: 0.0,
+                              color:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                            ),
+                            borderRadius:
+                            BorderRadius.circular(
+                                20.0)
+                        )),
+
+                  ),
                   onPressed: () {
-                    !widget.isEdit!?
-                    _showBottomSheet(1):null;
+                    !widget.isEdit! ? _showBottomSheet(1) : null;
                   },
-                  child: const Text("Choose Image"),
+                  child: Text(
+                    "Choose Image",
+                    style: TextStyle(
+                      color: ColorParser().hexToColor(RuntimeStorage
+                          .instance.clientTheme!.top_title_background_color!),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -297,7 +323,7 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
             child: Text(
               "Description",
               style: TextStyle(
-                  fontSize: labelTextSize, color: const Color(0xff757575)),
+                  fontSize: labelTextSize, color: Colors.black),
             ).tr(),
           ),
           Padding(
@@ -333,12 +359,15 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
           Padding(
             padding: const EdgeInsets.only(bottom: 56.0),
             child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!),
+                    elevation: 0),
                 onPressed: () {
                   goToNextLangOrSubmit();
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: Text(widget.isEdit! ? "Next" : "Submit"),
+                  child: Text(widget.isEdit! ? "Next" : "Submit",style: TextStyle(color: Colors.white),),
                 )),
           )
         ],
@@ -365,7 +394,7 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
           child: Text(
             LocaleKeys.Title,
             style: TextStyle(
-                fontSize: labelTextSize, color: const Color(0xff757575)),
+                fontSize: labelTextSize, color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)),
           ).tr(),
         ),
         Padding(
@@ -398,7 +427,7 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
           child: Text(
             "Description",
             style: TextStyle(
-                fontSize: labelTextSize, color: const Color(0xff757575)),
+                fontSize: labelTextSize, color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)),
           ).tr(),
         ),
         Padding(
@@ -430,12 +459,15 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
             ? Padding(
                 padding: const EdgeInsets.only(bottom: 56.0),
                 child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!),
+                        elevation: 0),
                     onPressed: () {
                       submitDetails();
                     },
                     child: const Padding(
                       padding: EdgeInsets.symmetric(vertical: 16.0),
-                      child: Text("Submit"),
+                      child: Text("Submit",style: TextStyle(color: Colors.white),),
                     )),
               )
             : const SizedBox()
@@ -628,11 +660,9 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
 
       data.annoucement_lang_cols!.forEach((key, value) {
         log("CHECKING CONTENT => $key => ${value.toJson()}");
-        if (dataControllers.containsKey( key)) {
-          dataControllers[key]!["title"]!.text =
-              value.title!;
-          dataControllers[key]!["description"]!.text =
-              value.description!;
+        if (dataControllers.containsKey(key)) {
+          dataControllers[key]!["title"]!.text = value.title!;
+          dataControllers[key]!["description"]!.text = value.description!;
         } else {
           dataControllers.addAll({
             (key): {
@@ -644,12 +674,9 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
       });
       log("CONTROLLERS SET => $dataControllers");
       return Future.value(data);
-
     } catch (e) {
       log("ERROR OCCURED WHILE SETTING DATA => ", error: e);
       throw e;
     }
-
-
   }
 }

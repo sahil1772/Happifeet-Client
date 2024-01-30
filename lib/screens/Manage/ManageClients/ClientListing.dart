@@ -8,6 +8,7 @@ import 'package:happifeet_client_app/screens/Manage/ManageClients/AddClient.dart
 import '../../../components/ClientListingCard.dart';
 import '../../../components/HappiFeetAppBar.dart';
 import '../../../model/ClientUsers/ClientUserData.dart';
+import '../../../storage/runtime_storage.dart';
 import '../../../storage/shared_preferences.dart';
 import '../../../utils/ColorParser.dart';
 
@@ -83,8 +84,8 @@ class _ClientListingWidgetState extends State<ClientListingWidget> {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  ColorParser().hexToColor("#34A846"),
-                  ColorParser().hexToColor("#83C03D")
+                  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)
                 ],
               )),
               child: Column(children: [
@@ -92,7 +93,7 @@ class _ClientListingWidgetState extends State<ClientListingWidget> {
                 Padding(
                   padding: EdgeInsets.only(
                       top: MediaQuery.of(context).size.height / 8),
-                  child: const Row(
+                  child:  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
@@ -101,7 +102,7 @@ class _ClientListingWidgetState extends State<ClientListingWidget> {
                         // "Select Location".language(context),
                         // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
                         style: TextStyle(
-                            color: Colors.white,
+                            color:ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_text_color!),
                             fontSize: 20,
                             fontWeight: FontWeight.w500),
                       ),
@@ -233,7 +234,7 @@ class _ClientListingWidgetState extends State<ClientListingWidget> {
       ),
       bottomSheet: Container(
         height: 50,
-        color: ColorParser().hexToColor("#1A7C52"),
+        color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
         child: Row(
           children: [
             Expanded(
@@ -248,7 +249,7 @@ class _ClientListingWidgetState extends State<ClientListingWidget> {
                   });
                 },
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: ColorParser().hexToColor("#1A7C52"),
+                    backgroundColor: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                     elevation: 0),
                 child: const Text(
                   "Add Client",

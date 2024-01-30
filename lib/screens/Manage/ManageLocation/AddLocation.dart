@@ -9,6 +9,7 @@ import 'package:happifeet_client_app/i18n/locale_keys.g.dart';
 import 'package:happifeet_client_app/model/BaseResponse.dart';
 import 'package:happifeet_client_app/model/Location/Features.dart';
 import 'package:happifeet_client_app/model/Location/LocationDataModel.dart';
+import 'package:happifeet_client_app/storage/runtime_storage.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
 import 'package:happifeet_client_app/utils/DeviceDimensions.dart';
 import 'package:image_picker/image_picker.dart';
@@ -221,8 +222,8 @@ class _AddLocationState extends State<AddLocation>
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    ColorParser().hexToColor("#34A846"),
-                    ColorParser().hexToColor("#83C03D")
+                    ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                    ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)
                   ],
                 )),
                 child: Container(
@@ -262,9 +263,9 @@ class _AddLocationState extends State<AddLocation>
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: const Text(
+                    child:  Text(
                       LocaleKeys.Select_Language,
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: 18,color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)),
                     ).tr(),
                   ),
                   TabBar(
@@ -272,8 +273,9 @@ class _AddLocationState extends State<AddLocation>
                       controller: _controller,
                       indicatorWeight: 1,
                       indicatorPadding: const EdgeInsets.all(0),
-                      labelColor: const Color(0xff49AC43),
-                      indicatorColor: const Color(0xff49AC43),
+
+                      labelColor:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                      indicatorColor:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                       tabs: [
                         for (int i = 0; i < languages.keys.length; i++)
                           Padding(
@@ -402,12 +404,17 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            "Location Name*",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700),
-                          ),
+                           Row(
+                             children: [
+                               Text(
+                                "Location Name",
+                                style: TextStyle(
+                                    color:  Colors.black,
+                                    fontWeight: FontWeight.w700),
+                                                         ),
+                               Text(" *",style: TextStyle(color: Colors.red),),
+                             ],
+                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: TextFormField(
@@ -449,12 +456,17 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            "Address & Street*",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700),
-                          ),
+                           Row(
+                             children: [
+                               Text(
+                                "Address & Street",
+                                style: TextStyle(
+                                    color:  Colors.black,
+                                    fontWeight: FontWeight.w700),
+                                                         ),
+                               Text(" *",style: TextStyle(color: Colors.red),),
+                             ],
+                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: TextFormField(
@@ -496,12 +508,17 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            "City*",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700),
-                          ),
+                           Row(
+                             children: [
+                               Text(
+                                "City",
+                                style: TextStyle(
+                                    color:Colors.black,
+                                    fontWeight: FontWeight.w700),
+                                                         ),
+                               Text(" *",style: TextStyle(color: Colors.red),),
+                             ],
+                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: TextFormField(
@@ -543,12 +560,17 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            "Zip*",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700),
-                          ),
+                           Row(
+                             children: [
+                               Text(
+                                "Zip",
+                                style: TextStyle(
+                                    color:  Colors.black,
+                                    fontWeight: FontWeight.w700),
+                                                         ),
+                               Text(" *",style: TextStyle(color: Colors.red),),
+                             ],
+                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: TextFormField(
@@ -590,12 +612,17 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            "State*",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700),
-                          ),
+                           Row(
+                             children: [
+                               Text(
+                                "State",
+                                style: TextStyle(
+                                    color:  Colors.black,
+                                    fontWeight: FontWeight.w700),
+                                                         ),
+                               Text(" *",style: TextStyle(color: Colors.red),),
+                             ],
+                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: TextFormField(
@@ -637,12 +664,17 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            "Description*",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700),
-                          ),
+                           Row(
+                             children: [
+                               Text(
+                                "Description",
+                                style: TextStyle(
+                                    color:  Colors.black,
+                                    fontWeight: FontWeight.w700),
+                                                         ),
+                               Text(" *",style: TextStyle(color: Colors.red),),
+                             ],
+                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: TextFormField(
@@ -686,10 +718,10 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                           Text(
                             "Location (Images / Photos)",
                             style: TextStyle(
-                                color: Colors.black,
+                                color:  Colors.black,
                                 fontWeight: FontWeight.w700),
                           ),
                           Padding(
@@ -725,7 +757,7 @@ class _AddLocationState extends State<AddLocation>
                                             onPressed: () {
                                               _showBottomSheet(1);
                                             },
-                                            child: const Text("Choose File"),
+                                            child:  Text("Choose File",style: TextStyle(color:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)),),
                                             style: ButtonStyle(
                                               backgroundColor:
                                                   MaterialStateProperty.all(
@@ -734,13 +766,13 @@ class _AddLocationState extends State<AddLocation>
                                                   RoundedRectangleBorder(
                                                       side: BorderSide(
                                                           width: 0.0,
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .primaryColor),
+                                                          color:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                                                      ),
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               10.0))),
-                                            )),
+                                            )
+                                        ),
                                       ),
                                     ]),
                               ),
@@ -756,13 +788,13 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Row(
+                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 "Gallery (Images / Photos)",
                                 style: TextStyle(
-                                    color: Colors.black,
+                                    color:  Colors.black,
                                     fontWeight: FontWeight.w700),
                               ),
                               Text(
@@ -812,7 +844,7 @@ class _AddLocationState extends State<AddLocation>
                                                 _showBottomSheet(2);
                                               }
                                             },
-                                            child: const Text("Choose File"),
+                                            child:  Text("Choose File",style: TextStyle(color:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),),),
                                             style: ButtonStyle(
                                               backgroundColor:
                                                   MaterialStateProperty.all(
@@ -843,10 +875,10 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                           Text(
                             "Main City Location",
                             style: TextStyle(
-                                color: Colors.black,
+                                color:  Colors.black,
                                 fontWeight: FontWeight.w700),
                           ),
                           Padding(
@@ -877,12 +909,17 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            "Latitude*",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700),
-                          ),
+                           Row(
+                             children: [
+                               Text(
+                                "Latitude",
+                                style: TextStyle(
+                                    color:  Colors.black,
+                                    fontWeight: FontWeight.w700),
+                                                         ),
+                               Text(" *",style: TextStyle(color: Colors.red),),
+                             ],
+                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: TextFormField(
@@ -927,12 +964,17 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            "Longitude*",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700),
-                          ),
+                           Row(
+                             children: [
+                               Text(
+                                "Longitude",
+                                style: TextStyle(
+                                    color:  Colors.black,
+                                    fontWeight: FontWeight.w700),
+                                                         ),
+                               Text(" *",style: TextStyle(color: Colors.red),),
+                             ],
+                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: TextFormField(
@@ -977,7 +1019,7 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                           Text(
                             "Reserve Link",
                             style: TextStyle(
                                 color: Colors.black,
@@ -1018,10 +1060,10 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                           Text(
                             "Available For Months",
                             style: TextStyle(
-                                color: Colors.black,
+                                color:  Colors.black,
                                 fontWeight: FontWeight.w700),
                           ),
                           Padding(
@@ -1051,8 +1093,7 @@ class _AddLocationState extends State<AddLocation>
                                                   side: BorderSide(
                                                       width: 2,
                                                       color: showByMonth
-                                                          ? Theme.of(context)
-                                                              .primaryColor
+                                                          ?  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)
                                                           : Colors.transparent),
                                                   borderRadius:
                                                       BorderRadius.circular(
@@ -1063,8 +1104,7 @@ class _AddLocationState extends State<AddLocation>
                                           style: TextStyle(
                                               fontSize: 14,
                                               color: showByMonth
-                                                  ? Theme.of(context)
-                                                      .primaryColor
+                                                  ?  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)
                                                   : const Color(0xff828385)),
                                         ),
                                       ),
@@ -1088,9 +1128,8 @@ class _AddLocationState extends State<AddLocation>
                                                           color: !showByMonth
                                                               ? Colors
                                                                   .transparent
-                                                              : Theme.of(
-                                                                      context)
-                                                                  .primaryColor),
+                                                              :  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                                                      ),
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               10.0))),
@@ -1099,8 +1138,7 @@ class _AddLocationState extends State<AddLocation>
                                                 style: TextStyle(
                                                     fontSize: 14,
                                                     color: !showByMonth
-                                                        ? Theme.of(context)
-                                                            .primaryColor
+                                                        ?  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)
                                                         : const Color(
                                                             0xff828385)))),
                                       ),
@@ -1137,14 +1175,13 @@ class _AddLocationState extends State<AddLocation>
                                             child: Container(
                                               decoration: BoxDecoration(
                                                   color: isSelected
-                                                      ? const Color(0xff01825C)
+                                                      ?   ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)
                                                       : Colors.white,
                                                   borderRadius:
                                                       BorderRadius.circular(5),
                                                   border: Border.all(
                                                       color: isSelected
-                                                          ? const Color(
-                                                              0xff49AC43)
+                                                          ?  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)
                                                           : const Color(
                                                               0xff8A8A8A))),
                                               child: Center(
@@ -1191,10 +1228,10 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                           Text(
                             "Features",
                             style: TextStyle(
-                                color: Colors.black,
+                                color:  Colors.black,
                                 fontWeight: FontWeight.w700),
                           ),
                           Padding(
@@ -1233,7 +1270,7 @@ class _AddLocationState extends State<AddLocation>
                                                 BorderRadius.circular(5),
                                             border: Border.all(
                                                 color: isSelected
-                                                    ? const Color(0xff49AC43)
+                                                    ? ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)
                                                     : const Color(0xff8A8A8A))),
                                         child: Center(
                                           child: Column(
@@ -1245,8 +1282,7 @@ class _AddLocationState extends State<AddLocation>
                                               SvgPicture.network(item.icon!,
                                                   colorFilter: ColorFilter.mode(
                                                       isSelected
-                                                          ? const Color(
-                                                              0xff49AC43)
+                                                          ?  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)
                                                           : const Color(
                                                               0xff8A8A8A),
                                                       BlendMode.srcIn)),
@@ -1256,8 +1292,7 @@ class _AddLocationState extends State<AddLocation>
                                                 style: TextStyle(
                                                     fontSize: 14.0,
                                                     color: isSelected
-                                                        ? const Color(
-                                                            0xff49AC43)
+                                                        ?  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)
                                                         : const Color(
                                                             0xff8A8A8A)),
                                               ),
@@ -1281,10 +1316,10 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                           Text(
                             "Other Features",
                             style: TextStyle(
-                                color: Colors.black,
+                                color:  Colors.black,
                                 fontWeight: FontWeight.w700),
                           ),
                           Padding(
@@ -1330,7 +1365,7 @@ class _AddLocationState extends State<AddLocation>
 
                             setState(() {});
                           },
-                          child: const Text("Add More +")),
+                          child:  Text("Add More +",style: TextStyle(color:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),),)),
                     ),
                     // =========================== Todo ==>  Status
                     Container(
@@ -1339,10 +1374,10 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                           Text(
                             "Status",
                             style: TextStyle(
-                                color: Colors.black,
+                                color:  Colors.black,
                                 fontWeight: FontWeight.w700),
                           ),
                           Padding(
@@ -1354,7 +1389,7 @@ class _AddLocationState extends State<AddLocation>
                                   FlutterSwitch(
                                     width: 120,
                                     value: isChecked,
-                                    activeColor: Colors.green,
+                                    activeColor:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                                     showOnOff: true,
                                     valueFontSize: 16,
                                     activeText: "Active",
@@ -1373,12 +1408,15 @@ class _AddLocationState extends State<AddLocation>
                     Padding(
                       padding: const EdgeInsets.only(bottom: 56.0, top: 16),
                       child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!),
+                        ),
                           onPressed: () {
                             submit_English_Details();
                           },
                           child: const Padding(
                             padding: EdgeInsets.symmetric(vertical: 16.0),
-                            child: Text("Submit"),
+                            child: Text("Submit",style: TextStyle(color: Colors.white),),
                           )),
                     )
                   ],
@@ -1534,11 +1572,16 @@ class _AddLocationState extends State<AddLocation>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          LocaleKeys.Location_Name,
-                          style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.w700),
-                        ).tr(),
+                         Row(
+                           children: [
+                             const Text(
+                              LocaleKeys.Location_Name,
+                              style: TextStyle(
+                                  color:Colors.black, fontWeight: FontWeight.w700),
+                                                     ).tr(),
+                             Text(" *",style: TextStyle(color: Colors.red),),
+                           ],
+                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 10.0),
                           child: TextFormField(
@@ -1581,11 +1624,16 @@ class _AddLocationState extends State<AddLocation>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          LocaleKeys.Address_Street,
-                          style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.w700),
-                        ).tr(),
+                         Row(
+                           children: [
+                             const Text(
+                              LocaleKeys.Address_Street,
+                              style: TextStyle(
+                                  color: Colors.black, fontWeight: FontWeight.w700),
+                                                     ).tr(),
+                             Text(" *",style: TextStyle(color: Colors.red),),
+                           ],
+                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 10.0),
                           child: TextFormField(
@@ -1628,11 +1676,16 @@ class _AddLocationState extends State<AddLocation>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          LocaleKeys.Street,
-                          style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.w700),
-                        ).tr(),
+                         Row(
+                           children: [
+                             const Text(
+                              LocaleKeys.Street,
+                              style: TextStyle(
+                                  color: Colors.black, fontWeight: FontWeight.w700),
+                                                     ).tr(),
+                             Text(" *",style: TextStyle(color: Colors.red),),
+                           ],
+                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 10.0),
                           child: TextFormField(
@@ -1675,11 +1728,16 @@ class _AddLocationState extends State<AddLocation>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          LocaleKeys.City,
-                          style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.w700),
-                        ).tr(),
+                         Row(
+                           children: [
+                             const Text(
+                              LocaleKeys.City,
+                              style: TextStyle(
+                                  color: Colors.black, fontWeight: FontWeight.w700),
+                                                     ).tr(),
+                             Text(" *",style: TextStyle(color: Colors.red),),
+                           ],
+                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 10.0),
                           child: TextFormField(
@@ -1722,11 +1780,16 @@ class _AddLocationState extends State<AddLocation>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          LocaleKeys.Description,
-                          style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.w700),
-                        ).tr(),
+                         Row(
+                           children: [
+                             const Text(
+                              LocaleKeys.Description,
+                              style: TextStyle(
+                                  color: Colors.black, fontWeight: FontWeight.w700),
+                                                     ).tr(),
+                             Text(" *",style: TextStyle(color: Colors.red),),
+                           ],
+                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 10.0),
                           child: TextFormField(
@@ -1770,11 +1833,16 @@ class _AddLocationState extends State<AddLocation>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          LocaleKeys.Other_features,
-                          style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.w700),
-                        ).tr(),
+                         Row(
+                           children: [
+                             const Text(
+                              LocaleKeys.Other_features,
+                              style: TextStyle(
+                                  color: Colors.black, fontWeight: FontWeight.w700),
+                                                     ).tr(),
+                             Text(" *",style: TextStyle(color: Colors.red),),
+                           ],
+                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 10.0),
                           child: Column(
@@ -1824,7 +1892,7 @@ class _AddLocationState extends State<AddLocation>
 
                           setState(() {});
                         },
-                        child: const Text(LocaleKeys.Add_More).tr()),
+                        child:  Text(LocaleKeys.Add_More,style: TextStyle(color: ColorParser().hexToColor(SharedPref.instance.clientTheme.top_title_background_color!)),).tr()),
                   ),
                   // Container(
                   //     width: DeviceDimensions.getDeviceWidth(context),
@@ -1861,12 +1929,15 @@ class _AddLocationState extends State<AddLocation>
                   Padding(
                     padding: const EdgeInsets.only(bottom: 56.0, top: 24),
                     child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!),
+                        ),
                         onPressed: () {
                           submitDetails();
                         },
                         child: const Padding(
                           padding: EdgeInsets.symmetric(vertical: 16.0),
-                          child: Text("Submit"),
+                          child: Text("Submit",style: TextStyle(color: Colors.white),),
                         )),
                   )
                 ],

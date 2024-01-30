@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageUsers/AddAssignedUser.dart';
+import 'package:happifeet_client_app/storage/runtime_storage.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
 
 import '../../../components/HappiFeetAppBar.dart';
@@ -84,8 +85,8 @@ setState(() {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  ColorParser().hexToColor("#34A846"),
-                  ColorParser().hexToColor("#83C03D")
+                  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)
                 ],
               )),
               child: Column(children: [
@@ -93,7 +94,7 @@ setState(() {
                 Padding(
                   padding: EdgeInsets.only(
                       top: MediaQuery.of(context).size.height / 8),
-                  child: const Row(
+                  child:  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
@@ -102,7 +103,7 @@ setState(() {
                         // "Select Location".language(context),
                         // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
                         style: TextStyle(
-                            color: Colors.white,
+                            color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_text_color!),
                             fontSize: 20,
                             fontWeight: FontWeight.w500),
                       ),
@@ -232,7 +233,7 @@ setState(() {
       ),
       bottomSheet: Container(
         height: 50,
-        color: ColorParser().hexToColor("#1A7C52"),
+        color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
         child: Row(
           children: [
             Expanded(
@@ -247,7 +248,7 @@ setState(() {
                   });
                 },
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: ColorParser().hexToColor("#1A7C52"),
+                    backgroundColor: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                     elevation: 0),
                 child: const Text(
                   "Add User",

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
+import 'package:happifeet_client_app/storage/runtime_storage.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
 
 import '../model/AssignedUsers/AssignedUserData.dart';
@@ -73,7 +74,7 @@ class _UserListingCardState extends State<UserListingCard> {
                             // overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: TextStyle(
-                                color: ColorParser().hexToColor("#01825C"),
+                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                                 letterSpacing: 0.5),
@@ -105,7 +106,7 @@ class _UserListingCardState extends State<UserListingCard> {
                                   softWrap: true,
                                   maxLines: 1,
                                   overflow: TextOverflow.clip,
-                                  style: TextStyle(color: Colors.grey),
+                                  style: TextStyle(color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
                                 ),
                               ],
                             ),
@@ -127,7 +128,7 @@ class _UserListingCardState extends State<UserListingCard> {
                                   softWrap: true,
                                   maxLines: 1,
                                   overflow: TextOverflow.clip,
-                                  style: TextStyle(color: Colors.grey),
+                                  style: TextStyle(color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
                                 ),
                               ],
                             ),
@@ -144,7 +145,7 @@ class _UserListingCardState extends State<UserListingCard> {
                                   softWrap: true,
                                   maxLines: 1,
                                   overflow: TextOverflow.clip,
-                                  style: TextStyle(color: Colors.grey),
+                                  style: TextStyle(color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
                                 ),
                               ],
                             ),

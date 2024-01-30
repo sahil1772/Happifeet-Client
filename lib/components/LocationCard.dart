@@ -5,8 +5,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:happifeet_client_app/model/BaseResponse.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageLocation/AddLocation.dart';
+import 'package:happifeet_client_app/utils/ColorParser.dart';
 
 import '../model/Location/LocationData.dart';
+import '../storage/runtime_storage.dart';
 
 class LocationCard extends StatefulWidget {
   LocationData? locationDetails;
@@ -84,8 +86,8 @@ class _LocationCardState extends State<LocationCard> {
                         overflow: TextOverflow.clip,
                         softWrap: true,
                         maxLines: 1,
-                        style: const TextStyle(
-                            color: Colors.black,
+                        style:  TextStyle(
+                            color:ColorParser().hexToColor( RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                             letterSpacing: 0.5),
@@ -97,17 +99,17 @@ class _LocationCardState extends State<LocationCard> {
                           softWrap: true,
                           maxLines: 1,
                           overflow: TextOverflow.clip,
-                          style: const TextStyle(color: Colors.grey),
+                          style:  TextStyle(color: ColorParser().hexToColor( RuntimeStorage.instance.clientTheme!.body_text_color!),),
                         ),
                       ),
-                      const Padding(
+                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 1.0),
                         child: Text(
                           'Tallahassee, FL 32309, USA',
                           softWrap: true,
                           maxLines: 1,
                           overflow: TextOverflow.clip,
-                          style: TextStyle(color: Colors.grey),
+                          style: TextStyle(color: ColorParser().hexToColor( RuntimeStorage.instance.clientTheme!.body_text_color!),),
                         ),
                       ),
                     ],

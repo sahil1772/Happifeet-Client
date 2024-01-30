@@ -7,6 +7,7 @@ import 'package:happifeet_client_app/utils/DeviceDimensions.dart';
 import '../../../components/HappiFeetAppBar.dart';
 import '../../../components/TrailListingCard.dart';
 import '../../../model/Trails/TrailListingData.dart';
+import '../../../storage/runtime_storage.dart';
 import '../../../utils/ColorParser.dart';
 
 class TrailListing extends StatefulWidget {
@@ -63,20 +64,20 @@ class _TrailListingState extends State<TrailListing> {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    ColorParser().hexToColor("#34A846"),
-                    ColorParser().hexToColor("#83C03D")
+                    ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                    ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)
                   ],
                 )),
                 child: Container(
                   margin: DeviceDimensions.getHeaderEdgeInsets(context),
-                  child: const Center(
+                  child:  Center(
                     child: Text(
                       "List Trails",
                       // "Select Location".tr(),
                       // "Select Location".language(context),
                       // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
                       style: TextStyle(
-                          color: Colors.white,
+                          color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_text_color!),
                           fontSize: 20,
                           fontWeight: FontWeight.w500),
                     ),
@@ -121,7 +122,7 @@ class _TrailListingState extends State<TrailListing> {
                                     decoration: InputDecoration(
                                       prefixIcon: const Icon(Icons.search),
                                       prefixIconColor:
-                                          ColorParser().hexToColor("#1A7C52"),
+                                      ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                                       labelText: 'Search',
                                       // labelText: widget.selectedLanguage == "1"
                                       //     ? "Search".language(context)
@@ -212,11 +213,12 @@ class _TrailListingState extends State<TrailListing> {
       ),
       bottomSheet: Container(
         height: 50,
-        color: ColorParser().hexToColor("#1A7C52"),
+        color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
         child: Row(
           children: [
             Expanded(
               child: ElevatedButton(
+
                 onPressed: () {
                   AddTrail.goToAddTrail(context, false, null, () {
                     trailListing = getTrailListing();
@@ -224,7 +226,7 @@ class _TrailListingState extends State<TrailListing> {
                   });
                 },
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: ColorParser().hexToColor("#1A7C52"),
+                    backgroundColor: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                     elevation: 0),
                 child: const Text(
                   "Add Trail",

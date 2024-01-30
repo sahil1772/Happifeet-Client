@@ -15,6 +15,7 @@ class ClientTheme{
   String? button_text_color;
   String? search_filter_border;
   String? top_title_background_color;
+  String? top_title_background_color_second;
   String? top_title_text_color;
   String? title_color_on_listing;
   String? body_text_color;
@@ -31,6 +32,7 @@ class ClientTheme{
     this.button_text_color,
     this.search_filter_border,
     this.top_title_background_color,
+    this.top_title_background_color_second,
     this.top_title_text_color,
     this.title_color_on_listing,
     this.body_text_color,

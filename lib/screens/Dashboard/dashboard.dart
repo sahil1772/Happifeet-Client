@@ -4,9 +4,12 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:happifeet_client_app/components/HappiFeetAppBar.dart';
+import 'package:happifeet_client_app/model/Theme/ClientTheme.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/screens/Dashboard/Graph%20Model/GraphData.dart';
+import 'package:happifeet_client_app/storage/runtime_storage.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
 import 'package:happifeet_client_app/utils/DeviceDimensions.dart';
@@ -46,10 +49,22 @@ class _DashboardWidgetState extends State<DashboardWidget> {
       <StackedColumnSeries<GraphData, String>>[];
 
   String? selectedParkId = "";
+  ClientTheme? theme; 
 
   @override
   void initState() {
+    
+    // SharedPref.instance.getCityTheme().then((value) {
+    //   theme = value;
+    //   log("THEME IN DASHBOARD${theme!.toJson()}");
+    //   getParks();} );
+    //
     getParks();
+    log("THEME FROM RUNTIME STORAGE ${RuntimeStorage.instance.clientTheme!.toJson()}");
+
+
+
+
     super.initState();
   }
 
@@ -66,44 +81,53 @@ class _DashboardWidgetState extends State<DashboardWidget> {
       body: SafeArea(
         top: false,
         child: Stack(
+            // "assets/images/manage/manageBG.svg
           children: [
             Container(
-                width: DeviceDimensions.getDeviceWidth(context),
                 height: DeviceDimensions.getHeaderSize(context, HEADER_AREA),
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
                   colors: [
-                    ColorParser().hexToColor("#34A846"),
-                    ColorParser().hexToColor("#83C03D")
+                    ColorParser().hexToColor( RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                    ColorParser().hexToColor( RuntimeStorage.instance.clientTheme!.top_title_background_color!)
                   ],
                 )),
                 child: Container(
                   margin: DeviceDimensions.getHeaderEdgeInsets(context),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
+                  child: const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
                       child: Text(
                         "Dashboard",
                         // "Select Location".tr(),
                         // "Select Location".language(context),
                         // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
                         style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500),
+                            fontSize: 22, fontWeight: FontWeight.w600,color: Colors.white),
                       ),
                     ),
                   ),
                 )),
+            Positioned(
+                right: MediaQuery.of(context).size.height <= 667 ? -25 : 0,
+                top: MediaQuery.of(context).size.height <= 667
+                    ? MediaQuery.of(context).size.height / 7.7
+                    : MediaQuery.of(context).size.height / 9.5,
+                child: SizedBox(
+                    height:
+                    MediaQuery.of(context).size.height <= 667 ? 140 : null,
+                    child: SvgPicture.asset(
+                      "assets/images/manage/manageBG.svg",
+                    ))),
             Container(
+                height:
+                    DeviceDimensions.getBottomSheetHeight(context, HEADER_AREA),
                 margin: EdgeInsets.only(
                     top: DeviceDimensions.getBottomSheetMargin(
                         context, HEADER_AREA)),
-                height:
-                    DeviceDimensions.getBottomSheetHeight(context, HEADER_AREA),
                 padding: const EdgeInsets.symmetric(horizontal: 0),
                 decoration: const BoxDecoration(
                     borderRadius: BorderRadius.only(
@@ -163,8 +187,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                             backgroundColor:
                                                 MaterialStateProperty.all(
                                                     type == Filter_TYPE.WEEKLY
-                                                        ? Theme.of(context)
-                                                            .primaryColor
+                                                        ? ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!)
                                                         : Colors.transparent),
                                             shape: MaterialStateProperty.all(
                                                 RoundedRectangleBorder(
@@ -184,8 +207,8 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                                 color:
                                                     type == Filter_TYPE.WEEKLY
                                                         ? Colors.white
-                                                        : Theme.of(context)
-                                                            .primaryColor),
+                                                        : ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!)
+                                            ),
                                           ))),
                                   Flexible(
                                       fit: FlexFit.loose,
@@ -195,8 +218,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                             backgroundColor:
                                                 MaterialStateProperty.all(
                                                     type == Filter_TYPE.MONTHLY
-                                                        ? Theme.of(context)
-                                                            .primaryColor
+                                                        ? ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!)
                                                         : Colors.transparent),
                                             shape: MaterialStateProperty.all(
                                                 RoundedRectangleBorder(
@@ -216,8 +238,8 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                                 color:
                                                     type == Filter_TYPE.MONTHLY
                                                         ? Colors.white
-                                                        : Theme.of(context)
-                                                            .primaryColor),
+                                                        : ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!)
+                                            ),
                                           ))),
                                   Flexible(
                                       fit: FlexFit.loose,
@@ -227,9 +249,9 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                             backgroundColor:
                                                 MaterialStateProperty.all(
                                                     type == Filter_TYPE.YEARLY
-                                                        ? Theme.of(context)
-                                                            .primaryColor
-                                                        : Colors.transparent),
+                                                        ? ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!)
+                                                        : Colors.transparent
+                                                ),
                                             shape: MaterialStateProperty.all(
                                                 RoundedRectangleBorder(
                                                     borderRadius:
@@ -248,8 +270,8 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                                 color:
                                                     type == Filter_TYPE.YEARLY
                                                         ? Colors.white
-                                                        : Theme.of(context)
-                                                            .primaryColor),
+                                                        : ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!)
+                                            ),
                                           ))),
                                   Flexible(
                                       fit: FlexFit.loose,
@@ -259,9 +281,9 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                             backgroundColor:
                                                 MaterialStateProperty.all(
                                                     type == Filter_TYPE.ALL
-                                                        ? Theme.of(context)
-                                                            .primaryColor
-                                                        : Colors.transparent),
+                                                        ? ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!)
+                                                        : Colors.transparent
+                                                ),
                                             shape: MaterialStateProperty.all(
                                                 RoundedRectangleBorder(
                                                     borderRadius:
@@ -279,8 +301,8 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                                 fontSize: 12,
                                                 color: type == Filter_TYPE.ALL
                                                     ? Colors.white
-                                                    : Theme.of(context)
-                                                        .primaryColor),
+                                                    : ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!)
+                                            ),
                                           ))),
                                 ],
                               ),
@@ -385,7 +407,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                   //                             backgroundColor:
                   //                             MaterialStateProperty.all(type ==
                   //                                 Filter_TYPE.WEEKLY
-                  //                                 ? Theme.of(context).primaryColor
+                  //                                 ? theme!.of(context).primaryColor
                   //                                 : Colors.transparent),
                   //                             shape: MaterialStateProperty.all(
                   //                                 RoundedRectangleBorder(
@@ -403,7 +425,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                   //                                 fontSize: 12,
                   //                                 color: type == Filter_TYPE.WEEKLY
                   //                                     ? Colors.white
-                  //                                     : Theme.of(context).primaryColor),
+                  //                                     : theme!.of(context).primaryColor),
                   //                           ))),
                   //                   Flexible(
                   //                       fit: FlexFit.loose,
@@ -413,7 +435,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                   //                             backgroundColor:
                   //                             MaterialStateProperty.all(type ==
                   //                                 Filter_TYPE.MONTHLY
-                  //                                 ? Theme.of(context).primaryColor
+                  //                                 ? theme!.of(context).primaryColor
                   //                                 : Colors.transparent),
                   //                             shape: MaterialStateProperty.all(
                   //                                 RoundedRectangleBorder(
@@ -431,7 +453,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                   //                                 fontSize: 12,
                   //                                 color: type == Filter_TYPE.MONTHLY
                   //                                     ? Colors.white
-                  //                                     : Theme.of(context).primaryColor),
+                  //                                     : theme!.of(context).primaryColor),
                   //                           ))),
                   //                   Flexible(
                   //                       fit: FlexFit.loose,
@@ -441,7 +463,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                   //                             backgroundColor:
                   //                             MaterialStateProperty.all(type ==
                   //                                 Filter_TYPE.YEARLY
-                  //                                 ? Theme.of(context).primaryColor
+                  //                                 ? theme!.of(context).primaryColor
                   //                                 : Colors.transparent),
                   //                             shape: MaterialStateProperty.all(
                   //                                 RoundedRectangleBorder(
@@ -459,7 +481,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                   //                                 fontSize: 12,
                   //                                 color: type == Filter_TYPE.YEARLY
                   //                                     ? Colors.white
-                  //                                     : Theme.of(context).primaryColor),
+                  //                                     : theme!.of(context).primaryColor),
                   //                           ))),
                   //                   Flexible(
                   //                       fit: FlexFit.loose,
@@ -469,7 +491,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                   //                             backgroundColor:
                   //                             MaterialStateProperty.all(type ==
                   //                                 Filter_TYPE.ALL
-                  //                                 ? Theme.of(context).primaryColor
+                  //                                 ? theme!.of(context).primaryColor
                   //                                 : Colors.transparent),
                   //                             shape: MaterialStateProperty.all(
                   //                                 RoundedRectangleBorder(
@@ -487,7 +509,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                   //                                 fontSize: 12,
                   //                                 color: type == Filter_TYPE.ALL
                   //                                     ? Colors.white
-                  //                                     : Theme.of(context).primaryColor),
+                  //                                     : theme!.of(context).primaryColor),
                   //                           ))),
                   //                 ],
                   //               ),
@@ -575,7 +597,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
           padding: const EdgeInsets.all(16.0),
           child: Text("Comments",
               style: TextStyle(
-                  color: Theme.of(context).primaryColor, fontSize: 18)),
+                  color:ColorParser().hexToColor( RuntimeStorage.instance.clientTheme!.top_title_background_color!), fontSize: 18)),
         ),
         SizedBox(
           height: graphSize,
@@ -589,7 +611,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
           padding: const EdgeInsets.all(16.0),
           child: Text("Average Rating",
               style: TextStyle(
-                  color: Theme.of(context).primaryColor, fontSize: 18)),
+                  color: ColorParser().hexToColor( RuntimeStorage.instance.clientTheme!.top_title_background_color!), fontSize: 18)),
         ),
         SizedBox(
           height: graphSize,
@@ -600,10 +622,10 @@ class _DashboardWidgetState extends State<DashboardWidget> {
               series: ratingGraphLine),
         ),
         Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding:  EdgeInsets.all(16.0),
           child: Text("Recommendation",
               style: TextStyle(
-                  color: Theme.of(context).primaryColor, fontSize: 18)),
+                  color: ColorParser().hexToColor( RuntimeStorage.instance.clientTheme!.top_title_background_color!), fontSize: 18)),
         ),
         SizedBox(
           height: graphSize,
@@ -628,7 +650,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
           padding: const EdgeInsets.all(16.0),
           child: Text("Locations",
               style: TextStyle(
-                  color: Theme.of(context).primaryColor, fontSize: 18)),
+                  color: ColorParser().hexToColor( RuntimeStorage.instance.clientTheme!.top_title_background_color!) , fontSize: 18)),
         ),
         Card(
           color: Colors.white,
@@ -657,7 +679,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                               locations[i]["park_name"],
                               style: TextStyle(
                                   fontSize: 16,
-                                  color: Theme.of(context).primaryColor),
+                                  color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.title_color_on_listing!)),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 5.0),
@@ -667,7 +689,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     fontSize: 14,
-                                    color: ColorParser().hexToColor("#757575")),
+                                    color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
                               ),
                             )
                           ],
@@ -691,14 +713,14 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                               locations[i]["feedback_count"],
                               style: TextStyle(
                                   fontSize: 28,
-                                  color: Theme.of(context).primaryColor),
+                                  color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.title_color_on_listing!)),
                             ),
                             Text(
                               "Total Feedback",
                               softWrap: true,
                               style: TextStyle(
                                   fontSize: 14,
-                                  color: Theme.of(context).primaryColor),
+                                  color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!)),
                               textAlign: TextAlign.center,
                             )
                           ],
@@ -718,10 +740,11 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  backgroundColor: Theme.of(context).primaryColor),
-              child: const Text(
+                  backgroundColor:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!),
+              ),
+              child:  Text(
                 "View All",
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
               )),
         ),
         Padding(
@@ -729,7 +752,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
               const EdgeInsets.only(left: 16.0, top: 16, right: 16, bottom: 10),
           child: Text("Latest Comments",
               style: TextStyle(
-                  color: Theme.of(context).primaryColor, fontSize: 18)),
+                  color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!), fontSize: 18)),
         ),
         SingleChildScrollView(
           physics: const ClampingScrollPhysics(),
@@ -758,8 +781,8 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                             children: [
                               Text(
                                 comments[commentIndex]["description"],
-                                style: const TextStyle(
-                                    color: Color(0xff757575), fontSize: 12),
+                                style:  TextStyle(
+                                    color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!), fontSize: 12),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(
@@ -789,15 +812,15 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                               Text(
                                 "Will you recommend us ?",
                                 style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
+                                    color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.title_color_on_listing!),
                                     fontSize: 14),
                               ),
-                              const Padding(
+                               Padding(
                                 padding: EdgeInsets.only(top: 5.0),
                                 child: Text(
                                   "Maybe",
                                   style: TextStyle(
-                                      color: Color(0xff757575), fontSize: 12),
+                                      color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!), fontSize: 12),
                                 ),
                               ),
                             ],
@@ -812,7 +835,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           mainAxisSize: MainAxisSize.max,
                           children: [
-                            const Flexible(
+                             Flexible(
                               fit: FlexFit.tight,
                               flex: 2,
                               child: Padding(
@@ -827,13 +850,13 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                       style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
-                                          color: Color(0xff757575)),
+                                          color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.title_color_on_listing!)),
                                     ),
                                     Text(
                                       "Jan, 25, 2023",
                                       style: TextStyle(
                                           fontSize: 12,
-                                          color: Color(0xff757575)),
+                                          color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
                                     )
                                   ],
                                 ),
@@ -862,13 +885,13 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                           },
                                         ),
                                       ),
-                                      const Center(
+                                       Center(
                                         child: Text(
                                           "View",
                                           style: TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.bold,
-                                              color: Color(0xff757575)),
+                                              color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
                                         ),
                                       ),
                                     ],
@@ -880,7 +903,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                               fit: FlexFit.loose,
                               flex: 2,
                               child: Container(
-                                child: const Padding(
+                                child:  Padding(
                                   padding: EdgeInsets.symmetric(
                                       vertical: 10.0, horizontal: 16),
                                   child: Center(
@@ -889,7 +912,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                       style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
-                                          color: Color(0xff757575)),
+                                          color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
                                     ),
                                   ),
                                 ),
@@ -1065,8 +1088,6 @@ class _DashboardWidgetState extends State<DashboardWidget> {
 
     parks = responseData!["location_list"];
     selectedParkId = parks.keys.first;
-
-    SharedPref.instance.setParks(parks);
 
     setState(() {});
   }

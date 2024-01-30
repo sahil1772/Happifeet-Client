@@ -17,6 +17,7 @@ UserData _$UserDataFromJson(Map<String, dynamic> json) => UserData(
           : AccessPermissionData.fromJson(
               json['access'] as Map<String, dynamic>),
       language: json['language'] as Map<String, dynamic>?,
+      theme_data: json['theme_data'] as Map<String, dynamic>?,
     );
 
 Map<String, dynamic> _$UserDataToJson(UserData instance) => <String, dynamic>{
@@ -27,4 +28,5 @@ Map<String, dynamic> _$UserDataToJson(UserData instance) => <String, dynamic>{
       'client_id': instance.client_id,
       'access': instance.access,
       'language': instance.language,
+      'theme_data': instance.theme_data,
     };

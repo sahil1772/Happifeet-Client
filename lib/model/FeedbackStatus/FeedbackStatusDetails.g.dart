@@ -23,6 +23,9 @@ FeedbackStatusDetails _$FeedbackStatusDetailsFromJson(
       descrpt: json['descrpt'] as String?,
       how_safe_feel: json['how_safe_feel'] as String?,
       zip_code_live: json['zip_code_live'] as String?,
+      comment: (json['comment'] as List<dynamic>?)
+          ?.map((e) => CommentsData.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$FeedbackStatusDetailsToJson(
@@ -42,4 +45,5 @@ Map<String, dynamic> _$FeedbackStatusDetailsToJson(
       'descrpt': instance.descrpt,
       'how_safe_feel': instance.how_safe_feel,
       'zip_code_live': instance.zip_code_live,
+      'comment': instance.comment,
     };

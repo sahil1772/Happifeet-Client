@@ -6,6 +6,7 @@ import 'package:happifeet_client_app/screens/Manage/ManageTrails/AddTrail.dart';
 
 import '../model/Trails/TrailListingData.dart';
 import '../network/ApiFactory.dart';
+import '../storage/runtime_storage.dart';
 import '../utils/ColorParser.dart';
 
 class TrailListingCard extends StatefulWidget {
@@ -70,7 +71,7 @@ class _TrailListingCardState extends State<TrailListingCard> {
                             // overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: TextStyle(
-                                color: ColorParser().hexToColor("#01825C"),
+                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                                 letterSpacing: 0.5),
@@ -102,7 +103,7 @@ class _TrailListingCardState extends State<TrailListingCard> {
                                   softWrap: true,
                                   maxLines: 1,
                                   overflow: TextOverflow.clip,
-                                  style: TextStyle(color: Colors.grey),
+                                  style: TextStyle(color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
                                 ),
                               ],
                             ),
@@ -124,7 +125,7 @@ class _TrailListingCardState extends State<TrailListingCard> {
                                   softWrap: true,
                                   maxLines: 1,
                                   overflow: TextOverflow.clip,
-                                  style: TextStyle(color: Colors.grey),
+                                  style: TextStyle(color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
                                 ),
                               ],
                             ),
@@ -139,7 +140,7 @@ class _TrailListingCardState extends State<TrailListingCard> {
                                 Text(
                                   "Distance : ",
                                   style: TextStyle(
-                                    color: Colors.grey,
+                                    color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!),
                                   ),
                                 ),
                                 Text(
@@ -147,7 +148,14 @@ class _TrailListingCardState extends State<TrailListingCard> {
                                   softWrap: true,
                                   maxLines: 1,
                                   overflow: TextOverflow.clip,
-                                  style: TextStyle(color: Colors.grey),
+                                  style: TextStyle(color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
+                                ),
+                                Text(
+                                  " Miles",
+                                  softWrap: true,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.clip,
+                                  style: TextStyle(color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
                                 ),
                               ],
                             ),

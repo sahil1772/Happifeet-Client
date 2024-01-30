@@ -13,6 +13,7 @@ import 'package:happifeet_client_app/storage/shared_preferences.dart';
 import '../../../components/HappiFeetAppBar.dart';
 import '../../../model/AssignedUsers/AssignedUserData.dart';
 import '../../../model/AssignedUsers/SubmitAssignedUserData.dart';
+import '../../../storage/runtime_storage.dart';
 import '../../../utils/ColorParser.dart';
 
 class AddAssignedUserWidget extends StatefulWidget {
@@ -161,8 +162,8 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    ColorParser().hexToColor("#34A846"),
-                    ColorParser().hexToColor("#83C03D")
+                    ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                    ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)
                   ],
                 )),
                 child: Column(children: [
@@ -179,7 +180,7 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                           // "Select Location".language(context),
                           // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
                           style: TextStyle(
-                              color: Colors.white,
+                              color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_text_color!),
                               fontSize: 20,
                               fontWeight: FontWeight.w500),
                         ),
@@ -230,7 +231,9 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                       children: [
                                         Row(
                                           children: [
-                                            Text("Name"),
+                                            Text("Name", style: TextStyle(
+                                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                                                fontWeight: FontWeight.w700),),
                                             Row(
                                               children: [
                                                 Row(
@@ -294,7 +297,9 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                       children: [
                                         Row(
                                           children: [
-                                            const Text("Contact No"),
+                                             Text("Contact No", style: TextStyle(
+                                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                                                fontWeight: FontWeight.w700),),
                                             Text(
                                               " *",
                                               style: TextStyle(color: Colors.red),
@@ -348,9 +353,11 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        const Row(
+                                         Row(
                                           children: [
-                                            Text("Email ID"),
+                                            Text("Email ID", style: TextStyle(
+                                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                                                fontWeight: FontWeight.w700),),
                                             Text(
                                               " *",
                                               style: TextStyle(color: Colors.red),
@@ -411,7 +418,9 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                       children: [
                                         Row(
                                           children: [
-                                            const Text("Remark"),
+                                             Text("Remark", style: TextStyle(
+                                                color:ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                                                fontWeight: FontWeight.w700),),
                                             Text(
                                               " *",
                                               style: TextStyle(color: Colors.red),
@@ -462,46 +471,77 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                       height: 30,
                                     ),
 
-                                    // SizedBox(
-                                    //   height:60,
-                                    //   width: 90,
-                                    //   child: FittedBox(
-                                    //     fit: BoxFit.fill,
-                                    //     child: Switch(
-                                    //         value: isActive,
-                                    //         onChanged: (value){
+
+
+                                    Container(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 16.0, bottom: 10),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                               Text(
+                                                "Status",
+                                                style: TextStyle(
+                                                    color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                                                    fontWeight: FontWeight.w700),
+                                              ),
+                                              Padding(
+                                                  padding: const EdgeInsets.only(top: 10.0),
+                                                  child: Row(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    children: [
+                                                      FlutterSwitch(
+                                                        width: 120,
+                                                        value: isActive,
+                                                        activeColor: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                                                        showOnOff: true,
+                                                        valueFontSize: 16,
+                                                        activeText: "Active",
+                                                        inactiveText: "InActive",
+                                                          onToggle: (value) {
+                                                            setState(() {
+                                                              log("toggle ${value}");
+                                                              if (value) {
+                                                                submitAssignedUserData.status = "Y";
+                                                              } else {
+                                                                submitAssignedUserData.status = "N";
+                                                              }
+                                                              isActive = value;
+                                                            });
+                                                          }
+                                                      ),
+                                                    ],
+                                                  )),
+                                            ],
+                                          ),
+                                        )),
+
+                                    // Padding(
+                                    //   padding: const EdgeInsets.only(right: 250),
+                                    //   child: FlutterSwitch(
+                                    //       padding: 6,
+                                    //       width: 110,
+                                    //       height: 30,
+                                    //       activeColor: Colors.green,
+                                    //       showOnOff: true,
+                                    //       valueFontSize: 16,
+                                    //       activeText: "Active",
+                                    //       inactiveText: "InActive",
+                                    //       value: isActive,
+                                    //       onToggle: (value) {
                                     //         setState(() {
+                                    //           log("toggle ${value}");
+                                    //           if (value) {
+                                    //             submitAssignedUserData.status = "Y";
+                                    //           } else {
+                                    //             submitAssignedUserData.status = "N";
+                                    //           }
                                     //           isActive = value;
                                     //         });
-                                    //         }),
-                                    //   ),
+                                    //       }
+                                    //       ),
                                     // ),
-                                    // isActive ? Text("Active") : Text("Inactive"),
-
-                                    Padding(
-                                      padding: const EdgeInsets.only(right: 250),
-                                      child: FlutterSwitch(
-                                          padding: 6,
-                                          width: 110,
-                                          height: 30,
-                                          activeColor: Colors.green,
-                                          showOnOff: true,
-                                          valueFontSize: 16,
-                                          activeText: "Active",
-                                          inactiveText: "InActive",
-                                          value: isActive,
-                                          onToggle: (value) {
-                                            setState(() {
-                                              log("toggle ${value}");
-                                              if (value) {
-                                                submitAssignedUserData.status = "Y";
-                                              } else {
-                                                submitAssignedUserData.status = "N";
-                                              }
-                                              isActive = value;
-                                            });
-                                          }),
-                                    ),
 
                                     SizedBox(
                                       height: 30,
@@ -580,7 +620,7 @@ class _AddAssignedUserWidgetState extends State<AddAssignedUserWidget> {
                                         },
                                         style: ElevatedButton.styleFrom(
                                             backgroundColor:
-                                            ColorParser().hexToColor("#1A7C52"),
+                                            ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                                             elevation: 0,
                                             shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.all(
