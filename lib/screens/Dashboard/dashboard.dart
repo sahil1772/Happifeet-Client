@@ -106,9 +106,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                         // "Select Location".language(context),
                         // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
                         style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500),
+                            fontSize: 22, fontWeight: FontWeight.w600,color: Colors.white),
                       ),
                     ),
                   ),
