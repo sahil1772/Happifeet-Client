@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:happifeet_client_app/model/FilterMap.dart';
@@ -27,13 +28,13 @@ class CommentsFilterpageWidget extends StatefulWidget {
 
 enum FilterType { Trail, Park }
 
-enum FilterStatus { Completed, Pending, None }
+enum FilterStatus { Completed, Pending }
 
 enum FilterFunctionType { QR, App, None }
 
 class _CommentsFilterpageWidgetState extends State<CommentsFilterpageWidget> {
   FilterType type = FilterType.Park;
-  FilterStatus status = FilterStatus.None;
+  FilterStatus status = FilterStatus.Completed;
   FilterFunctionType functionType = FilterFunctionType.None;
   String? dropdownValueSelected = fieldOptions.first;
   DateTime selectedStartDate = DateTime.now();
@@ -45,7 +46,21 @@ class _CommentsFilterpageWidgetState extends State<CommentsFilterpageWidget> {
   void initState() {
     // TODO: implement initState
 
-    widget.params ??= FilterMap();
+    if (widget.params == null) {
+      widget.params = FilterMap();
+    } else {
+      type = FilterType.values.byName(widget.params!.type!);
+      status = FilterStatus.values.byName(widget.params!.status!);
+      if (widget.params!.functionType != null) {
+        functionType =
+            FilterFunctionType.values.byName(widget.params!.functionType!);
+      }
+      selectedStartDate = DateFormat("yyyy-MM-dd")
+          .parse(widget.params!.popupDatepickerFromDateSearch!);
+      selectedEndDate = DateFormat("yyyy-MM-dd")
+          .parse(widget.params!.popupDatepickerToDateSearch!);
+      keywordController.text = widget.params!.frm_keyword!;
+    }
 
     super.initState();
   }
@@ -556,25 +571,14 @@ class _CommentsFilterpageWidgetState extends State<CommentsFilterpageWidget> {
                     onPressed: () {
                       print("TO POST MAP ${widget.params!.toJson()}");
 
-
-
-
                       if (functionType != FilterFunctionType.None) {
                         widget.params!.functionType = functionType.name;
-                      }
-                      else{
+                      } else {
                         widget.params!.functionType = null;
                       }
 
-                      if (status != FilterStatus.None) {
-                        widget.params!.status = status.name;
-                      }
-                      else{
-                        widget.params!.status = null;
-                      }
-
-
-                      widget.params!.type = type.name.toLowerCase();
+                      widget.params!.status = status.name;
+                      widget.params!.type = type.name;
                       widget.params!.frm_keyword = keywordController.text;
                       widget.params!.main_park_id = "";
                       widget.params!.popupDatepickerToDateSearch =

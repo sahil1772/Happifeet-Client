@@ -24,7 +24,7 @@ class CommentsWidget extends StatefulWidget {
 class _CommentsWidgetState extends State<CommentsWidget> {
   Future<List<CommentData>?>? commentResponse;
 
-  FilterMap filterParams = FilterMap();
+  FilterMap? filterParams ;
 
   @override
   void initState() {
