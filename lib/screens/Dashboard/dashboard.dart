@@ -59,16 +59,17 @@ class _DashboardWidgetState extends State<DashboardWidget> {
     graphSize = DeviceDimensions.getDeviceHeight(context) / 4;
     double HEADER_AREA = 3.5;
 
-    return SafeArea(
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
-        resizeToAvoidBottomInset: false,
-        appBar: HappiFeetAppBar(IsDashboard: true, isCitiyList: false)
-            .getAppBar(context),
-        body: Stack(
-          fit: StackFit.expand,
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      resizeToAvoidBottomInset: false,
+      appBar: HappiFeetAppBar(IsDashboard: true, isCitiyList: false)
+          .getAppBar(context),
+      body: SafeArea(
+        top: false,
+        child: Stack(
           children: [
             Container(
+              width: DeviceDimensions.getDeviceWidth(context),
                 height: DeviceDimensions.getHeaderSize(context, HEADER_AREA),
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -80,19 +81,10 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                   ],
                 )),
                 child: Container(
-                  margin: EdgeInsets.only(
-                      top: HappiFeetAppBar(
-                              IsDashboard: false, isCitiyList: false)
-                          .getAppBar(context)
-                          .preferredSize
-                          .height,
-                      bottom: DeviceDimensions.getBottomSheetHeight(
-                              context, HEADER_AREA) +
-                          DeviceDimensions.BOTTOMSHEET_TOP_MARGIN),
-                  child: const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  margin: DeviceDimensions.getHeaderEdgeInsets(context),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Align(alignment: Alignment.centerLeft,
                       child: Text(
                         "Dashboard",
                         // "Select Location".tr(),
@@ -106,18 +98,13 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                     ),
                   ),
                 )),
-            Positioned(
-                right: 0,
-                top: MediaQuery.of(context).size.height / 9.5,
-                child: SvgPicture.asset(
-                  "assets/images/manage/manageBG.svg",
-                )),
+
             Container(
-                height:
-                    DeviceDimensions.getBottomSheetHeight(context, HEADER_AREA),
                 margin: EdgeInsets.only(
                     top: DeviceDimensions.getBottomSheetMargin(
                         context, HEADER_AREA)),
+                height:
+                DeviceDimensions.getBottomSheetHeight(context, HEADER_AREA),
                 padding: const EdgeInsets.symmetric(horizontal: 0),
                 decoration: const BoxDecoration(
                     borderRadius: BorderRadius.only(

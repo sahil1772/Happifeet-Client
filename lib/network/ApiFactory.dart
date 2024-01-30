@@ -1,9 +1,11 @@
+import 'package:happifeet_client_app/network/interface/InterfaceComments.dart';
 import 'package:happifeet_client_app/network/interface/InterfaceDashboard.dart';
 import 'package:happifeet_client_app/network/interface/InterfaceLocation.dart';
 import 'package:happifeet_client_app/network/interface/InterfaceTrails.dart';
 import 'package:happifeet_client_app/network/services/AnnouncementService.dart';
 import 'package:happifeet_client_app/network/services/AssignedUserService.dart';
 import 'package:happifeet_client_app/network/services/ClientUserService.dart';
+import 'package:happifeet_client_app/network/services/CommentService.dart';
 import 'package:happifeet_client_app/network/services/DashboardService.dart';
 import 'package:happifeet_client_app/network/services/FeedbackService.dart';
 import 'package:happifeet_client_app/network/services/FeedbackStatusService.dart';
@@ -15,12 +17,12 @@ import 'package:happifeet_client_app/network/services/TrailService.dart';
 
 import 'interface/InrerfaceFeedback.dart';
 import 'interface/InterfaceAnnouncement.dart';
+import 'interface/InterfaceAssignedUsers.dart';
 import 'interface/InterfaceClientUsers.dart';
 import 'interface/InterfaceFeedbackStatus.dart';
 import 'interface/InterfaceLogin.dart';
 import 'interface/InterfaceProfile.dart';
 import 'interface/InterfaceSmtp.dart';
-import 'interface/InterfaceAssignedUsers.dart';
 
 class ApiFactory {
   ApiFactory._privateConstructor();
@@ -48,53 +50,46 @@ class ApiFactory {
     return _interfaceFeedbackStatus!;
   }
 
-
   InterfaceClientUsers getClientService() {
     _interfaceClientUsers ??= ClientUserService();
     return _interfaceClientUsers!;
   }
 
-  InterfaceTrails getTrailService(){
+  InterfaceTrails getTrailService() {
     _interfaceTrails ??= TrailService();
     return _interfaceTrails!;
   }
 
+  static InterfaceComments getCommentService() {
+    InterfaceComments? _interfaceComments = CommentService();
 
-
+    return _interfaceComments;
+  }
 
   InterfaceProfile getProfileService() {
     _interfaceProfile ??= ProfileService();
     return _interfaceProfile!;
   }
 
-
   InterfaceDashboard getDashboardService() {
     _interfaceDashboard ??= DashboardService();
     return _interfaceDashboard!;
   }
-
 
   InterfaceFeedback getFeedbackService() {
     _interfaceFeedback ??= FeedbackService();
     return _interfaceFeedback!;
   }
 
-
-
-
   InterfaceAnnouncement getAnnouncementService() {
     _interfaceAnnouncement ??= AnnouncementService();
     return _interfaceAnnouncement!;
   }
 
-
-
   InterfaceAssignedUsers getUserService() {
     _interfaceUsers ??= AssignedUserService();
     return _interfaceUsers!;
   }
-
-
 
   InterfaceSmtp getSMTPService() {
     _interfaceSmtp ??= SmtpService();

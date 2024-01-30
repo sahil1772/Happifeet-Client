@@ -1,64 +1,80 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:happifeet_client_app/components/CommentsCard.dart';
+import 'package:happifeet_client_app/model/Comments/CommentData.dart';
+import 'package:happifeet_client_app/model/FilterMap.dart';
+import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/screens/Reports/CommentsFilterPage.dart';
 
-import '../../components/CommentsCard.dart';
 import '../../components/HappiFeetAppBar.dart';
 import '../../utils/ColorParser.dart';
 
-class CommentsWidget extends StatefulWidget{
+class CommentsWidget extends StatefulWidget {
+  const CommentsWidget({super.key});
 
-  gotoCommentsWidget(BuildContext context){
-    Navigator.push(context, MaterialPageRoute(builder: (_) => CommentsWidget()));
+  gotoCommentsWidget(BuildContext context) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (_) => const CommentsWidget()));
   }
-
 
   @override
   State<CommentsWidget> createState() => _CommentsWidgetState();
-
 }
 
 class _CommentsWidgetState extends State<CommentsWidget> {
+  Future<List<CommentData>?>? commentResponse;
+
+  FilterMap filterParams = FilterMap();
+
+  @override
+  void initState() {
+    getComments();
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawerEnableOpenDragGesture: false,
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
+      drawer: CommentsFilterpageWidget(
+        filterData: (params) {
+          filterParams = params;
+          getComments();
+        },params: filterParams,
+      ),
       appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false)
           .getAppBar(context),
       body:
-      // locationDetails.isEmpty ? CircularProgressIndicator() :
-      Stack(
+          // locationDetails.isEmpty ? CircularProgressIndicator() :
+          Stack(
         children: [
           Container(
               decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      ColorParser().hexToColor("#34A846"),
-                      ColorParser().hexToColor("#83C03D")
-                    ],
-                  )),
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  ColorParser().hexToColor("#34A846"),
+                  ColorParser().hexToColor("#83C03D")
+                ],
+              )),
               child: Column(children: [
                 // SizedBox(height: 105),
                 Padding(
-                  padding: EdgeInsets.only(top: MediaQuery
-                      .of(context)
-                      .size
-                      .height / 8),
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height / 8),
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-
                         "Comments",
                         // "Select Location".tr(),
                         // "Select Location".language(context),
                         // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
                         style: TextStyle(
-
                             color: Colors.white,
                             fontSize: 20,
                             fontWeight: FontWeight.w500),
@@ -68,7 +84,6 @@ class _CommentsWidgetState extends State<CommentsWidget> {
                 ),
               ])),
           DraggableScrollableSheet(
-
               initialChildSize: 0.8,
               minChildSize: 0.8,
               maxChildSize: 0.8,
@@ -83,7 +98,6 @@ class _CommentsWidgetState extends State<CommentsWidget> {
                       color: Colors.white),
                   // color: Colors.white,
                   child: SingleChildScrollView(
-
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -103,46 +117,45 @@ class _CommentsWidgetState extends State<CommentsWidget> {
                                       },
                                       style: const TextStyle(fontSize: 16),
                                       decoration: InputDecoration(
-                                        prefixIcon: InkWell(
-                                            onTap: () {
-                                              // FilterpageWidget().gotoFilterPage(
-                                              //     context);
-                                              Navigator.of(context).push(_createRoute());
-                                            },
-                                            child: SvgPicture.asset(
-                                                "assets/images/comments/filter.svg")),
-                                        prefixIconConstraints: BoxConstraints(
-                                            minHeight: 30, minWidth: 60),
-                                        prefixIconColor: ColorParser()
-                                            .hexToColor("#1A7C52"),
+                                        prefixIcon: Builder(builder: (context) {
+                                          return InkWell(
+                                              onTap: () {
+                                                Scaffold.of(context)
+                                                    .openDrawer();
+                                              },
+                                              child: SvgPicture.asset(
+                                                  "assets/images/comments/filter.svg"));
+                                        }),
+                                        prefixIconConstraints:
+                                            const BoxConstraints(
+                                                minHeight: 30, minWidth: 60),
+                                        prefixIconColor:
+                                            ColorParser().hexToColor("#1A7C52"),
                                         labelText: ' Filters',
                                         // labelText: widget.selectedLanguage == "1"
                                         //     ? "Search".language(context)
                                         //     : "Search",
                                         labelStyle: TextStyle(
-                                            color: ColorParser().hexToColor(
-                                                "#9E9E9E")),
+                                            color: ColorParser()
+                                                .hexToColor("#9E9E9E")),
 
                                         focusedBorder: OutlineInputBorder(
                                             borderSide: const BorderSide(
                                               color: Colors.grey,
                                               width: 1,
-
                                             ),
-                                            borderRadius: BorderRadius.circular(
-                                                10)
-                                        ),
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
                                         enabledBorder: OutlineInputBorder(
                                             borderSide: const BorderSide(
                                               width: 1,
-                                              color: Colors.grey,),
-                                            borderRadius: BorderRadius.circular(
-                                                10)
-                                        ),
+                                              color: Colors.grey,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
                                       )),
                                 ),
                               ),
-
                             ],
                           ),
                         ),
@@ -151,22 +164,56 @@ class _CommentsWidgetState extends State<CommentsWidget> {
                         /**  Comments card Listing **/
 
                         Flexible(
-                          child: ListView.separated(
-                            padding: EdgeInsets.zero,
+                          child: FutureBuilder<List<CommentData>?>(
+                            future: commentResponse,
+                            builder: (context, snapshot) {
+                              Widget toReturn = const Padding(
+                                  padding: EdgeInsets.all(64.0),
+                                  child: Center(
+                                      child: CircularProgressIndicator()));
 
-                            physics: const ScrollPhysics(),
-                            itemCount: 10,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return CommentsCard();
-                            },
-                            separatorBuilder: (BuildContext context,
-                                int index) {
-                              return SizedBox(height: 8,);
+                              switch (snapshot.connectionState) {
+                                case ConnectionState.done:
+                                  if (snapshot.hasData) {
+                                    if (snapshot.data!.isNotEmpty) {
+                                      toReturn = ListView.separated(
+                                        padding: EdgeInsets.zero,
+                                        physics: const ScrollPhysics(),
+                                        itemCount: snapshot.data!.length,
+                                        shrinkWrap: true,
+                                        itemBuilder: (context, index) {
+                                          return CommentsCard(data: snapshot.data![index],);
+                                        },
+                                        separatorBuilder:
+                                            (BuildContext context, int index) {
+                                          return const SizedBox(
+                                            height: 8,
+                                          );
+                                        },
+                                      );
+                                    } else {
+                                      toReturn = const Padding(
+                                        padding: EdgeInsets.all(64.0),
+                                        child: Center(
+                                            child: Text("No Comments Found.")),
+                                      );
+                                    }
+                                  }
+                                  break;
+                                case ConnectionState.none:
+                                  break;
+                                case ConnectionState.active:
+                                  break;
+                                case ConnectionState.waiting:
+                                  break;
+                              }
+                              return toReturn;
                             },
                           ),
                         ),
-                        SizedBox(height: 50,),
+                        const SizedBox(
+                          height: 50,
+                        ),
                       ],
                     ),
                   ),
@@ -174,28 +221,13 @@ class _CommentsWidgetState extends State<CommentsWidget> {
               })
         ],
       ),
-
     );
   }
 
-  Route _createRoute() {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) =>
-          CommentsFilterpageWidget(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(-1.0, 0.0);
-        const end = Offset.zero;
-        const curve = Curves.easeIn;
-        final tween = Tween(begin: begin, end: end);
-        final curvedAnimation = CurvedAnimation(
-          parent: animation,
-          curve: curve,
-        );
-        return SlideTransition(
-          position: tween.animate(curvedAnimation),
-          child: child,
-        );
-      },
-    );
+  getComments() {
+    commentResponse = ApiFactory.getCommentService().getComments(filterParams);
+    setState(() {
+
+    });
   }
 }
