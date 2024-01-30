@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:happifeet_client_app/model/FilterMap.dart';
+import 'package:happifeet_client_app/storage/shared_preferences.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
 
 import '../../resources/resources.dart';
@@ -40,6 +41,9 @@ class _CommentsFilterpageWidgetState extends State<CommentsFilterpageWidget> {
   DateTime selectedStartDate = DateTime.now();
   DateTime selectedEndDate = DateTime.now();
 
+  Map<String, dynamic> parks = {};
+  String? selectedParkId = "";
+
   TextEditingController keywordController = TextEditingController();
 
   @override
@@ -49,18 +53,32 @@ class _CommentsFilterpageWidgetState extends State<CommentsFilterpageWidget> {
     if (widget.params == null) {
       widget.params = FilterMap();
     } else {
-      type = FilterType.values.byName(widget.params!.type!);
-      status = FilterStatus.values.byName(widget.params!.status!);
+      if (widget.params!.type != null) {
+        type = FilterType.values.byName(widget.params!.type!);
+      }
+      if (widget.params!.status != null) {
+        status = FilterStatus.values.byName(widget.params!.status!);
+      }
       if (widget.params!.functionType != null) {
         functionType =
             FilterFunctionType.values.byName(widget.params!.functionType!);
       }
-      selectedStartDate = DateFormat("yyyy-MM-dd")
-          .parse(widget.params!.popupDatepickerFromDateSearch!);
-      selectedEndDate = DateFormat("yyyy-MM-dd")
-          .parse(widget.params!.popupDatepickerToDateSearch!);
-      keywordController.text = widget.params!.frm_keyword!;
+      if (widget.params!.popupDatepickerFromDateSearch != null) {
+        selectedStartDate = DateFormat("yyyy-MM-dd")
+            .parse(widget.params!.popupDatepickerFromDateSearch!);
+      }
+      if (widget.params!.popupDatepickerToDateSearch != null) {
+        selectedEndDate = DateFormat("yyyy-MM-dd")
+            .parse(widget.params!.popupDatepickerToDateSearch!);
+      }
+      selectedParkId = widget.params!.main_park_id ?? "";
+      keywordController.text = widget.params!.frm_keyword ?? "";
     }
+
+    SharedPref.instance.getParks().then((value) {
+      parks = value;
+      setState(() {});
+    });
 
     super.initState();
   }
@@ -222,44 +240,28 @@ class _CommentsFilterpageWidgetState extends State<CommentsFilterpageWidget> {
                   height: 10,
                 ),
                 Container(
-                  child: DropdownButtonFormField(
-                      dropdownColor: Colors.white,
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: ColorParser().hexToColor("#D7D7D7")),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
+                  child: DropdownMenu<String>(
+                    width: MediaQuery.of(context).size.width - 32,
+                    enableSearch: false,
+                    inputDecorationTheme: InputDecorationTheme(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15))),
+                    requestFocusOnTap: false,
+                    label: const Text('Select'),
+                    initialSelection: selectedParkId,
+                    onSelected: (String? park) {
+                      selectedParkId = park;
+                      log("Selected PARK => $park");
+                      setState(() {});
+                    },
+                    dropdownMenuEntries: [
+                      for (int i = 0; i < parks.keys.length; i++)
+                        DropdownMenuEntry<String>(
+                          value: parks.keys.elementAt(i),
+                          label: parks.values.elementAt(i),
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: ColorParser().hexToColor("#D7D7D7")),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
-                        ),
-                      ),
-                      value: dropdownValueSelected,
-                      icon: const Icon(Icons.arrow_drop_down_sharp),
-                      iconSize: 30,
-                      items:
-                          fieldOptions.map<DropdownMenuItem<String>>((value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value,
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: Resources.colors.hfText)),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          log("before ${value}");
-                          dropdownValueSelected = value!;
-                          // ListOfFeedbackDetails.first.value = value;
-                          log("after ${dropdownValueSelected}");
-                        });
-                      }),
+                    ],
+                  ),
                 ),
                 const SizedBox(
                   height: 16,
@@ -580,7 +582,7 @@ class _CommentsFilterpageWidgetState extends State<CommentsFilterpageWidget> {
                       widget.params!.status = status.name;
                       widget.params!.type = type.name;
                       widget.params!.frm_keyword = keywordController.text;
-                      widget.params!.main_park_id = "";
+                      widget.params!.main_park_id = selectedParkId;
                       widget.params!.popupDatepickerToDateSearch =
                           "${selectedEndDate.year}-${selectedEndDate.month}-${selectedEndDate.day}";
                       widget.params!.popupDatepickerFromDateSearch =

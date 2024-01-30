@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:happifeet_client_app/components/HappiFeetAppBar.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/screens/Dashboard/Graph%20Model/GraphData.dart';
@@ -69,7 +68,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
         child: Stack(
           children: [
             Container(
-              width: DeviceDimensions.getDeviceWidth(context),
+                width: DeviceDimensions.getDeviceWidth(context),
                 height: DeviceDimensions.getHeaderSize(context, HEADER_AREA),
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -84,7 +83,8 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                   margin: DeviceDimensions.getHeaderEdgeInsets(context),
                   child: const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Align(alignment: Alignment.centerLeft,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
                       child: Text(
                         "Dashboard",
                         // "Select Location".tr(),
@@ -98,13 +98,12 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                     ),
                   ),
                 )),
-
             Container(
                 margin: EdgeInsets.only(
                     top: DeviceDimensions.getBottomSheetMargin(
                         context, HEADER_AREA)),
                 height:
-                DeviceDimensions.getBottomSheetHeight(context, HEADER_AREA),
+                    DeviceDimensions.getBottomSheetHeight(context, HEADER_AREA),
                 padding: const EdgeInsets.symmetric(horizontal: 0),
                 decoration: const BoxDecoration(
                     borderRadius: BorderRadius.only(
@@ -1066,6 +1065,8 @@ class _DashboardWidgetState extends State<DashboardWidget> {
 
     parks = responseData!["location_list"];
     selectedParkId = parks.keys.first;
+
+    SharedPref.instance.setParks(parks);
 
     setState(() {});
   }

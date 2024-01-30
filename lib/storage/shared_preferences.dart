@@ -38,6 +38,25 @@ class SharedPref {
     }
   }
 
+  Future<Map<String, dynamic>> getParks() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    try{
+      return json.decode(preferences.getString("parks")!);
+    }
+    catch(e){
+      throw "Cannot Fetch Parks from session => ${e}";
+    }
+  }
+
+  setParks(Map<String, dynamic> parks) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      prefs.setString("parks", json.encode(parks));
+    } catch (e) {
+      throw e;
+    }
+  }
+
   setLanguages(Map<String, dynamic> languages) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {

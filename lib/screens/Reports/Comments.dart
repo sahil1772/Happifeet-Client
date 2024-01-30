@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:happifeet_client_app/components/CommentsCard.dart';
@@ -5,6 +9,7 @@ import 'package:happifeet_client_app/model/Comments/CommentData.dart';
 import 'package:happifeet_client_app/model/FilterMap.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/screens/Reports/CommentsFilterPage.dart';
+import 'package:happifeet_client_app/storage/shared_preferences.dart';
 
 import '../../components/HappiFeetAppBar.dart';
 import '../../utils/ColorParser.dart';
@@ -24,10 +29,21 @@ class CommentsWidget extends StatefulWidget {
 class _CommentsWidgetState extends State<CommentsWidget> {
   Future<List<CommentData>?>? commentResponse;
 
-  FilterMap? filterParams ;
+
+  FilterMap? filterParams = FilterMap(
+      type: FilterType.Park.name,
+      popupDatepickerToDateSearch:
+          DateFormat("yyyy-MM-dd").format(DateTime.now()),
+      popupDatepickerFromDateSearch:
+          DateFormat("yyyy-MM-dd").format(DateTime.now()));
+
+
 
   @override
   void initState() {
+
+
+
     getComments();
 
     super.initState();
@@ -43,7 +59,8 @@ class _CommentsWidgetState extends State<CommentsWidget> {
         filterData: (params) {
           filterParams = params;
           getComments();
-        },params: filterParams,
+        },
+        params: filterParams,
       ),
       appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false)
           .getAppBar(context),
@@ -182,7 +199,9 @@ class _CommentsWidgetState extends State<CommentsWidget> {
                                         itemCount: snapshot.data!.length,
                                         shrinkWrap: true,
                                         itemBuilder: (context, index) {
-                                          return CommentsCard(data: snapshot.data![index],);
+                                          return CommentsCard(
+                                            data: snapshot.data![index],
+                                          );
                                         },
                                         separatorBuilder:
                                             (BuildContext context, int index) {
@@ -226,8 +245,6 @@ class _CommentsWidgetState extends State<CommentsWidget> {
 
   getComments() {
     commentResponse = ApiFactory.getCommentService().getComments(filterParams);
-    setState(() {
-
-    });
+    setState(() {});
   }
 }
