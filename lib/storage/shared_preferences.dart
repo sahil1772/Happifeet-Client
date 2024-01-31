@@ -21,20 +21,18 @@ class SharedPref {
     return instance;
   }
 
-
   /// Store User data
   UserData userData = UserData();
   String? getuserData;
   ClientTheme? theme;
 
-  setUserData(UserData userdata) async{
+  setUserData(UserData userdata) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     log("data in setUserData ${userdata} ");
     userData = userdata;
     try {
       String user = json.encode(userdata);
-      prefs.setString("userData",user);
-
+      prefs.setString("userData", user);
     } catch (e) {
       throw e;
     }
@@ -42,10 +40,9 @@ class SharedPref {
 
   Future<Map<String, dynamic>> getParks() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    try{
+    try {
       return json.decode(preferences.getString("parks")!);
-    }
-    catch(e){
+    } catch (e) {
       throw "Cannot Fetch Parks from session => ${e}";
     }
   }
@@ -68,8 +65,8 @@ class SharedPref {
     }
   }
 
-  Future<Map<String,dynamic>> getLanguageList() async {
-    Map<String,dynamic> languages = {};
+  Future<Map<String, dynamic>> getLanguageList() async {
+    Map<String, dynamic> languages = {};
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       languages = json.decode(prefs.getString("languages")!);
@@ -80,16 +77,14 @@ class SharedPref {
     return Future.value(languages);
   }
 
-
-
   Future<String> getUserId() async {
     String? UserID = "";
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      UserData data = UserData.fromJson(json.decode(prefs.getString("userData")!));
+      UserData data =
+          UserData.fromJson(json.decode(prefs.getString("userData")!));
       log("User ID => ${data.user_id}");
       UserID = data.user_id;
-
     } catch (e) {
       throw e;
     }
@@ -101,10 +96,10 @@ class SharedPref {
     String? ClientID = "";
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      UserData data = UserData.fromJson(json.decode(prefs.getString("userData")!));
+      UserData data =
+          UserData.fromJson(json.decode(prefs.getString("userData")!));
       log("Client ID => ${data.client_id}");
       ClientID = data.client_id;
-
     } catch (e) {
       throw e;
     }
@@ -116,7 +111,8 @@ class SharedPref {
     String? userType = "";
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      UserData data = UserData.fromJson(json.decode(prefs.getString("userData")!));
+      UserData data =
+          UserData.fromJson(json.decode(prefs.getString("userData")!));
       log("User Type => ${data.user_type}");
       userType = data.user_type;
     } catch (e) {
@@ -143,7 +139,7 @@ class SharedPref {
   /// Access permission
   AccessPermissionData accessPermission = AccessPermissionData();
 
-  setAccessPermission(AccessPermissionData userdata) async{
+  setAccessPermission(AccessPermissionData userdata) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     log("data in setAccessPermission ${userdata} ");
     accessPermission = AccessPermissionData.fromJson(userdata.toJson());
@@ -151,7 +147,7 @@ class SharedPref {
     prefs?.setString("accessPermission", accessPermission.toString());
   }
 
-  AccessPermissionData getAccessPermission(){
+  AccessPermissionData getAccessPermission() {
     return this.accessPermission;
   }
 
@@ -179,9 +175,15 @@ class SharedPref {
 
   Future<bool?> getPermissionTrail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool? data = (prefs.getBool("trail") ?? false );
+    bool? data = (prefs.getBool("trail") ?? false);
     log("inside getPermissionTrail $data");
     return data;
+  }
+
+  logOutUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+
   }
 
   /// Session management
@@ -193,20 +195,26 @@ class SharedPref {
     log("VALUE OF isLogin $isLogin");
 
     if (isLogin) {
-      log("inside LoggedIn");
+      log("Current Theme in Session => ${prefs.getString("current_city_theme") ==null?" IS NULL ":prefs.getString("current_city_theme")}");
       // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context)));
 
+      if (prefs.getString("current_city_theme") != null ) {
+        RuntimeStorage.instance.clientTheme = ClientTheme.fromJson(
+            json.decode(prefs.getString("current_city_theme")!));
 
-
-
-        RuntimeStorage.instance.clientTheme = ClientTheme.fromJson(json.decode(prefs.getString("current_city_theme")!)) ;
-    log("Theme if logged in${RuntimeStorage.instance.clientTheme}");
-
-
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => BottomNavigationHappiFeet(),
-              ));
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BottomNavigationHappiFeet(),
+            ));
+      } else{
+        SharedPref.instance.logOutUser();
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const LoginPageWidget(),
+            ));
+      }
 
 
     } else {
@@ -218,9 +226,6 @@ class SharedPref {
           ));
     }
   }
-
-
-
 
   ClientTheme clientTheme = ClientTheme();
   ClientTheme getClientTheme = ClientTheme();
@@ -269,15 +274,13 @@ class SharedPref {
     }
   }
 
-
-
   Future<ClientTheme> getCityTheme() async {
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    clientTheme = ClientTheme.fromJson(json.decode(prefs.getString("current_city_theme")!));
+    clientTheme = ClientTheme.fromJson(
+        json.decode(prefs.getString("current_city_theme")!));
 
-     // getClientTheme = ClientTheme.fromJson(json.decode(prefs.getString("current_city_theme")!));
+    // getClientTheme = ClientTheme.fromJson(json.decode(prefs.getString("current_city_theme")!));
 
     log(" GET CLIENT THEME -->> ${this.clientTheme.toJson()}");
 
@@ -292,18 +295,16 @@ class SharedPref {
     clientTheme = ClientTheme.fromJson(value);
     log("SAVE THEME -->> ${clientTheme.toJson()}");
     prefs.setString("current_city_theme", json.encode(clientTheme));
-    RuntimeStorage.instance.clientTheme = ClientTheme.fromJson(json.decode(prefs.getString("current_city_theme")!)) ;
-log("save theme in runtime at logged in${RuntimeStorage.instance.clientTheme!.toJson()}");
+    RuntimeStorage.instance.clientTheme = ClientTheme.fromJson(
+        json.decode(prefs.getString("current_city_theme")!));
+    log("save theme in runtime at logged in${RuntimeStorage.instance.clientTheme!.toJson()}");
     // log("CURRENT THEME ${(prefs.get("current_city_theme") as CityTheme).toJson()}");
   }
-
 
   getTheme() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     log("PRINT CURRENT THEME ${prefs.get("current_theme")}");
 
     return prefs.getString("current_city_theme");
-
-
   }
 }

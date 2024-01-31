@@ -31,7 +31,7 @@ enum FilterType { Trail, Park }
 
 enum FilterStatus { Completed, Pending }
 
-enum FilterFunctionType { QR, App, None }
+enum FilterFunctionType { Website, Mobile, None }
 
 class _CommentsFilterpageWidgetState extends State<CommentsFilterpageWidget> {
   FilterType type = FilterType.Park;
@@ -511,7 +511,7 @@ class _CommentsFilterpageWidgetState extends State<CommentsFilterpageWidget> {
                     OutlinedButton(
                       onPressed: () {
                         setState(() {
-                          functionType = FilterFunctionType.QR;
+                          functionType = FilterFunctionType.Website;
                           widget.params!.functionType = functionType.name;
                         });
                       },
@@ -519,7 +519,7 @@ class _CommentsFilterpageWidgetState extends State<CommentsFilterpageWidget> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
                         side: BorderSide(
-                          color: functionType == FilterFunctionType.QR
+                          color: functionType == FilterFunctionType.Website
                               ? Resources.colors.buttonColorlight
                               : Colors.grey,
                         ),
@@ -527,7 +527,7 @@ class _CommentsFilterpageWidgetState extends State<CommentsFilterpageWidget> {
                       child: Text(
                         "QR Code",
                         style: TextStyle(
-                            color: functionType == FilterFunctionType.QR
+                            color: functionType == FilterFunctionType.Website
                                 ? Resources.colors.buttonColorlight
                                 : Colors.grey),
                       ),
@@ -538,7 +538,7 @@ class _CommentsFilterpageWidgetState extends State<CommentsFilterpageWidget> {
                     OutlinedButton(
                       onPressed: () {
                         setState(() {
-                          functionType = FilterFunctionType.App;
+                          functionType = FilterFunctionType.Mobile;
                           widget.params!.functionType = functionType.name;
                         });
                       },
@@ -546,7 +546,7 @@ class _CommentsFilterpageWidgetState extends State<CommentsFilterpageWidget> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
                         side: BorderSide(
-                          color: functionType != FilterFunctionType.App
+                          color: functionType != FilterFunctionType.Mobile
                               ? Colors.grey
                               : Resources.colors.buttonColorlight,
                         ),
@@ -554,7 +554,7 @@ class _CommentsFilterpageWidgetState extends State<CommentsFilterpageWidget> {
                       child: Text(
                         "App",
                         style: TextStyle(
-                            color: functionType != FilterFunctionType.App
+                            color: functionType != FilterFunctionType.Mobile
                                 ? Colors.grey
                                 : Resources.colors.buttonColorlight),
                       ),

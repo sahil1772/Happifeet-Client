@@ -1089,6 +1089,8 @@ class _DashboardWidgetState extends State<DashboardWidget> {
     parks = responseData!["location_list"];
     selectedParkId = parks.keys.first;
 
+    SharedPref.instance.setParks(parks);
+
     setState(() {});
   }
 }
