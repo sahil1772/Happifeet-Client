@@ -21,10 +21,7 @@ class _CommentsCardState extends State<CommentsCard> {
     return InkWell(
       onTap: () {},
       child: Container(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
+        width: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.only(left: 0, top: 0, bottom: 0, right: 0),
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
         decoration: BoxDecoration(
@@ -82,8 +79,7 @@ class _CommentsCardState extends State<CommentsCard> {
                               width: 10,
                             ),
                             Text(
-                                "${widget.data?.user_name == "" ? "-" : widget
-                                    .data?.user_name}",
+                                "${widget.data?.user_name == "" ? "-" : widget.data?.user_name}",
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
@@ -101,9 +97,7 @@ class _CommentsCardState extends State<CommentsCard> {
                               width: 10,
                             ),
                             Text(
-                                "${widget.data?.email_address == ""
-                                    ? "-"
-                                    : widget.data?.email_address}",
+                                "${widget.data?.email_address == "" ? "-" : widget.data?.email_address}",
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
@@ -128,7 +122,9 @@ class _CommentsCardState extends State<CommentsCard> {
                         const SizedBox(
                           height: 12,
                         ),
-                        SvgPicture.asset("assets/images/comments/visible.svg"),
+                        InkWell(
+                            child: SvgPicture.asset(
+                                "assets/images/comments/visible.svg")),
                         const SizedBox(
                           height: 4,
                         ),
@@ -136,7 +132,9 @@ class _CommentsCardState extends State<CommentsCard> {
                         const SizedBox(
                           height: 4,
                         ),
-                        SvgPicture.asset("assets/images/comments/delete.svg"),
+                        InkWell(
+                            child: SvgPicture.asset(
+                                "assets/images/comments/delete.svg")),
                         const SizedBox(
                           height: 4,
                         ),
@@ -144,7 +142,9 @@ class _CommentsCardState extends State<CommentsCard> {
                         const SizedBox(
                           height: 4,
                         ),
-                        SvgPicture.asset("assets/images/comments/contact.svg"),
+                        InkWell(
+                            child: SvgPicture.asset(
+                                "assets/images/comments/contact.svg")),
                         const SizedBox(
                           height: 12,
                         ),
@@ -158,7 +158,7 @@ class _CommentsCardState extends State<CommentsCard> {
 
             Padding(
                 padding:
-                const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                 child: GridView.count(
                   shrinkWrap: true,
                   mainAxisSpacing: 0,
@@ -172,9 +172,9 @@ class _CommentsCardState extends State<CommentsCard> {
                       decoration: BoxDecoration(
                           border: BorderDirectional(
                               end: BorderSide(
-                                width: 1,
-                                color: Colors.grey.shade200,
-                              ))),
+                        width: 1,
+                        color: Colors.grey.shade200,
+                      ))),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -211,14 +211,11 @@ class _CommentsCardState extends State<CommentsCard> {
                             ignoreGestures: true,
                             glowColor: ColorParser().hexToColor("#C99700"),
                             initialRating: double.parse(
-                                "${widget.data?.rating == "" ? "0" : widget.data
-                                    ?.rating}"),
+                                "${widget.data?.rating == "" ? "0" : widget.data?.rating}"),
                             maxRating: double.parse(
-                                "${widget.data?.rating == "" ? "0" : widget.data
-                                    ?.rating}"),
+                                "${widget.data?.rating == "" ? "0" : widget.data?.rating}"),
                             minRating: double.parse(
-                                "${widget.data?.rating == "" ? "0" : widget.data
-                                    ?.rating}"),
+                                "${widget.data?.rating == "" ? "0" : widget.data?.rating}"),
                             itemSize: 22,
                             direction: Axis.horizontal,
                             // itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
@@ -235,9 +232,9 @@ class _CommentsCardState extends State<CommentsCard> {
                       decoration: BoxDecoration(
                           border: BorderDirectional(
                               end: BorderSide(
-                                width: 1,
-                                color: Colors.grey.shade200,
-                              ))),
+                        width: 1,
+                        color: Colors.grey.shade200,
+                      ))),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
@@ -278,9 +275,9 @@ class _CommentsCardState extends State<CommentsCard> {
                       decoration: BoxDecoration(
                           border: BorderDirectional(
                               end: BorderSide(
-                                width: 1,
-                                color: Colors.grey.shade200,
-                              ))),
+                        width: 1,
+                        color: Colors.grey.shade200,
+                      ))),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -291,7 +288,8 @@ class _CommentsCardState extends State<CommentsCard> {
                                   fontSize: 13,
                                   fontWeight: FontWeight.w300,
                                   color: Resources.colors.hfText)),
-                          Text("${widget.data?.assigned_by ==""? "-":widget.data?.assigned_by }",
+                          Text(
+                              "${widget.data?.assigned_by == "" ? "-" : widget.data?.assigned_by}",
                               style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
@@ -309,7 +307,8 @@ class _CommentsCardState extends State<CommentsCard> {
                                 fontSize: 13,
                                 fontWeight: FontWeight.w300,
                                 color: Resources.colors.hfText)),
-                        Text("${widget.data?.assigned_to ==""? "-":widget.data?.assigned_to}",
+                        Text(
+                            "${widget.data?.assigned_to == "" ? "-" : widget.data?.assigned_to}",
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
@@ -333,13 +332,11 @@ class _CommentsCardState extends State<CommentsCard> {
                         // AddLocation().gotoAddLocation(context);
                       },
                       style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                               Resources.colors.buttonColorlight
-                              ,
+                          backgroundColor: Resources.colors.buttonColorlight,
                           elevation: 0,
                           shape: const RoundedRectangleBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(10)))),
+                                  BorderRadius.all(Radius.circular(10)))),
                       child: Text(
                         "${widget.data?.status}",
                         style: const TextStyle(
