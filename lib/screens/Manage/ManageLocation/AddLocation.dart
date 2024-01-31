@@ -235,13 +235,13 @@ class _AddLocationState extends State<AddLocation>
                           .height,
                       bottom: DeviceDimensions.BOTTOMSHEET_TOP_MARGIN),
                   child: Center(
-                    child: const Text(
+                    child:  Text(
                       "Add Location",
                       // "Select Location".tr(),
                       // "Select Location".language(context),
                       // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
                       style: TextStyle(
-                          color: Colors.white,
+                          color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_text_color!),
                           fontSize: 20,
                           fontWeight: FontWeight.w500),
                     ),
