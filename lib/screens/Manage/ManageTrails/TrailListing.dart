@@ -45,7 +45,7 @@ class _TrailListingState extends State<TrailListing> {
 
   @override
   Widget build(BuildContext context) {
-    double HEADER_HEIGHT = 4.0;
+    double HEADER_HEIGHT = 4.5;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
