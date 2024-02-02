@@ -8,8 +8,13 @@ import '../resources/resources.dart';
 import '../storage/runtime_storage.dart';
 
 class CommentsCard extends StatefulWidget {
+  CommentsCard({super.key, this.data});
+
+  CommentData? data;
+
   @override
   State<CommentsCard> createState() => _CommentsCardState();
+  
 }
 
 class _CommentsCardState extends State<CommentsCard> {
@@ -19,10 +24,7 @@ class _CommentsCardState extends State<CommentsCard> {
       onTap: () {},
       child: Container(
         width: MediaQuery.of(context).size.width,
-        height: 435,
-        // padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 10),
-        padding: EdgeInsets.only(left: 0, top: 0, bottom: 0, right: 0),
-        // margin: const EdgeInsets.symmetric(vertical: 8,horizontal: 8),
+        padding: const EdgeInsets.only(left: 0, top: 0, bottom: 0, right: 0),
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -30,11 +32,11 @@ class _CommentsCardState extends State<CommentsCard> {
           //   color: Colors.black,
           // ),
           boxShadow: [
-            BoxShadow(blurRadius: 3, color: Colors.black12, spreadRadius: 2),
+            const BoxShadow(
+                blurRadius: 3, color: Colors.black12, spreadRadius: 2),
           ],
           borderRadius: BorderRadius.circular(10),
         ),
-
         child: Column(
           children: [
             Container(
@@ -55,51 +57,53 @@ class _CommentsCardState extends State<CommentsCard> {
                         Row(
                           children: [
                             SvgPicture.asset(
-                                "assets/images/comments/location.svg",colorFilter: ColorFilter.mode(ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!), BlendMode.srcIn),),
-                            SizedBox(
+                                "assets/images/comments/location.svg"),
+                            const SizedBox(
                               width: 10,
                             ),
                             Text(
-                              "Tallahassee, FL 32309, USA",
+                              "${widget.data?.park_name}",
                               style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
-                                  color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
+                                  color: ColorParser().hexToColor("#757575")),
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 17,
                         ),
                         Row(
                           children: [
                             SvgPicture.asset(
-                                "assets/images/comments/profile.svg",colorFilter: ColorFilter.mode(ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!), BlendMode.srcIn),),
-                            SizedBox(
+                                "assets/images/comments/profile.svg"),
+                            const SizedBox(
                               width: 10,
                             ),
-                            Text("John Wikk",
+                            Text(
+                                "${widget.data?.user_name == "" ? "-" : widget.data?.user_name}",
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
-                                    color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
+                                    color: Resources.colors.hfText)),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 17,
                         ),
                         Row(
                           children: [
                             SvgPicture.asset(
-                                "assets/images/comments/email.svg",colorFilter: ColorFilter.mode(ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!), BlendMode.srcIn),),
-                            SizedBox(
+                                "assets/images/comments/email.svg"),
+                            const SizedBox(
                               width: 10,
                             ),
-                            Text("tester7701@gmail.com",
+                            Text(
+                                "${widget.data?.email_address == "" ? "-" : widget.data?.email_address}",
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
-                                    color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
+                                    color: Resources.colors.hfText)),
                           ],
                         ),
                       ],
@@ -117,27 +121,33 @@ class _CommentsCardState extends State<CommentsCard> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 12,
                         ),
-                        SvgPicture.asset("assets/images/comments/visible.svg"),
-                        SizedBox(
+                        InkWell(
+                            child: SvgPicture.asset(
+                                "assets/images/comments/visible.svg")),
+                        const SizedBox(
                           height: 4,
                         ),
                         Divider(color: Colors.grey.shade200),
-                        SizedBox(
+                        const SizedBox(
                           height: 4,
                         ),
-                        SvgPicture.asset("assets/images/comments/delete.svg"),
-                        SizedBox(
+                        InkWell(
+                            child: SvgPicture.asset(
+                                "assets/images/comments/delete.svg")),
+                        const SizedBox(
                           height: 4,
                         ),
                         Divider(color: Colors.grey.shade200),
-                        SizedBox(
+                        const SizedBox(
                           height: 4,
                         ),
-                        SvgPicture.asset("assets/images/comments/contact.svg"),
-                        SizedBox(
+                        InkWell(
+                            child: SvgPicture.asset(
+                                "assets/images/comments/contact.svg")),
+                        const SizedBox(
                           height: 12,
                         ),
                       ],
@@ -146,136 +156,192 @@ class _CommentsCardState extends State<CommentsCard> {
                 ],
               ),
             ),
-            //////////////////////////////////////////
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-              child: IntrinsicHeight(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                child: GridView.count(
+                  shrinkWrap: true,
+                  mainAxisSpacing: 0,
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisSpacing: 20,
+                  padding: EdgeInsets.zero,
+                  crossAxisCount: 2,
+                  childAspectRatio: 2.5,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Share Anonymously",
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
-                        ),
-                        Text("Yes",
+                    Container(
+                      decoration: BoxDecoration(
+                          border: BorderDirectional(
+                              end: BorderSide(
+                        width: 1,
+                        color: Colors.grey.shade200,
+                      ))),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "Share Anonymously",
                             style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text("Recommend",
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),),
-                        Text("HappiLy",
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text("Assigned By",
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),),
-                        Text("User 1",
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),),
-                      ],
-                    ),
-                    VerticalDivider(
-                      color: Colors.grey.shade200,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w300,
+                                color: Resources.colors.hfText),
+                          ),
+                          Text("-",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Resources.colors.hfText)),
+                        ],
+                      ),
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Text("Rating",
                             style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),),
+                                fontSize: 13,
+                                fontWeight: FontWeight.w300,
+                                color: Resources.colors.hfText)),
                         RatingBar.builder(
                             glow: false,
+                            tapOnlyMode: false,
+                            ignoreGestures: true,
                             glowColor: ColorParser().hexToColor("#C99700"),
-
-                            // initialRating: 3,
+                            initialRating: double.parse(
+                                "${widget.data?.rating == "" ? "0" : widget.data?.rating}"),
+                            maxRating: double.parse(
+                                "${widget.data?.rating == "" ? "0" : widget.data?.rating}"),
+                            minRating: double.parse(
+                                "${widget.data?.rating == "" ? "0" : widget.data?.rating}"),
                             itemSize: 22,
                             direction: Axis.horizontal,
                             // itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                            itemBuilder: (BuildContext, index) {
+                            itemBuilder: (context, index) {
                               // return SvgPicture.asset("assets/images/feedback/star_rating.svg",colorFilter: ColorFilter.mode(ColorParser().hexToColor("#C99700"), BlendMode.srcIn),);
                               return Icon(Icons.star,
                                   size: 10,
                                   color: ColorParser().hexToColor("#C99700"));
                             },
                             onRatingUpdate: (rating) {}),
-                        SizedBox(
-                          height: 15,
-                        ),
+                      ],
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          border: BorderDirectional(
+                              end: BorderSide(
+                        width: 1,
+                        color: Colors.grey.shade200,
+                      ))),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Recommend",
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w300,
+                                  color: Resources.colors.hfText)),
+                          Text("${widget.data?.recommend}",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Resources.colors.hfText)),
+                        ],
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
                         Text("Date",
                             style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w300,
+                                color: Resources.colors.hfText)),
+                        Text("${widget.data?.add_date}",
+                            style: TextStyle(
+                                overflow: TextOverflow.ellipsis,
                                 fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),),
-                        Text("09 Jan, 2023",
+                                fontWeight: FontWeight.bold,
+                                color: Resources.colors.hfText)),
+                      ],
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          border: BorderDirectional(
+                              end: BorderSide(
+                        width: 1,
+                        color: Colors.grey.shade200,
+                      ))),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text("Assigned By",
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w300,
+                                  color: Resources.colors.hfText)),
+                          Text(
+                              "${widget.data?.assigned_by == "" ? "-" : widget.data?.assigned_by}",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Resources.colors.hfText)),
+                        ],
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Assigned To",
+                            style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w300,
+                                color: Resources.colors.hfText)),
+                        Text(
+                            "${widget.data?.assigned_to == "" ? "-" : widget.data?.assigned_to}",
                             style: TextStyle(
                                 fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text("Assigned By",
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),),
-                        Text("User 2",
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),),
+                                fontWeight: FontWeight.bold,
+                                color: Resources.colors.hfText)),
                       ],
                     ),
                   ],
-                ),
-              ),
-            ),
+                )),
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
                     height: 40,
-                    width: 120,
                     child: ElevatedButton(
                       onPressed: () {
                         // AddLocation().gotoAddLocation(context);
                       },
                       style: ElevatedButton.styleFrom(
-                          backgroundColor:ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                          backgroundColor: Resources.colors.buttonColorlight,
                           elevation: 0,
-                          shape: RoundedRectangleBorder(
+                          shape: const RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10)))),
                       child: Text(
-                        "Completed",
-                        style: TextStyle(
+                        "${widget.data?.status}",
+                        style: const TextStyle(
                             color: Colors.white,
                             fontSize: 12,
                             fontWeight: FontWeight.w500),
@@ -286,14 +352,14 @@ class _CommentsCardState extends State<CommentsCard> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
               child: Text(
-                  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries",
-                  style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
-                  maxLines: 2),
+                "${widget.data?.description}",
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    color: Resources.colors.hfText),
+              ),
             ),
           ],
         ),

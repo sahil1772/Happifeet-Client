@@ -53,12 +53,8 @@ class _DashboardWidgetState extends State<DashboardWidget> {
 
   @override
   void initState() {
-    
-    SharedPref.instance.getCityTheme().then((value) {
-      theme = value;
-      log("THEME IN DASHBOARD${theme!.toJson()}");
-      getParks();} );
 
+    getParks();
 
     log("THEME FROM RUNTIME STORAGE ${RuntimeStorage.instance.clientTheme!.toJson()}");
 

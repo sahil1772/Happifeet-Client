@@ -1,18 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:happifeet_client_app/components/CommentsCard.dart';
+import 'package:happifeet_client_app/model/Comments/CommentData.dart';
+import 'package:happifeet_client_app/model/FilterMap.dart';
+import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/screens/Reports/CommentsFilterPage.dart';
 import 'package:happifeet_client_app/storage/runtime_storage.dart';
+import 'package:happifeet_client_app/storage/shared_preferences.dart';
 
-import '../../components/CommentsCard.dart';
 import '../../components/HappiFeetAppBar.dart';
 import '../../utils/ColorParser.dart';
 import '../../utils/DeviceDimensions.dart';
 
-class CommentsWidget extends StatefulWidget{
+class CommentsWidget extends StatefulWidget {
+  const CommentsWidget({super.key});
 
-  gotoCommentsWidget(BuildContext context){
-    Navigator.push(context, MaterialPageRoute(builder: (_) => CommentsWidget()));
+  gotoCommentsWidget(BuildContext context) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (_) => const CommentsWidget()));
   }
 
 
@@ -22,12 +28,42 @@ class CommentsWidget extends StatefulWidget{
 }
 
 class _CommentsWidgetState extends State<CommentsWidget> {
+  Future<List<CommentData>?>? commentResponse;
+
+
+  FilterMap? filterParams = FilterMap(
+      type: FilterType.Park.name,
+      popupDatepickerToDateSearch:
+          DateFormat("yyyy-MM-dd").format(DateTime.now()),
+      popupDatepickerFromDateSearch:
+          DateFormat("yyyy-MM-dd").format(DateTime.now()));
+
+
+
+  @override
+  void initState() {
+
+
+
+    getComments();
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double HEADER_HEIGHT = 4.5;
     return Scaffold(
+      drawerEnableOpenDragGesture: false,
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
+      drawer: CommentsFilterpageWidget(
+        filterData: (params) {
+          filterParams = params;
+          getComments();
+        },
+        params: filterParams,
+      ),
       appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false)
           .getAppBar(context),
       body: SafeArea(
@@ -115,52 +151,84 @@ class _CommentsWidgetState extends State<CommentsWidget> {
                                               color: ColorParser().hexToColor(
                                                   "#9E9E9E")),
 
-                                          focusedBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                color: Colors.grey,
-                                                width: 1,
-
-                                              ),
-                                              borderRadius: BorderRadius.circular(
-                                                  10)
-                                          ),
-                                          enabledBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                width: 1,
-                                                color: Colors.grey,),
-                                              borderRadius: BorderRadius.circular(
-                                                  10)
-                                          ),
-                                        )),
-                                  ),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        enabledBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                              width: 1,
+                                              color: Colors.grey,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                      )),
                                 ),
-
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                          /**   listview builder     **/
+                        ),
+                        /**   listview builder     **/
 
-                          /**  Comments card Listing **/
+                        /**  Comments card Listing **/
 
-                          Flexible(
-                            child: ListView.separated(
-                              padding: EdgeInsets.zero,
+                        Flexible(
+                          child: FutureBuilder<List<CommentData>?>(
+                            future: commentResponse,
+                            builder: (context, snapshot) {
+                              Widget toReturn = const Padding(
+                                  padding: EdgeInsets.all(64.0),
+                                  child: Center(
+                                      child: CircularProgressIndicator()));
 
-                              physics: const ScrollPhysics(),
-                              itemCount: 10,
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                return CommentsCard();
-                              },
-                              separatorBuilder: (BuildContext context,
-                                  int index) {
-                                return SizedBox(height: 8,);
-                              },
-                            ),
+                              switch (snapshot.connectionState) {
+                                case ConnectionState.done:
+                                  if (snapshot.hasData) {
+                                    if (snapshot.data!.isNotEmpty) {
+                                      toReturn = ListView.separated(
+                                        padding: EdgeInsets.zero,
+                                        physics: const ScrollPhysics(),
+                                        itemCount: snapshot.data!.length,
+                                        shrinkWrap: true,
+                                        itemBuilder: (context, index) {
+                                          return CommentsCard(
+                                            data: snapshot.data![index],
+                                          );
+                                        },
+                                        separatorBuilder:
+                                            (BuildContext context, int index) {
+                                          return const SizedBox(
+                                            height: 8,
+                                          );
+                                        },
+                                      );
+                                    } else {
+                                      toReturn = const Padding(
+                                        padding: EdgeInsets.all(64.0),
+                                        child: Center(
+                                            child: Text("No Comments Found.")),
+                                      );
+                                    }
+                                  }
+                                  break;
+                                case ConnectionState.none:
+                                  break;
+                                case ConnectionState.active:
+                                  break;
+                                case ConnectionState.waiting:
+                                  break;
+                              }
+                              return toReturn;
+                            },
                           ),
-                          SizedBox(height: 50,),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(
+                          height: 50,
+                        ),
+                      ],
                     ),
                   ),
 
@@ -171,24 +239,8 @@ class _CommentsWidgetState extends State<CommentsWidget> {
     );
   }
 
-  Route _createRoute() {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) =>
-          CommentsFilterpageWidget(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(-1.0, 0.0);
-        const end = Offset.zero;
-        const curve = Curves.easeIn;
-        final tween = Tween(begin: begin, end: end);
-        final curvedAnimation = CurvedAnimation(
-          parent: animation,
-          curve: curve,
-        );
-        return SlideTransition(
-          position: tween.animate(curvedAnimation),
-          child: child,
-        );
-      },
-    );
+  getComments() {
+    commentResponse = ApiFactory.getCommentService().getComments(filterParams);
+    setState(() {});
   }
 }
