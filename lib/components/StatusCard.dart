@@ -8,7 +8,9 @@ import '../screens/Reports/StatusDetailPage.dart';
 class StatusCard extends StatefulWidget {
   FeedbackStatusData? getStatusData;
 
-  StatusCard({Key? key,this.getStatusData});
+  Function? onClick;
+
+  StatusCard({Key? key,this.getStatusData,this.onClick});
 
   @override
   State<StatusCard> createState() => _StatusCardState();
@@ -88,8 +90,10 @@ class _StatusCardState extends State<StatusCard> {
                         ),
                         InkWell(
                           onTap: (){
-                            Navigator.of(context)
-                                .push(_createRouteForStatusDetail(widget.getStatusData!.id!));
+
+                            widget.onClick!(widget.getStatusData!.id!);
+                            // Navigator.of(context)
+                            //     .push(_createRouteForStatusDetail(widget.getStatusData!.id!));
                           },
                             child: SvgPicture.asset("assets/images/comments/visible.svg")),
                         SizedBox(

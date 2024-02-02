@@ -31,23 +31,29 @@ class _StatusWidgetState extends State<StatusWidget> {
   int resolvedCount = 0;
   int pendingCount = 0;
   String totalFeedback = "0";
+
+  String? selectedStatusID = "";
+
   @override
   void initState() {
     // TODO: implement initState
-    apiResposne =  getFeedbackStatusData();
+    apiResposne = getFeedbackStatusData();
 
     super.initState();
   }
-  
+
   Future<List<FeedbackStatusData>>? getFeedbackStatusData() async {
-    var response  =  ApiFactory().getFeedbackStatusService().getFeedbackStatusListing("feedback_status_report_list", await SharedPref.instance.getUserId());
+    var response = ApiFactory()
+        .getFeedbackStatusService()
+        .getFeedbackStatusListing("feedback_status_report_list",
+            await SharedPref.instance.getUserId());
     getStatusData = await response;
     log("FEEDBACK STATUS DATA --> ${getStatusData!.first.toJson()}");
-    if(getStatusData!.first.status == "Resolved"){
+    if (getStatusData!.first.status == "Resolved") {
       resolvedCount++;
       log("resolvedCount${resolvedCount}");
     }
-    if(getStatusData!.first.status == "Pending"){
+    if (getStatusData!.first.status == "Pending") {
       setState(() {
         pendingCount++;
       });
@@ -58,13 +64,15 @@ class _StatusWidgetState extends State<StatusWidget> {
       log("totalFeedback${totalFeedback.toString()}");
     });
     return getStatusData!;
-
   }
+
   @override
   Widget build(BuildContext context) {
     double HEADER_HEIGHT = 4;
     return Scaffold(
+      endDrawer: StatusDetailPage(report_id: selectedStatusID!),
       resizeToAvoidBottomInset: false,
+      endDrawerEnableOpenDragGesture: false,
       extendBodyBehindAppBar: true,
       appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false)
           .getAppBar(context),
@@ -136,10 +144,7 @@ class _StatusWidgetState extends State<StatusWidget> {
                                   style: const TextStyle(fontSize: 16),
                                   decoration: InputDecoration(
                                     prefixIcon: InkWell(
-                                        onTap: () {
-                                          Navigator.of(context)
-                                              .push(_createRouteForFliterPage());
-                                        },
+                                        onTap: () {},
                                         child: SvgPicture.asset(
                                             "assets/images/comments/filter.svg")),
                                     prefixIconConstraints: const BoxConstraints(
@@ -188,7 +193,7 @@ class _StatusWidgetState extends State<StatusWidget> {
                                 color: ColorParser().hexToColor("#F85100"),
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              child:  Column(
+                              child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
@@ -224,7 +229,7 @@ class _StatusWidgetState extends State<StatusWidget> {
                                 color: ColorParser().hexToColor("#C99700"),
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              child:  Column(
+                              child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
@@ -262,7 +267,7 @@ class _StatusWidgetState extends State<StatusWidget> {
                                 color: ColorParser().hexToColor("#FF9002"),
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              child:  Column(
+                              child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
@@ -326,8 +331,8 @@ class _StatusWidgetState extends State<StatusWidget> {
                           OutlinedButton(
                               onPressed: () {},
                               style: ButtonStyle(
-
-                                backgroundColor: MaterialStateProperty.all(ColorParser().hexToColor("#49AC43")),
+                                backgroundColor: MaterialStateProperty.all(
+                                    ColorParser().hexToColor("#49AC43")),
                                 shape: MaterialStateProperty.all(
                                     RoundedRectangleBorder(
                                         borderRadius:
@@ -336,11 +341,17 @@ class _StatusWidgetState extends State<StatusWidget> {
                               child: Row(
                                 children: [
                                   SvgPicture.asset(
-                                      "assets/images/status/excel.svg",colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),),
+                                    "assets/images/status/excel.svg",
+                                    colorFilter: ColorFilter.mode(
+                                        Colors.white, BlendMode.srcIn),
+                                  ),
                                   const SizedBox(
                                     width: 10,
                                   ),
-                                  const Text("Export to Excel",style: TextStyle(color: Colors.white),),
+                                  const Text(
+                                    "Export to Excel",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 ],
                               )),
                         ],
@@ -353,9 +364,10 @@ class _StatusWidgetState extends State<StatusWidget> {
 
                     FutureBuilder<List<FeedbackStatusData>?>(
                       future: apiResposne,
-                      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                        if(snapshot.connectionState == ConnectionState.done){
-                          if(snapshot.hasData){
+                      builder: (BuildContext context,
+                          AsyncSnapshot<dynamic> snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          if (snapshot.hasData) {
                             return Flexible(
                               child: ListView.separated(
                                 padding: EdgeInsets.zero,
@@ -363,27 +375,36 @@ class _StatusWidgetState extends State<StatusWidget> {
                                 itemCount: getStatusData!.length,
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) {
-                                  return StatusCard(getStatusData: getStatusData![index]);
+                                  return StatusCard(
+                                    getStatusData: getStatusData![index],
+                                    onClick: (value) {
+                                      setState(() {
+                                        print("Selected Report => $value");
+                                        selectedStatusID = value;
+                                        Scaffold.of(context).openEndDrawer();
+                                      });
+
+                                    },
+                                  );
                                 },
-                                separatorBuilder: (BuildContext context, int index) {
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
                                   return const SizedBox(
                                     height: 8,
                                   );
                                 },
                               ),
                             );
-                          }else{
+                          } else {
                             return Text("Something Went Wrong!");
                           }
-
-                        }else if(snapshot.connectionState == ConnectionState.waiting){
+                        } else if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
                           return CircularProgressIndicator();
-                        }else{
+                        } else {
                           return Text("Something Went Wrong");
                         }
-
                       },
-
                     ),
                     const SizedBox(
                       height: 50,
@@ -418,7 +439,4 @@ class _StatusWidgetState extends State<StatusWidget> {
       },
     );
   }
-
-
-
 }
