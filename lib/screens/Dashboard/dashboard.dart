@@ -1086,6 +1086,8 @@ class _DashboardWidgetState extends State<DashboardWidget> {
     selectedParkId = parks.keys.first;
     SharedPref.instance.setParks(parks);
 
+    SharedPref.instance.setParks(parks);
+
     setState(() {});
   }
 }

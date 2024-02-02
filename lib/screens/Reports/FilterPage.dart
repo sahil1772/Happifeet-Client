@@ -3,7 +3,9 @@ import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:happifeet_client_app/model/AssignedUsers/AssignedUserData.dart';
 import 'package:happifeet_client_app/model/FilterMap.dart';
+import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
 
@@ -11,29 +13,26 @@ import '../../resources/resources.dart';
 
 List<String> fieldOptions = ['Item 1', 'Item 2', 'Item 3', "Item 4"];
 
-class CommentsFilterpageWidget extends StatefulWidget {
-  CommentsFilterpageWidget({super.key, this.params, this.filterData});
+class FilterPage extends StatefulWidget {
+  FilterPage({super.key, this.params, this.filterData, required this.showAssignedUser});
 
   FilterMap? params;
   Function? filterData;
+  bool showAssignedUser = false;
 
-  gotoFilterPage(BuildContext context) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (_) => CommentsFilterpageWidget()));
-  }
+
 
   @override
-  State<CommentsFilterpageWidget> createState() =>
-      _CommentsFilterpageWidgetState();
+  State<FilterPage> createState() => _FilterPageState();
 }
 
 enum FilterType { Trail, Park }
 
-enum FilterStatus { Completed, Pending }
+enum FilterStatus { UnAssigned, Completed, Pending }
 
 enum FilterFunctionType { Website, Mobile, None }
 
-class _CommentsFilterpageWidgetState extends State<CommentsFilterpageWidget> {
+class _FilterPageState extends State<FilterPage> {
   FilterType type = FilterType.Park;
   FilterStatus status = FilterStatus.Completed;
   FilterFunctionType functionType = FilterFunctionType.None;
@@ -43,6 +42,9 @@ class _CommentsFilterpageWidgetState extends State<CommentsFilterpageWidget> {
 
   Map<String, dynamic> parks = {};
   String? selectedParkId = "";
+  String? selectedAssignedTo = "";
+
+  List<AssignedUserData>? userListing = [];
 
   TextEditingController keywordController = TextEditingController();
 
@@ -80,7 +82,18 @@ class _CommentsFilterpageWidgetState extends State<CommentsFilterpageWidget> {
       setState(() {});
     });
 
+    if (widget.showAssignedUser) getAssignedUserListing();
+
     super.initState();
+  }
+
+  Future<void> getAssignedUserListing() async {
+    var response = await ApiFactory().getUserService().getUserData(
+        "list_assigned_users", await SharedPref.instance.getUserId());
+
+    userListing = response;
+
+    setState(() {});
   }
 
   Future<void> _selectStartDate(BuildContext context) async {
@@ -263,6 +276,48 @@ class _CommentsFilterpageWidgetState extends State<CommentsFilterpageWidget> {
                     ],
                   ),
                 ),
+                widget.showAssignedUser!
+                    ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          Text("Assigned To",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Resources.colors.hfText)),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            child: DropdownMenu<String>(
+                              width: MediaQuery.of(context).size.width - 32,
+                              enableSearch: false,
+                              inputDecorationTheme: InputDecorationTheme(
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15))),
+                              requestFocusOnTap: false,
+                              label: const Text('Select'),
+                              initialSelection: selectedAssignedTo,
+                              onSelected: (String? userId) {
+                                selectedAssignedTo = userId;
+                                log("Selected Assigned To => $userId");
+                                setState(() {});
+                              },
+                              dropdownMenuEntries: [
+                                for (int i = 0; i < userListing!.length; i++)
+                                  DropdownMenuEntry<String>(
+                                    value: userListing![i].id!,
+                                    label: userListing![i].name!,
+                                  ),
+                              ],
+                            ),
+                          )
+                        ],
+                      )
+                    : SizedBox(),
                 const SizedBox(
                   height: 16,
                 ),
@@ -583,6 +638,7 @@ class _CommentsFilterpageWidgetState extends State<CommentsFilterpageWidget> {
                       widget.params!.type = type.name;
                       widget.params!.frm_keyword = keywordController.text;
                       widget.params!.main_park_id = selectedParkId;
+                      widget.params!.assignedTo = selectedAssignedTo;
                       widget.params!.popupDatepickerToDateSearch =
                           "${selectedEndDate.year}-${selectedEndDate.month}-${selectedEndDate.day}";
                       widget.params!.popupDatepickerFromDateSearch =

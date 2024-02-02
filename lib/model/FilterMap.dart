@@ -11,6 +11,7 @@ class FilterMap{
   String? popupDatepickerFromDateSearch;
   String? popupDatepickerToDateSearch;
   String? functionType;
+  String? assignedTo;
 
 
   FilterMap(
@@ -20,6 +21,7 @@ class FilterMap{
       this.frm_keyword,
       this.popupDatepickerFromDateSearch,
       this.popupDatepickerToDateSearch,
+      this.assignedTo,
       this.functionType});
 
   factory FilterMap.fromJson(Map<String, dynamic> json) =>

@@ -10,7 +10,9 @@ import '../storage/runtime_storage.dart';
 class StatusCard extends StatefulWidget {
   FeedbackStatusData? getStatusData;
 
-  StatusCard({Key? key, this.getStatusData});
+  Function? onClick;
+
+  StatusCard({Key? key,this.getStatusData,this.onClick});
 
   @override
   State<StatusCard> createState() => _StatusCardState();
@@ -77,6 +79,7 @@ class _StatusCardState extends State<StatusCard> {
                             ),
                           ],
                         ),
+
                       ],
                     ),
                   ),
@@ -96,13 +99,13 @@ class _StatusCardState extends State<StatusCard> {
                           height: 16,
                         ),
                         InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                  _createRouteForStatusDetail(
-                                      widget.getStatusData!.id!));
-                            },
-                            child: SvgPicture.asset(
-                                "assets/images/comments/visible.svg")),
+                          onTap: (){
+
+                            widget.onClick!(widget.getStatusData!.id!);
+                            // Navigator.of(context)
+                            //     .push(_createRouteForStatusDetail(widget.getStatusData!.id!));
+                          },
+                            child: SvgPicture.asset("assets/images/comments/visible.svg")),
                         SizedBox(
                           height: 16,
                         ),
@@ -209,8 +212,7 @@ class _StatusCardState extends State<StatusCard> {
                             alignment: Alignment.centerRight,
                             child: Padding(
                               padding: const EdgeInsets.only(top: 3.0),
-                              child: Text(
-                                  widget.getStatusData!.assigned_to ?? "",
+                              child: Text(widget.getStatusData!.assigned_to ?? "",
                                   style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
@@ -292,9 +294,8 @@ class _StatusCardState extends State<StatusCard> {
                   "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries",
                   style: TextStyle(
                       fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: ColorParser().hexToColor(RuntimeStorage
-                          .instance.clientTheme!.body_text_color!)),
+                      fontWeight: FontWeight.w400,
+                      color: Resources.colors.hfText),
                   maxLines: 2),
             ),
           ],
@@ -302,7 +303,6 @@ class _StatusCardState extends State<StatusCard> {
       ),
     );
   }
-
   Route _createRouteForStatusDetail(String report_id) {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) =>
@@ -324,3 +324,5 @@ class _StatusCardState extends State<StatusCard> {
     );
   }
 }
+
+

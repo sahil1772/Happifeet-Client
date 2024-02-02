@@ -1,12 +1,15 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:happifeet_client_app/components/CommentsCard.dart';
 import 'package:happifeet_client_app/model/Comments/CommentData.dart';
 import 'package:happifeet_client_app/model/FilterMap.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
-import 'package:happifeet_client_app/screens/Reports/CommentsFilterPage.dart';
+import 'package:happifeet_client_app/screens/Reports/FilterPage.dart';
+import 'package:happifeet_client_app/screens/Reports/StatusDetailPage.dart';
 import 'package:happifeet_client_app/storage/runtime_storage.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
 
@@ -22,16 +25,15 @@ class CommentsWidget extends StatefulWidget {
         context, MaterialPageRoute(builder: (_) => const CommentsWidget()));
   }
 
-
   @override
   State<CommentsWidget> createState() => _CommentsWidgetState();
-
 }
 
 class _CommentsWidgetState extends State<CommentsWidget> {
   Future<List<CommentData>?>? commentResponse;
-  String selectedReportId = "";
 
+  String? selectedReportId = "";
+  String? selectedAssignedId = "";
 
   FilterMap? filterParams = FilterMap(
       type: FilterType.Park.name,
@@ -59,7 +61,8 @@ class _CommentsWidgetState extends State<CommentsWidget> {
       drawerEnableOpenDragGesture: false,
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
-      drawer: CommentsFilterpageWidget(
+      endDrawer: StatusDetailPage(report_id: selectedReportId),
+      drawer: FilterPage(showAssignedUser: false,
         filterData: (params) {
           filterParams = params;
           getComments();
@@ -204,12 +207,13 @@ class _CommentsWidgetState extends State<CommentsWidget> {
                                         itemBuilder: (context, index) {
                                           return CommentsCard(
                                             data: snapshot.data![index],
-                                            onClick:(reportId){
+                                            onClick: (reportId) {
                                               setState(() {
                                                 selectedReportId = reportId;
-                                                Scaffold.of(context).openEndDrawer();
+                                                Scaffold.of(context)
+                                                    .openEndDrawer();
                                               });
-                                            }
+                                            },
                                           );
                                         },
                                         separatorBuilder:

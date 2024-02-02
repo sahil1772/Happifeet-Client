@@ -11,7 +11,7 @@ var base_url =
 
 class NetworkClient implements InterceptorsWrapper {
   NetworkClient._privateConstructor() {
-    addInterceptor();
+    // addInterceptor();
   }
 
   static final NetworkClient _instance = NetworkClient._privateConstructor();
@@ -33,7 +33,12 @@ class NetworkClient implements InterceptorsWrapper {
         contentType: "multipart/form-data"
         // headers: <String, dynamic>{"User-agent": Jiffy().dateTime}
         ),
-  );
+  )..interceptors.add(PrettyDioLogger(
+      requestHeader: true,
+      requestBody: true,
+      responseBody: true,
+      responseHeader: false,
+      compact: false));
 
   void addInterceptor() {
     if (!added) dio.interceptors.add(this);
@@ -43,9 +48,7 @@ class NetworkClient implements InterceptorsWrapper {
         requestBody: true,
         responseBody: true,
         responseHeader: false,
-        error: true,
-        compact: true,
-        maxWidth: 90));
+        compact: false));
     added = true;
   }
 
@@ -89,8 +92,6 @@ class NetworkClient implements InterceptorsWrapper {
   @override
   void onResponse(
       Response<dynamic> response, ResponseInterceptorHandler handler) {
-
-    print(response);
     return handler.next(response);
   }
 }

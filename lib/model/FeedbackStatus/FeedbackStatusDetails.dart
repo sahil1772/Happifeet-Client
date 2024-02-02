@@ -22,6 +22,7 @@ class FeedbackStatusDetails{
   String? rating;
   String? recommend;
   String? descrpt;
+  String? assign_to;
   String? how_safe_feel;
   String? zip_code_live;
   List<CommentsData>? comment;
@@ -42,6 +43,7 @@ class FeedbackStatusDetails{
       this.descrpt,
       this.how_safe_feel,
       this.zip_code_live,
+      this.assign_to,
       this.comment});
 
   factory FeedbackStatusDetails.fromJson(Map<String, dynamic> json) =>
