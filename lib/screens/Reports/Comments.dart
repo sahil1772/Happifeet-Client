@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -29,6 +30,7 @@ class CommentsWidget extends StatefulWidget {
 
 class _CommentsWidgetState extends State<CommentsWidget> {
   Future<List<CommentData>?>? commentResponse;
+  String selectedReportId = "";
 
 
   FilterMap? filterParams = FilterMap(
@@ -132,14 +134,20 @@ class _CommentsWidgetState extends State<CommentsWidget> {
                                         },
                                         style: const TextStyle(fontSize: 16),
                                         decoration: InputDecoration(
-                                          prefixIcon: InkWell(
-                                              onTap: () {
-                                                // FilterpageWidget().gotoFilterPage(
-                                                //     context);
-                                                Navigator.of(context).push(_createRoute());
-                                              },
-                                              child: SvgPicture.asset(
-                                                  "assets/images/comments/filter.svg",colorFilter: ColorFilter.mode(ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!), BlendMode.srcIn),)),
+                                          prefixIcon: Builder(
+                                            builder: (context) {
+                                              return InkWell(
+                                                  onTap: () {
+                                                    // FilterpageWidget().gotoFilterPage(
+                                                    //     context);
+                                                    // Navigator.of(context).push(_createRoute());
+                                                    Scaffold.of(context).openDrawer();
+                                                  },
+                                                  child: SvgPicture.asset(
+                                                    "assets/images/comments/filter.svg",colorFilter: ColorFilter.mode(ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!), BlendMode.srcIn),));
+                                            },
+
+                                          ),
                                           prefixIconConstraints: BoxConstraints(
                                               minHeight: 30, minWidth: 60),
 
@@ -196,6 +204,12 @@ class _CommentsWidgetState extends State<CommentsWidget> {
                                         itemBuilder: (context, index) {
                                           return CommentsCard(
                                             data: snapshot.data![index],
+                                            onClick:(reportId){
+                                              setState(() {
+                                                selectedReportId = reportId;
+                                                Scaffold.of(context).openEndDrawer();
+                                              });
+                                            }
                                           );
                                         },
                                         separatorBuilder:
@@ -231,8 +245,9 @@ class _CommentsWidgetState extends State<CommentsWidget> {
                       ],
                     ),
                   ),
-
+                   )
           ],
+
         ),
       ),
 

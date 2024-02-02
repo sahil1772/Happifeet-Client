@@ -4,13 +4,15 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
 
+import '../model/Comments/CommentData.dart';
 import '../resources/resources.dart';
 import '../storage/runtime_storage.dart';
 
 class CommentsCard extends StatefulWidget {
-  CommentsCard({super.key, this.data});
+  CommentsCard({super.key, this.data,this.onClick});
 
   CommentData? data;
+  Function? onClick;
 
   @override
   State<CommentsCard> createState() => _CommentsCardState();
@@ -119,14 +121,18 @@ class _CommentsCardState extends State<CommentsCard> {
                       ),
                     ),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        const SizedBox(
-                          height: 12,
-                        ),
+
                         InkWell(
-                            child: SvgPicture.asset(
-                                "assets/images/comments/visible.svg")),
+                          onTap: (){
+                            widget.onClick!(widget.data!.id);
+                          },
+                          child: InkWell(
+                              child: SvgPicture.asset(
+                                  "assets/images/comments/visible.svg")),
+                        ),
                         const SizedBox(
                           height: 4,
                         ),
