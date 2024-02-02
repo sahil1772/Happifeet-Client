@@ -96,7 +96,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                 )),
                 child: Container(
                   margin: DeviceDimensions.getHeaderEdgeInsets(context),
-                  child: const Align(
+                  child:  Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
@@ -106,7 +106,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                         // "Select Location".language(context),
                         // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
                         style: TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.w600,color: Colors.white),
+                            fontSize: 22, fontWeight: FontWeight.w600,color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)),
                       ),
                     ),
                   ),

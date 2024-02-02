@@ -110,6 +110,9 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                 builder:
                     (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                       if(snapshot.connectionState == ConnectionState.done){
+                        if(snapshot.hasData){
+
+                        }
                         return GridView(
                           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,

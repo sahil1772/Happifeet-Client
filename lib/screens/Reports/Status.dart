@@ -9,6 +9,7 @@ import 'package:happifeet_client_app/utils/DeviceDimensions.dart';
 import '../../components/HappiFeetAppBar.dart';
 import '../../components/StatusCard.dart';
 import '../../model/FeedbackStatus/FeedbackStatusData.dart';
+import '../../storage/runtime_storage.dart';
 import '../../utils/ColorParser.dart';
 import 'StatusDetailPage.dart';
 import 'StatusFilterpage.dart';
@@ -62,7 +63,7 @@ class _StatusWidgetState extends State<StatusWidget> {
   }
   @override
   Widget build(BuildContext context) {
-    double HEADER_HEIGHT = 4;
+    double HEADER_HEIGHT = 4.5;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
@@ -80,20 +81,20 @@ class _StatusWidgetState extends State<StatusWidget> {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    ColorParser().hexToColor("#34A846"),
-                    ColorParser().hexToColor("#83C03D")
+                    ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                    ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                   ],
                 )),
                 child: Container(
                   margin: DeviceDimensions.getHeaderEdgeInsets(context),
-                  child: const Center(
+                  child:  Center(
                     child: Text(
                       "Status",
                       // "Select Location".tr(),
                       // "Select Location".language(context),
                       // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
                       style: TextStyle(
-                          color: Colors.white,
+                          color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_text_color!),
                           fontSize: 20,
                           fontWeight: FontWeight.w500),
                     ),
@@ -141,11 +142,11 @@ class _StatusWidgetState extends State<StatusWidget> {
                                               .push(_createRouteForFliterPage());
                                         },
                                         child: SvgPicture.asset(
-                                            "assets/images/comments/filter.svg")),
+                                            "assets/images/comments/filter.svg",colorFilter: ColorFilter.mode(ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!), BlendMode.srcIn),)),
                                     prefixIconConstraints: const BoxConstraints(
                                         minHeight: 30, minWidth: 60),
-                                    prefixIconColor:
-                                        ColorParser().hexToColor("#1A7C52"),
+                                    // prefixIconColor:
+                                    //     ColorParser().hexToColor("#1A7C52"),
                                     labelText: ' Filters',
                                     // labelText: widget.selectedLanguage == "1"
                                     //     ? "Search".language(context)
@@ -327,7 +328,7 @@ class _StatusWidgetState extends State<StatusWidget> {
                               onPressed: () {},
                               style: ButtonStyle(
 
-                                backgroundColor: MaterialStateProperty.all(ColorParser().hexToColor("#49AC43")),
+                                backgroundColor: MaterialStateProperty.all(ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!)),
                                 shape: MaterialStateProperty.all(
                                     RoundedRectangleBorder(
                                         borderRadius:

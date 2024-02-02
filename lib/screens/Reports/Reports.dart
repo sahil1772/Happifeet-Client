@@ -125,7 +125,26 @@ class _ReportsWidgetState extends State<ReportsWidget>{
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        SvgPicture.asset("assets/images/reports/comments.svg"),
+                                        Container(
+                                          width: 70,
+                                          height: 70,
+                                          decoration: BoxDecoration(
+                                              color: ColorParser().hexToColor(
+                                                  RuntimeStorage
+                                                      .instance
+                                                      .clientTheme!
+                                                      .top_title_background_color!),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(50))),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(16.0),
+                                            child: SvgPicture.asset(
+                                              "assets/images/reports/comments.svg",
+                                              colorFilter: ColorFilter.mode(
+                                                  Colors.white, BlendMode.srcIn),
+                                            ),
+                                          ),
+                                        ),
                                         const SizedBox(height: 5,),
                                         Text("Comments",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: Resources.colors.hfText),textAlign: TextAlign.center),
                                       ],
@@ -143,7 +162,23 @@ class _ReportsWidgetState extends State<ReportsWidget>{
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        SvgPicture.asset("assets/images/reports/status.svg"),
+                                        Container(
+                                          width: 70,
+                                          height: 70,
+                                          decoration: BoxDecoration(
+                                              color: ColorParser().hexToColor(
+                                                  RuntimeStorage
+                                                      .instance
+                                                      .clientTheme!
+                                                      .top_title_background_color!),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(50))),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(16.0),
+                                            child: SvgPicture.asset("assets/images/reports/status.svg",colorFilter: ColorFilter.mode(
+                                                Colors.white, BlendMode.srcIn),),
+                                          ),
+                                        ),
                                         const SizedBox(height: 5,),
                                         Text("Status",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: Resources.colors.hfText),textAlign: TextAlign.center),
                                       ],
