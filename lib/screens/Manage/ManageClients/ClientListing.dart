@@ -104,8 +104,8 @@ class _ClientListingWidgetState extends State<ClientListingWidget> {
                       // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
                       style: TextStyle(
                           color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_text_color!),
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500),
+                          fontSize: 22,
+                          fontWeight: FontWeight.w600),
                     ),
                   ),
                 )),

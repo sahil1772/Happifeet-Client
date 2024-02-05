@@ -161,8 +161,9 @@ class _UserListingCardState extends State<UserListingCard> {
                 ),
               ),
               Container(
-                height: 60,
-                width: 55,
+                // height: 60,
+                // width: 45,
+                width: MediaQuery.of(context).size.width / 8.5,
                 decoration: BoxDecoration(
                   border: Border(
                     left: BorderSide(

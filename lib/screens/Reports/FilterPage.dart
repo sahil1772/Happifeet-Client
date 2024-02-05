@@ -10,6 +10,7 @@ import 'package:happifeet_client_app/storage/shared_preferences.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
 
 import '../../resources/resources.dart';
+import '../../storage/runtime_storage.dart';
 
 List<String> fieldOptions = ['Item 1', 'Item 2', 'Item 3', "Item 4"];
 
@@ -150,7 +151,7 @@ class _FilterPageState extends State<FilterPage> {
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Resources.colors.buttonColorlight,
+                          backgroundColor: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                           elevation: 0,
                           shape: const RoundedRectangleBorder(
                               borderRadius:
@@ -178,8 +179,8 @@ class _FilterPageState extends State<FilterPage> {
                   "Type",
                   style: TextStyle(
                       fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: Resources.colors.hfText),
+                      fontWeight: FontWeight.w600,
+                      color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
                 ),
                 const SizedBox(
                   height: 10,
@@ -198,15 +199,16 @@ class _FilterPageState extends State<FilterPage> {
                             borderRadius: BorderRadius.circular(10)),
                         side: BorderSide(
                           color: type == FilterType.Trail
-                              ? Resources.colors.buttonColorlight
+                              ? ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)
                               : Colors.grey,
                         ),
                       ),
                       child: Text(
                         "Trail",
                         style: TextStyle(
+                          fontWeight: FontWeight.w500,
                             color: type == FilterType.Trail
-                                ? Resources.colors.buttonColorlight
+                                ? ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)
                                 : Colors.grey),
                       ),
                     ),
@@ -226,15 +228,16 @@ class _FilterPageState extends State<FilterPage> {
                         side: BorderSide(
                           color: type != FilterType.Park
                               ? Colors.grey
-                              : Resources.colors.buttonColorlight,
+                              : ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                         ),
                       ),
                       child: Text(
                         "Park",
                         style: TextStyle(
+                            fontWeight: FontWeight.w500,
                             color: type != FilterType.Park
                                 ? Colors.grey
-                                : Resources.colors.buttonColorlight),
+                                : ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)),
                       ),
                     )
                   ],
@@ -247,8 +250,8 @@ class _FilterPageState extends State<FilterPage> {
                 Text("Main Location",
                     style: TextStyle(
                         fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Resources.colors.hfText)),
+                        fontWeight: FontWeight.w600,
+                        color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
                 const SizedBox(
                   height: 10,
                 ),
@@ -286,8 +289,8 @@ class _FilterPageState extends State<FilterPage> {
                           Text("Assigned To",
                               style: TextStyle(
                                   fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: Resources.colors.hfText)),
+                                  fontWeight: FontWeight.w600,
+                                  color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
                           const SizedBox(
                             height: 10,
                           ),
@@ -327,8 +330,8 @@ class _FilterPageState extends State<FilterPage> {
                   "Status",
                   style: TextStyle(
                       fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: Resources.colors.hfText),
+                      fontWeight: FontWeight.w600,
+                      color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
                 ),
                 const SizedBox(
                   height: 10,
@@ -347,15 +350,16 @@ class _FilterPageState extends State<FilterPage> {
                             borderRadius: BorderRadius.circular(10)),
                         side: BorderSide(
                           color: status == FilterStatus.Completed
-                              ? Resources.colors.buttonColorlight
+                              ? ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)
                               : Colors.grey,
                         ),
                       ),
                       child: Text(
                         "Completed",
                         style: TextStyle(
+                          fontWeight: FontWeight.w500,
                             color: status == FilterStatus.Completed
-                                ? Resources.colors.buttonColorlight
+                                ? ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)
                                 : Colors.grey),
                       ),
                     ),
@@ -375,15 +379,16 @@ class _FilterPageState extends State<FilterPage> {
                         side: BorderSide(
                           color: status != FilterStatus.Pending
                               ? Colors.grey
-                              : Resources.colors.buttonColorlight,
+                              : ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                         ),
                       ),
                       child: Text(
                         "Pending",
                         style: TextStyle(
+                            fontWeight: FontWeight.w500,
                             color: status != FilterStatus.Pending
                                 ? Colors.grey
-                                : Resources.colors.buttonColorlight),
+                                : ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)),
                       ),
                     )
                   ],
@@ -397,8 +402,8 @@ class _FilterPageState extends State<FilterPage> {
                   "Keyword",
                   style: TextStyle(
                       fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: Resources.colors.hfText),
+                      fontWeight: FontWeight.w600,
+                      color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
                 ),
                 const SizedBox(
                   height: 10,
@@ -412,11 +417,12 @@ class _FilterPageState extends State<FilterPage> {
                           decoration: InputDecoration(
                             prefixIcon: SvgPicture.asset(
                               "assets/images/comments/Search.svg",
+                              colorFilter: ColorFilter.mode(ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!), BlendMode.srcIn),
                             ),
                             prefixIconConstraints: const BoxConstraints(
                                 minHeight: 24, minWidth: 60),
                             prefixIconColor:
-                                ColorParser().hexToColor("#1A7C52"),
+                                ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                             labelText: ' Search',
                             // labelText: widget.selectedLanguage == "1"
                             //     ? "Search".language(context)
@@ -453,8 +459,8 @@ class _FilterPageState extends State<FilterPage> {
                           "Start Date",
                           style: TextStyle(
                               fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: Resources.colors.hfText),
+                              fontWeight: FontWeight.w600,
+                              color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
                         ),
                         const SizedBox(
                           height: 10,
@@ -504,8 +510,8 @@ class _FilterPageState extends State<FilterPage> {
                           "End Date",
                           style: TextStyle(
                               fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: Resources.colors.hfText),
+                              fontWeight: FontWeight.w600,
+                              color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
                         ),
                         const SizedBox(
                           height: 10,
@@ -555,8 +561,8 @@ class _FilterPageState extends State<FilterPage> {
                   "Type",
                   style: TextStyle(
                       fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: Resources.colors.hfText),
+                      fontWeight: FontWeight.w600,
+                      color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
                 ),
                 const SizedBox(
                   height: 10,
@@ -575,7 +581,7 @@ class _FilterPageState extends State<FilterPage> {
                             borderRadius: BorderRadius.circular(10)),
                         side: BorderSide(
                           color: functionType == FilterFunctionType.Website
-                              ? Resources.colors.buttonColorlight
+                              ? ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)
                               : Colors.grey,
                         ),
                       ),
@@ -583,7 +589,7 @@ class _FilterPageState extends State<FilterPage> {
                         "QR Code",
                         style: TextStyle(
                             color: functionType == FilterFunctionType.Website
-                                ? Resources.colors.buttonColorlight
+                                ? ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)
                                 : Colors.grey),
                       ),
                     ),
@@ -603,7 +609,7 @@ class _FilterPageState extends State<FilterPage> {
                         side: BorderSide(
                           color: functionType != FilterFunctionType.Mobile
                               ? Colors.grey
-                              : Resources.colors.buttonColorlight,
+                              : ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                         ),
                       ),
                       child: Text(
@@ -611,7 +617,7 @@ class _FilterPageState extends State<FilterPage> {
                         style: TextStyle(
                             color: functionType != FilterFunctionType.Mobile
                                 ? Colors.grey
-                                : Resources.colors.buttonColorlight),
+                                : ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)),
                       ),
                     )
                   ],
@@ -648,7 +654,7 @@ class _FilterPageState extends State<FilterPage> {
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Resources.colors.buttonColorDark,
+                        backgroundColor: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                         elevation: 0,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
