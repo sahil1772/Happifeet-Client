@@ -1,14 +1,18 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:happifeet_client_app/model/FilterMap.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
+import 'package:happifeet_client_app/screens/Reports/FilterPage.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
 import 'package:happifeet_client_app/utils/DeviceDimensions.dart';
 
 import '../../components/HappiFeetAppBar.dart';
 import '../../components/StatusCard.dart';
 import '../../model/FeedbackStatus/FeedbackStatusData.dart';
+import '../../storage/runtime_storage.dart';
 import '../../utils/ColorParser.dart';
 import 'StatusDetailPage.dart';
 import 'StatusFilterpage.dart';
@@ -34,6 +38,14 @@ class _StatusWidgetState extends State<StatusWidget> {
 
   String? selectedStatusID = "";
 
+
+  FilterMap? filterParams = FilterMap(
+      type: FilterType.Park.name,
+      popupDatepickerToDateSearch:
+      DateFormat("yyyy-MM-dd").format(DateTime.now()),
+      popupDatepickerFromDateSearch:
+      DateFormat("yyyy-MM-dd").format(DateTime.now()));
+
   @override
   void initState() {
     // TODO: implement initState
@@ -42,38 +54,22 @@ class _StatusWidgetState extends State<StatusWidget> {
     super.initState();
   }
 
-  Future<List<FeedbackStatusData>>? getFeedbackStatusData() async {
-    var response = ApiFactory()
-        .getFeedbackStatusService()
-        .getFeedbackStatusListing("feedback_status_report_list",
-            await SharedPref.instance.getUserId());
-    getStatusData = await response;
-    log("FEEDBACK STATUS DATA --> ${getStatusData!.first.toJson()}");
-    if (getStatusData!.first.status == "Resolved") {
-      resolvedCount++;
-      log("resolvedCount${resolvedCount}");
-    }
-    if (getStatusData!.first.status == "Pending") {
-      setState(() {
-        pendingCount++;
-      });
-      log("pendingCount${pendingCount}");
-    }
-    setState(() {
-      totalFeedback = getStatusData!.length.toString();
-      log("totalFeedback${totalFeedback.toString()}");
-    });
-    return getStatusData!;
-  }
 
   @override
   Widget build(BuildContext context) {
-    double HEADER_HEIGHT = 4;
+    double HEADER_HEIGHT = 4.5;
     return Scaffold(
       endDrawer: StatusDetailPage(report_id: selectedStatusID!),
       resizeToAvoidBottomInset: false,
       endDrawerEnableOpenDragGesture: false,
       extendBodyBehindAppBar: true,
+      drawer: FilterPage(
+          showAssignedUser: true,
+          filterData: (params) {
+            filterParams = params;
+            apiResposne = getFeedbackStatusData();
+          },
+          params: filterParams),
       appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false)
           .getAppBar(context),
       body: SafeArea(
@@ -88,20 +84,23 @@ class _StatusWidgetState extends State<StatusWidget> {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    ColorParser().hexToColor("#34A846"),
-                    ColorParser().hexToColor("#83C03D")
+                    ColorParser().hexToColor(RuntimeStorage
+                        .instance.clientTheme!.top_title_background_color!),
+                    ColorParser().hexToColor(RuntimeStorage
+                        .instance.clientTheme!.top_title_background_color!),
                   ],
                 )),
                 child: Container(
                   margin: DeviceDimensions.getHeaderEdgeInsets(context),
-                  child: const Center(
+                  child: Center(
                     child: Text(
                       "Status",
                       // "Select Location".tr(),
                       // "Select Location".language(context),
                       // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
                       style: TextStyle(
-                          color: Colors.white,
+                          color: ColorParser().hexToColor(RuntimeStorage
+                              .instance.clientTheme!.top_title_text_color!),
                           fontSize: 20,
                           fontWeight: FontWeight.w500),
                     ),
@@ -143,14 +142,26 @@ class _StatusWidgetState extends State<StatusWidget> {
                                   },
                                   style: const TextStyle(fontSize: 16),
                                   decoration: InputDecoration(
-                                    prefixIcon: InkWell(
-                                        onTap: () {},
-                                        child: SvgPicture.asset(
-                                            "assets/images/comments/filter.svg")),
+                                    prefixIcon: Builder(builder: (context) {
+                                      return InkWell(
+                                          onTap: () {
+                                            Scaffold.of(context).openDrawer();
+                                          },
+                                          child: SvgPicture.asset(
+                                            "assets/images/comments/filter.svg",
+                                            colorFilter: ColorFilter.mode(
+                                                ColorParser().hexToColor(
+                                                    RuntimeStorage
+                                                        .instance
+                                                        .clientTheme!
+                                                        .top_title_background_color!),
+                                                BlendMode.srcIn),
+                                          ));
+                                    }),
                                     prefixIconConstraints: const BoxConstraints(
                                         minHeight: 30, minWidth: 60),
-                                    prefixIconColor:
-                                        ColorParser().hexToColor("#1A7C52"),
+                                    // prefixIconColor:
+                                    //     ColorParser().hexToColor("#1A7C52"),
                                     labelText: ' Filters',
                                     // labelText: widget.selectedLanguage == "1"
                                     //     ? "Search".language(context)
@@ -332,7 +343,10 @@ class _StatusWidgetState extends State<StatusWidget> {
                               onPressed: () {},
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(
-                                    ColorParser().hexToColor("#49AC43")),
+                                    ColorParser().hexToColor(RuntimeStorage
+                                        .instance
+                                        .clientTheme!
+                                        .button_background!)),
                                 shape: MaterialStateProperty.all(
                                     RoundedRectangleBorder(
                                         borderRadius:
@@ -383,7 +397,6 @@ class _StatusWidgetState extends State<StatusWidget> {
                                         selectedStatusID = value;
                                         Scaffold.of(context).openEndDrawer();
                                       });
-
                                     },
                                   );
                                 },
@@ -419,24 +432,27 @@ class _StatusWidgetState extends State<StatusWidget> {
     );
   }
 
-  Route _createRouteForFliterPage() {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) =>
-          StatusFilterpageWidget(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(-1.0, 0.0);
-        const end = Offset.zero;
-        const curve = Curves.easeIn;
-        final tween = Tween(begin: begin, end: end);
-        final curvedAnimation = CurvedAnimation(
-          parent: animation,
-          curve: curve,
-        );
-        return SlideTransition(
-          position: tween.animate(curvedAnimation),
-          child: child,
-        );
-      },
-    );
+  Future<List<FeedbackStatusData>>? getFeedbackStatusData() async {
+    var response = ApiFactory()
+        .getFeedbackStatusService()
+        .getFeedbackStatusListing(filterParams);
+    getStatusData = await response;
+    log("FEEDBACK STATUS DATA --> ${getStatusData!.first.toJson()}");
+    if (getStatusData!.first.status == "Resolved") {
+      resolvedCount++;
+      log("resolvedCount${resolvedCount}");
+    }
+    if (getStatusData!.first.status == "Pending") {
+      setState(() {
+        pendingCount++;
+      });
+      log("pendingCount${pendingCount}");
+    }
+    setState(() {
+      totalFeedback = getStatusData!.length.toString();
+      log("totalFeedback${totalFeedback.toString()}");
+    });
+    return getStatusData!;
   }
+
 }

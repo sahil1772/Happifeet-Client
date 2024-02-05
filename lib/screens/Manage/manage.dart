@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:happifeet_client_app/resources/resources.dart';
+import 'package:happifeet_client_app/screens/Manage/ManageActivityReport/ActivityReportListing.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageAnnouncements/AnnouncementListing.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageClients/ClientListing.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageLocation/LocationListing.dart';
@@ -18,8 +19,9 @@ import '../../utils/DeviceDimensions.dart';
 import 'ManageUsers/AssignedUserListing.dart';
 
 class ManageWidget extends StatefulWidget {
-  ClientTheme?  clientTheme;
-   ManageWidget({super.key,this.clientTheme});
+  ClientTheme? clientTheme;
+
+  ManageWidget({super.key, this.clientTheme});
 
   @override
   State<ManageWidget> createState() => _ManageWidgetState();
@@ -54,10 +56,8 @@ class _ManageWidgetState extends State<ManageWidget> {
 
     SharedPref.instance.getCityTheme().then((value) {
       theme = value;
-      checkPermissions();} );
-
-
-
+      checkPermissions();
+    });
 
     super.initState();
   }
@@ -96,13 +96,15 @@ class _ManageWidgetState extends State<ManageWidget> {
                 height: DeviceDimensions.getHeaderSize(context, HEADER_AREA),
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                      colors: [
-                        ColorParser().hexToColor( RuntimeStorage.instance.clientTheme!.top_title_background_color!),
-                        ColorParser().hexToColor( RuntimeStorage.instance.clientTheme!.top_title_background_color!)
-                      ],
-                    )),
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [
+                    ColorParser().hexToColor(RuntimeStorage
+                        .instance.clientTheme!.top_title_background_color!),
+                    ColorParser().hexToColor(RuntimeStorage
+                        .instance.clientTheme!.top_title_background_color!)
+                  ],
+                )),
                 child: Container(
                   margin: DeviceDimensions.getHeaderEdgeInsets(context),
                   child: const Align(
@@ -115,7 +117,9 @@ class _ManageWidgetState extends State<ManageWidget> {
                         // "Select Location".language(context),
                         // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
                         style: TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.w600,color: Colors.white),
+                            fontSize: 22,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white),
                       ),
                     ),
                   ),
@@ -127,309 +131,433 @@ class _ManageWidgetState extends State<ManageWidget> {
                     : MediaQuery.of(context).size.height / 9.5,
                 child: SizedBox(
                     height:
-                    MediaQuery.of(context).size.height <= 667 ? 140 : null,
+                        MediaQuery.of(context).size.height <= 667 ? 140 : null,
                     child: SvgPicture.asset(
                       "assets/images/manage/manageBG.svg",
                     ))),
-
-                   Container(
-                     height:
-                     DeviceDimensions.getBottomSheetHeight(context, HEADER_AREA),
-                     margin: EdgeInsets.only(
-                         top: DeviceDimensions.getBottomSheetMargin(
-                             context, HEADER_AREA)),
-                     padding: const EdgeInsets.symmetric(horizontal: 0),
-                     decoration: const BoxDecoration(
-                         borderRadius: BorderRadius.only(
-                             topLeft: Radius.circular(25),
-                             topRight: Radius.circular(25)),
-                         color: Colors.white),
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 22),
-                        child: Column(
-                          children: [
-                            GridView(
-                              padding: const EdgeInsets.all(0),
-                              gridDelegate:
-                                  const SliverGridDelegateWithMaxCrossAxisExtent(
-                                      maxCrossAxisExtent: 180,
-                                      // childAspectRatio: (itemWidth / itemHeight),
-                                      childAspectRatio: 1,
-                                      crossAxisSpacing: 20,
-                                      mainAxisSpacing: 20),
-                              shrinkWrap: true,
-                              physics: const ScrollPhysics(),
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    LocationListing().gotoManageLocation(context);
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: Colors.black12,
-                                        ),
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(14))),
-                                    width: 150,
-                                    height: 130,
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        SvgPicture.asset(
-                                            "assets/images/manage/location.svg",
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text("Manage \nLocation",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500,
-                                                color: Resources.colors.hfText),
-                                            textAlign: TextAlign.center),
-                                      ],
-                                    ),
+            Container(
+              height:
+                  DeviceDimensions.getBottomSheetHeight(context, HEADER_AREA),
+              margin: EdgeInsets.only(
+                  top: DeviceDimensions.getBottomSheetMargin(
+                      context, HEADER_AREA)),
+              padding: const EdgeInsets.symmetric(horizontal: 0),
+              decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(25),
+                      topRight: Radius.circular(25)),
+                  color: Colors.white),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 22),
+                  child: Column(
+                    children: [
+                      GridView(
+                        padding: const EdgeInsets.all(0),
+                        gridDelegate:
+                            const SliverGridDelegateWithMaxCrossAxisExtent(
+                                maxCrossAxisExtent: 180,
+                                // childAspectRatio: (itemWidth / itemHeight),
+                                childAspectRatio: 1,
+                                crossAxisSpacing: 20,
+                                mainAxisSpacing: 20),
+                        shrinkWrap: true,
+                        physics: const ScrollPhysics(),
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              LocationListing().gotoManageLocation(context);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.black12,
                                   ),
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    const AssignedUserListing()
-                                        .goToAssignedUserListing(context,null);
-                                  },
-                                  child: Container(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(14))),
+                              width: 150,
+                              height: 130,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 70,
+                                    height: 70,
                                     decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.black12),
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(14),
-                                        )),
-                                    width: 150,
-                                    height: 130,
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        SvgPicture.asset(
-                                            "assets/images/manage/users.svg"),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text("Manage \nUsers",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500,
-                                                color: Resources.colors.hfText),
-                                            textAlign: TextAlign.center),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                if (isAnnouncement!)
-                                  InkWell(
-                                    onTap: () {
-                                      AnnouncementListingWidget
-                                          .gotoAnnouncementListingPage(context);
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: Colors.black12,
-                                          ),
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(14))),
-                                      width: 150,
-                                      height: 130,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          SvgPicture.asset(
-                                              "assets/images/manage/announcement.svg"),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text("Manage \nAnnouncement",
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: Resources.colors.hfText),
-                                              textAlign: TextAlign.center),
-                                        ],
+                                        color: ColorParser().hexToColor(
+                                            RuntimeStorage.instance.clientTheme!
+                                                .top_title_background_color!),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(50))),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16),
+                                      child: SvgPicture.asset(
+                                        "assets/images/manage/location.svg",
+                                        colorFilter: ColorFilter.mode(
+                                            Colors.white, BlendMode.srcIn),
                                       ),
                                     ),
                                   ),
-                                InkWell(
-                                  onTap: () {
-                                    const ManageSMTPDetails()
-                                        .goToManageSMTPPage(context);
-                                  },
-                                  child: Container(
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text("Manage \nLocation",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                          color: Resources.colors.hfText),
+                                      textAlign: TextAlign.center),
+                                ],
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              const AssignedUserListing()
+                                  .goToAssignedUserListing(context, null);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black12),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(14),
+                                  )),
+                              width: 150,
+                              height: 130,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 70,
+                                    height: 70,
                                     decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.black12),
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(14),
-                                        )),
-                                    width: 150,
-                                    height: 130,
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        SvgPicture.asset(
-                                            "assets/images/manage/smtp.svg"),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text("Manage \nSMTP Details",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500,
-                                                color: Resources.colors.hfText),
-                                            textAlign: TextAlign.center),
-                                      ],
+                                        color: ColorParser().hexToColor(
+                                            RuntimeStorage.instance.clientTheme!
+                                                .top_title_background_color!),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(50))),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: SvgPicture.asset(
+                                        "assets/images/manage/users.svg",
+                                        colorFilter: ColorFilter.mode(
+                                            Colors.white, BlendMode.srcIn),
+                                      ),
                                     ),
                                   ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text("Manage \nUsers",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                          color: Resources.colors.hfText),
+                                      textAlign: TextAlign.center),
+                                ],
+                              ),
+                            ),
+                          ),
+                          if (isAnnouncement!)
+                            InkWell(
+                              onTap: () {
+                                AnnouncementListingWidget
+                                    .gotoAnnouncementListingPage(context);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.black12,
+                                    ),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(14))),
+                                width: 150,
+                                height: 130,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: 70,
+                                      height: 70,
+                                      decoration: BoxDecoration(
+                                          color: ColorParser().hexToColor(
+                                              RuntimeStorage
+                                                  .instance
+                                                  .clientTheme!
+                                                  .top_title_background_color!),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(50))),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: SvgPicture.asset(
+                                          "assets/images/manage/announcement.svg",
+                                          colorFilter: ColorFilter.mode(
+                                              Colors.white, BlendMode.srcIn),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text("Manage \nAnnouncement",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: Resources.colors.hfText),
+                                        textAlign: TextAlign.center),
+                                  ],
                                 ),
-                                InkWell(
-                                  onTap: () {
-                                    ClientListingWidget()
-                                        .gotoClientListingPage(context);
-                                  },
-                                  child: Container(
+                              ),
+                            ),
+                          InkWell(
+                            onTap: () {
+                              const ManageSMTPDetails()
+                                  .goToManageSMTPPage(context);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black12),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(14),
+                                  )),
+                              width: 150,
+                              height: 130,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 70,
+                                    height: 70,
                                     decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.black12),
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(14),
-                                        )),
-                                    width: 150,
-                                    height: 130,
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        SvgPicture.asset(
-                                            "assets/images/manage/smtp.svg"),
-                                        const SizedBox(
-                                          height: 5,
+                                        color: ColorParser().hexToColor(
+                                            RuntimeStorage.instance.clientTheme!
+                                                .top_title_background_color!),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(50))),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: SvgPicture.asset(
+                                        "assets/images/manage/smtp.svg",
+                                        colorFilter: ColorFilter.mode(
+                                            Colors.white, BlendMode.srcIn),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text("Manage \nSMTP Details",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                          color: Resources.colors.hfText),
+                                      textAlign: TextAlign.center),
+                                ],
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              ClientListingWidget()
+                                  .gotoClientListingPage(context);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black12),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(14),
+                                  )),
+                              width: 150,
+                              height: 130,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 70,
+                                    height: 70,
+                                    decoration: BoxDecoration(
+                                        color: ColorParser().hexToColor(
+                                            RuntimeStorage.instance.clientTheme!
+                                                .top_title_background_color!),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(50))),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: SvgPicture.asset(
+                                        "assets/images/manage/clientUser.svg",
+                                        colorFilter: ColorFilter.mode(
+                                            Colors.white, BlendMode.srcIn),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text("Manage Client Users",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                          color: Resources.colors.hfText),
+                                      textAlign: TextAlign.center),
+                                ],
+                              ),
+                            ),
+                          ),
+                          if (isparkInspection!)
+                            InkWell(
+                              onTap: () {
+                                // ClientListingWidget()
+                                //     .gotoClientListingPage(context);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black12),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(14),
+                                    )),
+                                width: 150,
+                                height: 130,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: 70,
+                                      height: 70,
+                                      decoration: BoxDecoration(
+                                          color: ColorParser().hexToColor(
+                                              RuntimeStorage
+                                                  .instance
+                                                  .clientTheme!
+                                                  .top_title_background_color!),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(50))),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: SvgPicture.asset(
+                                          "assets/images/manage/parkInspection.svg",
+                                          colorFilter: ColorFilter.mode(
+                                              Colors.white, BlendMode.srcIn),
                                         ),
-                                        Text("Manage Client Users",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500,
-                                                color: Resources.colors.hfText),
-                                            textAlign: TextAlign.center),
-                                      ],
+                                      ),
                                     ),
-                                  ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text("Park Inspection",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: Resources.colors.hfText),
+                                        textAlign: TextAlign.center),
+                                  ],
                                 ),
-                                if (isparkInspection!)
-                                  InkWell(
-                                    onTap: () {
-                                      ClientListingWidget()
-                                          .gotoClientListingPage(context);
-                                    },
-                                    child: Container(
+                              ),
+                            ),
+                          if (isactivityReport!)
+                            InkWell(
+                              onTap: () {
+                                // ClientListingWidget()
+                                //     .gotoClientListingPage(context);
+                                ActivityReportWidget().gotoActivityReport(context);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black12),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(14),
+                                    )),
+                                width: 150,
+                                height: 130,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: 70,
+                                      height: 70,
                                       decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.black12),
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(14),
-                                          )),
-                                      width: 150,
-                                      height: 130,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          SvgPicture.asset(
-                                              "assets/images/manage/smtp.svg"),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text("Park Inspection",
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: Resources.colors.hfText),
-                                              textAlign: TextAlign.center),
-                                        ],
+                                          color: ColorParser().hexToColor(
+                                              RuntimeStorage
+                                                  .instance
+                                                  .clientTheme!
+                                                  .top_title_background_color!),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(50))),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: SvgPicture.asset(
+                                          "assets/images/manage/activityReport.svg",
+                                          colorFilter: ColorFilter.mode(
+                                              Colors.white, BlendMode.srcIn),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                if (isactivityReport!)
-                                  InkWell(
-                                    onTap: () {
-                                      ClientListingWidget()
-                                          .gotoClientListingPage(context);
-                                    },
-                                    child: Container(
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text("Activity Report",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: Resources.colors.hfText),
+                                        textAlign: TextAlign.center),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          if (istrail!)
+                            InkWell(
+                              onTap: () {
+                                TrailListing.goToTrailListing(context);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black12),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(14),
+                                    )),
+                                width: 150,
+                                height: 130,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: 70,
+                                      height: 70,
                                       decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.black12),
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(14),
-                                          )),
-                                      width: 150,
-                                      height: 130,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          SvgPicture.asset(
-                                              "assets/images/manage/smtp.svg"),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text("Activity Report",
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: Resources.colors.hfText),
-                                              textAlign: TextAlign.center),
-                                        ],
+                                          color: ColorParser().hexToColor(
+                                              RuntimeStorage
+                                                  .instance
+                                                  .clientTheme!
+                                                  .top_title_background_color!),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(50))),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: SvgPicture.asset(
+                                            "assets/images/manage/manageTrail.svg"),
                                       ),
                                     ),
-                                  ),
-                                if (istrail!)
-                                  InkWell(
-                                    onTap: () {
-                                     TrailListing.goToTrailListing(context);
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.black12),
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(14),
-                                          )),
-                                      width: 150,
-                                      height: 130,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          SvgPicture.asset(
-                                              "assets/images/manage/smtp.svg"),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text("Manage Trail",
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: Resources.colors.hfText),
-                                              textAlign: TextAlign.center),
-                                        ],
-                                      ),
+                                    const SizedBox(
+                                      height: 5,
                                     ),
-                                  ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
+                                    Text("Manage Trail",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: Resources.colors.hfText),
+                                        textAlign: TextAlign.center),
+                                  ],
+                                ),
+                              ),
+                            ),
+                        ],
+                      )
+                    ],
                   ),
-
+                ),
+              ),
+            ),
           ],
         ),
       ),

@@ -15,6 +15,7 @@ FilterMap _$FilterMapFromJson(Map<String, dynamic> json) => FilterMap(
           json['popupDatepickerFromDateSearch'] as String?,
       popupDatepickerToDateSearch:
           json['popupDatepickerToDateSearch'] as String?,
+      assignedTo: json['assignedTo'] as String?,
       functionType: json['functionType'] as String?,
     );
 
@@ -26,4 +27,5 @@ Map<String, dynamic> _$FilterMapToJson(FilterMap instance) => <String, dynamic>{
       'popupDatepickerFromDateSearch': instance.popupDatepickerFromDateSearch,
       'popupDatepickerToDateSearch': instance.popupDatepickerToDateSearch,
       'functionType': instance.functionType,
+      'assignedTo': instance.assignedTo,
     };

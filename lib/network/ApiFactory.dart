@@ -2,6 +2,7 @@ import 'package:happifeet_client_app/network/interface/InterfaceComments.dart';
 import 'package:happifeet_client_app/network/interface/InterfaceDashboard.dart';
 import 'package:happifeet_client_app/network/interface/InterfaceLocation.dart';
 import 'package:happifeet_client_app/network/interface/InterfaceTrails.dart';
+import 'package:happifeet_client_app/network/services/ActivityReportService.dart';
 import 'package:happifeet_client_app/network/services/AnnouncementService.dart';
 import 'package:happifeet_client_app/network/services/AssignedUserService.dart';
 import 'package:happifeet_client_app/network/services/ClientUserService.dart';
@@ -16,6 +17,7 @@ import 'package:happifeet_client_app/network/services/SmtpService.dart';
 import 'package:happifeet_client_app/network/services/TrailService.dart';
 
 import 'interface/InrerfaceFeedback.dart';
+import 'interface/InterfaceActivityReport.dart';
 import 'interface/InterfaceAnnouncement.dart';
 import 'interface/InterfaceAssignedUsers.dart';
 import 'interface/InterfaceClientUsers.dart';
@@ -44,6 +46,12 @@ class ApiFactory {
   InterfaceClientUsers? _interfaceClientUsers;
   InterfaceTrails? _interfaceTrails;
   InterfaceFeedbackStatus? _interfaceFeedbackStatus;
+  InterfaceActivityReport? _interfaceActivityReport;
+
+  InterfaceActivityReport getActivityReportService() {
+    _interfaceActivityReport ??= ActivityReportService();
+    return _interfaceActivityReport!;
+  }
 
   InterfaceFeedbackStatus getFeedbackStatusService() {
     _interfaceFeedbackStatus ??= FeedbackStatusService();

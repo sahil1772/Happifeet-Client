@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:happifeet_client_app/model/BaseResponse.dart';
 import 'package:happifeet_client_app/model/FeedbackStatus/FeedbackStatusData.dart';
+import 'package:happifeet_client_app/model/FilterMap.dart';
 import 'package:happifeet_client_app/network/interface/InterfaceFeedbackStatus.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
@@ -45,12 +46,14 @@ class FeedbackStatusService implements InterfaceFeedbackStatus {
   /** GET FEEDBACK STATUS LISTING **/
   @override
   Future<List<FeedbackStatusData>> getFeedbackStatusListing(
-      String task, String user_id) async {
+      FilterMap? params) async {
     try {
-      var map = {
-        'task': task,
-        'user_id': user_id,
-      };
+      var map = params!.toJson();
+      map.removeWhere((key, value) => value == null || value == "");
+      map.addAll({
+        'task': "feedback_status_report_list",
+        'user_id': await SharedPref.instance.getUserId(),
+      });
 
       var response =
           await NetworkClient().dio.post(base_url, queryParameters: map);
@@ -91,8 +94,9 @@ class FeedbackStatusService implements InterfaceFeedbackStatus {
         );
       }
 
-      var response = await NetworkClient().dio.post(base_url,
-          queryParameters: params, data: form);
+      var response = await NetworkClient()
+          .dio
+          .post(base_url, queryParameters: params, data: form);
 
       if (response.statusCode == 200) {
         BaseResponse baseResponse =

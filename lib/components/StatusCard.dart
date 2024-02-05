@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:happifeet_client_app/utils/ColorParser.dart';
 
 import '../model/FeedbackStatus/FeedbackStatusData.dart';
 import '../resources/resources.dart';
 import '../screens/Reports/StatusDetailPage.dart';
+import '../storage/runtime_storage.dart';
 
 class StatusCard extends StatefulWidget {
   FeedbackStatusData? getStatusData;
@@ -53,7 +55,14 @@ class _StatusCardState extends State<StatusCard> {
                         Row(
                           children: [
                             SvgPicture.asset(
-                                "assets/images/comments/location.svg"),
+                              "assets/images/comments/location.svg",
+                              colorFilter: ColorFilter.mode(
+                                  ColorParser().hexToColor(RuntimeStorage
+                                      .instance
+                                      .clientTheme!
+                                      .top_title_background_color!),
+                                  BlendMode.srcIn),
+                            ),
                             SizedBox(
                               width: 10,
                             ),
@@ -62,7 +71,8 @@ class _StatusCardState extends State<StatusCard> {
                               style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
-                                  color: Colors.black),
+                                  color: ColorParser().hexToColor(RuntimeStorage
+                                      .instance.clientTheme!.body_text_color!)),
                             ),
                             SizedBox(
                               width: 10,
@@ -120,17 +130,19 @@ class _StatusCardState extends State<StatusCard> {
                             "Assigned By",
                             style: TextStyle(
                                 fontSize: 13,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black),
+                                fontWeight: FontWeight.w600,
+                                color: ColorParser().hexToColor(RuntimeStorage
+                                    .instance.clientTheme!.body_text_color!)),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 3.0),
-                            child: Text(
-                                widget.getStatusData!.assigned_by ?? "",
+                            child: Text(widget.getStatusData!.assigned_by ?? "",
                                 style: TextStyle(
                                     fontSize: 14,
-                                    fontWeight: FontWeight.w300,
-                                    color: Resources.colors.hfText)),
+                                    fontWeight: FontWeight.w500,
+                                    color: ColorParser().hexToColor(
+                                        RuntimeStorage.instance.clientTheme!
+                                            .body_text_color!))),
                           ),
                           SizedBox(
                             height: 16,
@@ -138,16 +150,20 @@ class _StatusCardState extends State<StatusCard> {
                           Text("Feedback Date",
                               style: TextStyle(
                                   fontSize: 13,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black)),
+                                  fontWeight: FontWeight.w600,
+                                  color: ColorParser().hexToColor(RuntimeStorage
+                                      .instance
+                                      .clientTheme!
+                                      .body_text_color!))),
                           Padding(
                             padding: const EdgeInsets.only(top: 3.0),
-                            child: Text(
-                                widget.getStatusData!.add_date ?? "",
+                            child: Text(widget.getStatusData!.add_date ?? "",
                                 style: TextStyle(
                                     fontSize: 14,
-                                    fontWeight: FontWeight.w300,
-                                    color: Resources.colors.hfText)),
+                                    fontWeight: FontWeight.w500,
+                                    color: ColorParser().hexToColor(
+                                        RuntimeStorage.instance.clientTheme!
+                                            .body_text_color!))),
                           ),
                           SizedBox(
                             height: 16,
@@ -155,15 +171,20 @@ class _StatusCardState extends State<StatusCard> {
                           Text("Days Taken to Resolve",
                               style: TextStyle(
                                   fontSize: 13,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black)),
+                                  fontWeight: FontWeight.w600,
+                                  color: ColorParser().hexToColor(RuntimeStorage
+                                      .instance
+                                      .clientTheme!
+                                      .body_text_color!))),
                           Padding(
                             padding: const EdgeInsets.only(top: 3.0),
                             child: Text(widget.getStatusData!.diff_cnt ?? "",
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
-                                    color: Resources.colors.hfText)),
+                                    color: ColorParser().hexToColor(
+                                        RuntimeStorage.instance.clientTheme!
+                                            .body_text_color!))),
                           ),
                         ],
                       ),
@@ -182,8 +203,10 @@ class _StatusCardState extends State<StatusCard> {
                             child: Text("Assigned To",
                                 style: TextStyle(
                                     fontSize: 13,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.black)),
+                                    fontWeight: FontWeight.w600,
+                                    color: ColorParser().hexToColor(
+                                        RuntimeStorage.instance.clientTheme!
+                                            .body_text_color!))),
                           ),
                           Align(
                             alignment: Alignment.centerRight,
@@ -192,8 +215,10 @@ class _StatusCardState extends State<StatusCard> {
                               child: Text(widget.getStatusData!.assigned_to ?? "",
                                   style: TextStyle(
                                       fontSize: 14,
-                                      fontWeight: FontWeight.w300,
-                                      color: Resources.colors.hfText)),
+                                      fontWeight: FontWeight.w500,
+                                      color: ColorParser().hexToColor(
+                                          RuntimeStorage.instance.clientTheme!
+                                              .body_text_color!))),
                             ),
                           ),
                           SizedBox(
@@ -204,8 +229,10 @@ class _StatusCardState extends State<StatusCard> {
                             child: Text("Last Updated Date",
                                 style: TextStyle(
                                     fontSize: 13,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.black)),
+                                    fontWeight: FontWeight.w600,
+                                    color: ColorParser().hexToColor(
+                                        RuntimeStorage.instance.clientTheme!
+                                            .body_text_color!))),
                           ),
                           Align(
                             alignment: Alignment.centerRight,
@@ -214,8 +241,10 @@ class _StatusCardState extends State<StatusCard> {
                               child: Text(widget.getStatusData!.new_date ?? "",
                                   style: TextStyle(
                                       fontSize: 14,
-                                      fontWeight: FontWeight.w300,
-                                      color: Resources.colors.hfText)),
+                                      fontWeight: FontWeight.w500,
+                                      color: ColorParser().hexToColor(
+                                          RuntimeStorage.instance.clientTheme!
+                                              .body_text_color!))),
                             ),
                           ),
                           SizedBox(
@@ -226,8 +255,20 @@ class _StatusCardState extends State<StatusCard> {
                               // AddLocation().gotoAddLocation(context);
                             },
                             style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    Resources.colors.buttonColorlight,
+                                backgroundColor: widget.getStatusData!.status ==
+                                        "unassigned"
+                                    ? ColorParser().hexToColor("#F85100")
+                                    : widget.getStatusData!.status == "Pending"
+                                        ? ColorParser().hexToColor("#FF9002")
+                                        : widget.getStatusData!.status ==
+                                                "assigned"
+                                            ? ColorParser()
+                                                .hexToColor("#339D00")
+                                            : ColorParser().hexToColor(
+                                                RuntimeStorage
+                                                    .instance
+                                                    .clientTheme!
+                                                    .button_background!),
                                 elevation: 0,
                                 shape: RoundedRectangleBorder(
                                     borderRadius:

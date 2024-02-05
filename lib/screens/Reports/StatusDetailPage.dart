@@ -446,25 +446,25 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                   },
                 ),
 
-                // GridView.builder(
-                //     gridDelegate:  const SliverGridDelegateWithFixedCrossAxisCount(
-                //     crossAxisCount: 2,
-                //     mainAxisSpacing: 0,
-                //     // crossAxisSpacing: 15,
-                //     // mainAxisExtent: 80
-                //     ),
-                //   shrinkWrap: true,
-                //   physics: ScrollPhysics(),
-                //   itemBuilder: (BuildContext context, int index) {
-                //       return Column(
-                //         children: [
-                //           Text(),
-                //           Text()
-                //         ],
-                //       );
-                //   },
-                //
-                // ),
+              // GridView.builder(
+              //     gridDelegate:  const SliverGridDelegateWithFixedCrossAxisCount(
+              //     crossAxisCount: 2,
+              //     mainAxisSpacing: 0,
+              //     // crossAxisSpacing: 15,
+              //     // mainAxisExtent: 80
+              //     ),
+              //   shrinkWrap: true,
+              //   physics: ScrollPhysics(),
+              //   itemBuilder: (BuildContext context, int index) {
+              //       return Column(
+              //         children: [
+              //           Text(),
+              //           Text()
+              //         ],
+              //       );
+              //   },
+              //
+              // ),
 
                 /** SELECT LANG **/
                 // const SizedBox(
@@ -538,7 +538,9 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                           reportId: widget.report_id,
                           dataCallback: () {},
                           onFailure: () {},
-                          onSuccess: () {},
+                          onSuccess: () { setState(() {
+                            apiResponse = getFeedbackStatusDetails();
+                          });},
                           assignedTo: snapshot.data!.first.assign_to,
                         );
                       } else {
