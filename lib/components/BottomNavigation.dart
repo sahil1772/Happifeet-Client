@@ -71,9 +71,9 @@ class _BottomNavigationHappiFeetState extends State<BottomNavigationHappiFeet>{
     return [
       const DashboardWidget(),
       if(userType == "S")
-       ManageWidget(),
+       ManageWidget(controller: _controller),
        ReportsWidget(),
-       ProfileWidget(),
+       ProfileWidget(controller: _controller,),
 
 
     ];
@@ -92,6 +92,7 @@ class _BottomNavigationHappiFeetState extends State<BottomNavigationHappiFeet>{
           colorFilter: const ColorFilter.mode(Colors.grey, BlendMode.srcIn),),
         // activeColorPrimary: Colors.red,
         // activeColorSecondary: Colors.lightBlue,
+
       ),
       if(userType == "S")
       PersistentBottomNavBarItem(
@@ -144,6 +145,9 @@ class _BottomNavigationHappiFeetState extends State<BottomNavigationHappiFeet>{
       screens: _buildScreens(),
       items: _navBarsItems(),
       backgroundColor: Colors.white,
+      popAllScreensOnTapAnyTabs: true,
+
+
       decoration: NavBarDecoration(
         // borderRadius: BorderRadius.circular(10.0),
         colorBehindNavBar: Colors.white,

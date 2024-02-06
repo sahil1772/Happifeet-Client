@@ -14,7 +14,7 @@ class UserListingCard extends StatefulWidget {
   AssignedUserData? assignedUserdata;
   Function? refreshCallback;
 
-  UserListingCard({super.key, this.assignedUserdata,this.refreshCallback});
+  UserListingCard({super.key, this.assignedUserdata, this.refreshCallback});
 
   @override
   State<UserListingCard> createState() => _UserListingCardState();
@@ -57,25 +57,28 @@ class _UserListingCardState extends State<UserListingCard> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SizedBox(
-                height: 170,
+                height: 165,
                 child: Flex(
                   direction: Axis.horizontal,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Padding(
                       padding:
-                          const EdgeInsets.only(left: 10, top: 10, bottom: 10),
+                          const EdgeInsets.only(left: 10, top: 20, bottom: 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
                             '${widget.assignedUserdata!.name}',
                             // overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: TextStyle(
-                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
-                                fontSize: 16,
+                                color: ColorParser().hexToColor(RuntimeStorage
+                                    .instance
+                                    .clientTheme!
+                                    .top_title_background_color!),
+                                fontSize: 18,
                                 fontWeight: FontWeight.w500,
                                 letterSpacing: 0.5),
                           ),
@@ -106,7 +109,10 @@ class _UserListingCardState extends State<UserListingCard> {
                                   softWrap: true,
                                   maxLines: 1,
                                   overflow: TextOverflow.clip,
-                                  style: TextStyle(color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
+                                  style: TextStyle(  fontSize: 16,
+                                      color: ColorParser().hexToColor(
+                                          RuntimeStorage.instance.clientTheme!
+                                              .body_text_color!)),
                                 ),
                               ],
                             ),
@@ -128,28 +134,32 @@ class _UserListingCardState extends State<UserListingCard> {
                                   softWrap: true,
                                   maxLines: 1,
                                   overflow: TextOverflow.clip,
-                                  style: TextStyle(color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: ColorParser().hexToColor(
+                                          RuntimeStorage.instance.clientTheme!
+                                              .body_text_color!)),
                                 ),
                               ],
                             ),
                           ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 1.0),
-                            child: Row(
-                              children: [
-                                Text(
-                                  'Note: ${widget.assignedUserdata!.note_remark}',
-                                  softWrap: true,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.clip,
-                                  style: TextStyle(color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
-                                ),
-                              ],
-                            ),
-                          ),
+                          // const SizedBox(
+                          //   height: 15,
+                          // ),
+                          // Padding(
+                          //   padding: EdgeInsets.symmetric(vertical: 1.0),
+                          //   child: Row(
+                          //     children: [
+                          //       Text(
+                          //         'Note: ${widget.assignedUserdata!.note_remark}',
+                          //         softWrap: true,
+                          //         maxLines: 1,
+                          //         overflow: TextOverflow.clip,
+                          //         style: TextStyle(color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
@@ -181,9 +191,10 @@ class _UserListingCardState extends State<UserListingCard> {
                     InkWell(
                         onTap: () {
                           AddAssignedUserWidget().goToAddAssignedUser(
-                              context, widget.assignedUserdata!.id, forEdit,(){
-                                log("CALLBACK FROM USER LISTING CARD");
-                                widget.refreshCallback!();
+                              context, widget.assignedUserdata!.id, forEdit,
+                              () {
+                            log("CALLBACK FROM USER LISTING CARD");
+                            widget.refreshCallback!();
                           });
                         },
                         child: SvgPicture.asset(
@@ -207,20 +218,24 @@ class _UserListingCardState extends State<UserListingCard> {
                                   actions: [
                                     TextButton(
                                         onPressed: () async {
-                                          var response = await ApiFactory().getUserService().deleteUserData("delete_assigned_user", widget.assignedUserdata!.id!);
-                                          if(response.status == "1"){
+                                          var response = await ApiFactory()
+                                              .getUserService()
+                                              .deleteUserData(
+                                                  "delete_assigned_user",
+                                                  widget.assignedUserdata!.id!);
+                                          if (response.status == "1") {
                                             log("User Deleted Successfully");
                                             Navigator.pop(context);
 
-                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("User Deleted Successfully")));
-
-
-                                          }else{
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                                    content: Text(
+                                                        "User Deleted Successfully")));
+                                          } else {
                                             log("Error in user delete");
                                           }
-
-
-                                        }, child: Text("Yes")),
+                                        },
+                                        child: Text("Yes")),
                                     TextButton(
                                         onPressed: () => Navigator.of(context,
                                                 rootNavigator: true)

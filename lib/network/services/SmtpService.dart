@@ -59,7 +59,7 @@ class SmtpService implements InterfaceSmtp {
       };
 
       var response =
-          await NetworkClient().dio.post(base_url, data: FormData.fromMap(map));
+          await NetworkClient().dio.post(base_url, queryParameters: map);
       log("this is response of forgot password $response");
 
       if (response.statusCode == 200) {
