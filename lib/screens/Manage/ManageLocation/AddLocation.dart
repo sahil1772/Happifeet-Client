@@ -9,8 +9,10 @@ import 'package:happifeet_client_app/i18n/locale_keys.g.dart';
 import 'package:happifeet_client_app/model/BaseResponse.dart';
 import 'package:happifeet_client_app/model/Location/Features.dart';
 import 'package:happifeet_client_app/model/Location/LocationDataModel.dart';
+import 'package:happifeet_client_app/resources/resources.dart';
 import 'package:happifeet_client_app/storage/runtime_storage.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
+import 'package:happifeet_client_app/utils/CalendarUtils.dart';
 import 'package:happifeet_client_app/utils/DeviceDimensions.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -68,6 +70,8 @@ class _AddLocationState extends State<AddLocation>
   Map<String, Map<String, TextEditingController>> dataControllers = {};
   List<Features>? features = [];
   List<String> selectedMonths = [];
+  DateTime selectedStartDate = DateTime.now();
+  DateTime selectedEndDate = DateTime.now();
   List<String?> months = [
     "1",
     "2",
@@ -1324,32 +1328,39 @@ class _AddLocationState extends State<AddLocation>
                                           )),
                                           SizedBox(width: 10,),
                                           Flexible(
-                                              child: TextFormField(
-                                            decoration: InputDecoration(
-                                              hintText: "Enter End Date",
-                                              hintStyle: const TextStyle(
-                                                  color: Color(0xffabaaaa),
-                                                  fontSize: 13),
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: const BorderSide(
-                                                  color: Color(0xffc4c4c4),
+                                              child:   InkWell(
+                                                onTap: () {
+                                                  CalendarUtils.showPicker(context: context);
+                                                },
+                                                child: Container(
+                                                  height: 56,
+                                                  padding: EdgeInsets.symmetric(horizontal: 16),
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                      color: ColorParser().hexToColor("#9E9E9E"),
+                                                    ),
+                                                    borderRadius:
+                                                    const BorderRadius.all(Radius.circular(10)),
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                    children: [
+                                                      Text(
+                                                          "${selectedStartDate.day}-${selectedStartDate.month}-${selectedStartDate.year}"
+                                                              .split(' ')[0],
+                                                          style: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight: FontWeight.w500,
+                                                              color: Resources.colors.hfText)),
+                                                      SizedBox(
+                                                        width: 16,
+                                                      ),
+                                                      SvgPicture.asset(
+                                                          "assets/images/comments/datepicker.svg"),
+                                                    ],
+                                                  ),
                                                 ),
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                              contentPadding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 16),
-                                              border: OutlineInputBorder(
-                                                borderSide: const BorderSide(
-                                                  color: Color(0xffc4c4c4),
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                            ),
-                                          ))
+                                              ),)
                                         ],
                                       ),
                                 Padding(

@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 
 class CalendarUtils {
-  static showDatePicker(
-      {required BuildContext context,
-      required initialDate,
-      required DateTime firstDate,
-      required DateTime lastDate}) async {
+  static showPicker(
+      {required BuildContext context,DateTime? selectedStartDate}) async {
     final DateTime? picked = await showDatePicker(
         context: context,
-        initialDate: selectedStartDate,
+        initialDate: selectedStartDate??DateTime.now(),
         firstDate: DateTime(2015),
         lastDate: DateTime(2101));
   }
