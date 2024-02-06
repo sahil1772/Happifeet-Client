@@ -202,6 +202,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
                        // ),
                    ),
                      onPressed: () async{
+                       FocusManager.instance.primaryFocus?.unfocus();
                      var response = await ApiFactory().getLoginService().sendLoginDetails("login",email!, password!);
 
                      log("RESPONSE LOGIN ${response.data}");
@@ -224,6 +225,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
 
 
                      // OtpPageWidget().goToOtpPage(context);
+
 
 
                      },

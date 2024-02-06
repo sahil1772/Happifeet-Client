@@ -37,6 +37,8 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement initState
 
 
+
+
     SharedPref.instance.getCityTheme().then((value) {
       hexColor = value.top_title_background_color;
       setState(() {});
@@ -56,7 +58,7 @@ class _MyAppState extends State<MyApp> {
         textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
         canvasColor: Colors.transparent,
         colorScheme: ColorScheme.fromSeed(
-            seedColor: from(ColorParser().hexToColor(hexColor!))),
+            seedColor: from(hexColor == null ? Color(0xff49AC43) : ColorParser().hexToColor(hexColor!))),
         useMaterial3: true,
       ),
       home: const SplashScreen(),
