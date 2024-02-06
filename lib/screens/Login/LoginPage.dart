@@ -126,9 +126,9 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
                  const SizedBox(height: 20,),
                  TextField(
                    onChanged: (value){
-                     setEmailError(EmailValidator.validate(value)
-                         ? null
-                         : "Please enter valid email");
+                     // setEmailError(EmailValidator.validate(value)
+                     //     ? null
+                     //     : "Please enter valid email");
 
                      setState(() {
                        email = value;
@@ -141,7 +141,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>{
                        // labelText: labelText,
                        hintText: 'Email',
                        hintStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                       errorText: getEmailError(),
+                       // errorText: getEmailError(),
                        focusedBorder: OutlineInputBorder(
                          borderRadius: BorderRadius.circular(12),
                            borderSide: BorderSide(

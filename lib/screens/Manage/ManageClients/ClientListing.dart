@@ -74,7 +74,7 @@ class _ClientListingWidgetState extends State<ClientListingWidget> {
   Widget build(BuildContext context) {
     double HEADER_HEIGHT = 4.5;
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       extendBodyBehindAppBar: true,
       appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false)
           .getAppBar(context),
@@ -98,7 +98,7 @@ class _ClientListingWidgetState extends State<ClientListingWidget> {
                   margin: DeviceDimensions.getHeaderEdgeInsets(context),
                   child:  Center(
                     child: Text(
-                      "List Client",
+                      "List Assigned Client",
                       // "Select Location".tr(),
                       // "Select Location".language(context),
                       // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',

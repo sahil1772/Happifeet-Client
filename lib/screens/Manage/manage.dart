@@ -11,6 +11,7 @@ import 'package:happifeet_client_app/screens/Manage/ManageSMTP/manage_smtp_detai
 import 'package:happifeet_client_app/screens/Manage/ManageTrails/TrailListing.dart';
 import 'package:happifeet_client_app/storage/runtime_storage.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 
 import '../../components/HappiFeetAppBar.dart';
 import '../../model/Theme/ClientTheme.dart';
@@ -20,8 +21,9 @@ import 'ManageUsers/AssignedUserListing.dart';
 
 class ManageWidget extends StatefulWidget {
   ClientTheme? clientTheme;
+  PersistentTabController? controller;
 
-  ManageWidget({super.key, this.clientTheme});
+  ManageWidget({super.key, this.clientTheme,this.controller});
 
   @override
   State<ManageWidget> createState() => _ManageWidgetState();
@@ -53,6 +55,7 @@ class _ManageWidgetState extends State<ManageWidget> {
     // TODO: implement initState
     // checkPermissions();
     // SharedPref.instance.setPermissions();
+    log("BOTTOMSHEET CONTROLLER IN MANAGE PAGE ${widget.controller}");
 
     SharedPref.instance.getCityTheme().then((value) {
       theme = value;
@@ -107,7 +110,7 @@ class _ManageWidgetState extends State<ManageWidget> {
                 )),
                 child: Container(
                   margin: DeviceDimensions.getHeaderEdgeInsets(context),
-                  child: const Align(
+                  child:  Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
@@ -119,7 +122,7 @@ class _ManageWidgetState extends State<ManageWidget> {
                         style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.w600,
-                            color: Colors.white),
+                            color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_text_color!)),
                       ),
                     ),
                   ),
@@ -312,8 +315,8 @@ class _ManageWidgetState extends State<ManageWidget> {
                             ),
                           InkWell(
                             onTap: () {
-                              const ManageSMTPDetails()
-                                  .goToManageSMTPPage(context);
+                               ManageSMTPDetails()
+                                  .goToManageSMTPPage(context,widget.controller);
                             },
                             child: Container(
                               decoration: BoxDecoration(
