@@ -12,7 +12,7 @@ abstract class InterfaceLocation{
   Future<LocationDataModel> editLocationData(Map<String,String> park_id);
   Future<BaseResponse> submitLocationData(LocationDataModel data, XFile? locationImage, List<XFile>? galleryImages);
   Future<BaseResponse> updateLocationData(LocationDataModel data, XFile? locationImage, List<XFile>? galleryImages);
-  Future<BaseResponse> submitLocationLanguageData(LocationDataModel data,String parkId,String language );
+  Future<BaseResponse> submitLocationLanguageData(LocationDataModel data,String parkId,String language , XFile? locationImage, List<XFile>? galleryImages);
   Future<List<LocationData>?> getLocationListData(String task);
 
   Future<List<Features>?> getFeatures();

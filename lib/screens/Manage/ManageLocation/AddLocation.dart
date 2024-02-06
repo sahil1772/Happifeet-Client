@@ -108,9 +108,15 @@ class _AddLocationState extends State<AddLocation>
 
   bool isChecked = false;
 
-  double HEADER_HEIGHT = 5;
+  double HEADER_HEIGHT = 4;
 
   Future<LocationDataModel?>? apiResponse;
+
+  Future<BaseResponse?>? englishSubmissionResponse;
+  Future<BaseResponse?>? otherLanguageSubmissionResponse;
+  Future<List<Features>?>? featuresResponse;
+
+  bool selectAll = false;
 
   @override
   void initState() {
@@ -119,8 +125,7 @@ class _AddLocationState extends State<AddLocation>
 
     getLanguages().then((value) {
       languages = value;
-      getFeatures();
-      otherFeaturesWidgets!.addAll({
+      otherFeaturesWidgets.addAll({
         "en": [
           TextField(
             controller: TextEditingController(),
@@ -149,6 +154,22 @@ class _AddLocationState extends State<AddLocation>
 
       _controller = TabController(length: value.keys.length, vsync: this);
 
+      _controller!.addListener(() {
+        setState(() {
+          apiResponse = getLocationData(widget.parkId);
+          // context.setLocale(Locale("en"));
+          log("CONTROLLER INDEX ${languages.keys.elementAt(_controller!.index)}");
+          if (_controller!.indexIsChanging) {
+            log("tab is changing");
+            context.setLocale(Locale(
+                languages.keys.elementAt(_controller!.index) == "spa"
+                    ? "es"
+                    : languages.keys.elementAt(_controller!.index)));
+          } else {
+            log("INSIDE ELSE OF LISTENER${_controller!.index}");
+          }
+        });
+      });
       if (dataControllers.keys
           .contains(languages.keys.elementAt(_controller!.index))) {
         log("ALREADY HAS CONTROLLERS");
@@ -178,6 +199,7 @@ class _AddLocationState extends State<AddLocation>
       }
 
       apiResponse = getLocationData(widget.parkId);
+      featuresResponse = getFeatures();
       setState(() {
         context.setLocale(Locale(languages.keys.elementAt(0)));
       });
@@ -189,13 +211,14 @@ class _AddLocationState extends State<AddLocation>
   @override
   Widget build(BuildContext context) {
     this.buildContext = context;
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        extendBodyBehindAppBar: true,
-        appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false)
-            .getAppBar(context),
-        body: Stack(
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      extendBodyBehindAppBar: true,
+      appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false)
+          .getAppBar(context),
+      body: SafeArea(
+        top: false,
+        child: Stack(
           children: [
             Container(
                 height: DeviceDimensions.getHeaderSize(context, HEADER_HEIGHT),
@@ -212,13 +235,7 @@ class _AddLocationState extends State<AddLocation>
                   ],
                 )),
                 child: Container(
-                  margin: EdgeInsets.only(
-                      top: HappiFeetAppBar(
-                              isCitiyList: false, IsDashboard: false)
-                          .getAppBar(context)
-                          .preferredSize
-                          .height,
-                      bottom: DeviceDimensions.BOTTOMSHEET_TOP_MARGIN),
+                  margin: DeviceDimensions.getHeaderEdgeInsets(context),
                   child: Center(
                     child: Text(
                       "Add Location",
@@ -234,6 +251,8 @@ class _AddLocationState extends State<AddLocation>
                   ),
                 )),
             Container(
+              height:
+                  DeviceDimensions.getBottomSheetHeight(context, HEADER_HEIGHT),
               margin: EdgeInsets.only(
                   top: DeviceDimensions.getBottomSheetMargin(
                       context, HEADER_HEIGHT)),
@@ -395,7 +414,7 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
+                          const Row(
                             children: [
                               Text(
                                 "Location Name",
@@ -450,7 +469,7 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
+                          const Row(
                             children: [
                               Text(
                                 "Address & Street",
@@ -505,7 +524,7 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
+                          const Row(
                             children: [
                               Text(
                                 "City",
@@ -560,7 +579,7 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
+                          const Row(
                             children: [
                               Text(
                                 "Zip",
@@ -615,7 +634,7 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
+                          const Row(
                             children: [
                               Text(
                                 "State",
@@ -670,7 +689,7 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
+                          const Row(
                             children: [
                               Text(
                                 "Description",
@@ -727,7 +746,7 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             "Location (Images / Photos)",
                             style: TextStyle(
                                 color: Colors.black,
@@ -809,7 +828,7 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
+                          const Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
@@ -905,7 +924,7 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             "Main City Location",
                             style: TextStyle(
                                 color: Colors.black,
@@ -939,7 +958,7 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
+                          const Row(
                             children: [
                               Text(
                                 "Latitude",
@@ -997,7 +1016,7 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
+                          const Row(
                             children: [
                               Text(
                                 "Longitude",
@@ -1055,7 +1074,7 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             "Reserve Link",
                             style: TextStyle(
                                 color: Colors.black,
@@ -1096,7 +1115,7 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             "Available For Months",
                             style: TextStyle(
                                 color: Colors.black,
@@ -1273,7 +1292,118 @@ class _AddLocationState extends State<AddLocation>
                                           );
                                         }).toList(),
                                       )
-                                    : const SizedBox()
+                                    : Row(
+
+                                        children: [
+                                          Flexible(
+                                              child: TextFormField(
+                                            decoration: InputDecoration(
+                                              hintText: "Enter Start Date",
+                                              hintStyle: const TextStyle(
+                                                  color: Color(0xffabaaaa),
+                                                  fontSize: 13),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                  color: Color(0xffc4c4c4),
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 16),
+                                              border: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                  color: Color(0xffc4c4c4),
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                            ),
+                                          )),
+                                          SizedBox(width: 10,),
+                                          Flexible(
+                                              child: TextFormField(
+                                            decoration: InputDecoration(
+                                              hintText: "Enter End Date",
+                                              hintStyle: const TextStyle(
+                                                  color: Color(0xffabaaaa),
+                                                  fontSize: 13),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                  color: Color(0xffc4c4c4),
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 16),
+                                              border: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                  color: Color(0xffc4c4c4),
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                            ),
+                                          ))
+                                        ],
+                                      ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: showByMonth
+                                      ? OutlinedButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              selectAll = !selectAll;
+                                              if (selectAll) {
+                                                selectedMonths.addAll(
+                                                    months.map((e) => e!));
+                                              } else {
+                                                selectedMonths.clear();
+                                              }
+                                            });
+                                          },
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    Colors.transparent),
+                                            shape: MaterialStateProperty.all(
+                                                RoundedRectangleBorder(
+                                                    side: BorderSide(
+                                                        width: 2,
+                                                        color: selectAll
+                                                            ? ColorParser().hexToColor(
+                                                                RuntimeStorage
+                                                                    .instance
+                                                                    .clientTheme!
+                                                                    .top_title_background_color!)
+                                                            : Colors
+                                                                .transparent),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0))),
+                                          ),
+                                          child: Text(
+                                            selectAll
+                                                ? "Unselect All"
+                                                : "Select All",
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: selectAll
+                                                    ? ColorParser().hexToColor(
+                                                        RuntimeStorage
+                                                            .instance
+                                                            .clientTheme!
+                                                            .top_title_background_color!)
+                                                    : const Color(0xff828385)),
+                                          ),
+                                        )
+                                      : const SizedBox(),
+                                ),
                               ],
                             ),
                           ),
@@ -1287,7 +1417,7 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             "Features",
                             style: TextStyle(
                                 color: Colors.black,
@@ -1296,7 +1426,7 @@ class _AddLocationState extends State<AddLocation>
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: FutureBuilder(
-                              future: getFeatures(),
+                              future: featuresResponse,
                               builder: (context, snapshot) {
                                 return GridView.extent(
                                   shrinkWrap: true,
@@ -1387,7 +1517,7 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             "Other Features",
                             style: TextStyle(
                                 color: Colors.black,
@@ -1453,7 +1583,7 @@ class _AddLocationState extends State<AddLocation>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             "Status",
                             style: TextStyle(
                                 color: Colors.black,
@@ -1487,24 +1617,57 @@ class _AddLocationState extends State<AddLocation>
                     )),
 
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 56.0, top: 16),
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: ColorParser().hexToColor(
-                                RuntimeStorage
-                                    .instance.clientTheme!.button_background!),
-                          ),
-                          onPressed: () {
-                            submit_English_Details();
+                        padding: const EdgeInsets.only(bottom: 56.0, top: 16),
+                        child: FutureBuilder(
+                          future: englishSubmissionResponse,
+                          builder: (context, snapshot) {
+                            return ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: ColorParser().hexToColor(
+                                      RuntimeStorage.instance.clientTheme!
+                                          .button_background!),
+                                ),
+                                onPressed: () {
+                                  log("Connection STATE => ${snapshot.connectionState.name}");
+                                  if (snapshot.connectionState ==
+                                          ConnectionState.none ||
+                                      snapshot.connectionState ==
+                                          ConnectionState.done) {
+                                    setState(() {
+                                      englishSubmissionResponse =
+                                          submit_English_Details();
+                                    });
+                                  } else if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text(
+                                                "Location submission already in progress")));
+                                  }
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 16.0),
+                                  child: Center(
+                                    child: snapshot.connectionState ==
+                                                ConnectionState.none ||
+                                            snapshot.connectionState ==
+                                                ConnectionState.done
+                                        ? const Text(
+                                            "Submit",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          )
+                                        : const SizedBox(
+                                            width: 30,
+                                            height: 30,
+                                            child: CircularProgressIndicator(
+                                              color: Colors.white,
+                                            )),
+                                  ),
+                                ));
                           },
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 16.0),
-                            child: Text(
-                              "Submit",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          )),
-                    )
+                        ))
                   ],
                 );
                 break;
@@ -1665,7 +1828,7 @@ class _AddLocationState extends State<AddLocation>
                                   color: Colors.black,
                                   fontWeight: FontWeight.w700),
                             ).tr(),
-                            Text(
+                            const Text(
                               " *",
                               style: TextStyle(color: Colors.red),
                             ),
@@ -1721,7 +1884,7 @@ class _AddLocationState extends State<AddLocation>
                                   color: Colors.black,
                                   fontWeight: FontWeight.w700),
                             ).tr(),
-                            Text(
+                            const Text(
                               " *",
                               style: TextStyle(color: Colors.red),
                             ),
@@ -1777,7 +1940,7 @@ class _AddLocationState extends State<AddLocation>
                                   color: Colors.black,
                                   fontWeight: FontWeight.w700),
                             ).tr(),
-                            Text(
+                            const Text(
                               " *",
                               style: TextStyle(color: Colors.red),
                             ),
@@ -1833,7 +1996,7 @@ class _AddLocationState extends State<AddLocation>
                                   color: Colors.black,
                                   fontWeight: FontWeight.w700),
                             ).tr(),
-                            Text(
+                            const Text(
                               " *",
                               style: TextStyle(color: Colors.red),
                             ),
@@ -1889,7 +2052,7 @@ class _AddLocationState extends State<AddLocation>
                                   color: Colors.black,
                                   fontWeight: FontWeight.w700),
                             ).tr(),
-                            Text(
+                            const Text(
                               " *",
                               style: TextStyle(color: Colors.red),
                             ),
@@ -1946,7 +2109,7 @@ class _AddLocationState extends State<AddLocation>
                                   color: Colors.black,
                                   fontWeight: FontWeight.w700),
                             ).tr(),
-                            Text(
+                            const Text(
                               " *",
                               style: TextStyle(color: Colors.red),
                             ),
@@ -2043,24 +2206,28 @@ class _AddLocationState extends State<AddLocation>
                   // )),
 
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 56.0, top: 24),
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: ColorParser().hexToColor(
-                              RuntimeStorage
-                                  .instance.clientTheme!.button_background!),
-                        ),
-                        onPressed: () {
-                          submitDetails();
+                      padding: const EdgeInsets.only(bottom: 56.0, top: 24),
+                      child: FutureBuilder(
+                        future: otherLanguageSubmissionResponse,
+                        builder: (context, snapshot) {
+                          return ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: ColorParser().hexToColor(
+                                    RuntimeStorage.instance.clientTheme!
+                                        .button_background!),
+                              ),
+                              onPressed: () {
+                                submitDetails();
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 16.0),
+                                child: Text(
+                                  "Submit",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ));
                         },
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 16.0),
-                          child: Text(
-                            "Submit",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        )),
-                  )
+                      ))
                 ],
               );
               break;
@@ -2099,9 +2266,11 @@ class _AddLocationState extends State<AddLocation>
     }
   }
 
-  Future<void> getFeatures() async {
-    var response = await ApiFactory().getLocationService().getFeatures();
-    features = response!;
+  Future<List<Features>?> getFeatures() async {
+    var response = ApiFactory().getLocationService().getFeatures();
+    features = await response;
+
+    return response;
   }
 
   bool checkValidation() {
@@ -2264,8 +2433,12 @@ class _AddLocationState extends State<AddLocation>
     locationData!.otherFeatures = otherFeatures;
     BaseResponse response = await ApiFactory()
         .getLocationService()
-        .submitLocationLanguageData(locationData!, park_Id!,
-            languages.keys.elementAt(_controller!.index));
+        .submitLocationLanguageData(
+            locationData!,
+            park_Id!,
+            languages.keys.elementAt(_controller!.index),
+            locationImage,
+            galleryImages);
     if (response.status == 1) {
       _controller!.index = (_controller!.index + 1 > languages.length - 1)
           ? _controller!.index
@@ -2292,7 +2465,7 @@ class _AddLocationState extends State<AddLocation>
     dataCallback("abcd");
   }
 
-  Future<void> submit_English_Details() async {
+  Future<BaseResponse?>? submit_English_Details() async {
     log("DATA TO SUBMIT ===============================================================");
     log("Location Name : ${locationNameController.text}");
     log("Address & Street : ${addressNameController.text}");
@@ -2317,35 +2490,34 @@ class _AddLocationState extends State<AddLocation>
       if (selectedMonths.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Please select avability of parks")));
-        return;
+        return null;
       }
     } else {}
 
     if (selectedFeaturesID!.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Please select park features")));
-      return;
-    }
-
-    if (locationImage == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Please select park image.")));
-      return;
+      return null;
     }
 
     if (!widget.isEdit!) {
       if (galleryImages!.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text("Please select park gallery images.")));
-        return;
+        return null;
       }
 
-      if (!isValid) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content:
-                Text("Invalid park details. Please provide park details.")));
-        return;
+      if (locationImage == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Please select park image.")));
+        return null;
       }
+    }
+
+    if (!isValid) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Invalid park details. Please provide park details.")));
+      return null;
     }
 
     List<String> otherFeatures = [];
@@ -2375,15 +2547,16 @@ class _AddLocationState extends State<AddLocation>
     locationData!.otherFeatures = otherFeatures;
     locationData!.mainCityLocation = isMainCity ? "1" : "0";
     locationData!.status = isChecked ? "1" : "0";
-    BaseResponse response = widget.isEdit!
-        ? await ApiFactory()
+    Future<BaseResponse> response = widget.isEdit!
+        ? ApiFactory()
             .getLocationService()
-            .updateLocationData(locationData!, locationImage!, galleryImages!)
-        : await ApiFactory()
+            .updateLocationData(locationData!, locationImage, galleryImages!)
+        : ApiFactory()
             .getLocationService()
             .submitLocationData(locationData!, locationImage!, galleryImages!);
-    if (response.status == 1) {
-      park_Id = response.park_id.toString();
+    BaseResponse baseResponse = await response;
+    if (baseResponse.status == 1) {
+      park_Id = baseResponse.park_id.toString();
       _controller!.index = (_controller!.index + 1 > languages.length - 1)
           ? _controller!.index
           : (_controller!.index + 1);
@@ -2395,8 +2568,10 @@ class _AddLocationState extends State<AddLocation>
       });
     } else {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(response.msg!)));
+          .showSnackBar(SnackBar(content: Text(baseResponse.msg!)));
     }
+
+    return response;
   }
 
   Future<LocationDataModel?> getLocationData(String? park_id) async {

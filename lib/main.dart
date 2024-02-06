@@ -4,22 +4,19 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:happifeet_client_app/screens/splash_screen.dart';
+import 'package:happifeet_client_app/storage/shared_preferences.dart';
+import 'package:happifeet_client_app/utils/ColorParser.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
-void main() async{
-
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
-  runApp(
-      EasyLocalization(
-          supportedLocales: const [
-            Locale('en'),
-            Locale('es'),
-            Locale('ru'),
-            Locale('zh'),
-          ],
-  path: 'assets/i18n',
-  child: const MyApp()));
+  runApp(EasyLocalization(supportedLocales: const [
+    Locale('en'),
+    Locale('es'),
+    Locale('ru'),
+    Locale('zh'),
+  ], path: 'assets/i18n', child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -28,14 +25,25 @@ class MyApp extends StatefulWidget {
   @override
   State<MyApp> createState() => _MyAppState();
 
-
-  // This widget is the root of your application.
-
-
-
+// This widget is the root of your application.
 }
 
 class _MyAppState extends State<MyApp> {
+
+  String? hexColor;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+
+    SharedPref.instance.getCityTheme().then((value) {
+      hexColor = value.top_title_background_color;
+      setState(() {});
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -45,12 +53,10 @@ class _MyAppState extends State<MyApp> {
       locale: context.locale,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        textTheme: GoogleFonts.poppinsTextTheme(
-            Theme.of(context).textTheme
-        ),
+        textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
         canvasColor: Colors.transparent,
-
-        colorScheme: ColorScheme.fromSeed(seedColor: from(const Color(0xff49AC43))),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: from(ColorParser().hexToColor(hexColor!))),
         useMaterial3: true,
       ),
       home: const SplashScreen(),
@@ -90,6 +96,3 @@ class _MyAppState extends State<MyApp> {
       shadeValue(color.blue, factor),
       1);
 }
-
-
-

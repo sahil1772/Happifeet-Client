@@ -15,7 +15,7 @@ import '../../model/Location/LocationData.dart';
 class LocationService implements InterfaceLocation {
   /** Delete location data **/
 
-  Future<BaseResponse> deleteLocationData( String park_id) async {
+  Future<BaseResponse> deleteLocationData(String park_id) async {
     try {
       var map = {"task": "delete_location", "park_id": park_id};
 
@@ -38,20 +38,20 @@ class LocationService implements InterfaceLocation {
     }
   }
 
-
   /** Edit Location Data **/
 
   @override
-  Future<LocationDataModel> editLocationData(Map<String,String> map) async {
+  Future<LocationDataModel> editLocationData(Map<String, String> map) async {
     try {
-      map.addAll({'task': "edit_location"}) ;
+      map.addAll({'task': "edit_location"});
 
       var response = await NetworkClient()
           .dio
           .get(base_url, queryParameters: map, data: FormData.fromMap(map));
 
       if (response.statusCode == 200) {
-        LocationDataModel data = LocationDataModel.fromJson(json.decode(response.data!));
+        LocationDataModel data =
+            LocationDataModel.fromJson(json.decode(response.data!));
 
         return data;
       } else {
@@ -169,21 +169,36 @@ class LocationService implements InterfaceLocation {
 
   @override
   Future<BaseResponse> submitLocationLanguageData(
-      LocationDataModel data, String parkId, String lang) async {
+      LocationDataModel data,
+      String parkId,
+      String lang,
+      XFile? locationImage,
+      List<XFile>? galleryImages) async {
     Map<String, dynamic> paramMap = data.toJson();
-    //Adding task to Map
+
     paramMap.addAll({"task": "update_location_lang"});
     paramMap.addAll({"user_id": await SharedPref.instance.getUserId()});
     paramMap.addAll({"park_id": parkId});
     paramMap.addAll({"lang": lang});
+    var formData = FormData.fromMap(paramMap, ListFormat.multiCompatible);
+    if(locationImage!=null) {
+      formData.files.add(MapEntry(
+        "parkImages", await MultipartFile.fromFile(locationImage!.path)));
+    }
 
-    log("PARAM MAP $paramMap");
-
-    // var  paramMap = {"task":task};
+    if(galleryImages!=null && galleryImages.isNotEmpty) {
+      for (var file in galleryImages!) {
+        formData.files.add(
+          MapEntry("galleryImages[${galleryImages!.indexOf(file)}]",
+              await MultipartFile.fromFile(file.path)),
+        );
+      }
+    }
+    log("PARAM MAP $formData");
 
     //Calling Post API
     var response = await NetworkClient().dio.post(base_url,
-        data: FormData.fromMap(paramMap, ListFormat.multiCompatible));
+        data: formData);
 
     //Checking for successful response
     if (response.statusCode == 200) {
@@ -198,7 +213,8 @@ class LocationService implements InterfaceLocation {
   }
 
   @override
-  Future<BaseResponse> updateLocationData(LocationDataModel data, XFile? locationImage, List<XFile>? galleryImages) async {
+  Future<BaseResponse> updateLocationData(LocationDataModel data,
+      XFile? locationImage, List<XFile>? galleryImages) async {
     Map<String, dynamic> paramMap = data.toJson();
     //Adding task to Map
     paramMap.addAll({"task": "update_location"});
@@ -207,14 +223,19 @@ class LocationService implements InterfaceLocation {
 
     var formData = FormData.fromMap(paramMap, ListFormat.multiCompatible);
 
-    formData.files.add(MapEntry(
-        "parkImages", await MultipartFile.fromFile(locationImage!.path)));
+    if(locationImage!=null){
+      formData.files.add(MapEntry(
+          "parkImages", await MultipartFile.fromFile(locationImage!.path)));
+    }
 
-    for (var file in galleryImages!) {
-    formData.files.add(
-    MapEntry("galleryImages[${galleryImages!.indexOf(file)}]",
-    await MultipartFile.fromFile(file.path)),
-    );
+
+    if(galleryImages!=null && galleryImages.isNotEmpty) {
+      for (var file in galleryImages!) {
+        formData.files.add(
+          MapEntry("galleryImages[${galleryImages!.indexOf(file)}]",
+              await MultipartFile.fromFile(file.path)),
+        );
+      }
     }
     log("PARAM MAP $formData");
 
@@ -225,15 +246,13 @@ class LocationService implements InterfaceLocation {
 
     //Checking for successful response
     if (response.statusCode == 200) {
-    //Return Success Response Object as BaseResponse Class Object
-    var data = BaseResponse.fromJson(json.decode(response.data));
-    return data;
+      //Return Success Response Object as BaseResponse Class Object
+      var data = BaseResponse.fromJson(json.decode(response.data));
+      return data;
     } else {
-    //Return Failure Response Object as BaseResponse Class Object
-    return BaseResponse(
-    status: response.statusCode, msg: response.statusMessage);
+      //Return Failure Response Object as BaseResponse Class Object
+      return BaseResponse(
+          status: response.statusCode, msg: response.statusMessage);
     }
   }
-
-
 }

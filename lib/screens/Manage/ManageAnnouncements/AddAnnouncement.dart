@@ -376,6 +376,7 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
   }
 
   otherLanguageFields() {
+    bool isEnglishFormFilled = false;
     if (!dataControllers
         .containsKey(languages.keys.elementAt(_controller!.index))) {
       dataControllers.addAll({
@@ -386,9 +387,48 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
       });
     }
 
+    log("English Form Details :::");
+    for (var element in dataControllers["en"]!.entries) {
+      log(element.key, error: element.value.text);
+      if (element.value.text == "") {
+        isEnglishFormFilled = false;
+        break;
+      } else {
+        isEnglishFormFilled = true;
+      }
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        !isEnglishFormFilled
+            ? Container(
+          margin: const EdgeInsets.only(bottom: 24),
+          decoration: BoxDecoration(
+              border: Border.all(width: 1.0, color: Colors.red),
+              borderRadius: BorderRadius.circular(10)),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: 16.0, vertical: 20),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    LocaleKeys.Please_Fill_English,
+                    style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: Colors.red,
+                        letterSpacing: 0.2),
+                  ).tr()
+                ],
+              ),
+            ),
+          ),
+        )
+            : const SizedBox(),
         Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
           child: Text(
@@ -399,7 +439,12 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
         ),
         Padding(
           padding: const EdgeInsets.only(bottom: 20.0),
-          child: TextField(
+          child: TextFormField(
+            validator: (value) {
+              if(value=="" || value == null) {
+                return LocaleKeys.Provide_Valid_Data.tr();
+              }
+            },
             enabled: !widget.isEdit!,
             controller: dataControllers[
                 languages.keys.elementAt(_controller!.index)]!["title"],
@@ -432,7 +477,12 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
         ),
         Padding(
           padding: const EdgeInsets.only(bottom: 20.0),
-          child: TextField(
+          child: TextFormField(
+            validator: (value) {
+              if(value=="" || value == null) {
+                return LocaleKeys.Provide_Valid_Data.tr();
+              }
+            },
             enabled: !widget.isEdit!,
             controller: dataControllers[
                 languages.keys.elementAt(_controller!.index)]!["description"],
