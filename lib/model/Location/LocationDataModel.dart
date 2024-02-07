@@ -1,11 +1,9 @@
-import 'package:image_picker/image_picker.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'LocationDataModel.g.dart';
 
 @JsonSerializable()
 class LocationDataModel {
-
   // String? park_id;
   // String? park_name;
   // String? address;
@@ -27,8 +25,7 @@ class LocationDataModel {
   // List? features;
   // String? status;
 
-
-/** OLD **/
+  /** OLD **/
 
   String? id;
   String? locationName;
@@ -51,10 +48,10 @@ class LocationDataModel {
   List<String?>? parkFeatures;
   List<String?>? otherFeatures;
 
+  String? parkImages;
+  List<String?>? galleryImages;
 
-
-  LocationDataModel(
-      {
+  LocationDataModel({
     // this.park_id,
     //     this.park_name,
     //     this.address,
@@ -76,29 +73,29 @@ class LocationDataModel {
     //     this.features,
     //     this.status
 
+    this.id,
+    this.locationName,
+    this.addressStreet,
+    this.city,
+    this.state,
+    this.zip,
+    this.latitude,
+    this.longitude,
+    this.mainCityLocation,
+    this.description,
+    this.parkAvailability,
+    this.startDate,
+    this.endDate,
+    this.parkAvailabilityMonths,
+    this.parkFeatures,
+    this.reservationlink,
+    this.status,
+    this.otherFeatures,
+    this.parkImages,
+    this.galleryImages,
 
-      this.id,
-      this.locationName,
-      this.addressStreet,
-      this.city,
-      this.state,
-      this.zip,
-      this.latitude,
-      this.longitude,
-      this.mainCityLocation,
-
-      this.description,
-      this.parkAvailability,
-      this.startDate,
-      this.endDate,
-      this.parkAvailabilityMonths,
-      this.parkFeatures,
-      this.reservationlink,
-      this.status,
-      this.otherFeatures,
-
-      //
-      });
+    //
+  });
 
   factory LocationDataModel.fromJson(Map<String, dynamic> json) =>
       _$LocationDataModelFromJson(json);

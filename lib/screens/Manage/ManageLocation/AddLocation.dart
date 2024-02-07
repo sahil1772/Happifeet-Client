@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +50,6 @@ class _AddLocationState extends State<AddLocation>
   final _form = GlobalKey<FormState>();
 
   //IMAGE PICKER INSTANCE TO USE FOR PICKING FROM CAMERA OR GALLERY
-  final ImagePicker _picker = ImagePicker();
 
   //LocationDataModel USED FOR STORING FORM DATA AND USED TO POST TO SERVER
   LocationDataModel? locationData;
@@ -65,7 +65,6 @@ class _AddLocationState extends State<AddLocation>
   TabController? _controller;
 
   //MISC VARIABLES
-  dynamic _pickImageError;
   Map<String, dynamic> languages = {};
   Map<String, Map<String, TextEditingController>> dataControllers = {};
   List<Features>? features = [];
@@ -121,6 +120,8 @@ class _AddLocationState extends State<AddLocation>
   Future<List<Features>?>? featuresResponse;
 
   bool selectAll = false;
+  bool showDeleteLocationImage = false;
+  Map<int, bool> showDeleteGalleryImage = {};
 
   @override
   void initState() {
@@ -160,18 +161,40 @@ class _AddLocationState extends State<AddLocation>
 
       _controller!.addListener(() {
         setState(() {
-          apiResponse = getLocationData(widget.parkId);
           // context.setLocale(Locale("en"));
           log("CONTROLLER INDEX ${languages.keys.elementAt(_controller!.index)}");
           if (_controller!.indexIsChanging) {
             log("tab is changing");
-            context.setLocale(Locale(
-                languages.keys.elementAt(_controller!.index) == "spa"
-                    ? "es"
-                    : languages.keys.elementAt(_controller!.index)));
+            switch (languages.keys.elementAt(_controller!.index)) {
+              case "spa":
+                context.setLocale(const Locale("es"));
+                break;
+              case "rsa":
+                context.setLocale(const Locale("rsa"));
+                break;
+              default:
+                context.setLocale(
+                    Locale(languages.keys.elementAt(_controller!.index)));
+                break;
+            }
           } else {
             log("INSIDE ELSE OF LISTENER${_controller!.index}");
+            switch (languages.keys.elementAt(_controller!.index)) {
+              case "spa":
+                context.setLocale(const Locale("es"));
+                break;
+              case "rsa":
+                context.setLocale(const Locale("rsa"));
+                break;
+              default:
+                context.setLocale(
+                    Locale(languages.keys.elementAt(_controller!.index)));
+                break;
+            }
           }
+          locationImage = null;
+          galleryImages!.clear();
+          apiResponse = getLocationData(widget.parkId);
         });
       });
       if (dataControllers.keys
@@ -214,7 +237,7 @@ class _AddLocationState extends State<AddLocation>
 
   @override
   Widget build(BuildContext context) {
-    this.buildContext = context;
+    buildContext = context;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
@@ -437,6 +460,9 @@ class _AddLocationState extends State<AddLocation>
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: TextFormField(
+                              onTapOutside: (event) {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                              },
                               validator: (text) {
                                 if (text!.isEmpty) {
                                   return "Enter valid location name!";
@@ -492,6 +518,9 @@ class _AddLocationState extends State<AddLocation>
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: TextFormField(
+                              onTapOutside: (event) {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                              },
                               validator: (text) {
                                 if (text!.isEmpty) {
                                   return "Enter valid address!";
@@ -547,6 +576,9 @@ class _AddLocationState extends State<AddLocation>
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: TextFormField(
+                              onTapOutside: (event) {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                              },
                               validator: (text) {
                                 if (text!.isEmpty) {
                                   return "Enter valid city!";
@@ -602,6 +634,9 @@ class _AddLocationState extends State<AddLocation>
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: TextFormField(
+                              onTapOutside: (event) {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                              },
                               validator: (text) {
                                 if (text!.isEmpty) {
                                   return "Enter valid city!";
@@ -657,6 +692,9 @@ class _AddLocationState extends State<AddLocation>
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: TextFormField(
+                              onTapOutside: (event) {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                              },
                               validator: (text) {
                                 if (text!.isEmpty) {
                                   return "Enter valid state!";
@@ -712,6 +750,9 @@ class _AddLocationState extends State<AddLocation>
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: TextFormField(
+                              onTapOutside: (event) {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                              },
                               validator: (text) {
                                 if (text!.isEmpty) {
                                   return "Enter valid description!";
@@ -761,66 +802,183 @@ class _AddLocationState extends State<AddLocation>
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: Container(
-                              height: 64,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: const Color(0xffc4c4c4),
-                                ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10.0),
-                                child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Flexible(
-                                        fit: FlexFit.loose,
-                                        child: Text(
-                                          locationImage == null
-                                              ? "No File Selected"
-                                              : locationImage!.name,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: const Color(0xffc4c4c4),
                                       ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 16.0),
-                                        child: OutlinedButton(
-                                            onPressed: () {
-                                              _showBottomSheet(1);
-                                            },
-                                            child: Text(
-                                              "Choose File",
-                                              style: TextStyle(
-                                                  color: ColorParser()
-                                                      .hexToColor(RuntimeStorage
-                                                          .instance
-                                                          .clientTheme!
-                                                          .top_title_background_color!)),
+                                    ),
+                                    height: 64,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0),
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Flexible(
+                                              fit: FlexFit.loose,
+                                              child: Text(
+                                                locationImage == null
+                                                    ? "No File Selected"
+                                                    : locationImage!.name,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
                                             ),
-                                            style: ButtonStyle(
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      Colors.transparent),
-                                              shape: MaterialStateProperty.all(
-                                                  RoundedRectangleBorder(
-                                                      side: BorderSide(
-                                                        width: 0.0,
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 16.0),
+                                              child: OutlinedButton(
+                                                  onPressed: () {
+                                                    _showBottomSheet(1);
+                                                  },
+                                                  style: ButtonStyle(
+                                                    backgroundColor:
+                                                        MaterialStateProperty
+                                                            .all(Colors
+                                                                .transparent),
+                                                    shape: MaterialStateProperty.all(
+                                                        RoundedRectangleBorder(
+                                                            side: BorderSide(
+                                                              width: 0.0,
+                                                              color: ColorParser().hexToColor(
+                                                                  RuntimeStorage
+                                                                      .instance
+                                                                      .clientTheme!
+                                                                      .top_title_background_color!),
+                                                            ),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10.0))),
+                                                  ),
+                                                  child: Text(
+                                                    "Choose File",
+                                                    style: TextStyle(
                                                         color: ColorParser()
                                                             .hexToColor(
                                                                 RuntimeStorage
                                                                     .instance
                                                                     .clientTheme!
-                                                                    .top_title_background_color!),
-                                                      ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10.0))),
-                                            )),
-                                      ),
-                                    ]),
+                                                                    .top_title_background_color!)),
+                                                  )),
+                                            ),
+                                          ]),
+                                    ),
+                                  ),
+                                  widget.isEdit!
+                                      ? Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 8.0),
+                                          child: Row(
+                                            children: [
+                                              InkWell(
+                                                onTap: () {
+                                                  showDeleteGalleryImage
+                                                      .forEach((key, value) {
+                                                    showDeleteGalleryImage[
+                                                        key] = false;
+                                                  });
+                                                  showDeleteLocationImage =
+                                                      !showDeleteLocationImage;
+                                                  setState(() {});
+                                                },
+                                                onLongPress: () {},
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20), // Image border
+                                                  child: SizedBox.fromSize(
+                                                    size: const Size.fromRadius(
+                                                        48),
+                                                    // Image radius
+                                                    child: Stack(
+                                                      fit: StackFit.expand,
+                                                      children: [
+                                                        Image.network(snapshot
+                                                            .data!.parkImages!),
+                                                        showDeleteLocationImage
+                                                            ? Center(
+                                                                child: ClipRect(
+                                                                  // <-- clips to the 200x200 [Container] below
+                                                                  child:
+                                                                      BackdropFilter(
+                                                                    filter:
+                                                                        ImageFilter
+                                                                            .blur(
+                                                                      sigmaX:
+                                                                          5.0,
+                                                                      sigmaY:
+                                                                          5.0,
+                                                                    ),
+                                                                    child:
+                                                                        Container(
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .center,
+                                                                      width:
+                                                                          200.0,
+                                                                      height:
+                                                                          200.0,
+                                                                      child:
+                                                                          Center(
+                                                                        child:
+                                                                            InkWell(
+                                                                          onTap:
+                                                                              () {
+                                                                            showDialog(
+                                                                              context: context,
+                                                                              builder: (context) {
+                                                                                return AlertDialog(
+                                                                                  title: const Text("Confirm Image Deletion"),
+                                                                                  content: const Text("Please confirm if you wan to delete this image?"),
+                                                                                  actions: [
+                                                                                    TextButton(onPressed: () {}, child: const Text("Cancel")),
+                                                                                    ElevatedButton(
+                                                                                        style: ButtonStyle(
+                                                                                          backgroundColor: MaterialStateProperty.all(Theme.of(context).primaryColor),
+                                                                                          shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                                                                              side: BorderSide(
+                                                                                                width: 0.0,
+                                                                                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                                                                                              ),
+                                                                                              borderRadius: BorderRadius.circular(10.0))),
+                                                                                        ),
+                                                                                        onPressed: () {
+                                                                                          Navigator.of(context).pop();
+                                                                                        },
+                                                                                        child: const Text(
+                                                                                          "Confirm and Delete",
+                                                                                          style: TextStyle(color: Colors.white),
+                                                                                        ))
+                                                                                  ],
+                                                                                );
+                                                                              },
+                                                                            );
+                                                                          },
+                                                                          child: const Icon(
+                                                                              color: Colors.white,
+                                                                              Icons.delete),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            : const SizedBox()
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                      : const SizedBox()
+                                ],
                               ),
                             ),
                           ),
@@ -850,76 +1008,197 @@ class _AddLocationState extends State<AddLocation>
                               ),
                             ],
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10.0),
-                            child: Container(
-                              height: 64,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: const Color(0xffc4c4c4),
-                                ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10.0),
-                                child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                          widget.isEdit!
+                              ? Padding(
+                                  padding: const EdgeInsets.only(top: 10.0),
+                                  child: Column(
                                     children: [
-                                      Flexible(
-                                        fit: FlexFit.loose,
-                                        child: Text(
-                                          galleryImages!.isEmpty
-                                              ? "No File Selected"
-                                              : "${galleryImages!.length == 1 ? galleryImages!.first.name : "${galleryImages!.length} ${galleryImages!.length == 1 ? "File" : "Files"} Selected"}",
-                                          overflow: TextOverflow.ellipsis,
+                                      Container(
+                                        height: 64,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border: Border.all(
+                                            color: const Color(0xffc4c4c4),
+                                          ),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10.0),
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Flexible(
+                                                  fit: FlexFit.loose,
+                                                  child: Text(
+                                                    galleryImages!.isEmpty
+                                                        ? "No File Selected"
+                                                        : galleryImages!.length == 1 ? galleryImages!.first.name : "${galleryImages!.length} ${galleryImages!.length == 1 ? "File" : "Files"} Selected",
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 16.0),
+                                                  child: OutlinedButton(
+                                                      onPressed: () {
+                                                        if (galleryImages!
+                                                                .length +snapshot.data!.galleryImages!.length >=
+                                                            5 ) {
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                                  const SnackBar(
+                                                                      content: Text(
+                                                                          "Only 5 images are allowed")));
+                                                        } else {
+                                                          _showBottomSheet(2);
+                                                        }
+                                                      },
+                                                      style: ButtonStyle(
+                                                        backgroundColor:
+                                                            MaterialStateProperty
+                                                                .all(Colors
+                                                                    .transparent),
+                                                        shape: MaterialStateProperty.all(
+                                                            RoundedRectangleBorder(
+                                                                side: BorderSide(
+                                                                    width: 0.0,
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .primaryColor),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10.0))),
+                                                      ),
+                                                      child: Text(
+                                                        "Choose File",
+                                                        style: TextStyle(
+                                                          color: ColorParser()
+                                                              .hexToColor(
+                                                                  RuntimeStorage
+                                                                      .instance
+                                                                      .clientTheme!
+                                                                      .top_title_background_color!),
+                                                        ),
+                                                      )),
+                                                ),
+                                              ]),
                                         ),
                                       ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 16.0),
-                                        child: OutlinedButton(
-                                            onPressed: () {
-                                              if (galleryImages!.length >= 5) {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(const SnackBar(
-                                                        content: Text(
-                                                            "Only 5 images are allowed")));
-                                              } else {
-                                                _showBottomSheet(2);
-                                              }
+                                      GridView.builder(
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        gridDelegate:
+                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                                childAspectRatio: 3 / 5,
+                                                crossAxisSpacing: 10,
+                                                crossAxisCount: 5),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8),
+                                        shrinkWrap: true,
+                                        itemCount: snapshot
+                                            .data!.galleryImages!.length,
+                                        itemBuilder: (context, index) {
+                                          if (!showDeleteGalleryImage
+                                              .containsKey(index)) {
+                                            showDeleteGalleryImage
+                                                .addAll({index: false});
+                                          }
+
+                                          return InkWell(
+                                            onTap: () {
+                                              showDeleteLocationImage = false;
+                                              showDeleteGalleryImage
+                                                  .forEach((key, value) {
+                                                showDeleteGalleryImage[key] =
+                                                    false;
+                                              });
+
+                                              showDeleteGalleryImage[index] =
+                                                  !showDeleteGalleryImage[
+                                                      index]!;
+                                              setState(() {});
                                             },
-                                            child: Text(
-                                              "Choose File",
-                                              style: TextStyle(
-                                                color: ColorParser().hexToColor(
-                                                    RuntimeStorage
-                                                        .instance
-                                                        .clientTheme!
-                                                        .top_title_background_color!),
+                                            onLongPress: () {},
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      20), // Image border
+                                              child: SizedBox.fromSize(
+                                                size: const Size.fromRadius(48),
+                                                // Image radius
+                                                child: Stack(
+                                                  fit: StackFit.expand,
+                                                  children: [
+                                                    Image.network(
+                                                        height: 100,
+                                                        width: 150,
+                                                        fit: BoxFit.cover,
+                                                        snapshot.data!
+                                                                .galleryImages![
+                                                            index]!),
+                                                    showDeleteGalleryImage[
+                                                            index]!
+                                                        ? Center(
+                                                            child: ClipRect(
+                                                              // <-- clips to the 200x200 [Container] below
+                                                              child:
+                                                                  BackdropFilter(
+                                                                filter:
+                                                                    ImageFilter
+                                                                        .blur(
+                                                                  sigmaX: 5.0,
+                                                                  sigmaY: 5.0,
+                                                                ),
+                                                                child:
+                                                                    Container(
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  child: Center(
+                                                                    child:
+                                                                        InkWell(
+                                                                      onTap:
+                                                                          () {
+                                                                        showDeleteDailog(
+                                                                            context:
+                                                                                context,
+                                                                            onResult:
+                                                                                () {
+                                                                              apiResponse = getLocationData(widget.parkId);
+                                                                              setState(() {});
+                                                                            },
+                                                                            fileName:
+                                                                                snapshot.data!.galleryImages![index]!.split("/").toList().last);
+                                                                      },
+                                                                      child: const Icon(
+                                                                          color:
+                                                                              Colors.white,
+                                                                          Icons.delete),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          )
+                                                        : const SizedBox()
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                            style: ButtonStyle(
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      Colors.transparent),
-                                              shape: MaterialStateProperty.all(
-                                                  RoundedRectangleBorder(
-                                                      side: BorderSide(
-                                                          width: 0.0,
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .primaryColor),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10.0))),
-                                            )),
-                                      ),
-                                    ]),
-                              ),
-                            ),
-                          ),
+                                          );
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                )
+                              : const SizedBox(),
                         ],
                       ),
                     )),
@@ -938,7 +1217,7 @@ class _AddLocationState extends State<AddLocation>
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
-                            child: Container(
+                            child: SizedBox(
                                 height: 64,
                                 child: CheckboxListTile(
                                   contentPadding: EdgeInsets.zero,
@@ -981,6 +1260,9 @@ class _AddLocationState extends State<AddLocation>
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: TextFormField(
+                              onTapOutside: (event) {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                              },
                               validator: (text) {
                                 if (text!.isEmpty) {
                                   return "Enter valid latitude!";
@@ -1039,6 +1321,9 @@ class _AddLocationState extends State<AddLocation>
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: TextFormField(
+                              onTapOutside: (event) {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                              },
                               validator: (text) {
                                 if (text!.isEmpty) {
                                   return "Enter valid longitude!";
@@ -1089,6 +1374,9 @@ class _AddLocationState extends State<AddLocation>
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: TextField(
+                              onTapOutside: (event) {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                              },
                               controller: reserveLinkController,
                               decoration: InputDecoration(
                                 hintText: "Enter Reserve Link",
@@ -1184,6 +1472,7 @@ class _AddLocationState extends State<AddLocation>
                                             onPressed: () {
                                               setState(() {
                                                 showByMonth = false;
+                                                selectedMonths.clear();
                                               });
                                             },
                                             style: ButtonStyle(
@@ -1242,7 +1531,7 @@ class _AddLocationState extends State<AddLocation>
                                           return InkWell(
                                             onTap: () {
                                               if (!isSelected) {
-                                                selectedMonths.add(item!);
+                                                selectedMonths.add(item);
                                               } else {
                                                 selectedMonths.remove(item);
                                               }
@@ -1278,7 +1567,7 @@ class _AddLocationState extends State<AddLocation>
                                                   children: [
                                                     Text(
                                                       DateFormat("MMM").format(
-                                                          new DateFormat("MM")
+                                                           DateFormat("MM")
                                                               .parse((int.parse(
                                                                       item!))
                                                                   .toString())),
@@ -1299,70 +1588,110 @@ class _AddLocationState extends State<AddLocation>
                                         }).toList(),
                                       )
                                     : Row(
-
                                         children: [
                                           Flexible(
-                                              child: TextFormField(
-                                            decoration: InputDecoration(
-                                              hintText: "Enter Start Date",
-                                              hintStyle: const TextStyle(
-                                                  color: Color(0xffabaaaa),
-                                                  fontSize: 13),
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: const BorderSide(
-                                                  color: Color(0xffc4c4c4),
+                                            child: InkWell(
+                                              onTap: () async {
+                                                selectedStartDate =
+                                                    await CalendarUtils
+                                                        .showPicker(
+                                                            context: context);
+                                                setState(() {});
+                                              },
+                                              child: Container(
+                                                height: 56,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 16),
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color:
+                                                        const Color(0xff8A8A8A),
+                                                  ),
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(10)),
                                                 ),
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                              contentPadding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 16),
-                                              border: OutlineInputBorder(
-                                                borderSide: const BorderSide(
-                                                  color: Color(0xffc4c4c4),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
+                                                    Text(
+                                                        DateFormat(
+                                                                "dd MMM yyyy")
+                                                            .format(
+                                                                selectedStartDate),
+                                                        style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            color: Resources
+                                                                .colors
+                                                                .hfText)),
+                                                    const SizedBox(
+                                                      width: 16,
+                                                    ),
+                                                    SvgPicture.asset(
+                                                        "assets/images/comments/datepicker.svg"),
+                                                  ],
                                                 ),
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
                                               ),
                                             ),
-                                          )),
-                                          SizedBox(width: 10,),
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
                                           Flexible(
-                                              child:   InkWell(
-                                                onTap: () {
-                                                  CalendarUtils.showPicker(context: context);
-                                                },
-                                                child: Container(
-                                                  height: 56,
-                                                  padding: EdgeInsets.symmetric(horizontal: 16),
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                      color: ColorParser().hexToColor("#9E9E9E"),
-                                                    ),
-                                                    borderRadius:
-                                                    const BorderRadius.all(Radius.circular(10)),
+                                            child: InkWell(
+                                              onTap: () async {
+                                                selectedEndDate =
+                                                    await CalendarUtils
+                                                        .showPicker(
+                                                            context: context);
+                                                setState(() {});
+                                              },
+                                              child: Container(
+                                                height: 56,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 16),
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color:
+                                                        const Color(0xff8A8A8A),
                                                   ),
-                                                  child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                    children: [
-                                                      Text(
-                                                          "${selectedStartDate.day}-${selectedStartDate.month}-${selectedStartDate.year}"
-                                                              .split(' ')[0],
-                                                          style: TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight: FontWeight.w500,
-                                                              color: Resources.colors.hfText)),
-                                                      SizedBox(
-                                                        width: 16,
-                                                      ),
-                                                      SvgPicture.asset(
-                                                          "assets/images/comments/datepicker.svg"),
-                                                    ],
-                                                  ),
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(10)),
                                                 ),
-                                              ),)
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
+                                                    Text(
+                                                        DateFormat(
+                                                                "dd MMM yyyy")
+                                                            .format(
+                                                                selectedEndDate),
+                                                        style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            color: Resources
+                                                                .colors
+                                                                .hfText)),
+                                                    const SizedBox(
+                                                      width: 16,
+                                                    ),
+                                                    SvgPicture.asset(
+                                                        "assets/images/comments/datepicker.svg"),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          )
                                         ],
                                       ),
                                 Padding(
@@ -1553,11 +1882,15 @@ class _AddLocationState extends State<AddLocation>
                         ],
                       ),
                     )),
+
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
                           onPressed: () {
                             otherFeaturesWidgets["en"]!.add(TextField(
+                              onTapOutside: (event) {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                              },
                               controller: TextEditingController(),
                               decoration: InputDecoration(
                                 enabledBorder: OutlineInputBorder(
@@ -1619,7 +1952,7 @@ class _AddLocationState extends State<AddLocation>
                                     activeText: "Active",
                                     inactiveText: "InActive",
                                     onToggle: (bool value) {
-                                      isChecked = value!;
+                                      isChecked = value;
                                       setState(() {});
                                     },
                                   ),
@@ -1633,7 +1966,7 @@ class _AddLocationState extends State<AddLocation>
                         padding: const EdgeInsets.only(bottom: 56.0, top: 16),
                         child: FutureBuilder(
                           future: englishSubmissionResponse,
-                          builder: (context, snapshot) {
+                          builder: (context, snapshot1) {
                             return ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: ColorParser().hexToColor(
@@ -1641,16 +1974,16 @@ class _AddLocationState extends State<AddLocation>
                                           .button_background!),
                                 ),
                                 onPressed: () {
-                                  log("Connection STATE => ${snapshot.connectionState.name}");
-                                  if (snapshot.connectionState ==
+                                  log("Connection STATE => ${snapshot1.connectionState.name}");
+                                  if (snapshot1.connectionState ==
                                           ConnectionState.none ||
-                                      snapshot.connectionState ==
+                                      snapshot1.connectionState ==
                                           ConnectionState.done) {
                                     setState(() {
                                       englishSubmissionResponse =
                                           submit_English_Details();
                                     });
-                                  } else if (snapshot.connectionState ==
+                                  } else if (snapshot1.connectionState ==
                                       ConnectionState.waiting) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                         const SnackBar(
@@ -1662,9 +1995,9 @@ class _AddLocationState extends State<AddLocation>
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 16.0),
                                   child: Center(
-                                    child: snapshot.connectionState ==
+                                    child: snapshot1.connectionState ==
                                                 ConnectionState.none ||
-                                            snapshot.connectionState ==
+                                            snapshot1.connectionState ==
                                                 ConnectionState.done
                                         ? const Text(
                                             "Submit",
@@ -1850,6 +2183,9 @@ class _AddLocationState extends State<AddLocation>
                         Padding(
                           padding: const EdgeInsets.only(top: 10.0),
                           child: TextFormField(
+                            onTapOutside: (event) {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                            },
                             validator: (text) {
                               if (text!.isEmpty) {
                                 return LocaleKeys.Provide_Valid_Data.tr();
@@ -1906,6 +2242,9 @@ class _AddLocationState extends State<AddLocation>
                         Padding(
                           padding: const EdgeInsets.only(top: 10.0),
                           child: TextFormField(
+                            onTapOutside: (event) {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                            },
                             validator: (text) {
                               if (text!.isEmpty) {
                                 return LocaleKeys.Provide_Valid_Data.tr();
@@ -1962,6 +2301,9 @@ class _AddLocationState extends State<AddLocation>
                         Padding(
                           padding: const EdgeInsets.only(top: 10.0),
                           child: TextFormField(
+                            onTapOutside: (event) {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                            },
                             validator: (text) {
                               if (text!.isEmpty) {
                                 return LocaleKeys.Provide_Valid_Data.tr();
@@ -2018,6 +2360,9 @@ class _AddLocationState extends State<AddLocation>
                         Padding(
                           padding: const EdgeInsets.only(top: 10.0),
                           child: TextFormField(
+                            onTapOutside: (event) {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                            },
                             validator: (text) {
                               if (text!.isEmpty) {
                                 return LocaleKeys.Provide_Valid_Data.tr();
@@ -2074,6 +2419,9 @@ class _AddLocationState extends State<AddLocation>
                         Padding(
                           padding: const EdgeInsets.only(top: 10.0),
                           child: TextFormField(
+                            onTapOutside: (event) {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                            },
                             validator: (text) {
                               if (text!.isEmpty) {
                                 return LocaleKeys.Provide_Valid_Data.tr();
@@ -2399,14 +2747,14 @@ class _AddLocationState extends State<AddLocation>
         maxWidth: 1800,
         maxHeight: 1800,
       );
-      log("value of captured image  ${pickedFile}");
+      log("value of captured image  $pickedFile");
       if (pickedFile != null) {
         dismissListener(pickedFile);
       } else {
         log("picked file is null");
       }
     } catch (e) {
-      log('exception in pick image${e}');
+      log('exception in pick image$e');
     }
   }
 
@@ -2423,7 +2771,7 @@ class _AddLocationState extends State<AddLocation>
           dataControllers[languages.keys.elementAt(_controller!.index)];
 
       locationData!.locationName = controllers!["locationName"]!.text;
-      locationData!.addressStreet = controllers!["address"]!.text;
+      locationData!.addressStreet = controllers["address"]!.text;
       locationData!.description = controllers["description"]!.text;
       locationData!.city = controllers["city"]!.text;
       locationData!.street = controllers["street"]!.text;
@@ -2448,7 +2796,7 @@ class _AddLocationState extends State<AddLocation>
         .getLocationService()
         .submitLocationLanguageData(
             locationData!,
-            park_Id!,
+            widget.isEdit! ? widget.parkId! : park_Id!,
             languages.keys.elementAt(_controller!.index),
             locationImage,
             galleryImages);
@@ -2458,24 +2806,28 @@ class _AddLocationState extends State<AddLocation>
           : (_controller!.index + 1);
 
       setState(() {
-        context.setLocale(Locale(
-            languages.keys.elementAt(_controller!.index) == "spa"
-                ? "es"
-                : languages.keys.elementAt(_controller!.index)));
+        switch (languages.keys.elementAt(_controller!.index)) {
+          case "spa":
+            context.setLocale(const Locale("es"));
+            break;
+          case "rsa":
+            context.setLocale(const Locale("rsa"));
+            break;
+          default:
+            context.setLocale(
+                Locale(languages.keys.elementAt(_controller!.index)));
+            break;
+        }
       });
       if (_controller!.index + 1 > languages.length - 1) {
         ScaffoldMessenger.of(buildContext!).showSnackBar(
-            const SnackBar(content: Text("Location Created Successfully.")));
+             SnackBar(content: Text("Location ${widget.isEdit!?"Updated":"Created"} Successfully.")));
         Navigator.of(buildContext!).pop();
       }
     } else {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(response.msg!)));
     }
-  }
-
-  dabcd(Function dataCallback) {
-    dataCallback("abcd");
   }
 
   Future<BaseResponse?>? submit_English_Details() async {
@@ -2491,7 +2843,12 @@ class _AddLocationState extends State<AddLocation>
     log("Longitude : ${longitudeController.text}");
     log("Reserve Link : ${reserveLinkController.text}");
     log("Availability Type : ${showByMonth ? "Months" : "Date"}");
-    log("Available Months : $selectedMonths");
+    if (showByMonth) {
+      log("Start Date : ${DateFormat("MM dd yyyy").format(selectedStartDate)}");
+      log("End Date : ${DateFormat("MM dd yyyy").format(selectedEndDate)}");
+    } else {
+      log("Available Months : $selectedMonths");
+    }
     log("Features : $selectedFeaturesID");
     log("Park Image : ${locationImage?.name}");
     log("Gallery Images : ${galleryImages!.length}");
@@ -2560,6 +2917,13 @@ class _AddLocationState extends State<AddLocation>
     locationData!.otherFeatures = otherFeatures;
     locationData!.mainCityLocation = isMainCity ? "1" : "0";
     locationData!.status = isChecked ? "1" : "0";
+
+    if (!showByMonth) {
+      locationData!.startDate =
+          DateFormat("MM dd yyyy").format(selectedStartDate);
+      locationData!.endDate = DateFormat("MM dd yyyy").format(selectedEndDate);
+    }
+
     Future<BaseResponse> response = widget.isEdit!
         ? ApiFactory()
             .getLocationService()
@@ -2568,16 +2932,24 @@ class _AddLocationState extends State<AddLocation>
             .getLocationService()
             .submitLocationData(locationData!, locationImage!, galleryImages!);
     BaseResponse baseResponse = await response;
-    if (baseResponse.status == 1) {
+    if (baseResponse.status == "1") {
       park_Id = baseResponse.park_id.toString();
       _controller!.index = (_controller!.index + 1 > languages.length - 1)
           ? _controller!.index
           : (_controller!.index + 1);
       setState(() {
-        context.setLocale(Locale(
-            languages.keys.elementAt(_controller!.index) == "spa"
-                ? "es"
-                : languages.keys.elementAt(_controller!.index)));
+        switch (languages.keys.elementAt(_controller!.index)) {
+          case "spa":
+            context.setLocale(const Locale("es"));
+            break;
+          case "rsa":
+            context.setLocale(const Locale("rsa"));
+            break;
+          default:
+            context.setLocale(
+                Locale(languages.keys.elementAt(_controller!.index)));
+            break;
+        }
       });
     } else {
       ScaffoldMessenger.of(context)
@@ -2591,6 +2963,7 @@ class _AddLocationState extends State<AddLocation>
     if (park_id == null) {
       return Future.value(null);
     }
+    showDeleteGalleryImage.clear();
 
     Map<String, String> params = {"park_id": park_id};
     if (languages.keys.elementAt(_controller!.index) != "en") {
@@ -2675,94 +3048,157 @@ class _AddLocationState extends State<AddLocation>
         otherFeaturesWidgets.addAll({"en": otherFeaturesFields});
       }
     } else {
-      locationData = data;
+      try {
+        locationData = data;
 
-      otherFeaturesWidgets = {};
-      List<String?> otherFeatures = locationData!.otherFeatures == null ||
-              locationData!.otherFeatures!.isEmpty
-          ? []
-          : locationData!.otherFeatures!;
-      List<TextField> otherFeaturesFields = locationData!.otherFeatures ==
-                  null ||
-              locationData!.otherFeatures!.isEmpty
-          ? [
-              TextField(
-                controller: TextEditingController(),
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Color(0xffc4c4c4),
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Color(0xffc4c4c4),
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+        otherFeaturesWidgets = {};
+        List<String?> otherFeatures = locationData!.otherFeatures == null ||
+                locationData!.otherFeatures!.isEmpty
+            ? []
+            : locationData!.otherFeatures!;
+        List<TextField> otherFeaturesFields =
+            locationData!.otherFeatures == null ||
+                    locationData!.otherFeatures!.isEmpty
+                ? [
+                    TextField(
+                      controller: TextEditingController(),
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color(0xffc4c4c4),
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 16),
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color(0xffc4c4c4),
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    )
+                  ]
+                : [];
+        otherFeatures.forEach((element) {
+          otherFeaturesFields.add(TextField(
+            controller: TextEditingController(text: element),
+            decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Color(0xffc4c4c4),
                 ),
-              )
-            ]
-          : [];
-      otherFeatures.forEach((element) {
-        otherFeaturesFields.add(TextField(
-          controller: TextEditingController(text: element),
-          decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Color(0xffc4c4c4),
+                borderRadius: BorderRadius.circular(10),
               ),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
-            border: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Color(0xffc4c4c4),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+              border: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Color(0xffc4c4c4),
+                ),
+                borderRadius: BorderRadius.circular(10),
               ),
-              borderRadius: BorderRadius.circular(10),
             ),
-          ),
-        ));
-      });
-
-      otherFeaturesWidgets.addAll(
-          {languages.keys.elementAt(_controller!.index): otherFeaturesFields});
-      if (dataControllers
-          .containsKey(languages.keys.elementAt(_controller!.index))) {
-        dataControllers[languages.keys.elementAt(_controller!.index)]![
-                "locationName"]!
-            .text = locationData!.locationName!;
-        dataControllers[languages.keys.elementAt(_controller!.index)]![
-                "address"]!
-            .text = locationData!.addressStreet!;
-        dataControllers[languages.keys.elementAt(_controller!.index)]![
-                "street"]!
-            .text = locationData!.street!;
-        dataControllers[languages.keys.elementAt(_controller!.index)]!["city"]!
-            .text = locationData!.city!;
-        dataControllers[languages.keys.elementAt(_controller!.index)]![
-                "description"]!
-            .text = locationData!.description!;
-      } else {
-        dataControllers.addAll({
-          languages.keys.elementAt(_controller!.index): {
-            "locationName":
-                TextEditingController(text: locationData!.locationName!),
-            "address":
-                TextEditingController(text: locationData!.addressStreet!),
-            "street": TextEditingController(text: locationData!.street!),
-            "city": TextEditingController(text: locationData!.city!),
-            "description":
-                TextEditingController(text: locationData!.description!)
-          }
+          ));
         });
+
+        otherFeaturesWidgets.addAll({
+          languages.keys.elementAt(_controller!.index): otherFeaturesFields
+        });
+
+        if (dataControllers
+            .containsKey(languages.keys.elementAt(_controller!.index))) {
+          dataControllers[languages.keys.elementAt(_controller!.index)]![
+                  "locationName"]!
+              .text = locationData!.locationName!;
+          dataControllers[languages.keys.elementAt(_controller!.index)]![
+                  "address"]!
+              .text = locationData!.addressStreet!;
+          dataControllers[languages.keys.elementAt(_controller!.index)]![
+                  "street"]!
+              .text = locationData!.state!;
+          dataControllers[languages.keys.elementAt(_controller!.index)]![
+                  "city"]!
+              .text = locationData!.city!;
+          dataControllers[languages.keys.elementAt(_controller!.index)]![
+                  "description"]!
+              .text = locationData!.description!;
+        } else {
+          dataControllers.addAll({
+            languages.keys.elementAt(_controller!.index): {
+              "locationName":
+                  TextEditingController(text: locationData!.locationName!),
+              "address":
+                  TextEditingController(text: locationData!.addressStreet!),
+              "street": TextEditingController(text: locationData!.street!),
+              "city": TextEditingController(text: locationData!.city!),
+              "description":
+                  TextEditingController(text: locationData!.description!)
+            }
+          });
+        }
+      } catch (e) {
+        log("Error occured while handeling language data $e");
+        throw e;
       }
+
+      log("DATA CONTROLLERS ${dataControllers[languages.keys.elementAt(_controller!.index)]}");
     }
 
     return Future.value(data);
+  }
+
+  showDeleteDailog(
+      {required BuildContext context,
+      required String fileName,
+      required Function onResult}) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Confirm Image Deletion"),
+          content:
+              const Text("Please confirm if you wan to delete this image?"),
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text("Cancel")),
+            ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(Theme.of(context).primaryColor),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      side: BorderSide(
+                        width: 0.0,
+                        color: ColorParser().hexToColor(RuntimeStorage
+                            .instance.clientTheme!.top_title_background_color!),
+                      ),
+                      borderRadius: BorderRadius.circular(10.0))),
+                ),
+                onPressed: () {
+                  log("User has requested to delete => $fileName");
+
+                  Map<String, dynamic> params = {
+                    "park_id": widget.isEdit! ? widget.parkId : park_Id,
+                    "image_name": fileName
+                  };
+                  ApiFactory()
+                      .getLocationService()
+                      .deleteImage(params)
+                      .then((value) {
+                    Navigator.of(context).pop();
+
+                    onResult();
+                  });
+                },
+                child: const Text(
+                  "Confirm and Delete",
+                  style: TextStyle(color: Colors.white),
+                ))
+          ],
+        );
+      },
+    );
   }
 }

@@ -92,16 +92,32 @@ class _AddTrailState extends State<AddTrail>
           log("CONTROLLER INDEX ${languages.keys.elementAt(_controller!.index)}");
           if (_controller!.indexIsChanging) {
             log("tab is changing");
-            context.setLocale(Locale(
-                languages.keys.elementAt(_controller!.index) == "spa"
-                    ? "es"
-                    : languages.keys.elementAt(_controller!.index)));
+            switch (languages.keys.elementAt(_controller!.index)) {
+              case "spa":
+                context.setLocale(Locale("es"));
+                break;
+              case "rsa":
+                context.setLocale(Locale("rsa"));
+                break;
+              default:
+                context.setLocale(
+                    Locale(languages.keys.elementAt(_controller!.index)));
+                break;
+            }
           } else {
             log("INSIDE ELSE OF LISTENER${_controller!.index}");
-            context.setLocale(Locale(
-                languages.keys.elementAt(_controller!.index) == "spa"
-                    ? "es"
-                    : languages.keys.elementAt(_controller!.index)));
+            switch (languages.keys.elementAt(_controller!.index)) {
+              case "spa":
+                context.setLocale(Locale("es"));
+                break;
+              case "rsa":
+                context.setLocale(Locale("rsa"));
+                break;
+              default:
+                context.setLocale(
+                    Locale(languages.keys.elementAt(_controller!.index)));
+                break;
+            }
           }
           response = getTrailData();
         });

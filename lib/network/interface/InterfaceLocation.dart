@@ -15,5 +15,7 @@ abstract class InterfaceLocation{
   Future<BaseResponse> submitLocationLanguageData(LocationDataModel data,String parkId,String language , XFile? locationImage, List<XFile>? galleryImages);
   Future<List<LocationData>?> getLocationListData(String task);
 
+  Future<BaseResponse> deleteImage(Map<String,dynamic> params);
+
   Future<List<Features>?> getFeatures();
 }
