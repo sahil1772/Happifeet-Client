@@ -1033,7 +1033,12 @@ class _AddLocationState extends State<AddLocation>
                                                   child: Text(
                                                     galleryImages!.isEmpty
                                                         ? "No File Selected"
-                                                        : galleryImages!.length == 1 ? galleryImages!.first.name : "${galleryImages!.length} ${galleryImages!.length == 1 ? "File" : "Files"} Selected",
+                                                        : galleryImages!
+                                                                    .length ==
+                                                                1
+                                                            ? galleryImages!
+                                                                .first.name
+                                                            : "${galleryImages!.length} ${galleryImages!.length == 1 ? "File" : "Files"} Selected",
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                   ),
@@ -1045,8 +1050,12 @@ class _AddLocationState extends State<AddLocation>
                                                   child: OutlinedButton(
                                                       onPressed: () {
                                                         if (galleryImages!
-                                                                .length +snapshot.data!.galleryImages!.length >=
-                                                            5 ) {
+                                                                    .length +
+                                                                snapshot
+                                                                    .data!
+                                                                    .galleryImages!
+                                                                    .length >=
+                                                            5) {
                                                           ScaffoldMessenger.of(
                                                                   context)
                                                               .showSnackBar(
@@ -1565,7 +1574,7 @@ class _AddLocationState extends State<AddLocation>
                                                   children: [
                                                     Text(
                                                       DateFormat("MMM").format(
-                                                           DateFormat("MM")
+                                                          DateFormat("MM")
                                                               .parse((int.parse(
                                                                       item!))
                                                                   .toString())),
@@ -2818,8 +2827,9 @@ class _AddLocationState extends State<AddLocation>
         }
       });
       if (_controller!.index + 1 > languages.length - 1) {
-        ScaffoldMessenger.of(buildContext!).showSnackBar(
-             SnackBar(content: Text("Location ${widget.isEdit!?"Updated":"Created"} Successfully.")));
+        ScaffoldMessenger.of(buildContext!).showSnackBar(SnackBar(
+            content: Text(
+                "Location ${widget.isEdit! ? "Updated" : "Created"} Successfully.")));
         Navigator.of(buildContext!).pop();
       }
     } else {

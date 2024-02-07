@@ -22,9 +22,12 @@ class AddTrail extends StatefulWidget {
   bool? isEdit;
   String? trailId;
 
-  static goToAddTrail(BuildContext context, bool? isEdit, String? trailId,Function? refreshCallback) {
-    Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
-        builder: (_) => AddTrail(isEdit: isEdit, trailId: trailId))).then((value) => refreshCallback!());
+  static goToAddTrail(BuildContext context, bool? isEdit, String? trailId,
+      Function? refreshCallback) {
+    Navigator.of(context, rootNavigator: true)
+        .push(MaterialPageRoute(
+            builder: (_) => AddTrail(isEdit: isEdit, trailId: trailId)))
+        .then((value) => refreshCallback!());
   }
 
   @override
@@ -57,7 +60,6 @@ class _AddTrailState extends State<AddTrail>
   //DISPLAY VARIABLES
   double? labelTextSize = 12.0;
   double? fontLabelTextSize = 14.0;
-
 
   //SCOPED CONTEXT
   BuildContext? buildContext;
@@ -158,7 +160,8 @@ class _AddTrailState extends State<AddTrail>
       extendBodyBehindAppBar: true,
       appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false)
           .getAppBar(context),
-      body: SafeArea(top: false,
+      body: SafeArea(
+        top: false,
         child: Stack(
           children: [
             Container(
@@ -169,8 +172,10 @@ class _AddTrailState extends State<AddTrail>
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
-                    ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)
+                    ColorParser().hexToColor(RuntimeStorage
+                        .instance.clientTheme!.top_title_background_color!),
+                    ColorParser().hexToColor(RuntimeStorage
+                        .instance.clientTheme!.top_title_background_color!)
                   ],
                 )),
                 child: Container(
@@ -204,9 +209,14 @@ class _AddTrailState extends State<AddTrail>
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child:  Text(
+                    child: Text(
                       LocaleKeys.Select_Language,
-                      style: TextStyle(fontSize: 18,color:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)),
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: ColorParser().hexToColor(RuntimeStorage
+                              .instance
+                              .clientTheme!
+                              .top_title_background_color!)),
                     ).tr(),
                   ),
                   TabBar(
@@ -214,8 +224,10 @@ class _AddTrailState extends State<AddTrail>
                       controller: _controller,
                       indicatorWeight: 1,
                       indicatorPadding: const EdgeInsets.all(0),
-                      labelColor: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
-                      indicatorColor: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                      labelColor: ColorParser().hexToColor(RuntimeStorage
+                          .instance.clientTheme!.top_title_background_color!),
+                      indicatorColor: ColorParser().hexToColor(RuntimeStorage
+                          .instance.clientTheme!.top_title_background_color!),
                       tabs: [
                         for (int i = 0; i < languages.keys.length; i++)
                           Padding(
@@ -293,17 +305,22 @@ class _AddTrailState extends State<AddTrail>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                           Row(
-                             children: [
-                               Text(
+                          Row(
+                            children: [
+                              Text(
                                 "Trail Name",
                                 style: TextStyle(
-                                    color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                                    color: ColorParser().hexToColor(
+                                        RuntimeStorage.instance.clientTheme!
+                                            .top_title_background_color!),
                                     fontWeight: FontWeight.w700),
-                                                         ),
-                               Text(" *",style: TextStyle(color: Colors.red),),
-                             ],
-                           ),
+                              ),
+                              Text(
+                                " *",
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ],
+                          ),
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: TextFormField(
@@ -345,17 +362,22 @@ class _AddTrailState extends State<AddTrail>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                           Row(
-                             children: [
-                               Text(
+                          Row(
+                            children: [
+                              Text(
                                 "Distance",
                                 style: TextStyle(
-                                    color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                                    color: ColorParser().hexToColor(
+                                        RuntimeStorage.instance.clientTheme!
+                                            .top_title_background_color!),
                                     fontWeight: FontWeight.w700),
-                                                         ),
-                               Text(" *",style: TextStyle(color: Colors.red),),
-                             ],
-                           ),
+                              ),
+                              Text(
+                                " *",
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ],
+                          ),
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: TextFormField(
@@ -398,17 +420,22 @@ class _AddTrailState extends State<AddTrail>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                           Row(
-                             children: [
-                               Text(
+                          Row(
+                            children: [
+                              Text(
                                 "Opening Time (Trial days & timing)",
                                 style: TextStyle(
-                                    color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                                    color: ColorParser().hexToColor(
+                                        RuntimeStorage.instance.clientTheme!
+                                            .top_title_background_color!),
                                     fontWeight: FontWeight.w700),
-                                                         ),
-                               Text(" *",style: TextStyle(color: Colors.red),),
-                             ],
-                           ),
+                              ),
+                              Text(
+                                " *",
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ],
+                          ),
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: Row(
@@ -491,10 +518,13 @@ class _AddTrailState extends State<AddTrail>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                           Text(
+                          Text(
                             "Location (Images / Photos)",
                             style: TextStyle(
-                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                                color: ColorParser().hexToColor(RuntimeStorage
+                                    .instance
+                                    .clientTheme!
+                                    .top_title_background_color!),
                                 fontWeight: FontWeight.w700),
                           ),
                           Padding(
@@ -561,13 +591,15 @@ class _AddTrailState extends State<AddTrail>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                           Row(
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 "Gallery (Images / Photos)",
                                 style: TextStyle(
-                                    color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                                    color: ColorParser().hexToColor(
+                                        RuntimeStorage.instance.clientTheme!
+                                            .top_title_background_color!),
                                     fontWeight: FontWeight.w700),
                               ),
                               Text(
@@ -648,17 +680,22 @@ class _AddTrailState extends State<AddTrail>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                           Row(
-                             children: [
-                               Text(
+                          Row(
+                            children: [
+                              Text(
                                 "Trail Description",
                                 style: TextStyle(
-                                    color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                                    color: ColorParser().hexToColor(
+                                        RuntimeStorage.instance.clientTheme!
+                                            .top_title_background_color!),
                                     fontWeight: FontWeight.w700),
-                                                         ),
-                               Text(" *",style: TextStyle(color: Colors.red),),
-                             ],
-                           ),
+                              ),
+                              Text(
+                                " *",
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ],
+                          ),
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: TextFormField(
@@ -702,17 +739,22 @@ class _AddTrailState extends State<AddTrail>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                           Row(
-                             children: [
-                               Text(
+                          Row(
+                            children: [
+                              Text(
                                 "Difficulty Level",
                                 style: TextStyle(
-                                    color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                                    color: ColorParser().hexToColor(
+                                        RuntimeStorage.instance.clientTheme!
+                                            .top_title_background_color!),
                                     fontWeight: FontWeight.w700),
-                                                         ),
-                               Text(" *",style: TextStyle(color: Colors.red),),
-                             ],
-                           ),
+                              ),
+                              Text(
+                                " *",
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ],
+                          ),
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
                             child: DropdownMenu<String>(
@@ -757,10 +799,13 @@ class _AddTrailState extends State<AddTrail>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                           Text(
+                          Text(
                             "Status",
                             style: TextStyle(
-                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                                color: ColorParser().hexToColor(RuntimeStorage
+                                    .instance
+                                    .clientTheme!
+                                    .top_title_background_color!),
                                 fontWeight: FontWeight.w700),
                           ),
                           Padding(
@@ -772,7 +817,9 @@ class _AddTrailState extends State<AddTrail>
                                   FlutterSwitch(
                                     width: 120,
                                     value: isChecked,
-                                    activeColor: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                                    activeColor: ColorParser().hexToColor(
+                                        RuntimeStorage.instance.clientTheme!
+                                            .top_title_background_color!),
                                     showOnOff: true,
                                     valueFontSize: 16,
                                     activeText: "Active",
@@ -792,14 +839,19 @@ class _AddTrailState extends State<AddTrail>
                       padding: const EdgeInsets.only(bottom: 56.0, top: 16),
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                              backgroundColor: ColorParser().hexToColor(
+                                  RuntimeStorage.instance.clientTheme!
+                                      .top_title_background_color!),
                               elevation: 0),
                           onPressed: () {
                             submit_English_Details();
                           },
                           child: const Padding(
                             padding: EdgeInsets.symmetric(vertical: 16.0),
-                            child: Text("Submit",style: TextStyle(color: Colors.white),),
+                            child: Text(
+                              "Submit",
+                              style: TextStyle(color: Colors.white),
+                            ),
                           )),
                     )
                   ],
@@ -901,17 +953,22 @@ class _AddTrailState extends State<AddTrail>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                             Row(
-                               children: [
-                                 Text(
+                            Row(
+                              children: [
+                                Text(
                                   LocaleKeys.Trail_Name,
                                   style: TextStyle(
-                                      color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                                      color: ColorParser().hexToColor(
+                                          RuntimeStorage.instance.clientTheme!
+                                              .top_title_background_color!),
                                       fontWeight: FontWeight.w700),
-                                                             ).tr(),
-                                 Text(" *",style: TextStyle(color: Colors.red),),
-                               ],
-                             ),
+                                ).tr(),
+                                Text(
+                                  " *",
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ],
+                            ),
                             Padding(
                               padding: const EdgeInsets.only(top: 10.0),
                               child: TextFormField(
@@ -953,17 +1010,22 @@ class _AddTrailState extends State<AddTrail>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                             Row(
-                               children: [
-                                 Text(
+                            Row(
+                              children: [
+                                Text(
                                   LocaleKeys.Distance,
                                   style: TextStyle(
-                                      color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                                      color: ColorParser().hexToColor(
+                                          RuntimeStorage.instance.clientTheme!
+                                              .top_title_background_color!),
                                       fontWeight: FontWeight.w700),
-                                                             ).tr(),
-                                 Text(" *",style: TextStyle(color: Colors.red),),
-                               ],
-                             ),
+                                ).tr(),
+                                Text(
+                                  " *",
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ],
+                            ),
                             Padding(
                               padding: const EdgeInsets.only(top: 10.0),
                               child: TextFormField(
@@ -1005,17 +1067,22 @@ class _AddTrailState extends State<AddTrail>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                             Row(
-                               children: [
-                                 Text(
+                            Row(
+                              children: [
+                                Text(
                                   LocaleKeys.Opening_Time,
                                   style: TextStyle(
-                                      color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                                      color: ColorParser().hexToColor(
+                                          RuntimeStorage.instance.clientTheme!
+                                              .top_title_background_color!),
                                       fontWeight: FontWeight.w700),
-                                                             ).tr(),
-                                 Text(" *",style: TextStyle(color: Colors.red),),
-                               ],
-                             ),
+                                ).tr(),
+                                Text(
+                                  " *",
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ],
+                            ),
                             Padding(
                               padding: const EdgeInsets.only(top: 10.0),
                               child: Row(
@@ -1102,17 +1169,22 @@ class _AddTrailState extends State<AddTrail>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                             Row(
-                               children: [
-                                 Text(
+                            Row(
+                              children: [
+                                Text(
                                   LocaleKeys.Trail_Description,
                                   style: TextStyle(
-                                      color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                                      color: ColorParser().hexToColor(
+                                          RuntimeStorage.instance.clientTheme!
+                                              .top_title_background_color!),
                                       fontWeight: FontWeight.w700),
-                                                             ).tr(),
-                                 Text(" *",style: TextStyle(color: Colors.red),),
-                               ],
-                             ),
+                                ).tr(),
+                                Text(
+                                  " *",
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ],
+                            ),
                             Padding(
                               padding: const EdgeInsets.only(top: 10.0),
                               child: TextFormField(
@@ -1155,14 +1227,19 @@ class _AddTrailState extends State<AddTrail>
                         padding: const EdgeInsets.only(bottom: 56.0, top: 16),
                         child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                                backgroundColor: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                                backgroundColor: ColorParser().hexToColor(
+                                    RuntimeStorage.instance.clientTheme!
+                                        .top_title_background_color!),
                                 elevation: 0),
                             onPressed: () {
                               submit_Other_Language_DATA();
                             },
                             child: const Padding(
                               padding: EdgeInsets.symmetric(vertical: 16.0),
-                              child: Text("Submit",style: TextStyle(color: Colors.white),),
+                              child: Text(
+                                "Submit",
+                                style: TextStyle(color: Colors.white),
+                              ),
                             )),
                       )
                     ],
