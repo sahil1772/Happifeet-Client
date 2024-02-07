@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:happifeet_client_app/components/LocationCard.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageLocation/AddLocation.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 
 import '../../../components/HappiFeetAppBar.dart';
 import '../../../model/Location/LocationData.dart';
@@ -14,9 +15,12 @@ import '../../../utils/ColorParser.dart';
 import '../../../utils/DeviceDimensions.dart';
 
 class LocationListing extends StatefulWidget {
-  gotoManageLocation(BuildContext context) {
+  PersistentTabController? controller;
+
+  LocationListing({Key? key,this.controller});
+  gotoManageLocation(BuildContext context,PersistentTabController? controller) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (_) => LocationListing()));
+        context, MaterialPageRoute(builder: (_) => LocationListing(controller: controller,)));
   }
 
   @override
@@ -79,7 +83,10 @@ class _ManageLocationWidgetState extends State<LocationListing> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
-      appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false)
+      appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false,callback: (){
+        log("CALLBACK CALLED IN LOCATION LISTING");
+        Navigator.of(context).pop();
+      })
           .getAppBar(context),
       body:
           // locationDetails.isEmpty ? CircularProgressIndicator() :

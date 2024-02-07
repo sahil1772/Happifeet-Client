@@ -14,7 +14,7 @@ import '../../../storage/runtime_storage.dart';
 import '../../../utils/ColorParser.dart';
 import '../../../utils/DeviceDimensions.dart';
 
-List<String> fieldOptions = ['SSL/TLS', 'STATRTLS'];
+List<String> fieldOptions = ['SSL/TLS', 'STARTTLS'];
 
 class ManageSMTPDetails extends StatefulWidget {
   PersistentTabController? tabController;
@@ -41,6 +41,7 @@ class _ManageSMTPDetailsState extends State<ManageSMTPDetails> {
   SmtpDataModel sendSmtpData = SmtpDataModel();
   String? emailerror;
   Future? apiResponse;
+  String? smtpSecurity;
 
 
   @override
@@ -89,9 +90,7 @@ class _ManageSMTPDetailsState extends State<ManageSMTPDetails> {
     }
     if (SmtpData!.smtp_security != null) {
       log("INSIDEIFFFFFFFFFFFFF ${SmtpData!.smtp_security}");
-      setState(() {
 
-      });
       if(SmtpData!.smtp_security == "ssl")
         {
           dropdownValueSelected = "SSL/TLS";
@@ -105,6 +104,7 @@ class _ManageSMTPDetailsState extends State<ManageSMTPDetails> {
       //   log("OHHHHHHHHH $dropdownValueSelected");
       // });
     } else {
+      log("SMTP DATA IS EMPTY");
       dropdownValueSelected = fieldOptions.first;
     }
     setState(() {});
@@ -124,7 +124,9 @@ class _ManageSMTPDetailsState extends State<ManageSMTPDetails> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
-      appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false)
+      appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false,callback: (){
+        Navigator.of(context).pop();
+      })
           .getAppBar(context),
       body: SafeArea(
         top: false,
@@ -491,18 +493,25 @@ class _ManageSMTPDetailsState extends State<ManageSMTPDetails> {
                                           );
                                         }).toList(),
                                         onChanged: (value) {
-                                          setState(() {
-                                            log("before ${dropdownValueSelected}");
-                                            // if(value == "SSL/TLS"){
-                                            //   dropdownValueSelected = "ssl";
-                                            // }else if(value == "STARTTLS"){
-                                            //   dropdownValueSelected = "tls";
-                                            // }
-                                            dropdownValueSelected = value!;
+
+
+                                            log("value on chnaged ${value}");
+                                            if(value == "SSL/TLS"){
+                                            setState(() {
+                                              smtpSecurity = "ssl";
+                                            });
+                                            log("value1${smtpSecurity}");
+                                            }else if(value == "STARTTLS"){
+                                              setState(() {
+                                                smtpSecurity = "tls";
+                                              });
+                                              log("value2${smtpSecurity}");
+                                            }
+                                            // dropdownValueSelected = value!;
                                             // sendSmtpData!.smtpSecurity = value;
                                             // ListOfFeedbackDetails.first.value = value;
-                                            log("after ${dropdownValueSelected}");
-                                          });
+
+
                                         }),
                                   ),
                                 ),
@@ -546,6 +555,7 @@ class _ManageSMTPDetailsState extends State<ManageSMTPDetails> {
                                 // ),
                               ),
                               onPressed: () async {
+                                log("SMTP VALUE BEFORE SUBMIT ${smtpSecurity}");
                                 sendSmtpData.client_id =
                                 await SharedPref.instance.getClientId();
                                 sendSmtpData.smtp_host = smtphostController.text;
@@ -554,7 +564,7 @@ class _ManageSMTPDetailsState extends State<ManageSMTPDetails> {
                                 sendSmtpData.smtp_password = passwordController.text;
                                 sendSmtpData.smtp_port = portController.text;
                                 sendSmtpData.from_email_id = fromemailController.text;
-                                sendSmtpData.smtp_security = dropdownValueSelected;
+                                sendSmtpData.smtp_security = smtpSecurity;
 
                                 log("SMTP DATA TO SEND ${sendSmtpData!.toJson()}");
 

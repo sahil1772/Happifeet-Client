@@ -50,7 +50,9 @@ class _ActivityReportWidgetState extends State<ActivityReportWidget> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
-      appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false)
+      appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false,callback: (){
+        Navigator.of(context).pop();
+      })
           .getAppBar(context),
       body: SafeArea(
         top: false,

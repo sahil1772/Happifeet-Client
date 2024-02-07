@@ -224,7 +224,10 @@ class SharedPref {
           MaterialPageRoute(
             builder: (context) => const LoginPageWidget(),
           ));
+
     }
+    return Future.value(isLogin);
+
   }
 
   ClientTheme clientTheme = ClientTheme();

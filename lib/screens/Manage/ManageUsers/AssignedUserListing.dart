@@ -5,6 +5,7 @@ import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageUsers/AddAssignedUser.dart';
 import 'package:happifeet_client_app/storage/runtime_storage.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 
 import '../../../components/HappiFeetAppBar.dart';
 import '../../../components/UserListingCard.dart';
@@ -13,16 +14,17 @@ import '../../../utils/ColorParser.dart';
 import '../../../utils/DeviceDimensions.dart';
 
 class AssignedUserListing extends StatefulWidget {
-  const AssignedUserListing({super.key});
+  PersistentTabController? controller;
+   AssignedUserListing({super.key,this.controller});
 
   @override
   State<AssignedUserListing> createState() => _AssignedUserListingState();
 
 
 
-  goToAssignedUserListing(BuildContext context,Function? callback) {
+  goToAssignedUserListing(BuildContext context,Function? callback,PersistentTabController? controller) {
     Navigator.push(context,
-        MaterialPageRoute(builder: (_) => const AssignedUserListing()));
+        MaterialPageRoute(builder: (_) =>  AssignedUserListing(controller:controller)));
   }
 }
 
@@ -77,7 +79,9 @@ setState(() {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
-      appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false)
+      appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false,callback: (){
+        Navigator.of(context).pop();
+      })
           .getAppBar(context),
       body: SafeArea(
         top: false,

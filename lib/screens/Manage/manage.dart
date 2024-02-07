@@ -89,7 +89,9 @@ class _ManageWidgetState extends State<ManageWidget> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
-      appBar: HappiFeetAppBar(IsDashboard: true, isCitiyList: false)
+      appBar: HappiFeetAppBar(IsDashboard: true, isCitiyList: false,callback: (){
+
+      })
           .getAppBar(context),
       body: SafeArea(
         top: false,
@@ -156,117 +158,29 @@ class _ManageWidgetState extends State<ManageWidget> {
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 22),
                   child: Column(
                     children: [
-                      GridView(
-                        padding: const EdgeInsets.all(0),
-                        gridDelegate:
-                            const SliverGridDelegateWithMaxCrossAxisExtent(
-                                maxCrossAxisExtent: 180,
-                                // childAspectRatio: (itemWidth / itemHeight),
-                                childAspectRatio: 1,
-                                crossAxisSpacing: 20,
-                                mainAxisSpacing: 20),
-                        shrinkWrap: true,
-                        physics: const ScrollPhysics(),
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              LocationListing().gotoManageLocation(context);
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colors.black12,
-                                  ),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(14))),
-                              width: 150,
-                              height: 130,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: 70,
-                                    height: 70,
-                                    decoration: BoxDecoration(
-                                        color: ColorParser().hexToColor(
-                                            RuntimeStorage.instance.clientTheme!
-                                                .top_title_background_color!),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(50))),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16),
-                                      child: SvgPicture.asset(
-                                        "assets/images/manage/location.svg",
-                                        colorFilter: ColorFilter.mode(
-                                            Colors.white, BlendMode.srcIn),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text("Manage \nLocation",
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                          color: Resources.colors.hfText),
-                                      textAlign: TextAlign.center),
-                                ],
-                              ),
-                            ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 12),
+                        child: GridView(
+                          padding: const EdgeInsets.all(0),
+                          gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 18,
+                            mainAxisSpacing: 18
+                            // mainAxisSpacing: 10
                           ),
-                          InkWell(
-                            onTap: () {
-                              const AssignedUserListing()
-                                  .goToAssignedUserListing(context, null);
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black12),
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(14),
-                                  )),
-                              width: 150,
-                              height: 130,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: 70,
-                                    height: 70,
-                                    decoration: BoxDecoration(
-                                        color: ColorParser().hexToColor(
-                                            RuntimeStorage.instance.clientTheme!
-                                                .top_title_background_color!),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(50))),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: SvgPicture.asset(
-                                        "assets/images/manage/users.svg",
-                                        colorFilter: ColorFilter.mode(
-                                            Colors.white, BlendMode.srcIn),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text("Manage \nUsers",
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                          color: Resources.colors.hfText),
-                                      textAlign: TextAlign.center),
-                                ],
-                              ),
-                            ),
-                          ),
-                          if (isAnnouncement!)
+                              // const SliverGridDelegateWithMaxCrossAxisExtent(
+                              //     maxCrossAxisExtent: 180,
+                              //     // childAspectRatio: (itemWidth / itemHeight),
+                              //     childAspectRatio: 1,
+                              //     crossAxisSpacing: 20,
+                              //     mainAxisSpacing: 20),
+                          shrinkWrap: true,
+                          physics: const ScrollPhysics(),
+                          children: [
                             InkWell(
                               onTap: () {
-                                AnnouncementListingWidget
-                                    .gotoAnnouncementListingPage(context);
+                                LocationListing().gotoManageLocation(context,widget.controller);
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -285,16 +199,14 @@ class _ManageWidgetState extends State<ManageWidget> {
                                       height: 70,
                                       decoration: BoxDecoration(
                                           color: ColorParser().hexToColor(
-                                              RuntimeStorage
-                                                  .instance
-                                                  .clientTheme!
+                                              RuntimeStorage.instance.clientTheme!
                                                   .top_title_background_color!),
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(50))),
                                       child: Padding(
-                                        padding: const EdgeInsets.all(16.0),
+                                        padding: const EdgeInsets.all(16),
                                         child: SvgPicture.asset(
-                                          "assets/images/manage/announcement.svg",
+                                          "assets/images/manage/location.svg",
                                           colorFilter: ColorFilter.mode(
                                               Colors.white, BlendMode.srcIn),
                                         ),
@@ -303,7 +215,7 @@ class _ManageWidgetState extends State<ManageWidget> {
                                     const SizedBox(
                                       height: 5,
                                     ),
-                                    Text("Manage \nAnnouncement",
+                                    Text("Manage \nLocation",
                                         style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w500,
@@ -313,105 +225,10 @@ class _ManageWidgetState extends State<ManageWidget> {
                                 ),
                               ),
                             ),
-                          InkWell(
-                            onTap: () {
-                               ManageSMTPDetails()
-                                  .goToManageSMTPPage(context,widget.controller);
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black12),
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(14),
-                                  )),
-                              width: 150,
-                              height: 130,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: 70,
-                                    height: 70,
-                                    decoration: BoxDecoration(
-                                        color: ColorParser().hexToColor(
-                                            RuntimeStorage.instance.clientTheme!
-                                                .top_title_background_color!),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(50))),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: SvgPicture.asset(
-                                        "assets/images/manage/smtp.svg",
-                                        colorFilter: ColorFilter.mode(
-                                            Colors.white, BlendMode.srcIn),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text("Manage \nSMTP Details",
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                          color: Resources.colors.hfText),
-                                      textAlign: TextAlign.center),
-                                ],
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              ClientListingWidget()
-                                  .gotoClientListingPage(context);
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black12),
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(14),
-                                  )),
-                              width: 150,
-                              height: 130,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: 70,
-                                    height: 70,
-                                    decoration: BoxDecoration(
-                                        color: ColorParser().hexToColor(
-                                            RuntimeStorage.instance.clientTheme!
-                                                .top_title_background_color!),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(50))),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: SvgPicture.asset(
-                                        "assets/images/manage/clientUser.svg",
-                                        colorFilter: ColorFilter.mode(
-                                            Colors.white, BlendMode.srcIn),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text("Manage Client Users",
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                          color: Resources.colors.hfText),
-                                      textAlign: TextAlign.center),
-                                ],
-                              ),
-                            ),
-                          ),
-                          if (isparkInspection!)
                             InkWell(
                               onTap: () {
-                                // ClientListingWidget()
-                                //     .gotoClientListingPage(context);
+                                 AssignedUserListing()
+                                    .goToAssignedUserListing(context, null,widget.controller);
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -429,16 +246,14 @@ class _ManageWidgetState extends State<ManageWidget> {
                                       height: 70,
                                       decoration: BoxDecoration(
                                           color: ColorParser().hexToColor(
-                                              RuntimeStorage
-                                                  .instance
-                                                  .clientTheme!
+                                              RuntimeStorage.instance.clientTheme!
                                                   .top_title_background_color!),
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(50))),
                                       child: Padding(
                                         padding: const EdgeInsets.all(16.0),
                                         child: SvgPicture.asset(
-                                          "assets/images/manage/parkInspection.svg",
+                                          "assets/images/manage/users.svg",
                                           colorFilter: ColorFilter.mode(
                                               Colors.white, BlendMode.srcIn),
                                         ),
@@ -447,7 +262,7 @@ class _ManageWidgetState extends State<ManageWidget> {
                                     const SizedBox(
                                       height: 5,
                                     ),
-                                    Text("Park Inspection",
+                                    Text("Manage \nUsers",
                                         style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w500,
@@ -457,12 +272,61 @@ class _ManageWidgetState extends State<ManageWidget> {
                                 ),
                               ),
                             ),
-                          if (isactivityReport!)
+                            if (isAnnouncement!)
+                              InkWell(
+                                onTap: () {
+                                  AnnouncementListingWidget
+                                      .gotoAnnouncementListingPage(context);
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.black12,
+                                      ),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(14))),
+                                  width: 150,
+                                  height: 130,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: 70,
+                                        height: 70,
+                                        decoration: BoxDecoration(
+                                            color: ColorParser().hexToColor(
+                                                RuntimeStorage
+                                                    .instance
+                                                    .clientTheme!
+                                                    .top_title_background_color!),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(50))),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(16.0),
+                                          child: SvgPicture.asset(
+                                            "assets/images/manage/announcement.svg",
+                                            colorFilter: ColorFilter.mode(
+                                                Colors.white, BlendMode.srcIn),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text("Manage \nAnnouncement",
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500,
+                                              color: Resources.colors.hfText),
+                                          textAlign: TextAlign.center),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             InkWell(
                               onTap: () {
-                                // ClientListingWidget()
-                                //     .gotoClientListingPage(context);
-                                ActivityReportWidget().gotoActivityReport(context);
+                                 ManageSMTPDetails()
+                                    .goToManageSMTPPage(context,widget.controller);
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -480,16 +344,14 @@ class _ManageWidgetState extends State<ManageWidget> {
                                       height: 70,
                                       decoration: BoxDecoration(
                                           color: ColorParser().hexToColor(
-                                              RuntimeStorage
-                                                  .instance
-                                                  .clientTheme!
+                                              RuntimeStorage.instance.clientTheme!
                                                   .top_title_background_color!),
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(50))),
                                       child: Padding(
                                         padding: const EdgeInsets.all(16.0),
                                         child: SvgPicture.asset(
-                                          "assets/images/manage/activityReport.svg",
+                                          "assets/images/manage/smtp.svg",
                                           colorFilter: ColorFilter.mode(
                                               Colors.white, BlendMode.srcIn),
                                         ),
@@ -498,7 +360,7 @@ class _ManageWidgetState extends State<ManageWidget> {
                                     const SizedBox(
                                       height: 5,
                                     ),
-                                    Text("Activity Report",
+                                    Text("Manage \nSMTP Details",
                                         style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w500,
@@ -508,10 +370,10 @@ class _ManageWidgetState extends State<ManageWidget> {
                                 ),
                               ),
                             ),
-                          if (istrail!)
                             InkWell(
                               onTap: () {
-                                TrailListing.goToTrailListing(context);
+                                ClientListingWidget()
+                                    .gotoClientListingPage(context);
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -529,22 +391,23 @@ class _ManageWidgetState extends State<ManageWidget> {
                                       height: 70,
                                       decoration: BoxDecoration(
                                           color: ColorParser().hexToColor(
-                                              RuntimeStorage
-                                                  .instance
-                                                  .clientTheme!
+                                              RuntimeStorage.instance.clientTheme!
                                                   .top_title_background_color!),
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(50))),
                                       child: Padding(
                                         padding: const EdgeInsets.all(16.0),
                                         child: SvgPicture.asset(
-                                            "assets/images/manage/manageTrail.svg"),
+                                          "assets/images/manage/clientUser.svg",
+                                          colorFilter: ColorFilter.mode(
+                                              Colors.white, BlendMode.srcIn),
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(
                                       height: 5,
                                     ),
-                                    Text("Manage Trail",
+                                    Text("Manage Client Users",
                                         style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w500,
@@ -554,7 +417,155 @@ class _ManageWidgetState extends State<ManageWidget> {
                                 ),
                               ),
                             ),
-                        ],
+                            if (isparkInspection!)
+                              InkWell(
+                                onTap: () {
+                                  // ClientListingWidget()
+                                  //     .gotoClientListingPage(context);
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.black12),
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(14),
+                                      )),
+                                  width: 150,
+                                  height: 130,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: 70,
+                                        height: 70,
+                                        decoration: BoxDecoration(
+                                            color: ColorParser().hexToColor(
+                                                RuntimeStorage
+                                                    .instance
+                                                    .clientTheme!
+                                                    .top_title_background_color!),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(50))),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(16.0),
+                                          child: SvgPicture.asset(
+                                            "assets/images/manage/parkInspection.svg",
+                                            colorFilter: ColorFilter.mode(
+                                                Colors.white, BlendMode.srcIn),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text("Park Inspection",
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500,
+                                              color: Resources.colors.hfText),
+                                          textAlign: TextAlign.center),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            if (isactivityReport!)
+                              InkWell(
+                                onTap: () {
+                                  // ClientListingWidget()
+                                  //     .gotoClientListingPage(context);
+                                  ActivityReportWidget().gotoActivityReport(context);
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.black12),
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(14),
+                                      )),
+                                  width: 150,
+                                  height: 130,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: 70,
+                                        height: 70,
+                                        decoration: BoxDecoration(
+                                            color: ColorParser().hexToColor(
+                                                RuntimeStorage
+                                                    .instance
+                                                    .clientTheme!
+                                                    .top_title_background_color!),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(50))),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(16.0),
+                                          child: SvgPicture.asset(
+                                            "assets/images/manage/activityReport.svg",
+                                            colorFilter: ColorFilter.mode(
+                                                Colors.white, BlendMode.srcIn),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text("Activity Report",
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500,
+                                              color: Resources.colors.hfText),
+                                          textAlign: TextAlign.center),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            if (istrail!)
+                              InkWell(
+                                onTap: () {
+                                  TrailListing.goToTrailListing(context);
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.black12),
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(14),
+                                      )),
+                                  width: 150,
+                                  height: 130,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: 70,
+                                        height: 70,
+                                        decoration: BoxDecoration(
+                                            color: ColorParser().hexToColor(
+                                                RuntimeStorage
+                                                    .instance
+                                                    .clientTheme!
+                                                    .top_title_background_color!),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(50))),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(16.0),
+                                          child: SvgPicture.asset(
+                                              "assets/images/manage/manageTrail.svg"),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text("Manage Trail",
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500,
+                                              color: Resources.colors.hfText),
+                                          textAlign: TextAlign.center),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
                       )
                     ],
                   ),
