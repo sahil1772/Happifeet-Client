@@ -74,16 +74,32 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
           log("CONTROLLER INDEX ${languages.keys.elementAt(_controller!.index)}");
           if (_controller!.indexIsChanging) {
             log("tab is changing");
-            context.setLocale(Locale(
-                languages.keys.elementAt(_controller!.index) == "spa"
-                    ? "es"
-                    : languages.keys.elementAt(_controller!.index)));
+            switch (languages.keys.elementAt(_controller!.index)) {
+              case "spa":
+                context.setLocale(Locale("es"));
+                break;
+              case "rsa":
+                context.setLocale(Locale("rsa"));
+                break;
+              default:
+                context.setLocale(
+                    Locale(languages.keys.elementAt(_controller!.index)));
+                break;
+            }
           } else {
             log("INSIDE ELSE OF LISTENER${_controller!.index}");
-            context.setLocale(Locale(
-                languages.keys.elementAt(_controller!.index) == "spa"
-                    ? "es"
-                    : languages.keys.elementAt(_controller!.index)));
+            switch (languages.keys.elementAt(_controller!.index)) {
+              case "spa":
+                context.setLocale(Locale("es"));
+                break;
+              case "rsa":
+                context.setLocale(Locale("rsa"));
+                break;
+              default:
+                context.setLocale(
+                    Locale(languages.keys.elementAt(_controller!.index)));
+                break;
+            }
           }
         });
       });
@@ -241,7 +257,9 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 20.0),
-            child: TextFormField(
+            child: TextFormField(   onTapOutside: (event) {
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
               enabled: !widget.isEdit!,
               validator: (text) {
                 if (text!.isEmpty) {
@@ -328,7 +346,9 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 20.0),
-            child: TextFormField(
+            child: TextFormField(   onTapOutside: (event) {
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
               enabled: !widget.isEdit!,
               validator: (text) {
                 if (text!.isEmpty) {
@@ -439,7 +459,9 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
         ),
         Padding(
           padding: const EdgeInsets.only(bottom: 20.0),
-          child: TextFormField(
+          child: TextFormField(   onTapOutside: (event) {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
             validator: (value) {
               if(value=="" || value == null) {
                 return LocaleKeys.Provide_Valid_Data.tr();
@@ -477,7 +499,9 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
         ),
         Padding(
           padding: const EdgeInsets.only(bottom: 20.0),
-          child: TextFormField(
+          child: TextFormField(   onTapOutside: (event) {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
             validator: (value) {
               if(value=="" || value == null) {
                 return LocaleKeys.Provide_Valid_Data.tr();

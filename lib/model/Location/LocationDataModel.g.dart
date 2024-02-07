@@ -32,6 +32,10 @@ LocationDataModel _$LocationDataModelFromJson(Map<String, dynamic> json) =>
       otherFeatures: (json['otherFeatures'] as List<dynamic>?)
           ?.map((e) => e as String?)
           .toList(),
+      parkImages: json['parkImages'] as String?,
+      galleryImages: (json['galleryImages'] as List<dynamic>?)
+          ?.map((e) => e as String?)
+          .toList(),
     )..street = json['street'] as String?;
 
 Map<String, dynamic> _$LocationDataModelToJson(LocationDataModel instance) =>
@@ -55,4 +59,6 @@ Map<String, dynamic> _$LocationDataModelToJson(LocationDataModel instance) =>
       'parkAvailabilityMonths': instance.parkAvailabilityMonths,
       'parkFeatures': instance.parkFeatures,
       'otherFeatures': instance.otherFeatures,
+      'parkImages': instance.parkImages,
+      'galleryImages': instance.galleryImages,
     };

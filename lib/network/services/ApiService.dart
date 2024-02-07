@@ -38,6 +38,7 @@ class NetworkClient implements InterceptorsWrapper {
       requestBody: true,
       responseBody: true,
       responseHeader: false,
+      error: true,
       compact: false));
 
   void addInterceptor() {

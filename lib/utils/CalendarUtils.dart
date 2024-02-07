@@ -8,5 +8,7 @@ class CalendarUtils {
         initialDate: selectedStartDate??DateTime.now(),
         firstDate: DateTime(2015),
         lastDate: DateTime(2101));
+
+    return picked;
   }
 }

@@ -179,14 +179,16 @@ class LocationService implements InterfaceLocation {
     paramMap.addAll({"task": "update_location_lang"});
     paramMap.addAll({"user_id": await SharedPref.instance.getUserId()});
     paramMap.addAll({"park_id": parkId});
+    paramMap.addAll({"id": parkId});
     paramMap.addAll({"lang": lang});
+    paramMap.removeWhere((key, value) => value == null||value=="");
     var formData = FormData.fromMap(paramMap, ListFormat.multiCompatible);
-    if(locationImage!=null) {
+    if (locationImage != null) {
       formData.files.add(MapEntry(
-        "parkImages", await MultipartFile.fromFile(locationImage!.path)));
+          "parkImages", await MultipartFile.fromFile(locationImage!.path)));
     }
 
-    if(galleryImages!=null && galleryImages.isNotEmpty) {
+    if (galleryImages != null && galleryImages.isNotEmpty) {
       for (var file in galleryImages!) {
         formData.files.add(
           MapEntry("galleryImages[${galleryImages!.indexOf(file)}]",
@@ -197,8 +199,7 @@ class LocationService implements InterfaceLocation {
     log("PARAM MAP $formData");
 
     //Calling Post API
-    var response = await NetworkClient().dio.post(base_url,
-        data: formData);
+    var response = await NetworkClient().dio.post(base_url, data: formData);
 
     //Checking for successful response
     if (response.statusCode == 200) {
@@ -215,7 +216,9 @@ class LocationService implements InterfaceLocation {
   @override
   Future<BaseResponse> updateLocationData(LocationDataModel data,
       XFile? locationImage, List<XFile>? galleryImages) async {
+
     Map<String, dynamic> paramMap = data.toJson();
+    paramMap.removeWhere((key, value) => value == null || value == "");
     //Adding task to Map
     paramMap.addAll({"task": "update_location"});
     paramMap.addAll({"user_id": await SharedPref.instance.getUserId()});
@@ -223,13 +226,12 @@ class LocationService implements InterfaceLocation {
 
     var formData = FormData.fromMap(paramMap, ListFormat.multiCompatible);
 
-    if(locationImage!=null){
+    if (locationImage != null) {
       formData.files.add(MapEntry(
           "parkImages", await MultipartFile.fromFile(locationImage!.path)));
     }
 
-
-    if(galleryImages!=null && galleryImages.isNotEmpty) {
+    if (galleryImages != null && galleryImages.isNotEmpty) {
       for (var file in galleryImages!) {
         formData.files.add(
           MapEntry("galleryImages[${galleryImages!.indexOf(file)}]",
@@ -237,7 +239,7 @@ class LocationService implements InterfaceLocation {
         );
       }
     }
-    log("PARAM MAP $formData");
+    log("PARAM MAP ${formData.fields}");
 
     // var  paramMap = {"task":task};
 
@@ -253,6 +255,29 @@ class LocationService implements InterfaceLocation {
       //Return Failure Response Object as BaseResponse Class Object
       return BaseResponse(
           status: response.statusCode, msg: response.statusMessage);
+    }
+  }
+
+  @override
+  Future<BaseResponse> deleteImage(Map<String, dynamic> params) async {
+    Map<String, dynamic> paramMap = params;
+    paramMap.removeWhere((key, value) => value == null || value == "");
+    //Adding task to Map
+    paramMap.addAll({"task": "delete_location_image"});
+    paramMap.addAll({"user_id": await SharedPref.instance.getUserId()});
+
+    //Calling Post API
+    var response = await NetworkClient().dio.post(base_url, data: FormData.fromMap(paramMap));
+
+    //Checking for successful response
+    if (response.statusCode == 200) {
+    //Return Success Response Object as BaseResponse Class Object
+    var data = BaseResponse.fromJson(json.decode(response.data));
+    return data;
+    } else {
+    //Return Failure Response Object as BaseResponse Class Object
+    return BaseResponse(
+    status: response.statusCode, msg: response.statusMessage);
     }
   }
 }
