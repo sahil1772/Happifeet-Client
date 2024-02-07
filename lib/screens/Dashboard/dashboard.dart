@@ -72,7 +72,10 @@ class _DashboardWidgetState extends State<DashboardWidget> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
-      appBar: HappiFeetAppBar(IsDashboard: true, isCitiyList: false)
+      appBar: HappiFeetAppBar(IsDashboard: true, isCitiyList: false,callback: (){
+        log("callback called!! in appbar");
+        Navigator.pop(context);
+      })
           .getAppBar(context),
       body: SafeArea(
         top: false,

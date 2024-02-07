@@ -144,7 +144,9 @@ class _AddClientWidgetState extends State<AddClientWidget> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
-      appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false)
+      appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false,callback: (){
+        Navigator.of(context).pop();
+      })
           .getAppBar(context),
       body: SafeArea(
         top: false,

@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:happifeet_client_app/components/BottomNavigation.dart';
 
 import '../storage/shared_preferences.dart';
 
@@ -36,8 +37,23 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> init() async {
-    Timer(const Duration(seconds: 2), () {
-      SharedPref.instance.checkIfLoggedIn(context);
+    Timer(const Duration(seconds: 2), () async {
+       bool isLoggedIn = await SharedPref.instance.checkIfLoggedIn(context);
+
+       // if(isLoggedIn){
+       //   Navigator.pushReplacement(
+       //       context,
+       //       MaterialPageRoute(
+       //         builder: (context) => BottomNavigationHappiFeet(),
+       //       ));
+       // }
+       // else{
+       //   Navigator.pushReplacement(
+       //       context,
+       //       MaterialPageRoute(
+       //         builder: (context) => BottomNavigationHappiFeet(),
+       //       ));
+       // }
 
       // Navigator.pushReplacement(
       //     context,

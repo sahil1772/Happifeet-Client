@@ -44,8 +44,6 @@ class _BottomNavigationHappiFeetState extends State<BottomNavigationHappiFeet>{
 
     setBoolForLogIn();
 
-
-
     SharedPref.instance.getClientType().then((value)  {
       userType = value;
       log("USER TYPE ==> ",error: userType);
