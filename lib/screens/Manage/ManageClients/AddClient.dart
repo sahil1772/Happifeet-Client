@@ -170,7 +170,7 @@ class _AddClientWidgetState extends State<AddClientWidget> {
                   margin: DeviceDimensions.getHeaderEdgeInsets(context),
                   child:  Center(
                     child: Text(
-                      "List Assigned User",
+                      "${widget.isEdit! ?"Edit":"Add"} Assigned User",
                       // "Select Location".tr(),
                       // "Select Location".language(context),
                       // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',

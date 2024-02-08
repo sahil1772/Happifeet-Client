@@ -239,7 +239,7 @@ class _AddLocationState extends State<AddLocation>
   Widget build(BuildContext context) {
     buildContext = context;
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       extendBodyBehindAppBar: true,
       appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false,callback: (){
         Navigator.of(context).pop();
@@ -267,7 +267,7 @@ class _AddLocationState extends State<AddLocation>
                   margin: DeviceDimensions.getHeaderEdgeInsets(context),
                   child: Center(
                     child: Text(
-                      "Add Location",
+                      "${widget.isEdit! ?"Edit":"Add"} Location",
                       // "Select Location".tr(),
                       // "Select Location".language(context),
                       // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
@@ -1008,8 +1008,8 @@ class _AddLocationState extends State<AddLocation>
                               ),
                             ],
                           ),
-                          widget.isEdit!
-                              ? Padding(
+
+                               Padding(
                                   padding: const EdgeInsets.only(top: 10.0),
                                   child: Column(
                                     children: [
@@ -1035,7 +1035,12 @@ class _AddLocationState extends State<AddLocation>
                                                   child: Text(
                                                     galleryImages!.isEmpty
                                                         ? "No File Selected"
-                                                        : galleryImages!.length == 1 ? galleryImages!.first.name : "${galleryImages!.length} ${galleryImages!.length == 1 ? "File" : "Files"} Selected",
+                                                        : galleryImages!
+                                                                    .length ==
+                                                                1
+                                                            ? galleryImages!
+                                                                .first.name
+                                                            : "${galleryImages!.length} ${galleryImages!.length == 1 ? "File" : "Files"} Selected",
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                   ),
@@ -1047,8 +1052,12 @@ class _AddLocationState extends State<AddLocation>
                                                   child: OutlinedButton(
                                                       onPressed: () {
                                                         if (galleryImages!
-                                                                .length +snapshot.data!.galleryImages!.length >=
-                                                            5 ) {
+                                                                    .length +
+                                                                snapshot
+                                                                    .data!
+                                                                    .galleryImages!
+                                                                    .length >=
+                                                            5) {
                                                           ScaffoldMessenger.of(
                                                                   context)
                                                               .showSnackBar(
@@ -1091,6 +1100,7 @@ class _AddLocationState extends State<AddLocation>
                                               ]),
                                         ),
                                       ),
+                                      widget.isEdit!?
                                       GridView.builder(
                                         physics:
                                             const NeverScrollableScrollPhysics(),
@@ -1194,11 +1204,11 @@ class _AddLocationState extends State<AddLocation>
                                             ),
                                           );
                                         },
-                                      )
+                                      ):SizedBox()
                                     ],
                                   ),
                                 )
-                              : const SizedBox(),
+
                         ],
                       ),
                     )),
@@ -1567,7 +1577,7 @@ class _AddLocationState extends State<AddLocation>
                                                   children: [
                                                     Text(
                                                       DateFormat("MMM").format(
-                                                           DateFormat("MM")
+                                                          DateFormat("MM")
                                                               .parse((int.parse(
                                                                       item!))
                                                                   .toString())),
@@ -2820,8 +2830,9 @@ class _AddLocationState extends State<AddLocation>
         }
       });
       if (_controller!.index + 1 > languages.length - 1) {
-        ScaffoldMessenger.of(buildContext!).showSnackBar(
-             SnackBar(content: Text("Location ${widget.isEdit!?"Updated":"Created"} Successfully.")));
+        ScaffoldMessenger.of(buildContext!).showSnackBar(SnackBar(
+            content: Text(
+                "Location ${widget.isEdit! ? "Updated" : "Created"} Successfully.")));
         Navigator.of(buildContext!).pop();
       }
     } else {

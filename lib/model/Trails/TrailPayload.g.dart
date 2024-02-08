@@ -15,6 +15,10 @@ TrailPayload _$TrailPayloadFromJson(Map<String, dynamic> json) => TrailPayload(
       trailDifficulty: json['trailDifficulty'] as String?,
       trailOpeningTime: json['trailOpeningTime'] as String?,
       status: json['status'] as String?,
+      trailImages: json['trailImages'] as String?,
+      trailDetailImages: (json['trailDetailImages'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       trailOpeningTime2: json['trailOpeningTime2'] as String?,
     );
 
@@ -29,4 +33,6 @@ Map<String, dynamic> _$TrailPayloadToJson(TrailPayload instance) =>
       'trailOpeningTime': instance.trailOpeningTime,
       'trailOpeningTime2': instance.trailOpeningTime2,
       'status': instance.status,
+      'trailImages': instance.trailImages,
+      'trailDetailImages': instance.trailDetailImages,
     };

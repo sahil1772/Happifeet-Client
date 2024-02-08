@@ -137,6 +137,7 @@ class TrailService implements InterfaceTrails {
   Future<BaseResponse> updateTrailData(TrailPayload payload, XFile? trailImage, List<XFile>? galleryImages) async {
     try {
       var map = payload.toJson();
+      map.removeWhere((key, value) => value == null||value=="");
       map.addAll({
         'task': "update_trail",
         'user_id': await SharedPref.instance.getUserId()
@@ -144,20 +145,22 @@ class TrailService implements InterfaceTrails {
 
       var formData = FormData.fromMap(map, ListFormat.multiCompatible);
 
-      if (trailImage != null)
+      if (trailImage != null) {
         formData.files.add(MapEntry(
-            "parkImages", await MultipartFile.fromFile(trailImage!.path)));
+            "trailListingImage", await MultipartFile.fromFile(trailImage!.path)));
+      }
 
-      if (galleryImages!.length > 0)
-        for (var file in galleryImages!) {
+      if (galleryImages!.isNotEmpty) {
+        for (var file in galleryImages) {
           formData.files.add(
-            MapEntry("galleryImages[${galleryImages!.indexOf(file)}]",
+            MapEntry("trailDetailImages[${galleryImages.indexOf(file)}]",
                 await MultipartFile.fromFile(file.path)),
           );
         }
+      }
 
       var response =
-          await NetworkClient().dio.post(base_url, data: FormData.fromMap(map));
+          await NetworkClient().dio.post(base_url, data: formData);
 
       if (response.statusCode == 200) {
         BaseResponse data = BaseResponse.fromJson(json.decode(response.data!));

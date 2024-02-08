@@ -13,7 +13,7 @@ TrailListingData _$TrailListingDataFromJson(Map<String, dynamic> json) =>
       opening_time: json['opening_time'] as String?,
       opening_time2: json['opening_time2'] as String?,
       distance: json['distance'] as String?,
-      image: json['image'] as String?,
+      parkImages: json['parkImages'] as String?,
     );
 
 Map<String, dynamic> _$TrailListingDataToJson(TrailListingData instance) =>
@@ -23,5 +23,5 @@ Map<String, dynamic> _$TrailListingDataToJson(TrailListingData instance) =>
       'opening_time': instance.opening_time,
       'opening_time2': instance.opening_time2,
       'distance': instance.distance,
-      'image': instance.image,
+      'parkImages': instance.parkImages,
     };

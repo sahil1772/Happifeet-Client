@@ -125,7 +125,7 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
     buildContext = context;
     double HEADER_HEIGHT = 4.0;
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       extendBodyBehindAppBar: true,
       appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false,callback: (){
         Navigator.of(context).pop();
@@ -153,7 +153,7 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
                   margin: DeviceDimensions.getHeaderEdgeInsets(context),
                   child: Center(
                     child: Text(
-                      "Add Announcement",
+                      "${widget.isEdit! ?"Edit":"Add"} Announcement",
                       // "Select Location".tr(),
                       // "Select Location".language(context),
                       // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',

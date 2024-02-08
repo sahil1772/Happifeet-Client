@@ -199,7 +199,6 @@ class _ClientListingWidgetState extends State<ClientListingWidget> {
                                         return ClientListingCard(
                                             clientUserData:
                                                 clientUserData![index],refreshCallback: (){
-                                              print("ADHKSAHGJKLSAHCBJKLSABFCJKAGBCHAVCIJH");
                                               setState(() {
                                                 futureClientData = getClientUserData();
 
@@ -216,9 +215,9 @@ class _ClientListingWidgetState extends State<ClientListingWidget> {
                                   );
                                 } else if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
-                                  return CircularProgressIndicator();
+                                  return const CircularProgressIndicator();
                                 } else {
-                                  return Text("Something Went Wrong");
+                                  return const Text("Something Went Wrong");
                                 }
                               },
                             ),
