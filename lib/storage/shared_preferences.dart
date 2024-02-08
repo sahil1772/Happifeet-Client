@@ -107,7 +107,7 @@ class SharedPref {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       UserData data =
       UserData.fromJson(json.decode(prefs.getString("userData")!));
-      log("User Name in Shared pref => ${data.user_name}");
+      log("User Name in Shared pref => ${data.theme_data}");
       Name = data.user_name;
     } catch (e) {
       throw e;

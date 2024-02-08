@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:happifeet_client_app/storage/runtime_storage.dart';
+import 'package:happifeet_client_app/storage/shared_preferences.dart';
 
 class HappiFeetAppBar {
   bool IsDashboard;
@@ -25,7 +27,8 @@ class HappiFeetAppBar {
       leading: IsDashboard
           ? Padding(
               padding: const EdgeInsets.only(left: 16),
-              child: SvgPicture.asset("assets/images/appBar/npp-logo.svg"),
+              // child: SvgPicture.asset("assets/images/appBar/npp-logo.svg"),
+              child:  Image.network(RuntimeStorage.instance.clientTheme!.logo!,width: 45, height: 45),
               // child: Image.asset("assets/images/appBar/city_jpg.jpg"),
               // child: Image.network(SharedPref.instance.getCityTheme().logo!)
             )
@@ -43,6 +46,7 @@ class HappiFeetAppBar {
                     width: 10,
                   ),
                   SvgPicture.asset("assets/images/appBar/npp-logo.svg"),
+
                 ],
               ),
               // child: Image.asset("assets/images/appBar/city_jpg.jpg"),
