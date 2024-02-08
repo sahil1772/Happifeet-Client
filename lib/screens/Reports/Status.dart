@@ -64,12 +64,16 @@ class _StatusWidgetState extends State<StatusWidget> {
       endDrawerEnableOpenDragGesture: false,
       extendBodyBehindAppBar: true,
       drawer: FilterPage(
-          showAssignedUser: true,
+          // showAssignedUser: true,
+          // showType: true,
+          // showStatus: true,
+          // showKeyword: true,
+          // formType: true,
           filterData: (params) {
             filterParams = params;
             apiResposne = getFeedbackStatusData();
           },
-          params: filterParams),
+          params: filterParams, page: FilterPages.STATUS,),
       appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false)
           .getAppBar(context),
       body: SafeArea(

@@ -61,7 +61,7 @@ class _ActivityReportCardState extends State<ActivityReportCard>{
                 children: [
                   Row(
                     children: [
-                      SvgPicture.asset("assets/images/status/excel.svg",colorFilter: ColorFilter.mode(Colors.green, BlendMode.srcIn),),
+                      SvgPicture.asset("assets/images/activityReport/date.svg",colorFilter: ColorFilter.mode(Colors.green, BlendMode.srcIn),),
                     SizedBox(width: 10,),
                       Text("Date",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w600)),
                     ],
@@ -69,7 +69,7 @@ class _ActivityReportCardState extends State<ActivityReportCard>{
                   SizedBox(height: 10,),
                   Row(
                     children: [
-                      SvgPicture.asset("assets/images/status/excel.svg",colorFilter: ColorFilter.mode(Colors.green, BlendMode.srcIn),),
+                      SvgPicture.asset("assets/images/activityReport/photoGallery.svg",colorFilter: ColorFilter.mode(Colors.green, BlendMode.srcIn),),
                       SizedBox(width: 10,),
                       Text("Photo Gallery",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w600),),
                     ],
@@ -77,7 +77,7 @@ class _ActivityReportCardState extends State<ActivityReportCard>{
                   SizedBox(height: 10,),
                   Row(
                     children: [
-                      SvgPicture.asset("assets/images/status/excel.svg",colorFilter: ColorFilter.mode(Colors.green, BlendMode.srcIn),),
+                      SvgPicture.asset("assets/images/activityReport/feedback.svg",colorFilter: ColorFilter.mode(Colors.green, BlendMode.srcIn),),
                       SizedBox(width: 10,),
                       Text("Feedback",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w600)),
                     ],
@@ -85,7 +85,7 @@ class _ActivityReportCardState extends State<ActivityReportCard>{
                   SizedBox(height: 10,),
                   Row(
                     children: [
-                      SvgPicture.asset("assets/images/status/excel.svg",colorFilter: ColorFilter.mode(Colors.green, BlendMode.srcIn),),
+                      SvgPicture.asset("assets/images/activityReport/detail.svg",colorFilter: ColorFilter.mode(Colors.green, BlendMode.srcIn),),
                       SizedBox(width: 10,),
                       Text("Detail",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w600)),
                     ],
@@ -93,7 +93,7 @@ class _ActivityReportCardState extends State<ActivityReportCard>{
                   SizedBox(height: 10,),
                   Row(
                     children: [
-                      SvgPicture.asset("assets/images/status/excel.svg",colorFilter: ColorFilter.mode(Colors.green, BlendMode.srcIn),),
+                      SvgPicture.asset("assets/images/activityReport/reservation.svg",colorFilter: ColorFilter.mode(Colors.green, BlendMode.srcIn),),
                       SizedBox(width: 10,),
                       Text("Reservation",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w600)),
                     ],
@@ -101,7 +101,7 @@ class _ActivityReportCardState extends State<ActivityReportCard>{
                   SizedBox(height: 10,),
                   Row(
                     children: [
-                      SvgPicture.asset("assets/images/status/excel.svg",colorFilter: ColorFilter.mode(Colors.green, BlendMode.srcIn),),
+                      SvgPicture.asset("assets/images/activityReport/detail.svg",colorFilter: ColorFilter.mode(Colors.green, BlendMode.srcIn),),
                       SizedBox(width: 10,),
                       Text("Know More",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w600)),
                     ],

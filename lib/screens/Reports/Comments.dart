@@ -62,12 +62,17 @@ class _CommentsWidgetState extends State<CommentsWidget> {
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
       endDrawer: StatusDetailPage(report_id: selectedReportId),
-      drawer: FilterPage(showAssignedUser: false,
+      drawer: FilterPage(
+        // showAssignedUser: false,
+        // showType: true,
+        // showStatus: true,
+        // showKeyword: true,
+        // formType: true,
         filterData: (params) {
           filterParams = params;
           getComments();
         },
-        params: filterParams,
+        params: filterParams, page: FilterPages.COMMENTS,
       ),
       appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false)
           .getAppBar(context),

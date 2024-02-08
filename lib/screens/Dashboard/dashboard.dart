@@ -15,6 +15,8 @@ import 'package:happifeet_client_app/utils/ColorParser.dart';
 import 'package:happifeet_client_app/utils/DeviceDimensions.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../model/Trails/TrailListingData.dart';
+
 class DashboardWidget extends StatefulWidget {
   const DashboardWidget({super.key});
 
@@ -38,6 +40,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
   List<dynamic> locations = [];
   List<dynamic> comments = [];
   Map<String, dynamic> parks = {};
+  List<TrailListingData>? trails;
 
   List<ColumnSeries> commentsGraphColumns = <ColumnSeries<GraphData, String>>[
     // Bind data source
@@ -49,7 +52,8 @@ class _DashboardWidgetState extends State<DashboardWidget> {
       <StackedColumnSeries<GraphData, String>>[];
 
   String? selectedParkId = "";
-  ClientTheme? theme; 
+  ClientTheme? theme;
+  String userName = "";
 
   @override
   void initState() {
@@ -58,10 +62,13 @@ class _DashboardWidgetState extends State<DashboardWidget> {
 
     log("THEME FROM RUNTIME STORAGE ${RuntimeStorage.instance.clientTheme!.toJson()}");
 
-
-
+    getTrailListing();
+    getuserName();
 
     super.initState();
+  }
+  Future<void> getuserName() async {
+    userName = await SharedPref.instance.getUserName();
   }
 
   @override
@@ -845,7 +852,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "John Wick",
+                                      userName.toString(),
                                       style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
@@ -1092,5 +1099,20 @@ class _DashboardWidgetState extends State<DashboardWidget> {
     SharedPref.instance.setParks(parks);
 
     setState(() {});
+  }
+
+  Future<List<TrailListingData>?> getTrailListing() async {
+    var response =  ApiFactory()
+        .getTrailService()
+        .getTrailListing(await SharedPref.instance.getUserId());
+    // Map<String, dynamic> responseData = json.decode(response);
+    trails =  response as List<TrailListingData>?;
+    log("TRAIL LISTING DATA in dashboard${trails!.first.toJson()}");
+    SharedPref.instance.setTrails(trails);
+    return trails;
+    log("TRAIL LISTING DATA ${trails!.first}");
+    // return ApiFactory()
+    //     .getTrailService()
+    //     .getTrailListing(await SharedPref.instance.getUserId());
   }
 }
