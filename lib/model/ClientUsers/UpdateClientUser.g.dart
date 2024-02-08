@@ -15,7 +15,7 @@ UpdateClientUser _$UpdateClientUserFromJson(Map<String, dynamic> json) =>
       contact_no: json['contact_no'] as String?,
       username: json['username'] as String?,
       password: json['password'] as String?,
-      email_notifiction: json['email_notifiction'] as String?,
+      email_notification: json['email_notification'] as String?,
       user_type: json['user_type'] as String?,
       status: json['status'] as String?,
     );
@@ -29,7 +29,7 @@ Map<String, dynamic> _$UpdateClientUserToJson(UpdateClientUser instance) =>
       'contact_no': instance.contact_no,
       'username': instance.username,
       'password': instance.password,
-      'email_notifiction': instance.email_notifiction,
+      'email_notification': instance.email_notification,
       'user_type': instance.user_type,
       'status': instance.status,
     };

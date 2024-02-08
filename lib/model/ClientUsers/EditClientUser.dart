@@ -13,7 +13,7 @@ class EditClientUser {
   String? username;
   String? email_notification;
   String? user_type;
-  String? is_active;
+  String? status;
 
   EditClientUser(
       {this.client_user_id,
@@ -23,7 +23,7 @@ class EditClientUser {
       this.username,
       this.email_notification,
       this.user_type,
-      this.is_active});
+      this.status});
 
 
   factory EditClientUser.fromJson(Map<String, dynamic> json) =>

@@ -106,6 +106,7 @@ class _AddClientWidgetState extends State<AddClientWidget> {
       usernameController.text = editClientData!.username!;
     }
     if (editClientData!.email_notification != null) {
+      log("editClientData!.email_notification VALUE --> ${editClientData!.email_notification}");
       if (editClientData!.email_notification == "Y") {
         setState(() {
           emailNotification = true;
@@ -117,9 +118,9 @@ class _AddClientWidgetState extends State<AddClientWidget> {
       }
     }
 
-    if (editClientData!.is_active != null) {
-      log("editClientData!.is_active VALUE --> ${editClientData!.is_active}");
-      if (editClientData!.is_active == "Y") {
+    if (editClientData!.status != null) {
+
+      if (editClientData!.status == "Y") {
         setState(() {
           isActive = true;
         });
@@ -731,10 +732,10 @@ class _AddClientWidgetState extends State<AddClientWidget> {
                                                           .text;
                                                   if (emailNotification) {
                                                     dataToUpdate
-                                                        .email_notifiction = "Y";
+                                                        .email_notification = "Y";
                                                   } else {
                                                     dataToUpdate
-                                                        .email_notifiction = "N";
+                                                        .email_notification = "N";
                                                   }
 
                                                   if (isActive) {

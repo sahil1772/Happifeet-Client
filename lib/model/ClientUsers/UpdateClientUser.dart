@@ -13,7 +13,7 @@ class UpdateClientUser {
   String? contact_no;
   String? username;
   String? password;
-  String? email_notifiction;
+  String? email_notification;
   String? user_type;
   String? status;
 
@@ -26,7 +26,7 @@ class UpdateClientUser {
       this.contact_no,
       this.username,
       this.password,
-      this.email_notifiction,
+      this.email_notification,
       this.user_type,
       this.status});
 

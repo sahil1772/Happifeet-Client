@@ -15,7 +15,7 @@ EditClientUser _$EditClientUserFromJson(Map<String, dynamic> json) =>
       username: json['username'] as String?,
       email_notification: json['email_notification'] as String?,
       user_type: json['user_type'] as String?,
-      is_active: json['is_active'] as String?,
+      status: json['status'] as String?,
     );
 
 Map<String, dynamic> _$EditClientUserToJson(EditClientUser instance) =>
@@ -27,5 +27,5 @@ Map<String, dynamic> _$EditClientUserToJson(EditClientUser instance) =>
       'username': instance.username,
       'email_notification': instance.email_notification,
       'user_type': instance.user_type,
-      'is_active': instance.is_active,
+      'status': instance.status,
     };
