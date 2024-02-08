@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -8,10 +9,13 @@ import 'package:happifeet_client_app/network/ApiFactory.dart';
 
 import '../../../components/ActivityReportCard.dart';
 import '../../../components/HappiFeetAppBar.dart';
+import '../../../model/Comments/CommentData.dart';
+import '../../../model/FilterMap.dart';
 import '../../../storage/runtime_storage.dart';
 import '../../../storage/shared_preferences.dart';
 import '../../../utils/ColorParser.dart';
 import '../../../utils/DeviceDimensions.dart';
+import '../../Reports/FilterPage.dart';
 
 class ActivityReportWidget extends StatefulWidget {
   gotoActivityReport(BuildContext context) {
@@ -26,6 +30,15 @@ class ActivityReportWidget extends StatefulWidget {
 class _ActivityReportWidgetState extends State<ActivityReportWidget> {
   List<ActivityReportData>? activityReportData;
   Future<List<ActivityReportData>>? apiResponse;
+  Future<List<CommentData>?>? commentResponse;
+
+  FilterMap? filterParams = FilterMap(
+      type: FilterType.Park.name,
+      // popupDatepickerToDateSearch:
+      // DateFormat("yyyy-MM-dd").format(DateTime.now()),
+      // popupDatepickerFromDateSearch:
+      // DateFormat("yyyy-MM-dd").format(DateTime.now())
+  );
 
   @override
   void initState() {
@@ -37,8 +50,7 @@ class _ActivityReportWidgetState extends State<ActivityReportWidget> {
   Future<List<ActivityReportData>>? getActivityReportListing() async {
     var response = ApiFactory()
         .getActivityReportService()
-        .getActivityReportListing(
-            "activity_report_list", await SharedPref.instance.getUserId());
+        .getActivityReportListing(filterParams);
     activityReportData = await response;
     log("ACTIVITY REPORT DATA --> ${activityReportData!.first.toJson()}");
     return activityReportData!;
@@ -50,6 +62,21 @@ class _ActivityReportWidgetState extends State<ActivityReportWidget> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
+      drawerEnableOpenDragGesture: false,
+
+
+      drawer: FilterPage(
+        // showAssignedUser: false,
+        // showType: false,
+        // showStatus: false,
+        // showKeyword: false,
+        // formType: false,
+        filterData: (params) {
+          filterParams = params;
+          apiResponse = getActivityReportListing();
+        },
+        params: filterParams, page: FilterPages.ACTIVITY,
+      ),
       appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false,callback: (){
         Navigator.of(context).pop();
       })
@@ -124,18 +151,24 @@ class _ActivityReportWidgetState extends State<ActivityReportWidget> {
                                   },
                                   style: const TextStyle(fontSize: 16),
                                   decoration: InputDecoration(
-                                    prefixIcon: InkWell(
-                                        onTap: () {},
-                                        child: SvgPicture.asset(
-                                          "assets/images/comments/filter.svg",
-                                          colorFilter: ColorFilter.mode(
-                                              ColorParser().hexToColor(
-                                                  RuntimeStorage
-                                                      .instance
-                                                      .clientTheme!
-                                                      .top_title_background_color!),
-                                              BlendMode.srcIn),
-                                        )),
+                                    prefixIcon: Builder(
+                                      builder: (context) {
+                                        return InkWell(
+                                            onTap: () {
+                                              Scaffold.of(context).openDrawer();
+                                            },
+                                            child: SvgPicture.asset(
+                                              "assets/images/comments/filter.svg",
+                                              colorFilter: ColorFilter.mode(
+                                                  ColorParser().hexToColor(
+                                                      RuntimeStorage
+                                                          .instance
+                                                          .clientTheme!
+                                                          .top_title_background_color!),
+                                                  BlendMode.srcIn),
+                                            ));
+                                      }
+                                    ),
                                     prefixIconConstraints: const BoxConstraints(
                                         minHeight: 30, minWidth: 60),
                                     // prefixIconColor:
@@ -178,26 +211,31 @@ class _ActivityReportWidgetState extends State<ActivityReportWidget> {
                       builder: (BuildContext context,
                           AsyncSnapshot<dynamic> snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
-                          return Flexible(
-                            child: ListView.separated(
-                              padding: EdgeInsets.zero,
-                              physics: const ScrollPhysics(),
-                              itemCount: activityReportData!.length,
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                return ActivityReportCard(
-                                  activityReportData:
-                                      activityReportData![index],
-                                );
-                              },
-                              separatorBuilder:
-                                  (BuildContext context, int index) {
-                                return const SizedBox(
-                                  height: 8,
-                                );
-                              },
-                            ),
-                          );
+                          if(snapshot.hasData){
+                            return Flexible(
+                              child: ListView.separated(
+                                padding: EdgeInsets.zero,
+                                physics: const ScrollPhysics(),
+                                itemCount: activityReportData!.length,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  return ActivityReportCard(
+                                    activityReportData:
+                                    activityReportData![index],
+                                  );
+                                },
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
+                                  return const SizedBox(
+                                    height: 8,
+                                  );
+                                },
+                              ),
+                            );
+                          }else {
+                            return Text("No Data Found");
+                          }
+
                         } else if (snapshot.connectionState ==
                             ConnectionState.waiting) {
                           return CircularProgressIndicator();
@@ -217,5 +255,10 @@ class _ActivityReportWidgetState extends State<ActivityReportWidget> {
         ),
       ),
     );
+  }
+
+  getComments() {
+    commentResponse = ApiFactory.getCommentService().getComments(filterParams);
+    setState(() {});
   }
 }

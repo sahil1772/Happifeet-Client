@@ -118,6 +118,7 @@ class _AddClientWidgetState extends State<AddClientWidget> {
     }
 
     if (editClientData!.is_active != null) {
+      log("editClientData!.is_active VALUE --> ${editClientData!.is_active}");
       if (editClientData!.is_active == "Y") {
         setState(() {
           isActive = true;

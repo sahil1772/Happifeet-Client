@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../components/BottomNavigation.dart';
 import '../model/Theme/ClientTheme.dart';
+import '../model/Trails/TrailListingData.dart';
 import '../screens/Login/LoginPage.dart';
 
 class SharedPref {
@@ -38,6 +39,8 @@ class SharedPref {
     }
   }
 
+
+
   Future<Map<String, dynamic>> getParks() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     try {
@@ -51,6 +54,27 @@ class SharedPref {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       prefs.setString("parks", json.encode(parks));
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<List<TrailListingData>> getTrails() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    try {
+      List<TrailListingData> data = List<TrailListingData>.from(json
+              .decode(preferences.getString("trails")!)
+              .map((model) => TrailListingData.fromJson(model)));
+      return data;
+    } catch (e) {
+      throw "Cannot Fetch Trails from session => ${e}";
+    }
+  }
+
+  setTrails(List<TrailListingData>? trails) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      prefs.setString("trails", json.encode(trails));
     } catch (e) {
       throw e;
     }
@@ -75,6 +99,21 @@ class SharedPref {
     }
 
     return Future.value(languages);
+  }
+
+  Future<String> getUserName() async {
+    String? Name = "";
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      UserData data =
+      UserData.fromJson(json.decode(prefs.getString("userData")!));
+      log("User Name in Shared pref => ${data.user_name}");
+      Name = data.user_name;
+    } catch (e) {
+      throw e;
+    }
+
+    return Future.value(Name);
   }
 
   Future<String> getUserId() async {

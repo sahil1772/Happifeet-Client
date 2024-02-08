@@ -7,13 +7,23 @@ import 'package:dio/dio.dart';
 import 'package:happifeet_client_app/model/ActivityReport/ActivityReportData.dart';
 import 'package:happifeet_client_app/network/interface/InterfaceActivityReport.dart';
 
+import '../../model/FilterMap.dart';
+import '../../storage/shared_preferences.dart';
 import 'ApiService.dart';
+
+// "activity_report_list", await SharedPref.instance.getUserId()
 
 class ActivityReportService implements InterfaceActivityReport{
   @override
-  Future<List<ActivityReportData>>? getActivityReportListing(String? task, String user_id) async{
+  Future<List<ActivityReportData>>? getActivityReportListing(FilterMap? params) async{
     try {
-      var map = {'task': task, 'user_id': user_id};
+      // var map = {'task': task, 'user_id': user_id};
+      var map = params!.toJson();
+      map.removeWhere((key, value) => value == null || value == "");
+      map.addAll({
+        'task': "activity_report_list",
+        'user_id': await SharedPref.instance.getUserId(),
+      });
 
       var response =
           await NetworkClient().dio.get(base_url, queryParameters: map);

@@ -32,12 +32,28 @@ class _ProfileWidgetState extends State<ProfileWidget> {
   var confirmPasswordController = TextEditingController();
   var currentPassword = TextEditingController();
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  String userName = "";
   @override
   void initState() {
     // TODO: implement initState
+    getUserName();
     log("CONTROLLER DATA${widget.controller}");
+
     super.initState();
   }
+
+  Future<void> getUserName() async {
+
+
+      userName = await SharedPref.instance.getUserName();
+      log("user name in profile${userName}");
+      setState(() {
+
+      });
+
+
+  }
+
 
   void setBoolForLogOut() async {
     /** update checkIfLoggedIn value in shared pref   **/
@@ -131,14 +147,14 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                             "Name",
                             style: TextStyle(
                                 fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: Resources.colors.hfText),
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black),
                           ),
-                          Text("John Wick",
+                          Text( userName.toString(),
                               style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                  color: Resources.colors.hfText)),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black)),
                           const SizedBox(
                             height: 20,
                           ),

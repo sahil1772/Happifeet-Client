@@ -35,8 +35,8 @@ class HappiFeetAppBar {
                 children: [
                   InkWell(
                       onTap: () {
-                        // Navigator.of(context).pop();
-                        callback!();
+                        Navigator.of(context).pop();
+                        // callback!();
                       },
                       child: Icon(Icons.arrow_back_ios)),
                   SizedBox(
