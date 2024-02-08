@@ -103,6 +103,7 @@ class _TrailListingState extends State<TrailListing> {
                 color: ColorParser().hexToColor("#1A7C52"),
                 onRefresh: () => getTrailListing(),
                 child: SingleChildScrollView(
+                  physics: AlwaysScrollableScrollPhysics(),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [

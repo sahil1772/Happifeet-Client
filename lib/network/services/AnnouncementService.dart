@@ -68,7 +68,7 @@ class AnnouncementService implements InterfaceAnnouncement {
         data.annoucement_lang_cols!.forEach((key, value) {
           map.addAll({
             "title_$key": value.title,
-            "description$key": value.description
+            "description_$key": value.description
           });
         });
 

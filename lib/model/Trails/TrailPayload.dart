@@ -14,6 +14,8 @@ class TrailPayload {
   String? trailOpeningTime;
   String? trailOpeningTime2;
   String? status;
+  String? trailImages;
+  List<String>? trailDetailImages;
 
 
   TrailPayload(
@@ -25,6 +27,8 @@ class TrailPayload {
       this.trailDifficulty,
       this.trailOpeningTime,
       this.status,
+      this.trailImages,
+      this.trailDetailImages,
       this.trailOpeningTime2});
 
 

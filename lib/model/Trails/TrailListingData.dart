@@ -10,7 +10,7 @@ class TrailListingData {
   String? opening_time;
   String? opening_time2;
   String? distance;
-  String? image;
+  String? parkImages;
 
   TrailListingData(
       {this.trail_id,
@@ -18,7 +18,7 @@ class TrailListingData {
       this.opening_time,
       this.opening_time2,
       this.distance,
-      this.image});
+      this.parkImages});
 
   factory TrailListingData.fromJson(Map<String, dynamic> json) =>
       _$TrailListingDataFromJson(json);

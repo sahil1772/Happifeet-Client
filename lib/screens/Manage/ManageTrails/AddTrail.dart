@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -65,12 +66,11 @@ class _AddTrailState extends State<AddTrail>
   BuildContext? buildContext;
 
   //Controllers for English Form
-  TextEditingController trailNameController = new TextEditingController();
-  TextEditingController trailDescriptionController =
-      new TextEditingController();
-  TextEditingController trailDistanceController = new TextEditingController();
-  TextEditingController trailOpeningController = new TextEditingController();
-  TextEditingController trailOpening2Controller = new TextEditingController();
+  TextEditingController trailNameController = TextEditingController();
+  TextEditingController trailDescriptionController = TextEditingController();
+  TextEditingController trailDistanceController = TextEditingController();
+  TextEditingController trailOpeningController = TextEditingController();
+  TextEditingController trailOpening2Controller = TextEditingController();
 
   List<Difficulty> difficulties = [];
 
@@ -78,6 +78,9 @@ class _AddTrailState extends State<AddTrail>
   bool isChecked = true;
 
   Future<TrailPayload?>? response;
+
+  bool showDeleteLocationImage = false;
+  Map<int, bool> showDeleteGalleryImage = {};
 
   @override
   void initState() {
@@ -96,10 +99,10 @@ class _AddTrailState extends State<AddTrail>
             log("tab is changing");
             switch (languages.keys.elementAt(_controller!.index)) {
               case "spa":
-                context.setLocale(Locale("es"));
+                context.setLocale(const Locale("es"));
                 break;
               case "rsa":
-                context.setLocale(Locale("rsa"));
+                context.setLocale(const Locale("rsa"));
                 break;
               default:
                 context.setLocale(
@@ -110,10 +113,10 @@ class _AddTrailState extends State<AddTrail>
             log("INSIDE ELSE OF LISTENER${_controller!.index}");
             switch (languages.keys.elementAt(_controller!.index)) {
               case "spa":
-                context.setLocale(Locale("es"));
+                context.setLocale(const Locale("es"));
                 break;
               case "rsa":
-                context.setLocale(Locale("rsa"));
+                context.setLocale(const Locale("rsa"));
                 break;
               default:
                 context.setLocale(
@@ -121,6 +124,9 @@ class _AddTrailState extends State<AddTrail>
                 break;
             }
           }
+
+          locationImage = null;
+          galleryImages!.clear();
           response = getTrailData();
         });
       });
@@ -156,12 +162,14 @@ class _AddTrailState extends State<AddTrail>
     double HEADER_HEIGHT = 4;
     buildContext = context;
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       extendBodyBehindAppBar: true,
-      appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false,callback: (){
-        Navigator.of(context).pop();
-      })
-          .getAppBar(context),
+      appBar: HappiFeetAppBar(
+          IsDashboard: false,
+          isCitiyList: false,
+          callback: () {
+            Navigator.of(context).pop();
+          }).getAppBar(context),
       body: SafeArea(
         top: false,
         child: Stack(
@@ -182,13 +190,13 @@ class _AddTrailState extends State<AddTrail>
                 )),
                 child: Container(
                   margin: DeviceDimensions.getHeaderEdgeInsets(context),
-                  child: const Center(
+                  child:  Center(
                     child: Text(
-                      "Add Trail",
+                      "${widget.isEdit! ?"Edit":"Add"} Trail",
                       // "Select Location".tr(),
                       // "Select Location".language(context),
                       // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.white,
                           fontSize: 20,
                           fontWeight: FontWeight.w500),
@@ -317,7 +325,7 @@ class _AddTrailState extends State<AddTrail>
                                             .top_title_background_color!),
                                     fontWeight: FontWeight.w700),
                               ),
-                              Text(
+                              const Text(
                                 " *",
                                 style: TextStyle(color: Colors.red),
                               ),
@@ -374,7 +382,7 @@ class _AddTrailState extends State<AddTrail>
                                             .top_title_background_color!),
                                     fontWeight: FontWeight.w700),
                               ),
-                              Text(
+                              const Text(
                                 " *",
                                 style: TextStyle(color: Colors.red),
                               ),
@@ -425,14 +433,14 @@ class _AddTrailState extends State<AddTrail>
                           Row(
                             children: [
                               Text(
-                                "Opening Time (Trial days & timing)",
+                                "Opening Time (Trail days & timing)",
                                 style: TextStyle(
                                     color: ColorParser().hexToColor(
                                         RuntimeStorage.instance.clientTheme!
                                             .top_title_background_color!),
                                     fontWeight: FontWeight.w700),
                               ),
-                              Text(
+                              const Text(
                                 " *",
                                 style: TextStyle(color: Colors.red),
                               ),
@@ -531,56 +539,169 @@ class _AddTrailState extends State<AddTrail>
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
-                            child: Container(
-                              height: 64,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: const Color(0xffc4c4c4),
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: 64,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: const Color(0xffc4c4c4),
+                                    ),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10.0),
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Flexible(
+                                            fit: FlexFit.loose,
+                                            child: Text(
+                                              locationImage == null
+                                                  ? "No File Selected"
+                                                  : locationImage!.name,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 16.0),
+                                            child: OutlinedButton(
+                                                onPressed: () {
+                                                  _showBottomSheet(1);
+                                                },
+                                                style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                          Colors.transparent),
+                                                  shape: MaterialStateProperty.all(
+                                                      RoundedRectangleBorder(
+                                                          side: BorderSide(
+                                                              width: 0.0,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .primaryColor),
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  10.0))),
+                                                ),
+                                                child: const Text("Choose File")),
+                                          ),
+                                        ]),
+                                  ),
                                 ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10.0),
-                                child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                widget.isEdit!
+                                    ? Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8.0),
+                                  child: Row(
                                     children: [
-                                      Flexible(
-                                        fit: FlexFit.loose,
-                                        child: Text(
-                                          locationImage == null
-                                              ? "No File Selected"
-                                              : locationImage!.name,
-                                          overflow: TextOverflow.ellipsis,
+                                      InkWell(
+                                        onTap: () {
+                                          showDeleteGalleryImage
+                                              .forEach((key, value) {
+                                            showDeleteGalleryImage[
+                                            key] = false;
+                                          });
+                                          showDeleteLocationImage =
+                                          !showDeleteLocationImage;
+                                          setState(() {});
+                                        },
+                                        onLongPress: () {},
+                                        child: ClipRRect(
+                                          borderRadius:
+                                          BorderRadius.circular(
+                                              20), // Image border
+                                          child: SizedBox.fromSize(
+                                            size: const Size.fromRadius(
+                                                48),
+                                            // Image radius
+                                            child: Stack(
+                                              fit: StackFit.expand,
+                                              children: [
+                                                Image.network(snapshot
+                                                    .data!.trailImages!),
+                                                showDeleteLocationImage
+                                                    ? Center(
+                                                  child: ClipRect(
+                                                    // <-- clips to the 200x200 [Container] below
+                                                    child:
+                                                    BackdropFilter(
+                                                      filter:
+                                                      ImageFilter
+                                                          .blur(
+                                                        sigmaX:
+                                                        5.0,
+                                                        sigmaY:
+                                                        5.0,
+                                                      ),
+                                                      child:
+                                                      Container(
+                                                        alignment:
+                                                        Alignment
+                                                            .center,
+                                                        width:
+                                                        200.0,
+                                                        height:
+                                                        200.0,
+                                                        child:
+                                                        Center(
+                                                          child:
+                                                          InkWell(
+                                                            onTap:
+                                                                () {
+                                                              showDialog(
+                                                                context: context,
+                                                                builder: (context) {
+                                                                  return AlertDialog(
+                                                                    title: const Text("Confirm Image Deletion"),
+                                                                    content: const Text("Please confirm if you wan to delete this image?"),
+                                                                    actions: [
+                                                                      TextButton(onPressed: () {   Navigator.of(context).pop();}, child: const Text("Cancel")),
+                                                                      ElevatedButton(
+                                                                          style: ButtonStyle(
+                                                                            backgroundColor: MaterialStateProperty.all(Theme.of(context).primaryColor),
+                                                                            shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                                                                side: BorderSide(
+                                                                                  width: 0.0,
+                                                                                  color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                                                                                ),
+                                                                                borderRadius: BorderRadius.circular(10.0))),
+                                                                          ),
+                                                                          onPressed: () {
+                                                                            Navigator.of(context).pop();
+                                                                          },
+                                                                          child: const Text(
+                                                                            "Confirm and Delete",
+                                                                            style: TextStyle(color: Colors.white),
+                                                                          ))
+                                                                    ],
+                                                                  );
+                                                                },
+                                                              );
+                                                            },
+                                                            child: const Icon(
+                                                                color: Colors.white,
+                                                                Icons.delete),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                                    : const SizedBox()
+                                              ],
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 16.0),
-                                        child: OutlinedButton(
-                                            onPressed: () {
-                                              _showBottomSheet(1);
-                                            },
-                                            child: const Text("Choose File"),
-                                            style: ButtonStyle(
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      Colors.transparent),
-                                              shape: MaterialStateProperty.all(
-                                                  RoundedRectangleBorder(
-                                                      side: BorderSide(
-                                                          width: 0.0,
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .primaryColor),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10.0))),
-                                            )),
-                                      ),
-                                    ]),
-                              ),
+                                      )
+                                    ],
+                                  ),
+                                )
+                                    : const SizedBox()
+                              ],
                             ),
                           ),
                         ],
@@ -604,7 +725,7 @@ class _AddTrailState extends State<AddTrail>
                                             .top_title_background_color!),
                                     fontWeight: FontWeight.w700),
                               ),
-                              Text(
+                              const Text(
                                 "(Only 5 allowed)",
                                 style: TextStyle(
                                     fontSize: 12, color: Colors.black),
@@ -613,63 +734,172 @@ class _AddTrailState extends State<AddTrail>
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 10.0),
-                            child: Container(
-                              height: 64,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: const Color(0xffc4c4c4),
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: 64,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: const Color(0xffc4c4c4),
+                                    ),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10.0),
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Flexible(
+                                            fit: FlexFit.loose,
+                                            child: Text(
+                                              galleryImages!.isEmpty
+                                                  ? "No File Selected"
+                                                  : galleryImages!.length == 1 ? galleryImages!.first.name : "${galleryImages!.length} ${galleryImages!.length == 1 ? "File" : "Files"} Selected",
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 16.0),
+                                            child: OutlinedButton(
+                                                onPressed: () {
+                                                  if (galleryImages!.length >= 5) {
+                                                    ScaffoldMessenger.of(context)
+                                                        .showSnackBar(const SnackBar(
+                                                            content: Text(
+                                                                "Only 5 images are allowed")));
+                                                  } else {
+                                                    _showBottomSheet(2);
+                                                  }
+                                                },
+                                                style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                          Colors.transparent),
+                                                  shape: MaterialStateProperty.all(
+                                                      RoundedRectangleBorder(
+                                                          side: BorderSide(
+                                                              width: 0.0,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .primaryColor),
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  10.0))),
+                                                ),
+                                                child: const Text("Choose File")),
+                                          ),
+                                        ]),
+                                  ),
                                 ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10.0),
-                                child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Flexible(
-                                        fit: FlexFit.loose,
-                                        child: Text(
-                                          galleryImages!.isEmpty
-                                              ? "No File Selected"
-                                              : "${galleryImages!.length == 1 ? galleryImages!.first.name : "${galleryImages!.length} ${galleryImages!.length == 1 ? "File" : "Files"} Selected"}",
-                                          overflow: TextOverflow.ellipsis,
+                                GridView.builder(
+                                  physics:
+                                  const NeverScrollableScrollPhysics(),
+                                  gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      childAspectRatio: 3 / 5,
+                                      crossAxisSpacing: 10,
+                                      crossAxisCount: 5),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8),
+                                  shrinkWrap: true,
+                                  itemCount: snapshot
+                                      .data!.trailDetailImages!.length,
+                                  itemBuilder: (context, index) {
+                                    if (!showDeleteGalleryImage
+                                        .containsKey(index)) {
+                                      showDeleteGalleryImage
+                                          .addAll({index: false});
+                                    }
+
+                                    return InkWell(
+                                      onTap: () {
+                                        showDeleteLocationImage = false;
+                                        showDeleteGalleryImage
+                                            .forEach((key, value) {
+                                          showDeleteGalleryImage[key] =
+                                          false;
+                                        });
+
+                                        showDeleteGalleryImage[index] =
+                                        !showDeleteGalleryImage[
+                                        index]!;
+                                        setState(() {});
+                                      },
+                                      onLongPress: () {},
+                                      child: ClipRRect(
+                                        borderRadius:
+                                        BorderRadius.circular(
+                                            20), // Image border
+                                        child: SizedBox.fromSize(
+                                          size: const Size.fromRadius(48),
+                                          // Image radius
+                                          child: Stack(
+                                            fit: StackFit.expand,
+                                            children: [
+                                              Image.network(
+                                                  height: 100,
+                                                  width: 150,
+                                                  fit: BoxFit.cover,
+                                                  snapshot.data!
+                                                      .trailDetailImages![
+                                                  index]!),
+                                              showDeleteGalleryImage[
+                                              index]!
+                                                  ? Center(
+                                                child: ClipRect(
+                                                  // <-- clips to the 200x200 [Container] below
+                                                  child:
+                                                  BackdropFilter(
+                                                    filter:
+                                                    ImageFilter
+                                                        .blur(
+                                                      sigmaX: 5.0,
+                                                      sigmaY: 5.0,
+                                                    ),
+                                                    child:
+                                                    Container(
+                                                      alignment:
+                                                      Alignment
+                                                          .center,
+                                                      child: Center(
+                                                        child:
+                                                        InkWell(
+                                                          onTap:
+                                                              () {
+                                                            showDeleteDailog(
+                                                                context:
+                                                                context,
+                                                                onResult:
+                                                                    () {
+                                                                      response = getTrailData();
+                                                                  setState(() {});
+                                                                },
+                                                                fileName:
+                                                                snapshot.data!.trailDetailImages![index]!.split("/").toList().last);
+                                                          },
+                                                          child: const Icon(
+                                                              color:
+                                                              Colors.white,
+                                                              Icons.delete),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                                  : const SizedBox()
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 16.0),
-                                        child: OutlinedButton(
-                                            onPressed: () {
-                                              if (galleryImages!.length >= 5) {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(const SnackBar(
-                                                        content: Text(
-                                                            "Only 5 images are allowed")));
-                                              } else {
-                                                _showBottomSheet(2);
-                                              }
-                                            },
-                                            child: const Text("Choose File"),
-                                            style: ButtonStyle(
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      Colors.transparent),
-                                              shape: MaterialStateProperty.all(
-                                                  RoundedRectangleBorder(
-                                                      side: BorderSide(
-                                                          width: 0.0,
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .primaryColor),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10.0))),
-                                            )),
-                                      ),
-                                    ]),
-                              ),
+                                    );
+                                  },
+                                )
+
+                              ],
                             ),
                           ),
                         ],
@@ -692,7 +922,7 @@ class _AddTrailState extends State<AddTrail>
                                             .top_title_background_color!),
                                     fontWeight: FontWeight.w700),
                               ),
-                              Text(
+                              const Text(
                                 " *",
                                 style: TextStyle(color: Colors.red),
                               ),
@@ -751,7 +981,7 @@ class _AddTrailState extends State<AddTrail>
                                             .top_title_background_color!),
                                     fontWeight: FontWeight.w700),
                               ),
-                              Text(
+                              const Text(
                                 " *",
                                 style: TextStyle(color: Colors.red),
                               ),
@@ -770,7 +1000,7 @@ class _AddTrailState extends State<AddTrail>
                                   enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10),
                                       borderSide:
-                                          BorderSide(color: Color(0xffc4c4c4))),
+                                          const BorderSide(color: Color(0xffc4c4c4))),
                                   border: OutlineInputBorder(
                                       borderSide: const BorderSide(
                                           color: Color(0xffc4c4c4)),
@@ -965,7 +1195,7 @@ class _AddTrailState extends State<AddTrail>
                                               .top_title_background_color!),
                                       fontWeight: FontWeight.w700),
                                 ).tr(),
-                                Text(
+                                const Text(
                                   " *",
                                   style: TextStyle(color: Colors.red),
                                 ),
@@ -1022,7 +1252,7 @@ class _AddTrailState extends State<AddTrail>
                                               .top_title_background_color!),
                                       fontWeight: FontWeight.w700),
                                 ).tr(),
-                                Text(
+                                const Text(
                                   " *",
                                   style: TextStyle(color: Colors.red),
                                 ),
@@ -1079,7 +1309,7 @@ class _AddTrailState extends State<AddTrail>
                                               .top_title_background_color!),
                                       fontWeight: FontWeight.w700),
                                 ).tr(),
-                                Text(
+                                const Text(
                                   " *",
                                   style: TextStyle(color: Colors.red),
                                 ),
@@ -1181,7 +1411,7 @@ class _AddTrailState extends State<AddTrail>
                                               .top_title_background_color!),
                                       fontWeight: FontWeight.w700),
                                 ).tr(),
-                                Text(
+                                const Text(
                                   " *",
                                   style: TextStyle(color: Colors.red),
                                 ),
@@ -1322,7 +1552,7 @@ class _AddTrailState extends State<AddTrail>
 
     if (!isFormValid) {
       ScaffoldMessenger.of(buildContext!).showSnackBar(
-          SnackBar(content: Text("Please provide valid trail details!")));
+          const SnackBar(content: Text("Please provide valid trail details!")));
       return;
     }
 
@@ -1447,7 +1677,7 @@ class _AddTrailState extends State<AddTrail>
 
   void getFromCamera(Function dismissListener) async {
     try {
-      log("inside camera functiom");
+      log("inside camera function");
       XFile? pickedFile = await ImagePicker().pickImage(
         imageQuality: 100,
         source: ImageSource.camera,
@@ -1503,6 +1733,59 @@ class _AddTrailState extends State<AddTrail>
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(response.msg!)));
     }
+  }
+
+  showDeleteDailog(
+      {required BuildContext context,
+        required String fileName,
+        required Function onResult}) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Confirm Image Deletion"),
+          content:
+          const Text("Please confirm if you wan to delete this image?"),
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text("Cancel")),
+            ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor:
+                  MaterialStateProperty.all(Theme.of(context).primaryColor),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      side: BorderSide(
+                        width: 0.0,
+                        color: ColorParser().hexToColor(RuntimeStorage
+                            .instance.clientTheme!.top_title_background_color!),
+                      ),
+                      borderRadius: BorderRadius.circular(10.0))),
+                ),
+                onPressed: () {
+                  log("User has requested to delete => $fileName");
+
+                  Map<String, dynamic> params = {
+                    "park_id": widget.isEdit! ? widget.trailId : trailId,
+                    "image_name": fileName
+                  };
+                  ApiFactory()
+                      .getLocationService()
+                      .deleteImage(params)
+                      .then((value) {
+                    Navigator.of(context).pop();
+
+                    onResult();
+                  });
+                },
+                child: const Text(
+                  "Confirm and Delete",
+                  style: TextStyle(color: Colors.white),
+                ))
+          ],
+        );
+      },
+    );
   }
 }
 
