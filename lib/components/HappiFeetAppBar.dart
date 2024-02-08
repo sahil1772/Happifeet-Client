@@ -45,7 +45,8 @@ class HappiFeetAppBar {
                   SizedBox(
                     width: 10,
                   ),
-                  SvgPicture.asset("assets/images/appBar/npp-logo.svg"),
+                  // SvgPicture.asset("assets/images/appBar/npp-logo.svg"),
+                  Image.network(RuntimeStorage.instance.clientTheme!.logo!,width: 45, height: 45),
 
                 ],
               ),
