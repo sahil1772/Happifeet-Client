@@ -1008,8 +1008,8 @@ class _AddLocationState extends State<AddLocation>
                               ),
                             ],
                           ),
-                          widget.isEdit!
-                              ? Padding(
+
+                               Padding(
                                   padding: const EdgeInsets.only(top: 10.0),
                                   child: Column(
                                     children: [
@@ -1100,6 +1100,7 @@ class _AddLocationState extends State<AddLocation>
                                               ]),
                                         ),
                                       ),
+                                      widget.isEdit!?
                                       GridView.builder(
                                         physics:
                                             const NeverScrollableScrollPhysics(),
@@ -1203,11 +1204,11 @@ class _AddLocationState extends State<AddLocation>
                                             ),
                                           );
                                         },
-                                      )
+                                      ):SizedBox()
                                     ],
                                   ),
                                 )
-                              : const SizedBox(),
+
                         ],
                       ),
                     )),

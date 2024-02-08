@@ -794,6 +794,7 @@ class _AddTrailState extends State<AddTrail>
                                         ]),
                                   ),
                                 ),
+                                widget.isEdit!?
                                 GridView.builder(
                                   physics:
                                   const NeverScrollableScrollPhysics(),
@@ -897,7 +898,7 @@ class _AddTrailState extends State<AddTrail>
                                       ),
                                     );
                                   },
-                                )
+                                ):SizedBox()
 
                               ],
                             ),
