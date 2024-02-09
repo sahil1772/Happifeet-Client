@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/storage/runtime_storage.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
 
@@ -19,6 +16,7 @@ class CommentsCard extends StatefulWidget {
 
   @override
   State<CommentsCard> createState() => _CommentsCardState();
+
 }
 
 class _CommentsCardState extends State<CommentsCard> {
@@ -82,8 +80,7 @@ class _CommentsCardState extends State<CommentsCard> {
                               style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
-                                  color: ColorParser().hexToColor(RuntimeStorage
-                                      .instance.clientTheme!.body_text_color!)),
+                                  color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
                             ),
                           ],
                         ),
@@ -93,14 +90,7 @@ class _CommentsCardState extends State<CommentsCard> {
                         Row(
                           children: [
                             SvgPicture.asset(
-                              "assets/images/comments/profile.svg",
-                              colorFilter: ColorFilter.mode(
-                                  ColorParser().hexToColor(RuntimeStorage
-                                      .instance
-                                      .clientTheme!
-                                      .top_title_background_color!),
-                                  BlendMode.srcIn),
-                            ),
+                                "assets/images/comments/profile.svg",colorFilter: ColorFilter.mode( ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!), BlendMode.srcIn),),
                             const SizedBox(
                               width: 10,
                             ),
@@ -109,9 +99,7 @@ class _CommentsCardState extends State<CommentsCard> {
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
-                                    color: ColorParser().hexToColor(
-                                        RuntimeStorage.instance.clientTheme!
-                                            .body_text_color!))),
+                                    color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
                           ],
                         ),
                         const SizedBox(
@@ -403,7 +391,8 @@ class _CommentsCardState extends State<CommentsCard> {
           /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
           Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
               child: GridView.count(
                 shrinkWrap: true,
                 mainAxisSpacing: 0,
@@ -428,17 +417,15 @@ class _CommentsCardState extends State<CommentsCard> {
                         Text(
                           "Share Anonymously",
                           style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: ColorParser().hexToColor(RuntimeStorage
-                                  .instance.clientTheme!.body_text_color!)),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w300,
+                              color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
                         ),
                         Text("-",
                             style: TextStyle(
                                 fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: ColorParser().hexToColor(RuntimeStorage
-                                    .instance.clientTheme!.body_text_color!))),
+                                fontWeight: FontWeight.bold,
+                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
                       ],
                     ),
                   ),
@@ -449,10 +436,9 @@ class _CommentsCardState extends State<CommentsCard> {
                     children: [
                       Text("Rating",
                           style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: ColorParser().hexToColor(RuntimeStorage
-                                  .instance.clientTheme!.body_text_color!))),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w300,
+                              color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
                       RatingBar.builder(
                           glow: false,
                           tapOnlyMode: false,
@@ -490,16 +476,14 @@ class _CommentsCardState extends State<CommentsCard> {
                       children: [
                         Text("Recommend",
                             style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: ColorParser().hexToColor(RuntimeStorage
-                                    .instance.clientTheme!.body_text_color!))),
+                                fontSize: 13,
+                                fontWeight: FontWeight.w300,
+                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
                         Text("${widget.data?.recommend}",
                             style: TextStyle(
                                 fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: ColorParser().hexToColor(RuntimeStorage
-                                    .instance.clientTheme!.body_text_color!))),
+                                fontWeight: FontWeight.bold,
+                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
                       ],
                     ),
                   ),
@@ -510,17 +494,15 @@ class _CommentsCardState extends State<CommentsCard> {
                     children: [
                       Text("Date",
                           style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: ColorParser().hexToColor(RuntimeStorage
-                                  .instance.clientTheme!.body_text_color!))),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w300,
+                              color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
                       Text("${widget.data?.add_date}",
                           style: TextStyle(
                               overflow: TextOverflow.ellipsis,
                               fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: ColorParser().hexToColor(RuntimeStorage
-                                  .instance.clientTheme!.body_text_color!))),
+                              fontWeight: FontWeight.bold,
+                              color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
                     ],
                   ),
                   Container(
@@ -537,17 +519,15 @@ class _CommentsCardState extends State<CommentsCard> {
                       children: [
                         Text("Assigned By",
                             style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: ColorParser().hexToColor(RuntimeStorage
-                                    .instance.clientTheme!.body_text_color!))),
+                                fontSize: 13,
+                                fontWeight: FontWeight.w300,
+                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
                         Text(
                             "${widget.data?.assigned_by == "" ? "-" : widget.data?.assigned_by}",
                             style: TextStyle(
                                 fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: ColorParser().hexToColor(RuntimeStorage
-                                    .instance.clientTheme!.body_text_color!))),
+                                fontWeight: FontWeight.bold,
+                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
                       ],
                     ),
                   ),
@@ -558,17 +538,15 @@ class _CommentsCardState extends State<CommentsCard> {
                     children: [
                       Text("Assigned To",
                           style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: ColorParser().hexToColor(RuntimeStorage
-                                  .instance.clientTheme!.body_text_color!))),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w300,
+                              color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
                       Text(
                           "${widget.data?.assigned_to == "" ? "-" : widget.data?.assigned_to}",
                           style: TextStyle(
                               fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: ColorParser().hexToColor(RuntimeStorage
-                                  .instance.clientTheme!.body_text_color!))),
+                              fontWeight: FontWeight.bold,
+                              color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
                     ],
                   ),
                 ],
@@ -588,8 +566,7 @@ class _CommentsCardState extends State<CommentsCard> {
                       // AddLocation().gotoAddLocation(context);
                     },
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: ColorParser().hexToColor(RuntimeStorage
-                            .instance.clientTheme!.top_title_background_color!),
+                        backgroundColor:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                         elevation: 0,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
@@ -598,7 +575,7 @@ class _CommentsCardState extends State<CommentsCard> {
                       "${widget.data?.status}",
                       style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 14,
+                          fontSize: 12,
                           fontWeight: FontWeight.w500),
                     ),
                   ),
@@ -612,9 +589,8 @@ class _CommentsCardState extends State<CommentsCard> {
               "${widget.data?.description}",
               style: TextStyle(
                   fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: ColorParser().hexToColor(
-                      RuntimeStorage.instance.clientTheme!.body_text_color!)),
+                  fontWeight: FontWeight.w400,
+                  color:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
             ),
           ),
         ],

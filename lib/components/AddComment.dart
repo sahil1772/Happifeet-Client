@@ -7,7 +7,9 @@ import 'package:happifeet_client_app/model/FeedbackStatus/FeedbackStatusDetails.
 import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/resources/resources.dart';
 import 'package:happifeet_client_app/screens/Reports/StatusDetailPage.dart';
+import 'package:happifeet_client_app/storage/runtime_storage.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
+import 'package:happifeet_client_app/utils/ColorParser.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddComment extends StatefulWidget {
@@ -108,7 +110,8 @@ class _AddCommentState extends State<AddComment> {
                       borderRadius: BorderRadius.circular(10)),
                   side: BorderSide(
                     color: isStatusSelected == Status.Resolved
-                        ? Resources.colors.buttonColorlight
+                        ? ColorParser().hexToColor(RuntimeStorage
+                            .instance.clientTheme!.button_background!)
                         : Colors.grey,
                   ),
                 ),
@@ -116,7 +119,8 @@ class _AddCommentState extends State<AddComment> {
                   "Resolved",
                   style: TextStyle(
                       color: isStatusSelected == Status.Resolved
-                          ? Resources.colors.buttonColorlight
+                          ? ColorParser().hexToColor(RuntimeStorage
+                              .instance.clientTheme!.button_background!)
                           : Colors.grey),
                 ),
               ),
@@ -124,28 +128,30 @@ class _AddCommentState extends State<AddComment> {
                 width: 16,
               ),
               OutlinedButton(
-                onPressed: () {
-                  setState(() {
-                    isStatusSelected = Status.Pending;
-                  });
-                },
-                style: OutlinedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  side: BorderSide(
-                    color: isStatusSelected != Status.Pending
-                        ? Colors.grey
-                        : Resources.colors.buttonColorlight,
-                  ),
-                ),
-                child: Text(
-                  "Pending",
-                  style: TextStyle(
+                  onPressed: () {
+                    setState(() {
+                      isStatusSelected = Status.Pending;
+                    });
+                  },
+                  style: OutlinedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    side: BorderSide(
                       color: isStatusSelected != Status.Pending
                           ? Colors.grey
-                          : Resources.colors.buttonColorlight),
-                ),
-              )
+                          : ColorParser().hexToColor(RuntimeStorage
+                              .instance.clientTheme!.button_background!),
+                    ),
+                  ),
+                  child: Text(
+                    "Pending",
+                    style: TextStyle(
+                      color: isStatusSelected != Status.Pending
+                          ? Colors.grey
+                          : ColorParser().hexToColor(RuntimeStorage
+                              .instance.clientTheme!.button_background!),
+                    ),
+                  ))
             ],
           ),
 
@@ -164,49 +170,51 @@ class _AddCommentState extends State<AddComment> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Container(
-                decoration: BoxDecoration(
-                   border: Border.all( color: Colors.grey,),
-                    borderRadius: BorderRadius.circular(10)),
-                child: SizedBox(
-                  height: 56,
-                  child: widget.assignedTo == null
-                      ? DropdownMenu<String>(
-                          width: MediaQuery.of(context).size.width - 32,
-                          enableSearch: false,
-                          enabled: widget.assignedTo != null,
-                          inputDecorationTheme: InputDecorationTheme(
-                              floatingLabelBehavior:
-                                  FloatingLabelBehavior.never,
-                              border: OutlineInputBorder(
-                                  borderSide:
-                                      const BorderSide(color: Colors.grey),
-                                  borderRadius: BorderRadius.circular(10))),
-                          requestFocusOnTap: false,
-                          label: const Text('Select'),
-                          initialSelection: dropdownValueSelected,
-                          onSelected: (String? park) {
-                            dropdownValueSelected = park;
-                            log("Selected PARK => $park");
-                            setState(() {});
-                          },
-                          dropdownMenuEntries: [
-                            for (int i = 0; i < userListing!.length; i++)
-                              DropdownMenuEntry<String>(
-                                value: userListing![i].id!,
-                                label: userListing![i].name!,
-                              ),
-                          ],
-                        )
-                      : Align(alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Text(
-                              "${userListing!.firstWhere((element) => element.id == widget.assignedTo).name}"),
+              widget.assignedTo == null
+                  ? DropdownMenu<String>(
+                      width: MediaQuery.of(context).size.width - 32,
+                      enableSearch: false,
+                      enabled: widget.assignedTo == null,
+                      inputDecorationTheme: InputDecorationTheme(
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                          border: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(10))),
+                      requestFocusOnTap: false,
+                      label: const Text('Select'),
+                      initialSelection: dropdownValueSelected,
+                      onSelected: (String? park) {
+                        dropdownValueSelected = park;
+                        log("Selected PARK => $park");
+                        setState(() {});
+                      },
+                      dropdownMenuEntries: [
+                        for (int i = 0; i < userListing!.length; i++)
+                          DropdownMenuEntry<String>(
+                            value: userListing![i].id!,
+                            label: userListing![i].name!,
+                          ),
+                      ],
+                    )
+                  : Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey,
+                          ),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: SizedBox(
+                        height: 56,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Text(
+                                "${widget.assignedTo != null && userListing!.isNotEmpty ? userListing!.firstWhere((element) => element.id == widget.assignedTo).name : ""}"),
+                          ),
                         ),
                       ),
-                ),
-              ),
+                    ),
             ],
           ),
 
@@ -247,13 +255,15 @@ class _AddCommentState extends State<AddComment> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
                       side: BorderSide(
-                        color: Resources.colors.buttonColorlight,
+                        color: ColorParser().hexToColor(RuntimeStorage
+                            .instance.clientTheme!.button_background!),
                       ),
                     ),
                     child: Text(
                       "Choose File",
-                      style:
-                          TextStyle(color: Resources.colors.buttonColorlight),
+                      style: TextStyle(
+                          color: ColorParser().hexToColor(RuntimeStorage
+                              .instance.clientTheme!.button_background!)),
                     ),
                   ),
                   const SizedBox(
@@ -274,7 +284,8 @@ class _AddCommentState extends State<AddComment> {
                   submitComment();
                 },
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: Resources.colors.buttonColorDark,
+                    backgroundColor: ColorParser().hexToColor(RuntimeStorage
+                        .instance.clientTheme!.button_background!),
                     elevation: 0,
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)))),
@@ -369,9 +380,10 @@ class _AddCommentState extends State<AddComment> {
       "assignedto": dropdownValueSelected,
     };
 
-    BaseResponse response =
-        await ApiFactory().getFeedbackStatusService().submitComment(params,imageFile);
-    if (response.status == "1") {
+    BaseResponse response = await ApiFactory()
+        .getFeedbackStatusService()
+        .submitComment(params, imageFile);
+    if (response.status == 1) {
       getAssignedUserListing();
       widget.onSuccess!();
     } else {

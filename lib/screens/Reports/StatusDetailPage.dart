@@ -5,6 +5,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:happifeet_client_app/components/AddComment.dart';
 import 'package:happifeet_client_app/model/AssignedUsers/AssignedUserData.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
+import 'package:happifeet_client_app/storage/runtime_storage.dart';
+import 'package:happifeet_client_app/utils/ColorParser.dart';
 
 import '../../model/FeedbackStatus/FeedbackStatusDetails.dart';
 import '../../resources/resources.dart';
@@ -69,7 +71,9 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                           Navigator.pop(context);
                         },
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: Resources.colors.buttonColorlight,
+                            backgroundColor: ColorParser().hexToColor(
+                                RuntimeStorage
+                                    .instance.clientTheme!.button_background!),
                             elevation: 0,
                             shape: const RoundedRectangleBorder(
                                 borderRadius:
@@ -103,8 +107,8 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
 
                 FutureBuilder<List<FeedbackStatusDetails>?>(
                   future: apiResponse,
-                  builder:
-                      (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<FeedbackStatusDetails>?> snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       return GridView(
                         gridDelegate:
@@ -275,7 +279,13 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
                                       color: Colors.black)),
-                              Text("ABC",
+                              Text(
+                                  snapshot.data!.first.comment != null ||
+                                          snapshot
+                                              .data!.first.comment!.isNotEmpty
+                                      ? snapshot
+                                          .data!.first.comment!.first.assign_by!
+                                      : "-",
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w300,
@@ -290,7 +300,12 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
                                       color: Colors.black)),
-                              Text("ABC",
+                              Text(snapshot.data!.first.comment != null ||
+                                  snapshot
+                                      .data!.first.comment!.isNotEmpty
+                                  ? snapshot
+                                  .data!.first.comment!.first.assign_to!
+                                  : "-",
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w300,
@@ -312,11 +327,7 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                 const SizedBox(
                   height: 24,
                 ),
-                const Text("Comments",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black)),
+
                 FutureBuilder<List<FeedbackStatusDetails>>(
                   future: apiResponse,
                   builder: (context, snapshot) {
@@ -328,6 +339,11 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            const Text("Comments",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black)),
                             const SizedBox(
                               height: 8,
                             ),
@@ -413,24 +429,45 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                                                             FontWeight.bold)),
                                               ],
                                             ),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              children: [
-                                                const Text("Uploaded File",
-                                                    style: TextStyle(
-                                                        fontSize: 13,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: Colors.black)),
-                                                Text("View Document",
-                                                    style: TextStyle(
-                                                        color: Theme.of(context)
-                                                            .primaryColor,
-                                                        fontWeight:
-                                                            FontWeight.bold)),
-                                              ],
-                                            )
+                                            snapshot.data!.first.comment![index]
+                                                    .images_uploaded!.isNotEmpty
+                                                ? Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.end,
+                                                    children: [
+                                                      const Text(
+                                                          "Uploaded File",
+                                                          style: TextStyle(
+                                                              fontSize: 13,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              color: Colors
+                                                                  .black)),
+                                                      InkWell(
+                                                        onTap: () {
+                                                          showAttachment(
+                                                              context: context,
+                                                              image: snapshot
+                                                                  .data!
+                                                                  .first
+                                                                  .comment![
+                                                                      index]
+                                                                  .images_uploaded!);
+                                                        },
+                                                        child: Text(
+                                                            "View Document",
+                                                            style: TextStyle(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .primaryColor,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                      ),
+                                                    ],
+                                                  )
+                                                : SizedBox()
                                           ]),
                                     ),
                                   );
@@ -446,25 +483,25 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                   },
                 ),
 
-              // GridView.builder(
-              //     gridDelegate:  const SliverGridDelegateWithFixedCrossAxisCount(
-              //     crossAxisCount: 2,
-              //     mainAxisSpacing: 0,
-              //     // crossAxisSpacing: 15,
-              //     // mainAxisExtent: 80
-              //     ),
-              //   shrinkWrap: true,
-              //   physics: ScrollPhysics(),
-              //   itemBuilder: (BuildContext context, int index) {
-              //       return Column(
-              //         children: [
-              //           Text(),
-              //           Text()
-              //         ],
-              //       );
-              //   },
-              //
-              // ),
+                // GridView.builder(
+                //     gridDelegate:  const SliverGridDelegateWithFixedCrossAxisCount(
+                //     crossAxisCount: 2,
+                //     mainAxisSpacing: 0,
+                //     // crossAxisSpacing: 15,
+                //     // mainAxisExtent: 80
+                //     ),
+                //   shrinkWrap: true,
+                //   physics: ScrollPhysics(),
+                //   itemBuilder: (BuildContext context, int index) {
+                //       return Column(
+                //         children: [
+                //           Text(),
+                //           Text()
+                //         ],
+                //       );
+                //   },
+                //
+                // ),
 
                 /** SELECT LANG **/
                 // const SizedBox(
@@ -489,7 +526,7 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                 //       style: OutlinedButton.styleFrom(
                 //         side: BorderSide(
                 //           color: isSelected
-                //               ? Resources.colors.buttonColorlight
+                //               ? ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!)
                 //               : Colors.grey,
                 //         ),
                 //       ),
@@ -497,7 +534,7 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                 //         "English",
                 //         style: TextStyle(
                 //             color: isSelected
-                //                 ? Resources.colors.buttonColorlight
+                //                 ? ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!)
                 //                 : Colors.grey),
                 //       ),
                 //     ),
@@ -514,7 +551,7 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                 //         side: BorderSide(
                 //           color: isSelected
                 //               ? Colors.grey
-                //               : Resources.colors.buttonColorlight,
+                //               : ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!),
                 //         ),
                 //       ),
                 //       child: Text(
@@ -522,7 +559,7 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                 //         style: TextStyle(
                 //             color: isSelected
                 //                 ? Colors.grey
-                //                 : Resources.colors.buttonColorlight),
+                //                 : ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!)),
                 //       ),
                 //     )
                 //   ],
@@ -538,9 +575,11 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                           reportId: widget.report_id,
                           dataCallback: () {},
                           onFailure: () {},
-                          onSuccess: () { setState(() {
-                            apiResponse = getFeedbackStatusDetails();
-                          });},
+                          onSuccess: () {
+                            setState(() {
+                              apiResponse = getFeedbackStatusDetails();
+                            });
+                          },
                           assignedTo: snapshot.data!.first.assign_to,
                         );
                       } else {
@@ -552,6 +591,25 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
           ),
         ),
       ),
+    );
+  }
+
+  void showAttachment(
+      {required BuildContext context, required List<String> image}) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return GridView.builder(
+          padding: EdgeInsets.zero,
+          itemCount: image.length,
+          shrinkWrap: true,
+          gridDelegate:
+              SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+          itemBuilder: (context, index) {
+            return Image.network(image[index]);
+          },
+        );
+      },
     );
   }
 }

@@ -42,6 +42,8 @@ class DashboardService implements InterfaceDashboard {
         'client': client_user_id
       };
 
+      var clientUser = await SharedPref.instance.getClientId();
+
       var response =
           await NetworkClient().dio.post(base_url, data: FormData.fromMap(map));
 
