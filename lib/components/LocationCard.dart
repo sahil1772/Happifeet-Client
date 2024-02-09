@@ -95,7 +95,7 @@ class _LocationCardState extends State<LocationCard> {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 1.0),
                         child: Text(
-                          widget.locationDetails!.park_name!,
+                          widget.locationDetails!.address1!,
                           softWrap: true,
                           maxLines: 1,
                           overflow: TextOverflow.clip,
@@ -105,7 +105,7 @@ class _LocationCardState extends State<LocationCard> {
                        Padding(
                         padding: EdgeInsets.symmetric(vertical: 1.0),
                         child: Text(
-                          'Tallahassee, FL 32309, USA',
+                          widget.locationDetails!.address2!,
                           softWrap: true,
                           maxLines: 1,
                           overflow: TextOverflow.clip,

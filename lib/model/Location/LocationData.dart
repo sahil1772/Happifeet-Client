@@ -10,7 +10,8 @@ part 'LocationData.g.dart';
 class LocationData{
   String? park_id;
   String? park_name;
-  String? address;
+  String? address1;
+  String? address2;
   String? city;
   String? state;
   String? zip;
@@ -19,7 +20,8 @@ class LocationData{
   LocationData({
     this.park_id,
     this.park_name,
-    this.address,
+    this.address1,
+    this.address2,
     this.city,
     this.state,
     this.zip,
