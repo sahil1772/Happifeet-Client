@@ -279,37 +279,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                                                         : ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!)
                                             ),
                                           ))),
-                                  Flexible(
-                                      fit: FlexFit.loose,
-                                      flex: 1,
-                                      child: OutlinedButton(
-                                          style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    type == Filter_TYPE.ALL
-                                                        ? ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!)
-                                                        : Colors.transparent
-                                                ),
-                                            shape: MaterialStateProperty.all(
-                                                RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10.0))),
-                                          ),
-                                          onPressed: () {
-                                            setState(() {
-                                              type = Filter_TYPE.ALL;
-                                            });
-                                          },
-                                          child: Text(
-                                            "All",
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: type == Filter_TYPE.ALL
-                                                    ? Colors.white
-                                                    : ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!)
-                                            ),
-                                          ))),
+
                                 ],
                               ),
                             ),
