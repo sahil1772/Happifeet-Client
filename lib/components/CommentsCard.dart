@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/storage/runtime_storage.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
 
@@ -16,10 +19,12 @@ class CommentsCard extends StatefulWidget {
 
   @override
   State<CommentsCard> createState() => _CommentsCardState();
-
 }
 
 class _CommentsCardState extends State<CommentsCard> {
+  TextEditingController subjectController = TextEditingController();
+  TextEditingController commentController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -61,7 +66,14 @@ class _CommentsCardState extends State<CommentsCard> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             SvgPicture.asset(
-                                "assets/images/comments/location.svg",colorFilter: ColorFilter.mode( ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!), BlendMode.srcIn),),
+                              "assets/images/comments/location.svg",
+                              colorFilter: ColorFilter.mode(
+                                  ColorParser().hexToColor(RuntimeStorage
+                                      .instance
+                                      .clientTheme!
+                                      .top_title_background_color!),
+                                  BlendMode.srcIn),
+                            ),
                             const SizedBox(
                               width: 10,
                             ),
@@ -70,7 +82,8 @@ class _CommentsCardState extends State<CommentsCard> {
                               style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
-                                  color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
+                                  color: ColorParser().hexToColor(RuntimeStorage
+                                      .instance.clientTheme!.body_text_color!)),
                             ),
                           ],
                         ),
@@ -80,7 +93,14 @@ class _CommentsCardState extends State<CommentsCard> {
                         Row(
                           children: [
                             SvgPicture.asset(
-                                "assets/images/comments/profile.svg",colorFilter: ColorFilter.mode( ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!), BlendMode.srcIn),),
+                              "assets/images/comments/profile.svg",
+                              colorFilter: ColorFilter.mode(
+                                  ColorParser().hexToColor(RuntimeStorage
+                                      .instance
+                                      .clientTheme!
+                                      .top_title_background_color!),
+                                  BlendMode.srcIn),
+                            ),
                             const SizedBox(
                               width: 10,
                             ),
@@ -89,26 +109,248 @@ class _CommentsCardState extends State<CommentsCard> {
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
-                                    color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
+                                    color: ColorParser().hexToColor(
+                                        RuntimeStorage.instance.clientTheme!
+                                            .body_text_color!))),
                           ],
                         ),
                         const SizedBox(
                           height: 17,
                         ),
-                        Row(
-                          children: [
-                            SvgPicture.asset(
-                                "assets/images/comments/email.svg",colorFilter: ColorFilter.mode( ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!), BlendMode.srcIn),),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                                "${widget.data?.email_address == "" ? "-" : widget.data?.email_address}",
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
-                          ],
+                        InkWell(
+                          onTap: () {
+                            widget.data?.email_address != ""
+                                ? showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return Dialog(
+                                        clipBehavior: Clip.none,
+                                        child: SingleChildScrollView(
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 16, vertical: 16),
+                                            height: 450,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            child: Column(
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      "Send email to user",
+                                                      style: TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: Colors.black),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 30),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      "Subject",
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          color: Resources
+                                                              .colors.hfText),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 8,
+                                                    ),
+                                                    TextField(
+                                                        controller:
+                                                            subjectController,
+                                                        onChanged: (value) {},
+                                                        decoration:
+                                                            InputDecoration(
+                                                          filled: true,
+                                                          fillColor:
+                                                              Colors.white,
+                                                          // labelText: labelText,
+                                                          hintStyle:
+                                                              const TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400),
+                                                          // errorText: getEmailError(),
+                                                          focusedBorder: OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          12),
+                                                              borderSide: BorderSide(
+                                                                  color: ColorParser()
+                                                                      .hexToColor(
+                                                                          "#D7D7D7"),
+                                                                  width: 1)),
+                                                          enabledBorder: OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          12),
+                                                              borderSide: BorderSide(
+                                                                  width: 1,
+                                                                  color: ColorParser()
+                                                                      .hexToColor(
+                                                                          "#D7D7D7"))),
+                                                        )),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 20),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      "Comment",
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          color: Resources
+                                                              .colors.hfText),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 8,
+                                                    ),
+                                                    TextField(
+                                                        controller:
+                                                            commentController,
+                                                        onChanged: (value) {},
+                                                        maxLines: 4,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          filled: true,
+                                                          fillColor:
+                                                              Colors.white,
+                                                          // labelText: labelText,
+                                                          hintStyle:
+                                                              const TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400),
+                                                          // errorText: getEmailError(),
+                                                          focusedBorder: OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          12),
+                                                              borderSide: BorderSide(
+                                                                  color: ColorParser()
+                                                                      .hexToColor(
+                                                                          "#D7D7D7"),
+                                                                  width: 1)),
+                                                          enabledBorder: OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          12),
+                                                              borderSide: BorderSide(
+                                                                  width: 1,
+                                                                  color: ColorParser()
+                                                                      .hexToColor(
+                                                                          "#D7D7D7"))),
+                                                        )),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 20),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    ElevatedButton(
+                                                      onPressed: () async {
+                                                        var response = await ApiFactory
+                                                                .getCommentService()
+                                                            .sendEmailData(
+                                                                widget.data!
+                                                                    .email_address!,
+                                                                subjectController
+                                                                    .text,
+                                                                commentController
+                                                                    .text);
+                                                        if (response!.status == "1") {
+                                                          log("EMAIL DATA SENT SUCCESSFILLY");
+                                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                              content: Text("Email Sent")));
+                                                          Future.delayed(Duration(seconds: 2),
+                                                                  () {
+                                                            Navigator.of(context).pop();
+
+
+                                                              });
+                                                        } else {
+                                                          log("Error in submitting Email data");
+                                                        }
+                                                      },
+                                                      style: ElevatedButton.styleFrom(
+                                                          backgroundColor:
+                                                              ColorParser().hexToColor(
+                                                                  RuntimeStorage
+                                                                      .instance
+                                                                      .clientTheme!
+                                                                      .top_title_background_color!),
+                                                          elevation: 0,
+                                                          shape: RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
+                                                                          10)))),
+                                                      child: Text(
+                                                        "Send Email",
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    })
+                                : null;
+                          },
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(
+                                "assets/images/comments/email.svg",
+                                colorFilter: ColorFilter.mode(
+                                    ColorParser().hexToColor(RuntimeStorage
+                                        .instance
+                                        .clientTheme!
+                                        .top_title_background_color!),
+                                    BlendMode.srcIn),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                  "${widget.data?.email_address == "" ? "-" : widget.data?.email_address}",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: ColorParser().hexToColor(
+                                          RuntimeStorage.instance.clientTheme!
+                                              .body_text_color!))),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -161,8 +403,7 @@ class _CommentsCardState extends State<CommentsCard> {
           /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
           Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
               child: GridView.count(
                 shrinkWrap: true,
                 mainAxisSpacing: 0,
@@ -189,13 +430,15 @@ class _CommentsCardState extends State<CommentsCard> {
                           style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
-                              color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
+                              color: ColorParser().hexToColor(RuntimeStorage
+                                  .instance.clientTheme!.body_text_color!)),
                         ),
                         Text("-",
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
-                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
+                                color: ColorParser().hexToColor(RuntimeStorage
+                                    .instance.clientTheme!.body_text_color!))),
                       ],
                     ),
                   ),
@@ -208,7 +451,8 @@ class _CommentsCardState extends State<CommentsCard> {
                           style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
-                              color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
+                              color: ColorParser().hexToColor(RuntimeStorage
+                                  .instance.clientTheme!.body_text_color!))),
                       RatingBar.builder(
                           glow: false,
                           tapOnlyMode: false,
@@ -248,12 +492,14 @@ class _CommentsCardState extends State<CommentsCard> {
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
-                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
+                                color: ColorParser().hexToColor(RuntimeStorage
+                                    .instance.clientTheme!.body_text_color!))),
                         Text("${widget.data?.recommend}",
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
-                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
+                                color: ColorParser().hexToColor(RuntimeStorage
+                                    .instance.clientTheme!.body_text_color!))),
                       ],
                     ),
                   ),
@@ -266,13 +512,15 @@ class _CommentsCardState extends State<CommentsCard> {
                           style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
-                              color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
+                              color: ColorParser().hexToColor(RuntimeStorage
+                                  .instance.clientTheme!.body_text_color!))),
                       Text("${widget.data?.add_date}",
                           style: TextStyle(
                               overflow: TextOverflow.ellipsis,
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
-                              color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
+                              color: ColorParser().hexToColor(RuntimeStorage
+                                  .instance.clientTheme!.body_text_color!))),
                     ],
                   ),
                   Container(
@@ -291,13 +539,15 @@ class _CommentsCardState extends State<CommentsCard> {
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
-                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
+                                color: ColorParser().hexToColor(RuntimeStorage
+                                    .instance.clientTheme!.body_text_color!))),
                         Text(
                             "${widget.data?.assigned_by == "" ? "-" : widget.data?.assigned_by}",
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
-                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
+                                color: ColorParser().hexToColor(RuntimeStorage
+                                    .instance.clientTheme!.body_text_color!))),
                       ],
                     ),
                   ),
@@ -310,13 +560,15 @@ class _CommentsCardState extends State<CommentsCard> {
                           style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
-                              color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
+                              color: ColorParser().hexToColor(RuntimeStorage
+                                  .instance.clientTheme!.body_text_color!))),
                       Text(
                           "${widget.data?.assigned_to == "" ? "-" : widget.data?.assigned_to}",
                           style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
-                              color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
+                              color: ColorParser().hexToColor(RuntimeStorage
+                                  .instance.clientTheme!.body_text_color!))),
                     ],
                   ),
                 ],
@@ -336,7 +588,8 @@ class _CommentsCardState extends State<CommentsCard> {
                       // AddLocation().gotoAddLocation(context);
                     },
                     style: ElevatedButton.styleFrom(
-                        backgroundColor:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                        backgroundColor: ColorParser().hexToColor(RuntimeStorage
+                            .instance.clientTheme!.top_title_background_color!),
                         elevation: 0,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
@@ -360,7 +613,8 @@ class _CommentsCardState extends State<CommentsCard> {
               style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
+                  color: ColorParser().hexToColor(
+                      RuntimeStorage.instance.clientTheme!.body_text_color!)),
             ),
           ),
         ],

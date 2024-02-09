@@ -166,7 +166,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                 style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
-                                    color: Resources.colors.hfText),
+                                    color: Colors.black),
                               ),
                               const SizedBox(
                                 height: 8,
@@ -209,7 +209,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w500,
-                                      color: Resources.colors.hfText)),
+                                      color: Colors.black)),
                               const SizedBox(
                                 height: 8,
                               ),
@@ -251,7 +251,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w500,
-                                      color: Resources.colors.hfText)),
+                                      color: Colors.black)),
                               const SizedBox(
                                 height: 8,
                               ),

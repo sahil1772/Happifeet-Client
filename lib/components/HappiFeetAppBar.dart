@@ -25,19 +25,20 @@ class HappiFeetAppBar {
       // automaticallyImplyLeading: IsDashboard,
       leadingWidth: IsDashboard ? 77 : 110,
 
-      leading: IsDashboard
-          ? Padding(
-              padding: const EdgeInsets.only(left: 16),
-              // child: SvgPicture.asset("assets/images/appBar/npp-logo.svg"),
-              child: Image.network(RuntimeStorage.instance.clientTheme!.logo!,
-                  width: 45, height: 45),
-              // child: Image.asset("assets/images/appBar/city_jpg.jpg"),
-              // child: Image.network(SharedPref.instance.getCityTheme().logo!)
-            )
-          : Padding(
+      leading:
+           // Padding(
+           //    padding: const EdgeInsets.only(left: 16),
+           //    // child: SvgPicture.asset("assets/images/appBar/npp-logo.svg"),
+           //    child: Image.network(RuntimeStorage.instance.clientTheme!.logo!,
+           //        width: 45, height: 45),
+           //    // child: Image.asset("assets/images/appBar/city_jpg.jpg"),
+           //    // child: Image.network(SharedPref.instance.getCityTheme().logo!)
+           //  )
+           Padding(
               padding: const EdgeInsets.only(left: 16),
               child: Row(
                 children: [
+                  !IsDashboard ?
                   InkWell(
                     onTap: () {
                       Navigator.of(context).pop();
@@ -49,7 +50,7 @@ class HappiFeetAppBar {
                           ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                           BlendMode.srcIn),
                     ),
-                  ),
+                  ) : SizedBox(),
                   SizedBox(
                     width: 10,
                   ),
