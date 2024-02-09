@@ -3,11 +3,13 @@ import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:happifeet_client_app/components/DownloadProgressDialog.dart';
 import 'package:happifeet_client_app/model/FilterMap.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/screens/Reports/FilterPage.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
 import 'package:happifeet_client_app/utils/DeviceDimensions.dart';
+import 'package:happifeet_client_app/utils/PermissionUtils.dart';
 
 import '../../components/HappiFeetAppBar.dart';
 import '../../components/StatusCard.dart';
@@ -344,7 +346,26 @@ class _StatusWidgetState extends State<StatusWidget> {
                           //       ],
                           //     )),
                           OutlinedButton(
-                              onPressed: () {},
+                              onPressed: () async { bool result = await PermissionUtils.permissionRequest();
+                              if (result) {
+
+                                // widget.locationDetails!.qrImage != null
+                                //     ? showDialog(
+                                //     context: context,
+                                //     builder: (dialogcontext) {
+                                //       return DownloadProgressDialog(
+                                //         filePath:
+                                //         widget.locationDetails!.qrImage!,
+                                //       );
+                                //     })
+                                //     :
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            "Failed to save data to device")));
+                              } else {
+                                print("No permission to read and write.");
+                              }},
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(
                                     ColorParser().hexToColor(RuntimeStorage
