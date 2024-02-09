@@ -13,6 +13,7 @@ import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
 import 'package:happifeet_client_app/utils/DeviceDimensions.dart';
+import 'package:happifeet_client_app/utils/LanguageUtils.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../storage/runtime_storage.dart';
@@ -1708,7 +1709,7 @@ class _AddTrailState extends State<AddTrail>
       Map<String, TextEditingController>? controllers =
           dataControllers[languages.keys.elementAt(_controller!.index)];
 
-      payload.lang = languages.keys.elementAt(_controller!.index);
+      payload.lang = LanguageUtils.convertLanguageCode(languages.keys.elementAt(_controller!.index));
       payload.trail_id = widget.trailId ?? trailId;
       payload.trailName = controllers!["trailName"]!.text;
       payload.trailDistance = controllers["trailDistance"]!.text;

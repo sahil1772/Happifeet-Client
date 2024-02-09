@@ -15,6 +15,7 @@ import 'package:happifeet_client_app/storage/runtime_storage.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
 import 'package:happifeet_client_app/utils/CalendarUtils.dart';
 import 'package:happifeet_client_app/utils/DeviceDimensions.dart';
+import 'package:happifeet_client_app/utils/LanguageUtils.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../components/HappiFeetAppBar.dart';
@@ -2807,7 +2808,7 @@ class _AddLocationState extends State<AddLocation>
         .submitLocationLanguageData(
             locationData!,
             widget.isEdit! ? widget.parkId! : park_Id!,
-            languages.keys.elementAt(_controller!.index),
+            LanguageUtils.convertLanguageCode(languages.keys.elementAt(_controller!.index)),
             locationImage,
             galleryImages);
     if (response.status == 1) {

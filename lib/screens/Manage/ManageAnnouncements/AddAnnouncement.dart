@@ -9,6 +9,7 @@ import 'package:happifeet_client_app/model/BaseResponse.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
 import 'package:happifeet_client_app/utils/DeviceDimensions.dart';
+import 'package:happifeet_client_app/utils/LanguageUtils.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../components/HappiFeetAppBar.dart';
@@ -583,7 +584,7 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
           data.annoucement_lang_cols = {};
         }
         data.annoucement_lang_cols!.addAll({
-          element.key: AnnouncementDetailLangWise(
+          LanguageUtils.convertLanguageCode(element.key): AnnouncementDetailLangWise(
               title: dataControllers[element.key]!["title"]!.text,
               description: dataControllers[element.key]!["description"]!.text)
         });
