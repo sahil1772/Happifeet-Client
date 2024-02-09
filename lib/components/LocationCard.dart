@@ -72,7 +72,7 @@ class _LocationCardState extends State<LocationCard> {
                   // ),
                 ),
               ),
-              Flexible(
+              Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 10),
                   child: Column(
