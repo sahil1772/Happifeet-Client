@@ -187,14 +187,14 @@ class _CommentsCardState extends State<CommentsCard> {
                         Text(
                           "Share Anonymously",
                           style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w300,
                               color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
                         ),
                         Text("-",
                             style: TextStyle(
                                 fontSize: 14,
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.bold,
                                 color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
                       ],
                     ),
@@ -206,8 +206,8 @@ class _CommentsCardState extends State<CommentsCard> {
                     children: [
                       Text("Rating",
                           style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w300,
                               color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
                       RatingBar.builder(
                           glow: false,
@@ -246,13 +246,13 @@ class _CommentsCardState extends State<CommentsCard> {
                       children: [
                         Text("Recommend",
                             style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w300,
                                 color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
                         Text("${widget.data?.recommend}",
                             style: TextStyle(
                                 fontSize: 14,
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.bold,
                                 color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
                       ],
                     ),
@@ -264,14 +264,14 @@ class _CommentsCardState extends State<CommentsCard> {
                     children: [
                       Text("Date",
                           style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w300,
                               color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
                       Text("${widget.data?.add_date}",
                           style: TextStyle(
                               overflow: TextOverflow.ellipsis,
                               fontSize: 14,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.bold,
                               color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
                     ],
                   ),
@@ -289,14 +289,14 @@ class _CommentsCardState extends State<CommentsCard> {
                       children: [
                         Text("Assigned By",
                             style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w300,
                                 color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
                         Text(
                             "${widget.data?.assigned_by == "" ? "-" : widget.data?.assigned_by}",
                             style: TextStyle(
                                 fontSize: 14,
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.bold,
                                 color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
                       ],
                     ),
@@ -308,14 +308,14 @@ class _CommentsCardState extends State<CommentsCard> {
                     children: [
                       Text("Assigned To",
                           style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w300,
                               color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
                       Text(
                           "${widget.data?.assigned_to == "" ? "-" : widget.data?.assigned_to}",
                           style: TextStyle(
                               fontSize: 14,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.bold,
                               color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
                     ],
                   ),
@@ -345,7 +345,7 @@ class _CommentsCardState extends State<CommentsCard> {
                       "${widget.data?.status}",
                       style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 14,
+                          fontSize: 12,
                           fontWeight: FontWeight.w500),
                     ),
                   ),
@@ -359,7 +359,7 @@ class _CommentsCardState extends State<CommentsCard> {
               "${widget.data?.description}",
               style: TextStyle(
                   fontSize: 14,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w400,
                   color:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
             ),
           ),

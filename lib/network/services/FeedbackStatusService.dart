@@ -89,7 +89,7 @@ class FeedbackStatusService implements InterfaceFeedbackStatus {
       FormData form = FormData.fromMap(params);
       for (var file in files!) {
         form.files.add(
-          MapEntry("galleryImages[${files!.indexOf(file)}]",
+          MapEntry("fileToUpload",
               await MultipartFile.fromFile(file.path)),
         );
       }
