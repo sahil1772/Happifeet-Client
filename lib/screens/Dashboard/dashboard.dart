@@ -1106,7 +1106,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
         .getTrailService()
         .getTrailListing(await SharedPref.instance.getUserId());
     // Map<String, dynamic> responseData = json.decode(response);
-    trails =  response as List<TrailListingData>?;
+    trails =  await response ;
     log("TRAIL LISTING DATA in dashboard${trails!.first.toJson()}");
     SharedPref.instance.setTrails(trails);
     return trails;
