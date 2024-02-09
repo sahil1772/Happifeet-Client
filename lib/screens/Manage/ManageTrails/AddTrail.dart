@@ -1505,9 +1505,7 @@ class _AddTrailState extends State<AddTrail>
     Map<String, String> params = {"trail_id": widget.trailId!};
     if (languages.keys.elementAt(_controller!.index) != "en") {
       params.addAll({
-        "lang": languages.keys.elementAt(_controller!.index) == "es"
-            ? "spa"
-            : languages.keys.elementAt(_controller!.index)
+        "lang": LanguageUtils.convertLanguageCode(languages.keys.elementAt(_controller!.index))
       });
     }
     TrailPayload data =
