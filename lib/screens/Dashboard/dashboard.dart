@@ -708,21 +708,26 @@ class _DashboardWidgetState extends State<DashboardWidget> {
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  backgroundColor:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!),
-              ),
-              child:  Text(
-                "View All",
-                style: TextStyle(color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
-              )),
-        ),
+        locations.length > 10
+            ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      backgroundColor: ColorParser().hexToColor(RuntimeStorage
+                          .instance.clientTheme!.button_background!),
+                    ),
+                    child: Text(
+                      "View All",
+                      style: TextStyle(
+                          color: ColorParser().hexToColor(RuntimeStorage
+                              .instance.clientTheme!.body_text_color!)),
+                    )),
+              )
+            : SizedBox(),
         Padding(
           padding:
               const EdgeInsets.only(left: 16.0, top: 16, right: 16, bottom: 10),
