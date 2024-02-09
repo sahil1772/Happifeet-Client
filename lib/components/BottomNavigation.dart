@@ -67,7 +67,7 @@ class _BottomNavigationHappiFeetState extends State<BottomNavigationHappiFeet>{
 
   List<Widget> _buildScreens() {
     return [
-      const DashboardWidget(),
+      DashboardWidget(controller: _controller),
       if(userType == "S")
        ManageWidget(controller: _controller),
        ReportsWidget(),

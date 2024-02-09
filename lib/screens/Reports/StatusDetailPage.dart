@@ -280,9 +280,7 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                                       fontWeight: FontWeight.w500,
                                       color: Colors.black)),
                               Text(
-                                  snapshot.data!.first.comment != null ||
-                                          snapshot
-                                              .data!.first.comment!.isNotEmpty
+                                  snapshot.data!.first.comment!.isNotEmpty
                                       ? snapshot
                                           .data!.first.comment!.first.assign_by!
                                       : "-",
@@ -300,12 +298,11 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
                                       color: Colors.black)),
-                              Text(snapshot.data!.first.comment != null ||
-                                  snapshot
-                                      .data!.first.comment!.isNotEmpty
-                                  ? snapshot
-                                  .data!.first.comment!.first.assign_to!
-                                  : "-",
+                              Text(
+                                  snapshot.data!.first.comment!.isNotEmpty
+                                      ? snapshot
+                                          .data!.first.comment!.first.assign_to!
+                                      : "-",
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w300,
