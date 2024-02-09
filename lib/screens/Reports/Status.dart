@@ -463,16 +463,24 @@ class _StatusWidgetState extends State<StatusWidget> {
         .getFeedbackStatusListing(filterParams);
     getStatusData = await response;
     log("FEEDBACK STATUS DATA --> ${getStatusData!.first.toJson()}");
-    if (getStatusData!.first.status == "Resolved") {
-      resolvedCount++;
-      log("resolvedCount${resolvedCount}");
+    for(int i = 0; i<getStatusData!.length; i++){
+      if (getStatusData![i].status == "Resolved") {
+        resolvedCount++;
+        log("resolvedCount${resolvedCount}");
+      }
+
     }
-    if (getStatusData!.first.status == "Pending") {
-      setState(() {
-        pendingCount++;
-      });
-      log("pendingCount${pendingCount}");
+
+
+    for(int i = 0;i< getStatusData!.length;i++){
+      if (getStatusData![i].status == "Pending") {
+        setState(() {
+          pendingCount++;
+        });
+        log("pendingCount${pendingCount}");
+      }
     }
+
     setState(() {
       totalFeedback = getStatusData!.length.toString();
       log("totalFeedback${totalFeedback.toString()}");
