@@ -288,16 +288,16 @@ class _StatusCardState extends State<StatusCard> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-              child: Text(
-                  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries",
-                  style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: Resources.colors.hfText),
-                  maxLines: 2),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+            //   child: Text(
+            //       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries",
+            //       style: TextStyle(
+            //           fontSize: 14,
+            //           fontWeight: FontWeight.w400,
+            //           color: Resources.colors.hfText),
+            //       maxLines: 2),
+            // ),
           ],
         ),
       ),
