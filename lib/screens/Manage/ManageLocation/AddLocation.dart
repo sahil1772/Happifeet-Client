@@ -2980,9 +2980,8 @@ class _AddLocationState extends State<AddLocation>
     Map<String, String> params = {"park_id": park_id};
     if (languages.keys.elementAt(_controller!.index) != "en") {
       params.addAll({
-        "lang": languages.keys.elementAt(_controller!.index) == "es"
-            ? "spa"
-            : languages.keys.elementAt(_controller!.index)
+        "lang":LanguageUtils.convertLanguageCode(languages.keys.elementAt(_controller!.index))
+
       });
     }
     LocationDataModel data =
