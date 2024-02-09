@@ -17,6 +17,8 @@ class LocationData{
   String? zip;
   String? description;
   String? image;
+  String? qrImage;
+
   LocationData({
     this.park_id,
     this.park_name,
@@ -26,7 +28,8 @@ class LocationData{
     this.state,
     this.zip,
     this.description,
-    this.image
+    this.image,
+    this.qrImage,
 
 });
 

@@ -781,7 +781,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
             ? Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {widget.controller.jumpToTab(2);},
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
