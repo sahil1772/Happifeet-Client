@@ -539,7 +539,7 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
                         backgroundColor: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!),
                         elevation: 0),
                     onPressed: () {
-                      submitDetails();
+                      goToNextLangOrSubmit();
                     },
                     child: const Padding(
                       padding: EdgeInsets.symmetric(vertical: 16.0),

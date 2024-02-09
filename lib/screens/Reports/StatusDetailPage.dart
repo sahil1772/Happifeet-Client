@@ -71,7 +71,9 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                           Navigator.pop(context);
                         },
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!),
+                            backgroundColor: ColorParser().hexToColor(
+                                RuntimeStorage
+                                    .instance.clientTheme!.button_background!),
                             elevation: 0,
                             shape: const RoundedRectangleBorder(
                                 borderRadius:
@@ -105,8 +107,8 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
 
                 FutureBuilder<List<FeedbackStatusDetails>?>(
                   future: apiResponse,
-                  builder:
-                      (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<FeedbackStatusDetails>?> snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       return GridView(
                         gridDelegate:
@@ -277,7 +279,13 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
                                       color: Colors.black)),
-                              Text("ABC",
+                              Text(
+                                  snapshot.data!.first.comment != null ||
+                                          snapshot
+                                              .data!.first.comment!.isNotEmpty
+                                      ? snapshot
+                                          .data!.first.comment!.first.assign_by!
+                                      : "-",
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w300,
@@ -292,7 +300,12 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
                                       color: Colors.black)),
-                              Text("ABC",
+                              Text(snapshot.data!.first.comment != null ||
+                                  snapshot
+                                      .data!.first.comment!.isNotEmpty
+                                  ? snapshot
+                                  .data!.first.comment!.first.assign_to!
+                                  : "-",
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w300,
@@ -416,7 +429,8 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                                                             FontWeight.bold)),
                                               ],
                                             ),
-                                            snapshot.data!.first.comment![index].images_uploaded!.isNotEmpty
+                                            snapshot.data!.first.comment![index]
+                                                    .images_uploaded!.isNotEmpty
                                                 ? Column(
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment.end,

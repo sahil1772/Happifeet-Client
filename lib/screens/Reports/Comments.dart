@@ -38,9 +38,9 @@ class _CommentsWidgetState extends State<CommentsWidget> {
   FilterMap? filterParams = FilterMap(
       type: FilterType.Park.name,
       popupDatepickerToDateSearch:
-          DateFormat("yyyy-MM-dd").format(DateTime.now()),
+          null,
       popupDatepickerFromDateSearch:
-          DateFormat("yyyy-MM-dd").format(DateTime.now()));
+         null);
 
 
 

@@ -6,6 +6,7 @@ import 'package:happifeet_client_app/model/Announcement/AnnouncementData.dart';
 import 'package:happifeet_client_app/model/BaseResponse.dart';
 import 'package:happifeet_client_app/network/interface/InterfaceAnnouncement.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
+import 'package:happifeet_client_app/utils/LanguageUtils.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'ApiService.dart';
@@ -67,8 +68,8 @@ class AnnouncementService implements InterfaceAnnouncement {
       if (data.annoucement_lang_cols != null)
         data.annoucement_lang_cols!.forEach((key, value) {
           map.addAll({
-            "title_$key": value.title,
-            "description_$key": value.description
+            "title_${LanguageUtils.convertLanguageCode(key)}": value.title,
+            "description_${LanguageUtils.convertLanguageCode(key)}": value.description
           });
         });
 

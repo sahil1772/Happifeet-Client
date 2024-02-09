@@ -170,43 +170,41 @@ class _AddCommentState extends State<AddComment> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Container(
-                decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.grey,
-                    ),
-                    borderRadius: BorderRadius.circular(10)),
-                child: SizedBox(
-                  height: 56,
-                  child: widget.assignedTo == null
-                      ? DropdownMenu<String>(
-                          width: MediaQuery.of(context).size.width - 32,
-                          enableSearch: false,
-                          enabled: widget.assignedTo != null,
-                          inputDecorationTheme: InputDecorationTheme(
-                              floatingLabelBehavior:
-                                  FloatingLabelBehavior.never,
-                              border: OutlineInputBorder(
-                                  borderSide:
-                                      const BorderSide(color: Colors.grey),
-                                  borderRadius: BorderRadius.circular(10))),
-                          requestFocusOnTap: false,
-                          label: const Text('Select'),
-                          initialSelection: dropdownValueSelected,
-                          onSelected: (String? park) {
-                            dropdownValueSelected = park;
-                            log("Selected PARK => $park");
-                            setState(() {});
-                          },
-                          dropdownMenuEntries: [
-                            for (int i = 0; i < userListing!.length; i++)
-                              DropdownMenuEntry<String>(
-                                value: userListing![i].id!,
-                                label: userListing![i].name!,
-                              ),
-                          ],
-                        )
-                      : Align(
+              widget.assignedTo == null
+                  ? DropdownMenu<String>(
+                      width: MediaQuery.of(context).size.width - 32,
+                      enableSearch: false,
+                      enabled: widget.assignedTo == null,
+                      inputDecorationTheme: InputDecorationTheme(
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                          border: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(10))),
+                      requestFocusOnTap: false,
+                      label: const Text('Select'),
+                      initialSelection: dropdownValueSelected,
+                      onSelected: (String? park) {
+                        dropdownValueSelected = park;
+                        log("Selected PARK => $park");
+                        setState(() {});
+                      },
+                      dropdownMenuEntries: [
+                        for (int i = 0; i < userListing!.length; i++)
+                          DropdownMenuEntry<String>(
+                            value: userListing![i].id!,
+                            label: userListing![i].name!,
+                          ),
+                      ],
+                    )
+                  : Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey,
+                          ),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: SizedBox(
+                        height: 56,
+                        child: Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
                             padding:
@@ -215,8 +213,8 @@ class _AddCommentState extends State<AddComment> {
                                 "${widget.assignedTo != null && userListing!.isNotEmpty ? userListing!.firstWhere((element) => element.id == widget.assignedTo).name : ""}"),
                           ),
                         ),
-                ),
-              ),
+                      ),
+                    ),
             ],
           ),
 
@@ -286,7 +284,8 @@ class _AddCommentState extends State<AddComment> {
                   submitComment();
                 },
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!),
+                    backgroundColor: ColorParser().hexToColor(RuntimeStorage
+                        .instance.clientTheme!.button_background!),
                     elevation: 0,
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)))),
@@ -384,7 +383,7 @@ class _AddCommentState extends State<AddComment> {
     BaseResponse response = await ApiFactory()
         .getFeedbackStatusService()
         .submitComment(params, imageFile);
-    if (response.status == "1") {
+    if (response.status == 1) {
       getAssignedUserListing();
       widget.onSuccess!();
     } else {

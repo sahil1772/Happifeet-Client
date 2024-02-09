@@ -8,6 +8,7 @@ import 'package:happifeet_client_app/model/Location/LocationDataModel.dart';
 import 'package:happifeet_client_app/network/interface/InterfaceLocation.dart';
 import 'package:happifeet_client_app/network/services/ApiService.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
+import 'package:happifeet_client_app/utils/LanguageUtils.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../model/Location/LocationData.dart';
@@ -180,7 +181,7 @@ class LocationService implements InterfaceLocation {
     paramMap.addAll({"user_id": await SharedPref.instance.getUserId()});
     paramMap.addAll({"park_id": parkId});
     paramMap.addAll({"id": parkId});
-    paramMap.addAll({"lang": lang});
+    paramMap.addAll({"lang": LanguageUtils.convertLanguageCode(lang)});
     paramMap.removeWhere((key, value) => value == null||value=="");
     var formData = FormData.fromMap(paramMap, ListFormat.multiCompatible);
     if (locationImage != null) {
