@@ -48,7 +48,7 @@ class CommentService implements InterfaceComments {
 
       map.addAll({
         "task": "sent_user_email",
-        'client_id': await SharedPref.instance.getUserId(),
+        'client_id': await SharedPref.instance.getClientId(),
       });
 
       // map.addAll({
@@ -57,7 +57,7 @@ class CommentService implements InterfaceComments {
       // });
 
       var response =
-          await NetworkClient().dio.post(base_url, data: FormData.fromMap(map));
+          await NetworkClient().dio.post(base_url,queryParameters: map, data: FormData.fromMap(map));
 
       if (response.statusCode == 200) {
         var data = BaseResponse.fromJson(json.decode(response.data));
