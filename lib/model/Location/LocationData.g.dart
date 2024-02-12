@@ -16,7 +16,7 @@ LocationData _$LocationDataFromJson(Map<String, dynamic> json) => LocationData(
       zip: json['zip'] as String?,
       description: json['description'] as String?,
       image: json['image'] as String?,
-      qrImage: json['qrImage'] as String?,
+      qr_image: json['qr_image'] as String?,
     );
 
 Map<String, dynamic> _$LocationDataToJson(LocationData instance) =>
@@ -30,5 +30,5 @@ Map<String, dynamic> _$LocationDataToJson(LocationData instance) =>
       'zip': instance.zip,
       'description': instance.description,
       'image': instance.image,
-      'qrImage': instance.qrImage,
+      'qr_image': instance.qr_image,
     };

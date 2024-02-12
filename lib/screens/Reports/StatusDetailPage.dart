@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:happifeet_client_app/components/AddComment.dart';
 import 'package:happifeet_client_app/model/AssignedUsers/AssignedUserData.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
+import 'package:happifeet_client_app/network/services/ApiService.dart';
 import 'package:happifeet_client_app/storage/runtime_storage.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
 
@@ -603,7 +604,7 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
           gridDelegate:
               SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
           itemBuilder: (context, index) {
-            return Image.network(image[index]);
+            return Image.network(images_url+image[index]);
           },
         );
       },

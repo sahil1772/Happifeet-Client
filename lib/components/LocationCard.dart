@@ -179,13 +179,13 @@ class _LocationCardState extends State<LocationCard> {
                         onTap: () async {
                           bool result = await PermissionUtils.permissionRequest();
                           if (result) {
-                            widget.locationDetails!.qrImage != null
+                            widget.locationDetails!.qr_image != null
                                 ? showDialog(
                                     context: context,
                                     builder: (dialogcontext) {
                                       return DownloadProgressDialog(
                                         filePath:
-                                            widget.locationDetails!.qrImage!,
+                                            widget.locationDetails!.qr_image!,
                                       );
                                     })
                                 : ScaffoldMessenger.of(context).showSnackBar(

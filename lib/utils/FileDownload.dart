@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -8,11 +9,8 @@ class FileDownload {
   Dio dio = Dio();
   bool isSuccess = false;
 
-  void startDownloading(BuildContext context, final Function okCallback,{required String fileName,required String filePath}) async {
-
-
-
-
+  void startDownloading(BuildContext context, final Function okCallback,
+      {required String fileName, required String filePath}) async {
     String path = await _getFilePath(fileName);
 
     try {
@@ -20,6 +18,7 @@ class FileDownload {
         filePath,
         path,
         onReceiveProgress: (recivedBytes, totalBytes) {
+          log("DOWNLOAD PROGRESS ", error: (recivedBytes / totalBytes));
           okCallback(recivedBytes, totalBytes);
         },
         deleteOnError: true,
@@ -27,7 +26,7 @@ class FileDownload {
         isSuccess = true;
       });
     } catch (e) {
-      print("Exception$e");
+      print("Error occurred while downloading file => $e");
     }
 
     if (isSuccess) {
@@ -42,7 +41,7 @@ class FileDownload {
       if (Platform.isIOS) {
         dir = await getApplicationDocumentsDirectory(); // for iOS
       } else {
-        dir = Directory('/storage/emulated/0/Download/');  // for android
+        dir = Directory('/storage/emulated/0/Download/'); // for android
         if (!await dir.exists()) dir = (await getExternalStorageDirectory())!;
       }
     } catch (err) {
