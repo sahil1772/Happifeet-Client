@@ -26,7 +26,7 @@ class FileDownload {
         isSuccess = true;
       });
     } catch (e) {
-      print("Error occurred while downloading file => $e");
+      log("Error occurred while downloading file => $e");
     }
 
     if (isSuccess) {
