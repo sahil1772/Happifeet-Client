@@ -401,7 +401,7 @@ class _AddTrailState extends State<AddTrail>
                               keyboardType: TextInputType.phone,
                               controller: trailDistanceController,
                               decoration: InputDecoration(
-                                hintText: "Enter Zip*",
+                                hintText: "Enter Distance*",
                                 hintStyle: const TextStyle(
                                     color: Color(0xffabaaaa), fontSize: 13),
                                 enabledBorder: OutlineInputBorder(
@@ -1424,7 +1424,7 @@ class _AddTrailState extends State<AddTrail>
                               child: TextFormField(
                                 validator: (text) {
                                   if (text!.isEmpty) {
-                                    return "Enter valid address!";
+                                    return "Enter valid description!";
                                   }
                                   return null;
                                 },
@@ -1433,7 +1433,7 @@ class _AddTrailState extends State<AddTrail>
                                 minLines: 3,
                                 maxLines: 10,
                                 decoration: InputDecoration(
-                                  hintText: "Enter Address",
+                                  hintText: "Enter Description",
                                   hintStyle: const TextStyle(
                                       color: Color(0xffabaaaa), fontSize: 13),
                                   enabledBorder: OutlineInputBorder(

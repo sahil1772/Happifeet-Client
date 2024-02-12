@@ -107,7 +107,9 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
 
       apiResponse = getAnnouncementDetails();
 
-      setState(() {});
+      setState(() {
+        context.setLocale(Locale("en"));
+      });
     });
 
     super.initState();
@@ -128,10 +130,12 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
     return Scaffold(
       resizeToAvoidBottomInset: true,
       extendBodyBehindAppBar: true,
-      appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false,callback: (){
-        Navigator.of(context).pop();
-      })
-          .getAppBar(context),
+      appBar: HappiFeetAppBar(
+          IsDashboard: false,
+          isCitiyList: false,
+          callback: () {
+            Navigator.of(context).pop();
+          }).getAppBar(context),
       body: SafeArea(
         top: false,
         child: Stack(
@@ -154,7 +158,7 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
                   margin: DeviceDimensions.getHeaderEdgeInsets(context),
                   child: Center(
                     child: Text(
-                      "${widget.isEdit! ?"Edit":"Add"} Announcement",
+                      "${widget.isEdit! ? "Edit" : "Add"} Announcement",
                       // "Select Location".tr(),
                       // "Select Location".language(context),
                       // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
@@ -260,9 +264,10 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 20.0),
-            child: TextFormField(   onTapOutside: (event) {
-              FocusManager.instance.primaryFocus?.unfocus();
-            },
+            child: TextFormField(
+              onTapOutside: (event) {
+                FocusManager.instance.primaryFocus?.unfocus();
+              },
               enabled: !widget.isEdit!,
               validator: (text) {
                 if (text!.isEmpty) {
@@ -311,17 +316,15 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
                     left: 10, top: 10, right: 200, bottom: 10),
                 child: OutlinedButton(
                   style: ButtonStyle(
-                    shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                            side: BorderSide(
-                              width: 0.0,
-                              color:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
-                            ),
-                            borderRadius:
-                            BorderRadius.circular(
-                                20.0)
-                        )),
-
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        side: BorderSide(
+                          width: 0.0,
+                          color: ColorParser().hexToColor(RuntimeStorage
+                              .instance
+                              .clientTheme!
+                              .top_title_background_color!),
+                        ),
+                        borderRadius: BorderRadius.circular(20.0))),
                   ),
                   onPressed: () {
                     !widget.isEdit! ? _showBottomSheet(1) : null;
@@ -343,15 +346,15 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
             padding: const EdgeInsets.only(bottom: 16.0),
             child: Text(
               "Description",
-              style: TextStyle(
-                  fontSize: labelTextSize, color: Colors.black),
+              style: TextStyle(fontSize: labelTextSize, color: Colors.black),
             ).tr(),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 20.0),
-            child: TextFormField(   onTapOutside: (event) {
-              FocusManager.instance.primaryFocus?.unfocus();
-            },
+            child: TextFormField(
+              onTapOutside: (event) {
+                FocusManager.instance.primaryFocus?.unfocus();
+              },
               enabled: !widget.isEdit!,
               validator: (text) {
                 if (text!.isEmpty) {
@@ -383,14 +386,18 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
             padding: const EdgeInsets.only(bottom: 56.0),
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!),
+                    backgroundColor: ColorParser().hexToColor(RuntimeStorage
+                        .instance.clientTheme!.button_background!),
                     elevation: 0),
                 onPressed: () {
                   goToNextLangOrSubmit();
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: Text(widget.isEdit! ? "Next" : "Submit",style: TextStyle(color: Colors.white),),
+                  child: Text(
+                    widget.isEdit! ? "Next" : "Submit",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 )),
           )
         ],
@@ -426,47 +433,50 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
       children: [
         !isEnglishFormFilled
             ? Container(
-          margin: const EdgeInsets.only(bottom: 24),
-          decoration: BoxDecoration(
-              border: Border.all(width: 1.0, color: Colors.red),
-              borderRadius: BorderRadius.circular(10)),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: 16.0, vertical: 20),
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    LocaleKeys.Please_Fill_English,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: Colors.red,
-                        letterSpacing: 0.2),
-                  ).tr()
-                ],
-              ),
-            ),
-          ),
-        )
+                margin: const EdgeInsets.only(bottom: 24),
+                decoration: BoxDecoration(
+                    border: Border.all(width: 1.0, color: Colors.red),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 20),
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          LocaleKeys.Please_Fill_English,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.red,
+                              letterSpacing: 0.2),
+                        ).tr()
+                      ],
+                    ),
+                  ),
+                ),
+              )
             : const SizedBox(),
         Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
           child: Text(
             LocaleKeys.Title,
             style: TextStyle(
-                fontSize: labelTextSize, color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)),
+                fontSize: labelTextSize,
+                color: ColorParser().hexToColor(RuntimeStorage
+                    .instance.clientTheme!.top_title_background_color!)),
           ).tr(),
         ),
         Padding(
           padding: const EdgeInsets.only(bottom: 20.0),
-          child: TextFormField(   onTapOutside: (event) {
-            FocusManager.instance.primaryFocus?.unfocus();
-          },
+          child: TextFormField(
+            onTapOutside: (event) {
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
             validator: (value) {
-              if(value=="" || value == null) {
+              if (value == "" || value == null) {
                 return LocaleKeys.Provide_Valid_Data.tr();
               }
             },
@@ -497,16 +507,19 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
           child: Text(
             "Description",
             style: TextStyle(
-                fontSize: labelTextSize, color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!)),
+                fontSize: labelTextSize,
+                color: ColorParser().hexToColor(RuntimeStorage
+                    .instance.clientTheme!.top_title_background_color!)),
           ).tr(),
         ),
         Padding(
           padding: const EdgeInsets.only(bottom: 20.0),
-          child: TextFormField(   onTapOutside: (event) {
-            FocusManager.instance.primaryFocus?.unfocus();
-          },
+          child: TextFormField(
+            onTapOutside: (event) {
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
             validator: (value) {
-              if(value=="" || value == null) {
+              if (value == "" || value == null) {
                 return LocaleKeys.Provide_Valid_Data.tr();
               }
             },
@@ -537,14 +550,18 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
                 padding: const EdgeInsets.only(bottom: 56.0),
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!),
+                        backgroundColor: ColorParser().hexToColor(RuntimeStorage
+                            .instance.clientTheme!.button_background!),
                         elevation: 0),
                     onPressed: () {
                       goToNextLangOrSubmit();
                     },
                     child: const Padding(
                       padding: EdgeInsets.symmetric(vertical: 16.0),
-                      child: Text("Submit",style: TextStyle(color: Colors.white),),
+                      child: Text(
+                        "Submit",
+                        style: TextStyle(color: Colors.white),
+                      ),
                     )),
               )
             : const SizedBox()
@@ -584,9 +601,11 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
           data.annoucement_lang_cols = {};
         }
         data.annoucement_lang_cols!.addAll({
-          LanguageUtils.convertLanguageCode(element.key): AnnouncementDetailLangWise(
-              title: dataControllers[element.key]!["title"]!.text,
-              description: dataControllers[element.key]!["description"]!.text)
+          LanguageUtils.convertLanguageCode(element.key):
+              AnnouncementDetailLangWise(
+                  title: dataControllers[element.key]!["title"]!.text,
+                  description:
+                      dataControllers[element.key]!["description"]!.text)
         });
       }
     });
