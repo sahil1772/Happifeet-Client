@@ -77,6 +77,8 @@ class _ManageLocationWidgetState extends State<LocationListing> {
     });
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     double HEADER_HEIGHT = 4.5;
@@ -150,7 +152,7 @@ class _ManageLocationWidgetState extends State<LocationListing> {
                                     width: 400,
                                     child: TextField(
                                         onChanged: (value) {
-                                          // filterSearchResults(value);
+                                          filterSearchResults(value);
                                         },
                                         style: const TextStyle(fontSize: 16),
                                         decoration: InputDecoration(

@@ -7,6 +7,7 @@ import 'package:happifeet_client_app/storage/runtime_storage.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
 
 import '../model/Comments/CommentData.dart';
+import '../model/Comments/MailLogData.dart';
 import '../network/ApiFactory.dart';
 import '../resources/resources.dart';
 
@@ -25,6 +26,23 @@ class CommentsCard extends StatefulWidget {
 class _CommentsCardState extends State<CommentsCard> {
   TextEditingController subjectController = TextEditingController();
   TextEditingController commentController = TextEditingController();
+  List<MailLogData>? mailLog = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    getMailLogs();
+    super.initState();
+  }
+
+  getMailLogs() async {
+    var response = await ApiFactory.getCommentService().getMailUserLog(widget.data!.id!);
+    mailLog = response;
+    log("MAIL LOG DATA --> ${mailLog!.length}");
+    setState(() {
+
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,20 +128,21 @@ class _CommentsCardState extends State<CommentsCard> {
                         ),
                         InkWell(
                           onTap: () {
+
                             widget.data?.email_address != ""
                                 ? showDialog(
                                     context: context,
                                     builder: (context) {
                                       return Dialog(
                                         clipBehavior: Clip.none,
-                                        child: SingleChildScrollView(
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 16, vertical: 16),
-                                            height: 450,
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 16),
+                                          height: MediaQuery.of(context).size.height / 1.5,
+                                          width: MediaQuery.of(context)
+                                              .size
+                                              .width,
+                                          child: SingleChildScrollView(
                                             child: Column(
                                               children: [
                                                 Row(
@@ -272,15 +291,17 @@ class _CommentsCardState extends State<CommentsCard> {
                                                                 commentController
                                                                     .text);
                                                         if (response!.status == "1") {
+                                                          Navigator.of(context).pop();
                                                           log("EMAIL DATA SENT SUCCESSFILLY");
                                                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                                               content: Text("Email Sent")));
-                                                          Future.delayed(Duration(seconds: 2),
-                                                                  () {
-                                                            Navigator.of(context).pop();
 
-
-                                                              });
+                                                          // Future.delayed(Duration(seconds: 2),
+                                                          //         () {
+                                                          //
+                                                          //
+                                                          //
+                                                          //     });
                                                         } else {
                                                           log("Error in submitting Email data");
                                                         }
@@ -310,6 +331,118 @@ class _CommentsCardState extends State<CommentsCard> {
                                                     ),
                                                   ],
                                                 ),
+                                                SizedBox(
+                                                  height: 20,
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  children: [
+                                                    Text("Logs : ",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                        FontWeight.w500,
+                                                        color: Colors.black),),
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  height: 20,
+                                                ),
+
+                                                Table(
+                                                  // columnWidths: {0:FixedColumnWidth(0.6)},
+                                                  defaultColumnWidth: const IntrinsicColumnWidth(),
+                                                  children: [
+                                                    const TableRow(
+                                                      children: [
+                                                        Padding(
+                                                          padding: EdgeInsets.only(right:10),
+                                                          child: Text("Subject",style: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                              FontWeight.w500,
+                                                              color: Colors.black),),
+                                                        ),
+                                                        Padding(
+                                                          padding: EdgeInsets.only(right: 10),
+                                                          child: Text("Comment", style: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                              FontWeight.w500,
+                                                              color: Colors.black),),
+                                                        ),
+                                                        Text("Added Date", style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                            FontWeight.w500,
+                                                            color: Colors.black),),
+                                                      ],
+                                                    ),
+                                                    for(int i = 0; i<mailLog!.length; i++)
+                                                     TableRow(
+                                                      children: [
+                                                        Padding(
+                                                          padding: EdgeInsets.only(right:10,top:10),
+                                                          child: Text("${mailLog![i].subject}"),
+                                                        ),
+                                                        Padding(
+                                                          padding: EdgeInsets.only(top:10),
+                                                          child: Text("${mailLog![i].comment}"),
+                                                        ),
+                                                        Padding(
+                                                          padding: EdgeInsets.only(top:10),
+                                                          child: Text("${mailLog![i].add_date}"),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+
+                                                // for(int i = 0; i<5; i++)
+                                                // Row(children: [
+                                                //   Column(
+                                                //     children: [
+                                                //       Text("abcd"),
+                                                //     ],
+                                                //   ),
+                                                //   Column(
+                                                //     children: [
+                                                //       Text("hghghghghg rgrh ghghghghg hghghghg"),
+                                                //     ],
+                                                //   ),
+                                                //   Column(
+                                                //     children: [
+                                                //       Text("qertuy erf"),
+                                                //     ],
+                                                //   ),
+                                                // ],),
+                                                //
+
+
+                                                // SizedBox(
+                                                //   height: 200,
+                                                //   child: GridView.builder(
+                                                //       gridDelegate:
+                                                //       const SliverGridDelegateWithFixedCrossAxisCount(
+                                                //         crossAxisCount: 3,
+                                                //         mainAxisSpacing: 0,
+                                                //         crossAxisSpacing: 20,
+                                                //       ),
+                                                //
+                                                //       itemBuilder: (BuildContext context, index){
+                                                //         return Row(
+                                                //           children: [
+                                                //             Text("Subject"),
+                                                //             Text("Comment"),
+                                                //             Text("Added Date"),
+                                                //             Text("Subjedfgdrfgfgct"),
+                                                //             Text("Subjegfdg fdggfffgfgfgfffffg fgfgfgfgfgfgfgfgfct"),
+                                                //             Text("Subjgfgfg fgfgfect"),
+                                                //           ],
+                                                //         );
+                                                //
+                                                //       }),
+                                                // )
                                               ],
                                             ),
                                           ),

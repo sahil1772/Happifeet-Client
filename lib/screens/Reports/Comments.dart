@@ -58,6 +58,8 @@ class _CommentsWidgetState extends State<CommentsWidget> {
   Widget build(BuildContext context) {
     double HEADER_HEIGHT = 4.5;
     return Scaffold(
+
+      endDrawerEnableOpenDragGesture: false,
       drawerEnableOpenDragGesture: false,
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
@@ -267,4 +269,6 @@ class _CommentsWidgetState extends State<CommentsWidget> {
     commentResponse = ApiFactory.getCommentService().getComments(filterParams);
     setState(() {});
   }
+
+
 }
