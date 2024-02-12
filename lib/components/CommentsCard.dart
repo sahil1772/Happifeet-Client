@@ -116,14 +116,14 @@ class _CommentsCardState extends State<CommentsCard> {
                                     builder: (context) {
                                       return Dialog(
                                         clipBehavior: Clip.none,
-                                        child: SingleChildScrollView(
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 16, vertical: 16),
-                                            height: 450,
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 16),
+                                          height: MediaQuery.of(context).size.height / 1.5,
+                                          width: MediaQuery.of(context)
+                                              .size
+                                              .width,
+                                          child: SingleChildScrollView(
                                             child: Column(
                                               children: [
                                                 Row(
@@ -278,8 +278,8 @@ class _CommentsCardState extends State<CommentsCard> {
                                                           Future.delayed(Duration(seconds: 2),
                                                                   () {
                                                             Navigator.of(context).pop();
-
-
+                                            
+                                            
                                                               });
                                                         } else {
                                                           log("Error in submitting Email data");
@@ -310,6 +310,101 @@ class _CommentsCardState extends State<CommentsCard> {
                                                     ),
                                                   ],
                                                 ),
+                                                SizedBox(
+                                                  height: 20,
+                                                ),
+
+                                                Table(
+                                                  // columnWidths: {0:FixedColumnWidth(0.6)},
+                                                  defaultColumnWidth: const IntrinsicColumnWidth(),
+                                                  children: [
+                                                    const TableRow(
+                                                      children: [
+                                                        Padding(
+                                                          padding: EdgeInsets.only(right:10),
+                                                          child: Text("Subject",style: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                              FontWeight.w500,
+                                                              color: Colors.black),),
+                                                        ),
+                                                        Text("Comment", style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                            FontWeight.w500,
+                                                            color: Colors.black),),
+                                                        Text("Added Date", style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                            FontWeight.w500,
+                                                            color: Colors.black),),
+                                                      ],
+                                                    ),
+                                                    for(int i = 0; i<5; i++)
+                                                    const TableRow(
+                                                      children: [
+                                                        Padding(
+                                                          padding: EdgeInsets.only(right:10,top:10),
+                                                          child: Text("sfdfdddf"),
+                                                        ),
+                                                        Padding(
+                                                          padding: EdgeInsets.only(top:10),
+                                                          child: Text("gfgfgfgff ggfgfgff fgfgfgfgf ggfgfgfgf gfgfgfg"),
+                                                        ),
+                                                        Padding(
+                                                          padding: EdgeInsets.only(top:10),
+                                                          child: Text("fgfgfg fgfgfg fggfgfgf"),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+
+                                                // for(int i = 0; i<5; i++)
+                                                // Row(children: [
+                                                //   Column(
+                                                //     children: [
+                                                //       Text("abcd"),
+                                                //     ],
+                                                //   ),
+                                                //   Column(
+                                                //     children: [
+                                                //       Text("hghghghghg rgrh ghghghghg hghghghg"),
+                                                //     ],
+                                                //   ),
+                                                //   Column(
+                                                //     children: [
+                                                //       Text("qertuy erf"),
+                                                //     ],
+                                                //   ),
+                                                // ],),
+                                                //
+
+
+                                                // SizedBox(
+                                                //   height: 200,
+                                                //   child: GridView.builder(
+                                                //       gridDelegate:
+                                                //       const SliverGridDelegateWithFixedCrossAxisCount(
+                                                //         crossAxisCount: 3,
+                                                //         mainAxisSpacing: 0,
+                                                //         crossAxisSpacing: 20,
+                                                //       ),
+                                                //
+                                                //       itemBuilder: (BuildContext context, index){
+                                                //         return Row(
+                                                //           children: [
+                                                //             Text("Subject"),
+                                                //             Text("Comment"),
+                                                //             Text("Added Date"),
+                                                //             Text("Subjedfgdrfgfgct"),
+                                                //             Text("Subjegfdg fdggfffgfgfgfffffg fgfgfgfgfgfgfgfgfct"),
+                                                //             Text("Subjgfgfg fgfgfect"),
+                                                //           ],
+                                                //         );
+                                                //
+                                                //       }),
+                                                // )
                                               ],
                                             ),
                                           ),
