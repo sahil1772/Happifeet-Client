@@ -9,6 +9,8 @@ import 'package:happifeet_client_app/network/interface/InterfaceComments.dart';
 import 'package:happifeet_client_app/network/services/ApiService.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
 
+import '../../model/Comments/MailLogData.dart';
+
 class CommentService implements InterfaceComments {
   /** get Comments listing **/
   @override
@@ -71,4 +73,38 @@ class CommentService implements InterfaceComments {
       throw "exception caught IN sendEmailData $error";
     }
   }
+
+
+
+  @override
+  Future<List<MailLogData>> getMailUserLog(String report_id) async {
+    try {
+      var map = {"report_id" : report_id};
+
+      map.addAll({
+        'task': "mail_user_log",
+      });
+
+      var response =
+          await NetworkClient().dio.get(base_url, queryParameters: map);
+
+      if (response.statusCode == 200) {
+        List<MailLogData> data = List<MailLogData>.from(json
+            .decode(response.data)
+            .map((model) => MailLogData.fromJson(model)));
+
+        return data;
+      } else {
+        log("response other than 200 for getMailUserLog");
+        throw "response other than 200 for getMailUserLog";
+      }
+    } on DioException catch (error) {
+      log("EXCEPTION IN getMailUserLog ${error.response}");
+      throw "exception caught IN getMailUserLog $error";
+    }
+  }
+
+
+
+
 }
