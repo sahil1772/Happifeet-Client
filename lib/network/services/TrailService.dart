@@ -5,7 +5,6 @@ import 'package:dio/dio.dart';
 import 'package:happifeet_client_app/model/BaseResponse.dart';
 import 'package:happifeet_client_app/model/Trails/TrailListingData.dart';
 import 'package:happifeet_client_app/model/Trails/TrailPayload.dart';
-
 import 'package:happifeet_client_app/network/interface/InterfaceTrails.dart';
 import 'package:happifeet_client_app/network/services/ApiService.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
@@ -50,8 +49,8 @@ class TrailService implements InterfaceTrails {
       var formData = FormData.fromMap(map, ListFormat.multiCompatible);
 
       if (trailImage != null) {
-        formData.files.add(MapEntry(
-            "trailListingImage", await MultipartFile.fromFile(trailImage.path)));
+        formData.files.add(MapEntry("trailListingImage",
+            await MultipartFile.fromFile(trailImage.path)));
       }
 
       if (galleryImages!.isNotEmpty) {
@@ -63,8 +62,7 @@ class TrailService implements InterfaceTrails {
         }
       }
 
-      var response =
-          await NetworkClient().dio.post(base_url, data: formData);
+      var response = await NetworkClient().dio.post(base_url, data: formData);
 
       if (response.statusCode == 200) {
         BaseResponse data = BaseResponse.fromJson(json.decode(response.data!));
@@ -97,7 +95,8 @@ class TrailService implements InterfaceTrails {
         BaseResponse data = BaseResponse.fromJson(json.decode(response.data!));
 
         return data;
-      } else {
+      }
+      else {
         log("response other than 200 for LocationData");
         throw "response other than 200 for LocationData";
       }
@@ -134,10 +133,11 @@ class TrailService implements InterfaceTrails {
   }
 
   @override
-  Future<BaseResponse> updateTrailData(TrailPayload payload, XFile? trailImage, List<XFile>? galleryImages) async {
+  Future<BaseResponse> updateTrailData(TrailPayload payload, XFile? trailImage,
+      List<XFile>? galleryImages) async {
     try {
       var map = payload.toJson();
-      map.removeWhere((key, value) => value == null||value=="");
+      map.removeWhere((key, value) => value == null || value == "");
       map.addAll({
         'task': "update_trail",
         'user_id': await SharedPref.instance.getUserId()
@@ -146,8 +146,8 @@ class TrailService implements InterfaceTrails {
       var formData = FormData.fromMap(map, ListFormat.multiCompatible);
 
       if (trailImage != null) {
-        formData.files.add(MapEntry(
-            "trailListingImage", await MultipartFile.fromFile(trailImage!.path)));
+        formData.files.add(MapEntry("trailListingImage",
+            await MultipartFile.fromFile(trailImage!.path)));
       }
 
       if (galleryImages!.isNotEmpty) {
@@ -159,8 +159,7 @@ class TrailService implements InterfaceTrails {
         }
       }
 
-      var response =
-          await NetworkClient().dio.post(base_url, data: formData);
+      var response = await NetworkClient().dio.post(base_url, data: formData);
 
       if (response.statusCode == 200) {
         BaseResponse data = BaseResponse.fromJson(json.decode(response.data!));
@@ -176,27 +175,22 @@ class TrailService implements InterfaceTrails {
     }
   }
 
-
   /** GET TRAIL LISTING **/
   @override
   Future<List<TrailListingData>> getTrailListing(String? client_id) async {
     try {
-      var map ={
+      var map = {
         'task': "list_trail",
         'client_id': client_id,
-
       };
 
-      var response = await NetworkClient()
-          .dio
-          .post(base_url, queryParameters:map);
+      var response =
+          await NetworkClient().dio.post(base_url, queryParameters: map);
 
       if (response.statusCode == 200) {
-
         List<TrailListingData> data = List<TrailListingData>.from(json
             .decode(response.data)
             .map((model) => TrailListingData.fromJson(model)));
-
 
         return data;
       } else {
@@ -212,22 +206,19 @@ class TrailService implements InterfaceTrails {
   @override
   Future<BaseResponse> deleteTrail(String? trailId) async {
     try {
-      var map ={
+      var map = {
         'task': "delete_trail",
         'trail_id': trailId,
-
       };
 
-      var response = await NetworkClient()
-          .dio
-          .post(base_url, queryParameters:map);
+      var response =
+          await NetworkClient().dio.post(base_url, queryParameters: map);
 
       if (response.statusCode == 200) {
+        BaseResponse response1 =
+            BaseResponse.fromJson(json.decode(response.data!));
 
-       BaseResponse response1=  BaseResponse.fromJson(json.decode(response.data!));
-
-
-        return response1 ;
+        return response1;
       } else {
         log("response other than 200 for deleteTrail");
         throw "response other than 200 for deleteTrail";
@@ -237,7 +228,4 @@ class TrailService implements InterfaceTrails {
       throw error;
     }
   }
-
-
-
 }

@@ -2,10 +2,13 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:happifeet_client_app/components/DownloadProgressDialog.dart';
 import 'package:happifeet_client_app/model/BaseResponse.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/screens/Manage/ManageLocation/AddLocation.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
+import 'package:happifeet_client_app/utils/PermissionUtils.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../model/Location/LocationData.dart';
 import '../storage/runtime_storage.dart';
@@ -13,7 +16,7 @@ import '../storage/runtime_storage.dart';
 class LocationCard extends StatefulWidget {
   LocationData? locationDetails;
 
-  LocationCard({Key? key, this.locationDetails,this.eventListener});
+  LocationCard({Key? key, this.locationDetails, this.eventListener});
 
   Function? eventListener;
 
@@ -47,7 +50,8 @@ class _LocationCardState extends State<LocationCard> {
           //   color: Colors.black,
           // ),
           boxShadow: [
-            const BoxShadow(blurRadius: 3, color: Colors.black12, spreadRadius: 2),
+            const BoxShadow(
+                blurRadius: 3, color: Colors.black12, spreadRadius: 2),
           ],
           borderRadius: BorderRadius.circular(10),
         ),
@@ -86,8 +90,11 @@ class _LocationCardState extends State<LocationCard> {
                         overflow: TextOverflow.clip,
                         softWrap: true,
                         maxLines: 1,
-                        style:  TextStyle(
-                            color:ColorParser().hexToColor( RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                        style: TextStyle(
+                            color: ColorParser().hexToColor(RuntimeStorage
+                                .instance
+                                .clientTheme!
+                                .top_title_background_color!),
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                             letterSpacing: 0.5),
@@ -99,17 +106,23 @@ class _LocationCardState extends State<LocationCard> {
                           softWrap: true,
                           maxLines: 1,
                           overflow: TextOverflow.clip,
-                          style:  TextStyle(color: ColorParser().hexToColor( RuntimeStorage.instance.clientTheme!.body_text_color!),),
+                          style: TextStyle(
+                            color: ColorParser().hexToColor(RuntimeStorage
+                                .instance.clientTheme!.body_text_color!),
+                          ),
                         ),
                       ),
-                       Padding(
-                        padding: EdgeInsets.symmetric(vertical: 1.0),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 1.0),
                         child: Text(
                           widget.locationDetails!.address2!,
                           softWrap: true,
                           maxLines: 1,
                           overflow: TextOverflow.clip,
-                          style: TextStyle(color: ColorParser().hexToColor( RuntimeStorage.instance.clientTheme!.body_text_color!),),
+                          style: TextStyle(
+                            color: ColorParser().hexToColor(RuntimeStorage
+                                .instance.clientTheme!.body_text_color!),
+                          ),
                         ),
                       ),
                     ],
@@ -162,7 +175,30 @@ class _LocationCardState extends State<LocationCard> {
                     const SizedBox(
                       height: 5,
                     ),
-                    SvgPicture.asset("assets/images/location/qrCode.svg"),
+                    InkWell(
+                        onTap: () async {
+                          bool result = await PermissionUtils.permissionRequest();
+                          if (result) {
+                            widget.locationDetails!.qr_image != null
+                                ? showDialog(
+                                    context: context,
+                                    builder: (dialogcontext) {
+                                      return DownloadProgressDialog(
+                                        filePath:
+                                            widget.locationDetails!.qr_image!,
+                                      );
+                                    })
+                                : ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            "QR image not available to download")));
+                          } else {
+                            print("No permission to read and write.");
+                          }
+                          // _saveImage(context: context,downloadImage: widget.locationDetails!.qrImage!);
+                        },
+                        child: SvgPicture.asset(
+                            "assets/images/location/qrCode.svg")),
                   ],
                 ),
               )
@@ -172,6 +208,40 @@ class _LocationCardState extends State<LocationCard> {
       ),
     );
   }
+
+  // Future<void> _saveImage({required BuildContext context,required String downloadImage}) async {
+  //   String? message;
+  //   final scaffoldMessenger = ScaffoldMessenger.of(context);
+  //
+  //   try {
+  //     // Download image
+  //     final http.Response response = await http.get(Uri.parse(downloadImage));
+  //
+  //     // Get temporary directory
+  //     final dir = await getTemporaryDirectory();
+  //
+  //     // Create an image name
+  //     var filename = '${dir.path}/image.png';
+  //
+  //     // Save to filesystem
+  //     final file = File(filename);
+  //     await file.writeAsBytes(response.bodyBytes);
+  //
+  //     // Ask the user to save it
+  //     final params = SaveFileDialogParams(sourceFilePath: file.path);
+  //     final finalPath = await FlutterFileDialog.saveFile(params: params);
+  //
+  //     if (finalPath != null) {
+  //       message = 'Image saved to disk';
+  //     }
+  //   } catch (e) {
+  //     message = 'An error occurred while saving the image';
+  //   }
+  //
+  //   if (message != null) {
+  //     scaffoldMessenger.showSnackBar(SnackBar(content: Text(message)));
+  //   }
+  // }
 
   AlertDialog showAlertDialog(BuildContext context) {
     Widget cancelButton = TextButton(
@@ -185,8 +255,8 @@ class _LocationCardState extends State<LocationCard> {
       onPressed: () {
         deleteLocation(() {
           Navigator.pop(context);
-          ScaffoldMessenger.of(context)
-              .showSnackBar(const SnackBar(content: Text("Location Deleted Successfully!")));
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Location Deleted Successfully!")));
           widget.eventListener!(events.DELETE);
         }, (message) {
           Navigator.pop(context);
@@ -234,4 +304,6 @@ class _LocationCardState extends State<LocationCard> {
       onError(response.msg);
     }
   }
+
+
 }

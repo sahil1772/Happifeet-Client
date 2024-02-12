@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:happifeet_client_app/components/AddComment.dart';
 import 'package:happifeet_client_app/model/AssignedUsers/AssignedUserData.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
+import 'package:happifeet_client_app/network/services/ApiService.dart';
 import 'package:happifeet_client_app/storage/runtime_storage.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
 
@@ -280,9 +281,7 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                                       fontWeight: FontWeight.w500,
                                       color: Colors.black)),
                               Text(
-                                  snapshot.data!.first.comment != null ||
-                                          snapshot
-                                              .data!.first.comment!.isNotEmpty
+                                  snapshot.data!.first.comment!.isNotEmpty
                                       ? snapshot
                                           .data!.first.comment!.first.assign_by!
                                       : "-",
@@ -300,12 +299,11 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
                                       color: Colors.black)),
-                              Text(snapshot.data!.first.comment != null ||
-                                  snapshot
-                                      .data!.first.comment!.isNotEmpty
-                                  ? snapshot
-                                  .data!.first.comment!.first.assign_to!
-                                  : "-",
+                              Text(
+                                  snapshot.data!.first.comment!.isNotEmpty
+                                      ? snapshot
+                                          .data!.first.comment!.first.assign_to!
+                                      : "-",
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w300,
@@ -606,7 +604,7 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
           gridDelegate:
               SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
           itemBuilder: (context, index) {
-            return Image.network(image[index]);
+            return Image.network(images_url+image[index]);
           },
         );
       },

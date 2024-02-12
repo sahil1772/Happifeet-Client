@@ -15,6 +15,7 @@ import 'package:happifeet_client_app/storage/runtime_storage.dart';
 import 'package:happifeet_client_app/storage/shared_preferences.dart';
 import 'package:happifeet_client_app/utils/CalendarUtils.dart';
 import 'package:happifeet_client_app/utils/DeviceDimensions.dart';
+import 'package:happifeet_client_app/utils/LanguageUtils.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../components/HappiFeetAppBar.dart';
@@ -241,10 +242,12 @@ class _AddLocationState extends State<AddLocation>
     return Scaffold(
       resizeToAvoidBottomInset: true,
       extendBodyBehindAppBar: true,
-      appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false,callback: (){
-        Navigator.of(context).pop();
-      })
-          .getAppBar(context),
+      appBar: HappiFeetAppBar(
+          IsDashboard: false,
+          isCitiyList: false,
+          callback: () {
+            Navigator.of(context).pop();
+          }).getAppBar(context),
       body: SafeArea(
         top: false,
         child: Stack(
@@ -267,7 +270,7 @@ class _AddLocationState extends State<AddLocation>
                   margin: DeviceDimensions.getHeaderEdgeInsets(context),
                   child: Center(
                     child: Text(
-                      "${widget.isEdit! ?"Edit":"Add"} Location",
+                      "${widget.isEdit! ? "Edit" : "Add"} Location",
                       // "Select Location".tr(),
                       // "Select Location".language(context),
                       // widget.selectedLanguage == "1" ? 'Select Location'.language(context) : 'Select Location',
@@ -1008,100 +1011,92 @@ class _AddLocationState extends State<AddLocation>
                               ),
                             ],
                           ),
-
-                               Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        height: 64,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          border: Border.all(
-                                            color: const Color(0xffc4c4c4),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10.0),
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: 64,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: const Color(0xffc4c4c4),
+                                    ),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10.0),
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Flexible(
+                                            fit: FlexFit.loose,
+                                            child: Text(
+                                              galleryImages!.isEmpty
+                                                  ? "No File Selected"
+                                                  : galleryImages!.length == 1
+                                                      ? galleryImages!
+                                                          .first.name
+                                                      : "${galleryImages!.length} ${galleryImages!.length == 1 ? "File" : "Files"} Selected",
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
                                           ),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10.0),
-                                          child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Flexible(
-                                                  fit: FlexFit.loose,
-                                                  child: Text(
-                                                    galleryImages!.isEmpty
-                                                        ? "No File Selected"
-                                                        : galleryImages!
-                                                                    .length ==
-                                                                1
-                                                            ? galleryImages!
-                                                                .first.name
-                                                            : "${galleryImages!.length} ${galleryImages!.length == 1 ? "File" : "Files"} Selected",
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 16.0),
+                                            child: OutlinedButton(
+                                                onPressed: () {
+                                                  if (galleryImages!.length +
+                                                          (widget.isEdit!
+                                                              ? snapshot
+                                                                  .data!
+                                                                  .galleryImages!
+                                                                  .length
+                                                              : 0) >=
+                                                      5) {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                            const SnackBar(
+                                                                content: Text(
+                                                                    "Only 5 images are allowed")));
+                                                  } else {
+                                                    _showBottomSheet(2);
+                                                  }
+                                                },
+                                                style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                          Colors.transparent),
+                                                  shape: MaterialStateProperty
+                                                      .all(RoundedRectangleBorder(
+                                                          side: BorderSide(
+                                                              width: 0.0,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .primaryColor),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10.0))),
+                                                ),
+                                                child: Text(
+                                                  "Choose File",
+                                                  style: TextStyle(
+                                                    color: ColorParser()
+                                                        .hexToColor(RuntimeStorage
+                                                            .instance
+                                                            .clientTheme!
+                                                            .top_title_background_color!),
                                                   ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 16.0),
-                                                  child: OutlinedButton(
-                                                      onPressed: () {
-                                                        if (galleryImages!
-                                                                    .length +
-                                                                snapshot
-                                                                    .data!
-                                                                    .galleryImages!
-                                                                    .length >=
-                                                            5) {
-                                                          ScaffoldMessenger.of(
-                                                                  context)
-                                                              .showSnackBar(
-                                                                  const SnackBar(
-                                                                      content: Text(
-                                                                          "Only 5 images are allowed")));
-                                                        } else {
-                                                          _showBottomSheet(2);
-                                                        }
-                                                      },
-                                                      style: ButtonStyle(
-                                                        backgroundColor:
-                                                            MaterialStateProperty
-                                                                .all(Colors
-                                                                    .transparent),
-                                                        shape: MaterialStateProperty.all(
-                                                            RoundedRectangleBorder(
-                                                                side: BorderSide(
-                                                                    width: 0.0,
-                                                                    color: Theme.of(
-                                                                            context)
-                                                                        .primaryColor),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10.0))),
-                                                      ),
-                                                      child: Text(
-                                                        "Choose File",
-                                                        style: TextStyle(
-                                                          color: ColorParser()
-                                                              .hexToColor(
-                                                                  RuntimeStorage
-                                                                      .instance
-                                                                      .clientTheme!
-                                                                      .top_title_background_color!),
-                                                        ),
-                                                      )),
-                                                ),
-                                              ]),
-                                        ),
-                                      ),
-                                      widget.isEdit!?
-                                      GridView.builder(
+                                                )),
+                                          ),
+                                        ]),
+                                  ),
+                                ),
+                                widget.isEdit!
+                                    ? GridView.builder(
                                         physics:
                                             const NeverScrollableScrollPhysics(),
                                         gridDelegate:
@@ -1204,11 +1199,11 @@ class _AddLocationState extends State<AddLocation>
                                             ),
                                           );
                                         },
-                                      ):SizedBox()
-                                    ],
-                                  ),
-                                )
-
+                                      )
+                                    : SizedBox()
+                              ],
+                            ),
+                          )
                         ],
                       ),
                     )),
@@ -2481,7 +2476,7 @@ class _AddLocationState extends State<AddLocation>
                                   fontWeight: FontWeight.w700),
                             ).tr(),
                             const Text(
-                              " *",
+                              "",
                               style: TextStyle(color: Colors.red),
                             ),
                           ],
@@ -2725,7 +2720,7 @@ class _AddLocationState extends State<AddLocation>
                     },
                     icon: SvgPicture.asset(
                         "assets/images/location/pick_from_gallery.svg"),
-                    label: const Text("Choose From Gallery")),
+                    label: const Text("CChoose From Gallery")),
               ],
             )));
   }
@@ -2807,33 +2802,26 @@ class _AddLocationState extends State<AddLocation>
         .submitLocationLanguageData(
             locationData!,
             widget.isEdit! ? widget.parkId! : park_Id!,
-            languages.keys.elementAt(_controller!.index),
+            LanguageUtils.convertLanguageCode(
+                languages.keys.elementAt(_controller!.index)),
             locationImage,
             galleryImages);
     if (response.status == 1) {
-      _controller!.index = (_controller!.index + 1 > languages.length - 1)
-          ? _controller!.index
-          : (_controller!.index + 1);
+
 
       setState(() {
-        switch (languages.keys.elementAt(_controller!.index)) {
-          case "spa":
-            context.setLocale(const Locale("es"));
-            break;
-          case "rsa":
-            context.setLocale(const Locale("rsa"));
-            break;
-          default:
-            context.setLocale(
-                Locale(languages.keys.elementAt(_controller!.index)));
-            break;
-        }
+        context.setLocale(Locale(languages.keys.elementAt(_controller!.index)));
       });
-      if (_controller!.index + 1 > languages.length - 1) {
+      if ((_controller!.index + 1 )> (languages.length - 1)) {
         ScaffoldMessenger.of(buildContext!).showSnackBar(SnackBar(
             content: Text(
                 "Location ${widget.isEdit! ? "Updated" : "Created"} Successfully.")));
         Navigator.of(buildContext!).pop();
+      }
+      else{
+        _controller!.index = (_controller!.index + 1 > languages.length - 1)
+            ? _controller!.index
+            : (_controller!.index + 1);
       }
     } else {
       ScaffoldMessenger.of(context)
@@ -2943,24 +2931,13 @@ class _AddLocationState extends State<AddLocation>
             .getLocationService()
             .submitLocationData(locationData!, locationImage!, galleryImages!);
     BaseResponse baseResponse = await response;
-    if (baseResponse.status == "1") {
+    if (baseResponse.status == 1) {
       park_Id = baseResponse.park_id.toString();
       _controller!.index = (_controller!.index + 1 > languages.length - 1)
           ? _controller!.index
           : (_controller!.index + 1);
       setState(() {
-        switch (languages.keys.elementAt(_controller!.index)) {
-          case "spa":
-            context.setLocale(const Locale("es"));
-            break;
-          case "rsa":
-            context.setLocale(const Locale("rsa"));
-            break;
-          default:
-            context.setLocale(
-                Locale(languages.keys.elementAt(_controller!.index)));
-            break;
-        }
+        context.setLocale(Locale(languages.keys.elementAt(_controller!.index)));
       });
     } else {
       ScaffoldMessenger.of(context)
@@ -2979,9 +2956,8 @@ class _AddLocationState extends State<AddLocation>
     Map<String, String> params = {"park_id": park_id};
     if (languages.keys.elementAt(_controller!.index) != "en") {
       params.addAll({
-        "lang": languages.keys.elementAt(_controller!.index) == "es"
-            ? "spa"
-            : languages.keys.elementAt(_controller!.index)
+        "lang": LanguageUtils.convertLanguageCode(
+            languages.keys.elementAt(_controller!.index))
       });
     }
     LocationDataModel data =

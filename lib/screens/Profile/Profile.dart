@@ -1,6 +1,9 @@
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:happifeet_client_app/model/Theme/ClientTheme.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
@@ -33,11 +36,16 @@ class _ProfileWidgetState extends State<ProfileWidget> {
   var currentPassword = TextEditingController();
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   String userName = "";
+
+  String? uniqueID = "";
+
   @override
   void initState() {
     // TODO: implement initState
     getUserName();
     log("CONTROLLER DATA${widget.controller}");
+
+    getDeviceDetails();
 
     super.initState();
   }
@@ -93,7 +101,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: Text(
                           "Profile",
                           // "Select Location".tr(),
@@ -143,25 +151,41 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "Name",
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Column( crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "Name",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black),
+                                    ),
+                                    Text( userName.toString(),
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black)),
+                                  ],
+                                ),
+                              ),
+                              TextButton(onPressed: () { 
+                                Clipboard.setData(ClipboardData(text: uniqueID!)).then((_){
+                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("UUID has been copied to clipboard")));
+                                });
+                              }, child: const Text("Copy UUID"))
+
+                            ],
                           ),
-                          Text( userName.toString(),
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black)),
                           const SizedBox(
                             height: 20,
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 "Current Password",
                                 style: TextStyle(
                                     fontSize: 16,
@@ -205,7 +229,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("New Password",
+                              const Text("New Password",
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w500,
@@ -247,7 +271,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Confirm Password",
+                              const Text("Confirm Password",
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w500,
@@ -318,22 +342,22 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                         if (response.status == 1) {
                                           log("password successfully change!!");
                                           ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
+                                              .showSnackBar(const SnackBar(
                                                   content: Text(
                                                       "Password Change Successfully!")));
-                                          Future.delayed(Duration(seconds: 2),
+                                          Future.delayed(const Duration(seconds: 2),
                                               () {
                                                 widget.controller!.jumpToTab(0);
 
                                           });
                                         } else if (response.status == 0) {
                                           ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
+                                              .showSnackBar(const SnackBar(
                                                   content: Text(
                                                       "Invalid old password")));
                                         } else {
                                           ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
+                                              .showSnackBar(const SnackBar(
                                                   content: Text(
                                                       "Something went wroong")));
                                         }
@@ -345,10 +369,10 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                         backgroundColor:
                                             ColorParser().hexToColor("#1A7C52"),
                                         elevation: 0,
-                                        shape: RoundedRectangleBorder(
+                                        shape: const RoundedRectangleBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(10)))),
-                                    child: Text(
+                                    child: const Text(
                                       "Save Changes",
                                       style: TextStyle(
                                           color: Colors.white,
@@ -358,7 +382,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                   ),
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 20,
                               ),
                               Expanded(
@@ -366,16 +390,16 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                   height: 40,
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      LoginPageWidget().gotoLogin(context);
+                                      const LoginPageWidget().gotoLogin(context);
                                       setBoolForLogOut();
                                     },
                                     style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.red,
                                         elevation: 0,
-                                        shape: RoundedRectangleBorder(
+                                        shape: const RoundedRectangleBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(10)))),
-                                    child: Text(
+                                    child: const Text(
                                       "Log Out",
                                       style: TextStyle(
                                           color: Colors.white,
@@ -398,5 +422,19 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         ),
       ),
     );
+  }
+
+  Future<void> getDeviceDetails() async {
+    var deviceInfo = DeviceInfoPlugin();
+    if (Platform.isIOS) { // import 'dart:io'
+      var iosDeviceInfo = await deviceInfo.iosInfo;
+      uniqueID= iosDeviceInfo.identifierForVendor; // unique ID on iOS
+    } else if(Platform.isAndroid) {
+      var androidDeviceInfo = await deviceInfo.androidInfo;
+      uniqueID= androidDeviceInfo.androidId; // unique ID on Android
+    }
+    setState(() {
+
+    });
   }
 }
