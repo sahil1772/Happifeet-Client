@@ -20,13 +20,14 @@ class CommentsCard extends StatefulWidget {
 
   @override
   State<CommentsCard> createState() => _CommentsCardState();
-
 }
 
 class _CommentsCardState extends State<CommentsCard> {
   TextEditingController subjectController = TextEditingController();
   TextEditingController commentController = TextEditingController();
   List<MailLogData>? mailLog = [];
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -35,13 +36,11 @@ class _CommentsCardState extends State<CommentsCard> {
   }
 
   getMailLogs() async {
-    var response = await ApiFactory.getCommentService().getMailUserLog(widget.data!.id!);
+    var response =
+        await ApiFactory.getCommentService().getMailUserLog(widget.data!.id!);
     mailLog = response;
     log("MAIL LOG DATA --> ${mailLog!.length}");
-    setState(() {
-
-    });
-
+    setState(() {});
   }
 
   @override
@@ -101,7 +100,8 @@ class _CommentsCardState extends State<CommentsCard> {
                               style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
-                                  color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
+                                  color: ColorParser().hexToColor(RuntimeStorage
+                                      .instance.clientTheme!.body_text_color!)),
                             ),
                           ],
                         ),
@@ -111,7 +111,14 @@ class _CommentsCardState extends State<CommentsCard> {
                         Row(
                           children: [
                             SvgPicture.asset(
-                                "assets/images/comments/profile.svg",colorFilter: ColorFilter.mode( ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!), BlendMode.srcIn),),
+                              "assets/images/comments/profile.svg",
+                              colorFilter: ColorFilter.mode(
+                                  ColorParser().hexToColor(RuntimeStorage
+                                      .instance
+                                      .clientTheme!
+                                      .top_title_background_color!),
+                                  BlendMode.srcIn),
+                            ),
                             const SizedBox(
                               width: 10,
                             ),
@@ -120,7 +127,9 @@ class _CommentsCardState extends State<CommentsCard> {
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
-                                    color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
+                                    color: ColorParser().hexToColor(
+                                        RuntimeStorage.instance.clientTheme!
+                                            .body_text_color!))),
                           ],
                         ),
                         const SizedBox(
@@ -128,7 +137,6 @@ class _CommentsCardState extends State<CommentsCard> {
                         ),
                         InkWell(
                           onTap: () {
-
                             widget.data?.email_address != ""
                                 ? showDialog(
                                     context: context,
@@ -138,312 +146,383 @@ class _CommentsCardState extends State<CommentsCard> {
                                         child: Container(
                                           padding: EdgeInsets.symmetric(
                                               horizontal: 16, vertical: 16),
-                                          height: MediaQuery.of(context).size.height / 1.5,
-                                          width: MediaQuery.of(context)
-                                              .size
-                                              .width,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              1.5,
+                                          width:
+                                              MediaQuery.of(context).size.width,
                                           child: SingleChildScrollView(
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      "Send email to user",
-                                                      style: TextStyle(
-                                                          fontSize: 18,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: Colors.black),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(height: 30),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      "Subject",
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          color: Resources
-                                                              .colors.hfText),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 8,
-                                                    ),
-                                                    TextField(
-                                                        controller:
-                                                            subjectController,
-                                                        onChanged: (value) {},
-                                                        decoration:
-                                                            InputDecoration(
-                                                          filled: true,
-                                                          fillColor:
-                                                              Colors.white,
-                                                          // labelText: labelText,
-                                                          hintStyle:
-                                                              const TextStyle(
-                                                                  fontSize: 16,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400),
-                                                          // errorText: getEmailError(),
-                                                          focusedBorder: OutlineInputBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          12),
-                                                              borderSide: BorderSide(
-                                                                  color: ColorParser()
-                                                                      .hexToColor(
-                                                                          "#D7D7D7"),
-                                                                  width: 1)),
-                                                          enabledBorder: OutlineInputBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          12),
-                                                              borderSide: BorderSide(
-                                                                  width: 1,
-                                                                  color: ColorParser()
-                                                                      .hexToColor(
-                                                                          "#D7D7D7"))),
-                                                        )),
-                                                  ],
-                                                ),
-                                                SizedBox(height: 20),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      "Comment",
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          color: Resources
-                                                              .colors.hfText),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 8,
-                                                    ),
-                                                    TextField(
-                                                        controller:
-                                                            commentController,
-                                                        onChanged: (value) {},
-                                                        maxLines: 4,
-                                                        decoration:
-                                                            InputDecoration(
-                                                          filled: true,
-                                                          fillColor:
-                                                              Colors.white,
-                                                          // labelText: labelText,
-                                                          hintStyle:
-                                                              const TextStyle(
-                                                                  fontSize: 16,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400),
-                                                          // errorText: getEmailError(),
-                                                          focusedBorder: OutlineInputBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          12),
-                                                              borderSide: BorderSide(
-                                                                  color: ColorParser()
-                                                                      .hexToColor(
-                                                                          "#D7D7D7"),
-                                                                  width: 1)),
-                                                          enabledBorder: OutlineInputBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          12),
-                                                              borderSide: BorderSide(
-                                                                  width: 1,
-                                                                  color: ColorParser()
-                                                                      .hexToColor(
-                                                                          "#D7D7D7"))),
-                                                        )),
-                                                  ],
-                                                ),
-                                                SizedBox(height: 20),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    ElevatedButton(
-                                                      onPressed: () async {
-                                                        var response = await ApiFactory
+                                            child: Form(
+                                              key: _formkey,
+                                              child: Column(
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        "Send email to user",
+                                                        style: TextStyle(
+                                                            fontSize: 18,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            color:
+                                                                Colors.black),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 30),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        "Subject",
+                                                        style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            color: Resources
+                                                                .colors.hfText),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 8,
+                                                      ),
+                                                      TextFormField(
+                                                          controller:
+                                                              subjectController,
+                                                          onChanged: (value) {},
+                                                          validator:
+                                                              (String? value) {
+                                                            if (value!
+                                                                .isEmpty) {
+                                                              return 'Please enter subject';
+                                                            }
+                                                          },
+                                                          decoration:
+                                                              InputDecoration(
+                                                            filled: true,
+                                                            fillColor:
+                                                                Colors.white,
+                                                            // labelText: labelText,
+                                                            hintStyle:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        16,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400),
+                                                            // errorText: getEmailError(),
+                                                            focusedBorder: OutlineInputBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            12),
+                                                                borderSide:
+                                                                    BorderSide(
+                                                                        color: ColorParser().hexToColor(
+                                                                            "#D7D7D7"),
+                                                                        width:
+                                                                            1)),
+                                                            enabledBorder: OutlineInputBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            12),
+                                                                borderSide: BorderSide(
+                                                                    width: 1,
+                                                                    color: ColorParser()
+                                                                        .hexToColor(
+                                                                            "#D7D7D7"))),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 20),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        "Comment",
+                                                        style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            color: Resources
+                                                                .colors.hfText),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 8,
+                                                      ),
+                                                      TextFormField(
+                                                          controller:
+                                                              commentController,
+                                                          onChanged: (value) {},
+                                                          validator:
+                                                              (String? value) {
+                                                            if (value!
+                                                                .isEmpty) {
+                                                              return 'Please enter your comment';
+                                                            }
+                                                          },
+                                                          maxLines: 4,
+                                                          decoration:
+                                                              InputDecoration(
+                                                            filled: true,
+                                                            fillColor:
+                                                                Colors.white,
+                                                            // labelText: labelText,
+                                                            hintStyle:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        16,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400),
+                                                            // errorText: getEmailError(),
+                                                            focusedBorder: OutlineInputBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            12),
+                                                                borderSide:
+                                                                    BorderSide(
+                                                                        color: ColorParser().hexToColor(
+                                                                            "#D7D7D7"),
+                                                                        width:
+                                                                            1)),
+                                                            enabledBorder: OutlineInputBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            12),
+                                                                borderSide: BorderSide(
+                                                                    width: 1,
+                                                                    color: ColorParser()
+                                                                        .hexToColor(
+                                                                            "#D7D7D7"))),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 20),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      ElevatedButton(
+                                                        onPressed: () async {
+                                                          if(_formkey.currentState!.validate()){
+                                                            var response = await ApiFactory
                                                                 .getCommentService()
-                                                            .sendEmailData(
+                                                                .sendEmailData(
                                                                 widget.data!
                                                                     .email_address!,
                                                                 subjectController
                                                                     .text,
                                                                 commentController
                                                                     .text);
-                                                        if (response!.status == "1") {
-                                                          Navigator.of(context).pop();
-                                                          log("EMAIL DATA SENT SUCCESSFILLY");
-                                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                                              content: Text("Email Sent")));
+                                                            if (response!
+                                                                .status ==
+                                                                "1") {
+                                                              Navigator.of(
+                                                                  context)
+                                                                  .pop();
+                                                              log("EMAIL DATA SENT SUCCESSFILLY");
+                                                              ScaffoldMessenger
+                                                                  .of(context)
+                                                                  .showSnackBar(
+                                                                  SnackBar(
+                                                                      content:
+                                                                      Text("Email Sent")));
 
-                                                          // Future.delayed(Duration(seconds: 2),
-                                                          //         () {
-                                                          //
-                                                          //
-                                                          //
-                                                          //     });
-                                                        } else {
-                                                          log("Error in submitting Email data");
-                                                        }
-                                                      },
-                                                      style: ElevatedButton.styleFrom(
-                                                          backgroundColor:
-                                                              ColorParser().hexToColor(
-                                                                  RuntimeStorage
-                                                                      .instance
-                                                                      .clientTheme!
-                                                                      .top_title_background_color!),
-                                                          elevation: 0,
-                                                          shape: RoundedRectangleBorder(
-                                                              borderRadius: BorderRadius
-                                                                  .all(Radius
-                                                                      .circular(
-                                                                          10)))),
-                                                      child: Text(
-                                                        "Send Email",
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w500),
+
+                                                            } else {
+                                                              log("Error in submitting Email data");
+                                                            }
+                                                          }
+                                                          else{
+                                                            log("validation unsuccessful");
+                                                          }
+
+                                                        },
+                                                        style: ElevatedButton.styleFrom(
+                                                            backgroundColor: ColorParser()
+                                                                .hexToColor(RuntimeStorage
+                                                                    .instance
+                                                                    .clientTheme!
+                                                                    .top_title_background_color!),
+                                                            elevation: 0,
+                                                            shape: RoundedRectangleBorder(
+                                                                borderRadius: BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            10)))),
+                                                        child: Text(
+                                                          "Send Email",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500),
+                                                        ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 20,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                  children: [
-                                                    Text("Logs : ",
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                        FontWeight.w500,
-                                                        color: Colors.black),),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 20,
-                                                ),
-
-                                                Table(
-                                                  // columnWidths: {0:FixedColumnWidth(0.6)},
-                                                  defaultColumnWidth: const IntrinsicColumnWidth(),
-                                                  children: [
-                                                    const TableRow(
-                                                      children: [
-                                                        Padding(
-                                                          padding: EdgeInsets.only(right:10),
-                                                          child: Text("Subject",style: TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                              FontWeight.w500,
-                                                              color: Colors.black),),
-                                                        ),
-                                                        Padding(
-                                                          padding: EdgeInsets.only(right: 10),
-                                                          child: Text("Comment", style: TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                              FontWeight.w500,
-                                                              color: Colors.black),),
-                                                        ),
-                                                        Text("Added Date", style: TextStyle(
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    height: 20,
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                        "Logs : ",
+                                                        style: TextStyle(
                                                             fontSize: 16,
                                                             fontWeight:
-                                                            FontWeight.w500,
-                                                            color: Colors.black),),
-                                                      ],
-                                                    ),
-                                                    for(int i = 0; i<mailLog!.length; i++)
-                                                     TableRow(
-                                                      children: [
-                                                        Padding(
-                                                          padding: EdgeInsets.only(right:10,top:10),
-                                                          child: Text("${mailLog![i].subject}"),
-                                                        ),
-                                                        Padding(
-                                                          padding: EdgeInsets.only(top:10),
-                                                          child: Text("${mailLog![i].comment}"),
-                                                        ),
-                                                        Padding(
-                                                          padding: EdgeInsets.only(top:10),
-                                                          child: Text("${mailLog![i].add_date}"),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
+                                                                FontWeight.w500,
+                                                            color:
+                                                                Colors.black),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    height: 20,
+                                                  ),
 
-                                                // for(int i = 0; i<5; i++)
-                                                // Row(children: [
-                                                //   Column(
-                                                //     children: [
-                                                //       Text("abcd"),
-                                                //     ],
-                                                //   ),
-                                                //   Column(
-                                                //     children: [
-                                                //       Text("hghghghghg rgrh ghghghghg hghghghg"),
-                                                //     ],
-                                                //   ),
-                                                //   Column(
-                                                //     children: [
-                                                //       Text("qertuy erf"),
-                                                //     ],
-                                                //   ),
-                                                // ],),
-                                                //
+                                                  Table(
+                                                    // columnWidths: {0:FixedColumnWidth(0.6)},
+                                                    defaultColumnWidth:
+                                                        const IntrinsicColumnWidth(),
+                                                    children: [
+                                                      const TableRow(
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                                    right: 10),
+                                                            child: Text(
+                                                              "Subject",
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                  color: Colors
+                                                                      .black),
+                                                            ),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                                    right: 10),
+                                                            child: Text(
+                                                              "Comment",
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                  color: Colors
+                                                                      .black),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            "Added Date",
+                                                            style: TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                color: Colors
+                                                                    .black),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      for (int i = 0;
+                                                          i < mailLog!.length;
+                                                          i++)
+                                                        TableRow(
+                                                          children: [
+                                                            Padding(
+                                                              padding: EdgeInsets
+                                                                  .only(
+                                                                      right: 10,
+                                                                      top: 10),
+                                                              child: Text(
+                                                                  "${mailLog![i].subject}"),
+                                                            ),
+                                                            Padding(
+                                                              padding: EdgeInsets
+                                                                  .only(
+                                                                      top: 10),
+                                                              child: Text(
+                                                                  "${mailLog![i].comment}"),
+                                                            ),
+                                                            Padding(
+                                                              padding: EdgeInsets
+                                                                  .only(
+                                                                      top: 10),
+                                                              child: Text(
+                                                                  "${mailLog![i].add_date}"),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                    ],
+                                                  ),
 
+                                                  // for(int i = 0; i<5; i++)
+                                                  // Row(children: [
+                                                  //   Column(
+                                                  //     children: [
+                                                  //       Text("abcd"),
+                                                  //     ],
+                                                  //   ),
+                                                  //   Column(
+                                                  //     children: [
+                                                  //       Text("hghghghghg rgrh ghghghghg hghghghg"),
+                                                  //     ],
+                                                  //   ),
+                                                  //   Column(
+                                                  //     children: [
+                                                  //       Text("qertuy erf"),
+                                                  //     ],
+                                                  //   ),
+                                                  // ],),
+                                                  //
 
-                                                // SizedBox(
-                                                //   height: 200,
-                                                //   child: GridView.builder(
-                                                //       gridDelegate:
-                                                //       const SliverGridDelegateWithFixedCrossAxisCount(
-                                                //         crossAxisCount: 3,
-                                                //         mainAxisSpacing: 0,
-                                                //         crossAxisSpacing: 20,
-                                                //       ),
-                                                //
-                                                //       itemBuilder: (BuildContext context, index){
-                                                //         return Row(
-                                                //           children: [
-                                                //             Text("Subject"),
-                                                //             Text("Comment"),
-                                                //             Text("Added Date"),
-                                                //             Text("Subjedfgdrfgfgct"),
-                                                //             Text("Subjegfdg fdggfffgfgfgfffffg fgfgfgfgfgfgfgfgfct"),
-                                                //             Text("Subjgfgfg fgfgfect"),
-                                                //           ],
-                                                //         );
-                                                //
-                                                //       }),
-                                                // )
-                                              ],
+                                                  // SizedBox(
+                                                  //   height: 200,
+                                                  //   child: GridView.builder(
+                                                  //       gridDelegate:
+                                                  //       const SliverGridDelegateWithFixedCrossAxisCount(
+                                                  //         crossAxisCount: 3,
+                                                  //         mainAxisSpacing: 0,
+                                                  //         crossAxisSpacing: 20,
+                                                  //       ),
+                                                  //
+                                                  //       itemBuilder: (BuildContext context, index){
+                                                  //         return Row(
+                                                  //           children: [
+                                                  //             Text("Subject"),
+                                                  //             Text("Comment"),
+                                                  //             Text("Added Date"),
+                                                  //             Text("Subjedfgdrfgfgct"),
+                                                  //             Text("Subjegfdg fdggfffgfgfgfffffg fgfgfgfgfgfgfgfgfct"),
+                                                  //             Text("Subjgfgfg fgfgfect"),
+                                                  //           ],
+                                                  //         );
+                                                  //
+                                                  //       }),
+                                                  // )
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -527,8 +606,7 @@ class _CommentsCardState extends State<CommentsCard> {
           /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
           Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
               child: GridView.count(
                 shrinkWrap: true,
                 mainAxisSpacing: 0,
@@ -555,13 +633,15 @@ class _CommentsCardState extends State<CommentsCard> {
                           style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w300,
-                              color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
+                              color: ColorParser().hexToColor(RuntimeStorage
+                                  .instance.clientTheme!.body_text_color!)),
                         ),
                         Text("-",
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
+                                color: ColorParser().hexToColor(RuntimeStorage
+                                    .instance.clientTheme!.body_text_color!))),
                       ],
                     ),
                   ),
@@ -574,7 +654,8 @@ class _CommentsCardState extends State<CommentsCard> {
                           style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w300,
-                              color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
+                              color: ColorParser().hexToColor(RuntimeStorage
+                                  .instance.clientTheme!.body_text_color!))),
                       RatingBar.builder(
                           glow: false,
                           tapOnlyMode: false,
@@ -614,12 +695,14 @@ class _CommentsCardState extends State<CommentsCard> {
                             style: TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w300,
-                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
+                                color: ColorParser().hexToColor(RuntimeStorage
+                                    .instance.clientTheme!.body_text_color!))),
                         Text("${widget.data?.recommend}",
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
+                                color: ColorParser().hexToColor(RuntimeStorage
+                                    .instance.clientTheme!.body_text_color!))),
                       ],
                     ),
                   ),
@@ -632,13 +715,15 @@ class _CommentsCardState extends State<CommentsCard> {
                           style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w300,
-                              color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
+                              color: ColorParser().hexToColor(RuntimeStorage
+                                  .instance.clientTheme!.body_text_color!))),
                       Text("${widget.data?.add_date}",
                           style: TextStyle(
                               overflow: TextOverflow.ellipsis,
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
-                              color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
+                              color: ColorParser().hexToColor(RuntimeStorage
+                                  .instance.clientTheme!.body_text_color!))),
                     ],
                   ),
                   Container(
@@ -657,13 +742,15 @@ class _CommentsCardState extends State<CommentsCard> {
                             style: TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w300,
-                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
+                                color: ColorParser().hexToColor(RuntimeStorage
+                                    .instance.clientTheme!.body_text_color!))),
                         Text(
                             "${widget.data?.assigned_by == "" ? "-" : widget.data?.assigned_by}",
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
+                                color: ColorParser().hexToColor(RuntimeStorage
+                                    .instance.clientTheme!.body_text_color!))),
                       ],
                     ),
                   ),
@@ -676,13 +763,15 @@ class _CommentsCardState extends State<CommentsCard> {
                           style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w300,
-                              color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
+                              color: ColorParser().hexToColor(RuntimeStorage
+                                  .instance.clientTheme!.body_text_color!))),
                       Text(
                           "${widget.data?.assigned_to == "" ? "-" : widget.data?.assigned_to}",
                           style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
-                              color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!))),
+                              color: ColorParser().hexToColor(RuntimeStorage
+                                  .instance.clientTheme!.body_text_color!))),
                     ],
                   ),
                 ],
@@ -702,7 +791,8 @@ class _CommentsCardState extends State<CommentsCard> {
                       // AddLocation().gotoAddLocation(context);
                     },
                     style: ElevatedButton.styleFrom(
-                        backgroundColor:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                        backgroundColor: ColorParser().hexToColor(RuntimeStorage
+                            .instance.clientTheme!.top_title_background_color!),
                         elevation: 0,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
@@ -726,7 +816,8 @@ class _CommentsCardState extends State<CommentsCard> {
               style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
-                  color:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.body_text_color!)),
+                  color: ColorParser().hexToColor(
+                      RuntimeStorage.instance.clientTheme!.body_text_color!)),
             ),
           ),
         ],
