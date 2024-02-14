@@ -23,6 +23,7 @@ AnnouncementData _$AnnouncementDataFromJson(Map<String, dynamic> json) =>
     )
       ..status = json['status']
       ..msg = json['msg'] as String?
+      ..exportUrl = json['exportUrl'] as String?
       ..park_id = json['park_id']
       ..trail_id = json['trail_id'];
 
@@ -30,6 +31,7 @@ Map<String, dynamic> _$AnnouncementDataToJson(AnnouncementData instance) =>
     <String, dynamic>{
       'status': instance.status,
       'msg': instance.msg,
+      'exportUrl': instance.exportUrl,
       'park_id': instance.park_id,
       'trail_id': instance.trail_id,
       'id': instance.id,

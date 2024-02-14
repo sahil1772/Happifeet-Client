@@ -4,10 +4,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:happifeet_client_app/components/DownloadProgressDialog.dart';
+import 'package:happifeet_client_app/model/BaseResponse.dart';
 import 'package:happifeet_client_app/model/FilterMap.dart';
 import 'package:happifeet_client_app/network/ApiFactory.dart';
 import 'package:happifeet_client_app/screens/Reports/FilterPage.dart';
-import 'package:happifeet_client_app/storage/shared_preferences.dart';
 import 'package:happifeet_client_app/utils/DeviceDimensions.dart';
 import 'package:happifeet_client_app/utils/PermissionUtils.dart';
 
@@ -17,7 +17,6 @@ import '../../model/FeedbackStatus/FeedbackStatusData.dart';
 import '../../storage/runtime_storage.dart';
 import '../../utils/ColorParser.dart';
 import 'StatusDetailPage.dart';
-import 'StatusFilterpage.dart';
 
 class StatusWidget extends StatefulWidget {
   const StatusWidget({super.key});
@@ -40,13 +39,12 @@ class _StatusWidgetState extends State<StatusWidget> {
 
   String? selectedStatusID = "";
 
-
   FilterMap? filterParams = FilterMap(
       type: FilterType.Park.name,
       popupDatepickerToDateSearch:
-      DateFormat("yyyy-MM-dd").format(DateTime.now()),
+          DateFormat("yyyy-MM-dd").format(DateTime.now()),
       popupDatepickerFromDateSearch:
-      DateFormat("yyyy-MM-dd").format(DateTime.now()));
+          DateFormat("yyyy-MM-dd").format(DateTime.now()));
 
   @override
   void initState() {
@@ -55,7 +53,6 @@ class _StatusWidgetState extends State<StatusWidget> {
 
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -66,16 +63,17 @@ class _StatusWidgetState extends State<StatusWidget> {
       endDrawerEnableOpenDragGesture: false,
       extendBodyBehindAppBar: true,
       drawer: FilterPage(
-          // showAssignedUser: true,
-          // showType: true,
-          // showStatus: true,
-          // showKeyword: true,
-          // formType: true,
-          filterData: (params) {
-            filterParams = params;
-            apiResposne = getFeedbackStatusData();
-          },
-          params: filterParams, page: FilterPages.STATUS,),
+        // showAssignedUser: true,
+        // showType: true,
+        // showStatus: true,
+        // showKeyword: true,
+        // formType: true,
+        filterData: (params) {
+          filterParams = params;
+          apiResposne = getFeedbackStatusData();
+        },
+        params: filterParams, page: FilterPages.STATUS,
+      ),
       appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false)
           .getAppBar(context),
       body: SafeArea(
@@ -346,26 +344,27 @@ class _StatusWidgetState extends State<StatusWidget> {
                           //       ],
                           //     )),
                           OutlinedButton(
-                              onPressed: () async { bool result = await PermissionUtils.permissionRequest();
-                              if (result) {
+                              onPressed: () async {
+                                bool result =
+                                    await PermissionUtils.permissionRequest();
+                                if (result) {
+                                  downloadExport();
 
-                                // widget.locationDetails!.qrImage != null
-                                //     ? showDialog(
-                                //     context: context,
-                                //     builder: (dialogcontext) {
-                                //       return DownloadProgressDialog(
-                                //         filePath:
-                                //         widget.locationDetails!.qrImage!,
-                                //       );
-                                //     })
-                                //     :
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text(
-                                            "Failed to save data to device")));
-                              } else {
-                                print("No permission to read and write.");
-                              }},
+                                  // widget.locationDetails!.qrImage != null
+                                  //     ? showDialog(
+                                  //     context: context,
+                                  //     builder: (dialogcontext) {
+                                  //       return DownloadProgressDialog(
+                                  //         filePath:
+                                  //         widget.locationDetails!.qrImage!,
+                                  //       );
+                                  //     })
+                                  //     :
+
+                                } else {
+                                  print("No permission to read and write.");
+                                }
+                              },
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(
                                     ColorParser().hexToColor(RuntimeStorage
@@ -463,16 +462,14 @@ class _StatusWidgetState extends State<StatusWidget> {
         .getFeedbackStatusListing(filterParams);
     getStatusData = await response;
     log("FEEDBACK STATUS DATA --> ${getStatusData!.first.toJson()}");
-    for(int i = 0; i<getStatusData!.length; i++){
+    for (int i = 0; i < getStatusData!.length; i++) {
       if (getStatusData![i].status == "Resolved") {
         resolvedCount++;
         log("resolvedCount${resolvedCount}");
       }
-
     }
 
-
-    for(int i = 0;i< getStatusData!.length;i++){
+    for (int i = 0; i < getStatusData!.length; i++) {
       if (getStatusData![i].status == "Pending") {
         setState(() {
           pendingCount++;
@@ -488,4 +485,23 @@ class _StatusWidgetState extends State<StatusWidget> {
     return getStatusData!;
   }
 
+  Future<void> downloadExport() async {
+    BaseResponse response =
+        await ApiFactory().getFeedbackStatusService().downloadReport(filterParams: filterParams);
+    if(response.exportUrl!.isNotEmpty) {
+      showDialog(
+          context: context,
+          builder: (dialogcontext) {
+            return DownloadProgressDialog(
+              filePath: response.exportUrl!,
+            );
+          });
+    }
+    else{
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text(
+                  "Failed to save data to device")));
+    }
+  }
 }

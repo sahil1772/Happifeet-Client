@@ -11,12 +11,14 @@ BaseResponse _$BaseResponseFromJson(Map<String, dynamic> json) => BaseResponse(
       msg: json['msg'] as String?,
       park_id: json['park_id'],
       trail_id: json['trail_id'],
+      exportUrl: json['exportUrl'] as String?,
     );
 
 Map<String, dynamic> _$BaseResponseToJson(BaseResponse instance) =>
     <String, dynamic>{
       'status': instance.status,
       'msg': instance.msg,
+      'exportUrl': instance.exportUrl,
       'park_id': instance.park_id,
       'trail_id': instance.trail_id,
     };
