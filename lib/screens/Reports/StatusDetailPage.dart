@@ -15,7 +15,7 @@ import '../../resources/resources.dart';
 class StatusDetailPage extends StatefulWidget {
   String? report_id;
 
-  StatusDetailPage({Key? key, this.report_id});
+    StatusDetailPage({Key? key, this.report_id});
 
   gotoStatusFilterPage(BuildContext context) {
     Navigator.push(

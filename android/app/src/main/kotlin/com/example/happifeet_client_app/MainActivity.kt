@@ -1,4 +1,4 @@
-package com.example.happifeet_client_app
+package com.nextpracticepartners.happifeetclient
 
 import io.flutter.embedding.android.FlutterActivity
 
