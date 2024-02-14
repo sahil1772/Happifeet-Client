@@ -12,5 +12,7 @@ abstract class InterfaceFeedbackStatus {
   Future<List<FeedbackStatusData>> getFeedbackStatusListing(
       FilterMap? params);
 
+  Future<BaseResponse> downloadReport({FilterMap? filterParams});
+
   Future<BaseResponse> submitComment(Map<String, dynamic> params,List<XFile>? files);
 }

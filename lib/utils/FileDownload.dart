@@ -30,6 +30,7 @@ class FileDownload {
     }
 
     if (isSuccess) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Files has been saved in your Dowloads Folder")));
       Navigator.pop(context);
     }
   }

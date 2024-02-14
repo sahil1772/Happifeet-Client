@@ -89,8 +89,7 @@ class FeedbackStatusService implements InterfaceFeedbackStatus {
       FormData form = FormData.fromMap(params);
       for (var file in files!) {
         form.files.add(
-          MapEntry("fileToUpload",
-              await MultipartFile.fromFile(file.path)),
+          MapEntry("fileToUpload", await MultipartFile.fromFile(file.path)),
         );
       }
 
@@ -111,4 +110,33 @@ class FeedbackStatusService implements InterfaceFeedbackStatus {
       throw "exeption caught IN getFeedbackStatusListing";
     }
   }
+
+  @override
+  Future<BaseResponse> downloadReport({FilterMap? filterParams}) async {
+    try {
+      Map<String, dynamic> params = filterParams!.toJson();
+      params.removeWhere((key, value) => value == null || value == "");
+      params.addAll({
+        'task': "feedback_status_report_export",
+        'user_id': await SharedPref.instance.getUserId(),
+      });
+
+      var response = await NetworkClient().dio.post(base_url,
+          queryParameters: params, data: FormData.fromMap(params));
+
+      if (response.statusCode == 200) {
+        BaseResponse baseResponse =
+        BaseResponse.fromJson(response.data);
+        return baseResponse;
+      } else {
+        log("downloadReport failed ${response.statusMessage}");
+        throw "response other than 200 for downloadReport";
+      }
+    } on DioException catch (error) {
+      log("EXCEPTION IN downloadReport ${error.response}");
+      throw "exeption caught IN downloadReport";
+    }
+  }
+
+
 }
