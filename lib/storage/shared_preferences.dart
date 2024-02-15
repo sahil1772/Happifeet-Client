@@ -39,8 +39,6 @@ class SharedPref {
     }
   }
 
-
-
   Future<Map<String, dynamic>> getParks() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     try {
@@ -63,8 +61,8 @@ class SharedPref {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     try {
       List<TrailListingData> data = List<TrailListingData>.from(json
-              .decode(preferences.getString("trails")!)
-              .map((model) => TrailListingData.fromJson(model)));
+          .decode(preferences.getString("trails")!)
+          .map((model) => TrailListingData.fromJson(model)));
       return data;
     } catch (e) {
       throw "Cannot Fetch Trails from session => ${e}";
@@ -106,7 +104,7 @@ class SharedPref {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       UserData data =
-      UserData.fromJson(json.decode(prefs.getString("userData")!));
+          UserData.fromJson(json.decode(prefs.getString("userData")!));
       log("User Name in Shared pref => ${data.theme_data}");
       Name = data.user_name;
     } catch (e) {
@@ -222,7 +220,6 @@ class SharedPref {
   logOutUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();
-
   }
 
   /// Session management
@@ -234,10 +231,10 @@ class SharedPref {
     log("VALUE OF isLogin $isLogin");
 
     if (isLogin) {
-      log("Current Theme in Session => ${prefs.getString("current_city_theme") ==null?" IS NULL ":prefs.getString("current_city_theme")}");
+      log("Current Theme in Session => ${prefs.getString("current_city_theme") == null ? " IS NULL " : prefs.getString("current_city_theme")}");
       // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context)));
 
-      if (prefs.getString("current_city_theme") != null ) {
+      if (prefs.getString("current_city_theme") != null) {
         RuntimeStorage.instance.clientTheme = ClientTheme.fromJson(
             json.decode(prefs.getString("current_city_theme")!));
 
@@ -246,7 +243,7 @@ class SharedPref {
             MaterialPageRoute(
               builder: (context) => BottomNavigationHappiFeet(),
             ));
-      } else{
+      } else {
         SharedPref.instance.logOutUser();
         Navigator.pushReplacement(
             context,
@@ -254,8 +251,6 @@ class SharedPref {
               builder: (context) => const LoginPageWidget(),
             ));
       }
-
-
     } else {
       // await prefs.setBool('seen', true);
       Navigator.pushReplacement(
@@ -263,10 +258,8 @@ class SharedPref {
           MaterialPageRoute(
             builder: (context) => const LoginPageWidget(),
           ));
-
     }
     return Future.value(isLogin);
-
   }
 
   ClientTheme clientTheme = ClientTheme();

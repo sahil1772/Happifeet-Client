@@ -30,8 +30,9 @@ class FileDownload {
     }
 
     if (isSuccess) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("File downloaded to your Downloads folder")));
-      log("DOWNLOAD SUCCESSFULL $filePath -> $path");
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("File downloaded to your Downloads folder")));
+      log("DOWNLOAD SUCCESSFUL $filePath -> $path");
       Navigator.pop(context);
     }
   }

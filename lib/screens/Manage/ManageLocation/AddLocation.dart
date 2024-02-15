@@ -311,6 +311,8 @@ class _AddLocationState extends State<AddLocation>
                     ).tr(),
                   ),
                   TabBar(
+                      isScrollable: true,
+                      tabAlignment: TabAlignment.start,
                       indicatorSize: TabBarIndicatorSize.label,
                       controller: _controller,
                       indicatorWeight: 1,
@@ -2807,18 +2809,15 @@ class _AddLocationState extends State<AddLocation>
             locationImage,
             galleryImages);
     if (response.status == 1) {
-
-
       setState(() {
         context.setLocale(Locale(languages.keys.elementAt(_controller!.index)));
       });
-      if ((_controller!.index + 1 )> (languages.length - 1)) {
+      if ((_controller!.index + 1) > (languages.length - 1)) {
         ScaffoldMessenger.of(buildContext!).showSnackBar(SnackBar(
             content: Text(
                 "Location ${widget.isEdit! ? "Updated" : "Created"} Successfully.")));
         Navigator.of(buildContext!).pop();
-      }
-      else{
+      } else {
         _controller!.index = (_controller!.index + 1 > languages.length - 1)
             ? _controller!.index
             : (_controller!.index + 1);
