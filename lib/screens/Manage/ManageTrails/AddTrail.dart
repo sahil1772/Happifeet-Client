@@ -231,6 +231,8 @@ class _AddTrailState extends State<AddTrail>
                     ).tr(),
                   ),
                   TabBar(
+                      isScrollable: true,
+                      tabAlignment: TabAlignment.start,
                       indicatorSize: TabBarIndicatorSize.label,
                       controller: _controller,
                       indicatorWeight: 1,

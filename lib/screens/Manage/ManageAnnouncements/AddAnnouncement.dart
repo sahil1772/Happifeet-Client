@@ -198,6 +198,8 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
                     ).tr(),
                   ),
                   TabBar(
+                      isScrollable: true,
+                      tabAlignment: TabAlignment.start,
                       indicatorSize: TabBarIndicatorSize.label,
                       controller: _controller,
                       indicatorWeight: 1,

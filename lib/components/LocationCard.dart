@@ -94,7 +94,7 @@ class _LocationCardState extends State<LocationCard> {
                             color: ColorParser().hexToColor(RuntimeStorage
                                 .instance
                                 .clientTheme!
-                                .top_title_background_color!),
+                                .top_title_text_color!),
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                             letterSpacing: 0.5),
