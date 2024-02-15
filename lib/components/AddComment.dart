@@ -18,6 +18,7 @@ class AddComment extends StatefulWidget {
   Function? onSuccess;
   Function? onFailure;
   Function? dataCallback;
+  Function? onRequest;
 
   @override
   State<AddComment> createState() => _AddCommentState();
@@ -27,7 +28,8 @@ class AddComment extends StatefulWidget {
       this.assignedTo,
       this.onSuccess,
       this.onFailure,
-      this.dataCallback});
+      this.dataCallback,
+      this.onRequest});
 }
 
 class _AddCommentState extends State<AddComment> {
@@ -368,9 +370,11 @@ class _AddCommentState extends State<AddComment> {
   }
 
   Future<void> submitComment() async {
+    widget.onRequest;
     if (!_form.currentState!.validate()) {
       return;
     }
+
 
     Map<String, dynamic> params = {
       "rpt_id": widget.reportId,
@@ -379,6 +383,8 @@ class _AddCommentState extends State<AddComment> {
       "status": isStatusSelected.name,
       "assignedto": dropdownValueSelected,
     };
+
+
 
     BaseResponse response = await ApiFactory()
         .getFeedbackStatusService()

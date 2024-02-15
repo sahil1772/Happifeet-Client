@@ -245,7 +245,7 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text("How safe do you feel hhhgfgh",
+                              const Text("How safe do you feel",
                                   style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
@@ -577,6 +577,9 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                             setState(() {
                               apiResponse = getFeedbackStatusDetails();
                             });
+                          },
+                          onRequest:(){
+                            CircularProgressIndicator();
                           },
                           assignedTo: snapshot.data!.first.assign_to,
                         );

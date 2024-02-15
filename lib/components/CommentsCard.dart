@@ -779,6 +779,8 @@ class _CommentsCardState extends State<CommentsCard> {
 
           /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+          widget.data?.status == "" || widget.data!.status!.isEmpty ?
+              SizedBox():
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
             child: Row(
