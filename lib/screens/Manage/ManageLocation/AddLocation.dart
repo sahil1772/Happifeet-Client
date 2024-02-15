@@ -838,7 +838,8 @@ class _AddLocationState extends State<AddLocation>
                                                   left: 16.0),
                                               child: OutlinedButton(
                                                   onPressed: () {
-                                                    _showBottomSheet(1);
+                                                    // _showBottomSheet(1);
+                                                    _showDialougToAddImages(1);
                                                   },
                                                   style: ButtonStyle(
                                                     backgroundColor:
@@ -1064,7 +1065,8 @@ class _AddLocationState extends State<AddLocation>
                                                                 content: Text(
                                                                     "Only 5 images are allowed")));
                                                   } else {
-                                                    _showBottomSheet(2);
+                                                    // _showBottomSheet(2);
+                                                    _showDialougToAddImages(2);
                                                   }
                                                 },
                                                 style: ButtonStyle(
@@ -2663,12 +2665,101 @@ class _AddLocationState extends State<AddLocation>
 
   void _handleError(PlatformException? exception) {}
 
+  void _showDialougToAddImages(int i) {
+    log("Image Picker Called For Case : $i");
+    showDialog(
+        context: context,
+        builder: (context) => Dialog(
+          clipBehavior: Clip.none,
+          child: Container(
+            // height: DeviceDimensions.getDeviceHeight(context) / 4,
+            // width: DeviceDimensions.getDeviceWidth(context),
+            // padding: const EdgeInsets.all(26),
+
+            // padding: EdgeInsets.symmetric(
+            //     horizontal: 16, vertical: 16),
+              height: MediaQuery.of(context)
+                  .size
+                  .height /
+                  4,
+              width:
+              MediaQuery.of(context).size.width,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                // crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  OutlinedButton.icon(
+                    style: OutlinedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),),
+                    ),
+                    onPressed: () {
+                      getFromCamera((file) {
+                        switch (i) {
+                          case 1:
+                            locationImage = file;
+                            break;
+                          case 2:
+                            galleryImages!.add(file);
+                            break;
+                        }
+                        Navigator.of(context).pop();
+                        setState(() {});
+                      });
+                    },
+                    icon: SvgPicture.asset(
+                        "assets/images/location/camera_icon.svg"),
+                    label: const Text("Take From Camera"),
+                  ),
+                  SizedBox(height: 15,),
+                  OutlinedButton.icon(
+                      style: OutlinedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),),
+                      ),
+
+                      onPressed: () {
+                        getFromGallery((file) {
+                          switch (i) {
+                            case 1:
+                              if (file.length > 1) {
+                                Navigator.of(context).pop();
+                                ScaffoldMessenger.of(buildContext!).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            "Cannot select multiple images for park image!")));
+
+                                setState(() {});
+                                return;
+                              } else if (file.length == 1) {
+                                List<XFile> data = file;
+                                locationImage = data.first;
+                              }
+                              break;
+                            case 2:
+                              galleryImages!.addAll(file);
+                              break;
+                          }
+                          Navigator.of(context).pop();
+                          setState(() {});
+                        });
+                      },
+                      icon: SvgPicture.asset(
+                          "assets/images/location/pick_from_gallery.svg"),
+                      label: const Text("Choose From Gallery")),
+                ],
+              )),
+        )
+    );
+
+  }
+
   void _showBottomSheet(int i) {
     log("Image Picker Called For Case : $i");
     showModalBottomSheet(
         context: buildContext!,
         builder: (context) => Container(
-            height: DeviceDimensions.getDeviceHeight(context) / 6,
+            height: DeviceDimensions.getDeviceHeight(context) / 4,
             width: DeviceDimensions.getDeviceWidth(context),
             padding: const EdgeInsets.all(26),
             child: Column(

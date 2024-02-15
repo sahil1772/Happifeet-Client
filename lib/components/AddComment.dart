@@ -370,7 +370,7 @@ class _AddCommentState extends State<AddComment> {
   }
 
   Future<void> submitComment() async {
-    widget.onRequest;
+
     if (!_form.currentState!.validate()) {
       return;
     }
@@ -392,6 +392,9 @@ class _AddCommentState extends State<AddComment> {
     if (response.status == 1) {
       getAssignedUserListing();
       widget.onSuccess!();
+      widget.onRequest;
+
+
     } else {
       widget.onFailure!(response.msg);
     }

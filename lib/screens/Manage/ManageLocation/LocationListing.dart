@@ -50,6 +50,7 @@ class _ManageLocationWidgetState extends State<LocationListing> {
 
     // var response = await ApiFactory().getLocationService().submitLocationData(data)
     // log("response inside manage location page ${response}");
+    // log("response inside manage location page ${response}");
     locationDetails = response!;
     locationDetailsTemp = response;
     log("DATAAAA in locationDetails ${locationDetails}");
@@ -236,7 +237,7 @@ class _ManageLocationWidgetState extends State<LocationListing> {
           ),
       bottomSheet: Container(
         height: 50,
-        color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!),
+        color: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
         child: Row(
           children: [
             Expanded(
@@ -245,7 +246,7 @@ class _ManageLocationWidgetState extends State<LocationListing> {
                   AddLocation.gotoAddLocation(context, false, null);
                 },
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.button_background!),
+                    backgroundColor: ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
                     elevation: 0),
                 child: Text(
                   "Add Location",

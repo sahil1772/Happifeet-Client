@@ -52,205 +52,213 @@ class _ClientListingCardState extends State<ClientListingCard> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 165,
-                child: Flex(
-                  direction: Axis.horizontal,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(left: 10, top: 20, bottom: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.clientUserData!.client_name!,
-                            // overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(
-                                color: ColorParser().hexToColor(RuntimeStorage
-                                    .instance
-                                    .clientTheme!
-                                    .top_title_background_color!),
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                letterSpacing: 0.5),
-                          ),
-                          // Text(
-                          //   'Working Team',
-                          //   // overflow: TextOverflow.ellipsis,
-                          //   maxLines:1,
-                          //   style: TextStyle(
-                          //       color:   ColorParser().hexToColor("#757575"),
-                          //       fontSize: 14,
-                          //       fontWeight: FontWeight.w500,
-                          //       letterSpacing: 0.5),
-                          // ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 1.0),
-                            child: Row(
-                              children: [
-                                SvgPicture.asset(
-                                    "assets/images/manageUser/mail.svg"),
-                                const SizedBox(
-                                  width: 15,
-                                ),
-                                Text(
-                                  widget.clientUserData!.email_address!,
-                                  softWrap: true,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.clip,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: ColorParser().hexToColor(
-                                        RuntimeStorage.instance.clientTheme!
-                                            .body_text_color!),
-                                  ),
-                                ),
-                              ],
+              Expanded(
+                child: SizedBox(
+                  height: 165,
+                  child: Flex(
+                    direction: Axis.horizontal,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(left: 10, top: 20, bottom: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.clientUserData!.client_name!,
+                              // overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: TextStyle(
+                                  color: ColorParser().hexToColor(RuntimeStorage
+                                      .instance
+                                      .clientTheme!
+                                      .top_title_background_color!),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                  letterSpacing: 0.5),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 1.0),
-                            child: Row(
-                              children: [
-                                SvgPicture.asset(
-                                    "assets/images/manageUser/call.svg"),
-                                const SizedBox(
-                                  width: 15,
-                                ),
-                                Text(
-                                  widget.clientUserData!.contact_no!,
-                                  softWrap: true,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.clip,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: ColorParser().hexToColor(
-                                        RuntimeStorage.instance.clientTheme!
-                                            .body_text_color!),
-                                  ),
-                                ),
-                              ],
+                            // Text(
+                            //   'Working Team',
+                            //   // overflow: TextOverflow.ellipsis,
+                            //   maxLines:1,
+                            //   style: TextStyle(
+                            //       color:   ColorParser().hexToColor("#757575"),
+                            //       fontSize: 14,
+                            //       fontWeight: FontWeight.w500,
+                            //       letterSpacing: 0.5),
+                            // ),
+                            const SizedBox(
+                              height: 15,
                             ),
-                          ),
-                          // const SizedBox(
-                          //   height: 15,
-                          // ),
-                          //  Padding(
-                          //   padding: EdgeInsets.symmetric(vertical: 1.0),
-                          //   child: Row(
-                          //     children: [
-                          //
-                          //       Text(
-                          //         'Note* Lorem ipsum dolor sit amet',
-                          //         softWrap: true,
-                          //         maxLines: 1,
-                          //         overflow: TextOverflow.clip,
-                          //         style: TextStyle(color:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!), ),
-                          //       ),
-                          //     ],
-                          //   ),
-                          // ),
-                        ],
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 1.0),
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(
+                                      "assets/images/manageUser/mail.svg"),
+                                  const SizedBox(
+                                    width: 15,
+                                  ),
+                                  Text(
+                                    widget.clientUserData!.email_address!,
+                                    softWrap: true,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.clip,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: ColorParser().hexToColor(
+                                          RuntimeStorage.instance.clientTheme!
+                                              .body_text_color!),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Wrap(
+                             children: [
+                               Padding(
+                                 padding: const EdgeInsets.symmetric(vertical: 1.0),
+                                 child: Row(
+                                   children: [
+                                     SvgPicture.asset(
+                                         "assets/images/manageUser/call.svg"),
+                                     const SizedBox(
+                                       width: 15,
+                                     ),
+                                     Text(
+                                       widget.clientUserData!.contact_no!,
+                                       softWrap: true,
+                                       maxLines: 1,
+                                       overflow: TextOverflow.clip,
+                                       style: TextStyle(
+                                         fontSize: 16,
+                                         color: ColorParser().hexToColor(
+                                             RuntimeStorage.instance.clientTheme!
+                                                 .body_text_color!),
+                                       ),
+                                     ),
+                                   ],
+                                 ),
+                               ),
+                             ],
+                            ),
+                            // const SizedBox(
+                            //   height: 15,
+                            // ),
+                            //  Padding(
+                            //   padding: EdgeInsets.symmetric(vertical: 1.0),
+                            //   child: Row(
+                            //     children: [
+                            //
+                            //       Text(
+                            //         'Note* Lorem ipsum dolor sit amet',
+                            //         softWrap: true,
+                            //         maxLines: 1,
+                            //         overflow: TextOverflow.clip,
+                            //         style: TextStyle(color:  ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!), ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
+                          ],
+                        ),
                       ),
-                    ),
-                    // SizedBox(width: 10),
-                    const SizedBox(
-                      width: 35,
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                // height: 60,
-                // width: 45,
-                width: MediaQuery.of(context).size.width / 8.5,
-                decoration: BoxDecoration(
-                  border: Border(
-                    left: BorderSide(
-                      color: Colors.grey.shade200,
-                    ),
+                      // SizedBox(width: 10),
+                      const SizedBox(
+                        width: 35,
+                      ),
+                    ],
                   ),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Divider(color: Colors.grey.shade200),
-                    const SizedBox(
-                      height: 8,
+              ),
+              Flexible(
+                child: Container(
+                  // height: 60,
+                  // width: 45,
+                  width: MediaQuery.of(context).size.width / 8.5,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      left: BorderSide(
+                        color: Colors.grey.shade200,
+                      ),
                     ),
-                    InkWell(
-                        onTap: () {
-                          AddClientWidget().gotoAddClientPage(
-                              context, widget.clientUserData!.id, isEdit, () {
-                            print("CARD VARUN ALOO BHAVAAAAA");
-                            widget.refreshCallback!();
-                          });
-                        },
-                        child: SvgPicture.asset(
-                            "assets/images/location/editing.svg")),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    Divider(color: Colors.grey.shade200),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    InkWell(
-                        onTap: () {
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: Text("Delete Client User"),
-                                  content: Text(
-                                      "Are you sure you want to delete this client user?"),
-                                  actions: [
-                                    TextButton(
-                                        onPressed: () async {
-                                          var response = await ApiFactory()
-                                              .getClientService()
-                                              .deleteClientUserData(
-                                                  "delete_client_user",
-                                                  widget.clientUserData!.id!);
-                                          if (response.status == "1") {
-                                            log("Client User Deleted Successfully");
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Divider(color: Colors.grey.shade200),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      InkWell(
+                          onTap: () {
+                            AddClientWidget().gotoAddClientPage(
+                                context, widget.clientUserData!.id, isEdit, () {
+                              print("CARD VARUN ALOO BHAVAAAAA");
+                              widget.refreshCallback!();
+                            });
+                          },
+                          child: SvgPicture.asset(
+                              "assets/images/location/editing.svg")),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Divider(color: Colors.grey.shade200),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      InkWell(
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text("Delete Client User"),
+                                    content: Text(
+                                        "Are you sure you want to delete this client user?"),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () async {
+                                            var response = await ApiFactory()
+                                                .getClientService()
+                                                .deleteClientUserData(
+                                                    "delete_client_user",
+                                                    widget.clientUserData!.id!);
+                                            if (response.status == "1") {
+                                              log("Client User Deleted Successfully");
 
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
-                                                    content: Text(
-                                                        "Client User Deleted Successfully")));
-                                            Navigator.pop(context);
-                                          } else {
-                                            log("Error in client user delete");
-                                          }
-                                        },
-                                        child: Text("Yes")),
-                                    TextButton(
-                                        onPressed: () => Navigator.of(context,
-                                                rootNavigator: true)
-                                            .pop(),
-                                        child: Text("No")),
-                                  ],
-                                );
-                              });
-                        },
-                        child: SvgPicture.asset(
-                            "assets/images/location/delete.svg")),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    Divider(color: Colors.grey.shade200),
-                  ],
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(SnackBar(
+                                                      content: Text(
+                                                          "Client User Deleted Successfully")));
+                                              Navigator.pop(context);
+                                            } else {
+                                              log("Error in client user delete");
+                                            }
+                                          },
+                                          child: Text("Yes")),
+                                      TextButton(
+                                          onPressed: () => Navigator.of(context,
+                                                  rootNavigator: true)
+                                              .pop(),
+                                          child: Text("No")),
+                                    ],
+                                  );
+                                });
+                          },
+                          child: SvgPicture.asset(
+                              "assets/images/location/delete.svg")),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Divider(color: Colors.grey.shade200),
+                    ],
+                  ),
                 ),
               )
             ],
