@@ -331,11 +331,13 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
                   onPressed: () {
                     !widget.isEdit! ? _showBottomSheet(1) : null;
                   },
-                  child: Text(
-                    "Choose Image",
-                    style: TextStyle(
-                      color: ColorParser().hexToColor(RuntimeStorage
-                          .instance.clientTheme!.top_title_background_color!),
+                  child: FittedBox(
+                    child: Text(
+                      "Choose Image",
+                      style: TextStyle(
+                        color: ColorParser().hexToColor(RuntimeStorage
+                            .instance.clientTheme!.top_title_background_color!),
+                      ),
                     ),
                   ),
                 ),
