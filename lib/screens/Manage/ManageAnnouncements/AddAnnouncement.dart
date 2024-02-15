@@ -329,7 +329,7 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
                         borderRadius: BorderRadius.circular(20.0))),
                   ),
                   onPressed: () {
-                    !widget.isEdit! ? _showDialougToAddImages(1) : null;
+                    !widget.isEdit! ? _showBottomSheet(1) : null;
                   },
                   child: Text(
                     "Choose Image",
@@ -725,49 +725,20 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
             height: DeviceDimensions.getDeviceHeight(context) / 4,
             width: DeviceDimensions.getDeviceWidth(context),
             padding: const EdgeInsets.all(26),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                TextButton.icon(
-                  onPressed: () {
-                    getFromCamera((file) {
-                      switch (i) {
-                        case 1:
-                          locationImage = file;
-                          break;
-                        case 2:
-                          galleryImages!.add(file);
-                          break;
-                      }
-                      Navigator.of(context).pop();
-                      setState(() {});
-                    });
-                  },
-                  icon: SvgPicture.asset(
-                      "assets/images/location/camera_icon.svg"),
-                  label: const Text("Take From Camera"),
-                ),
-                TextButton.icon(
+            child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+
+                children: [
+                  TextButton.icon(
                     onPressed: () {
-                      getFromGallery((file) {
+                      getFromCamera((file) {
                         switch (i) {
                           case 1:
-                            if (file.length > 1) {
-                              Navigator.of(context).pop();
-                              ScaffoldMessenger.of(buildContext!).showSnackBar(
-                                  const SnackBar(
-                                      content: Text(
-                                          "Cannot select multiple images for park image!")));
-
-                              setState(() {});
-                              return;
-                            } else if (file.length == 1) {
-                              List<XFile> data = file;
-                              locationImage = data.first;
-                            }
+                            locationImage = file;
                             break;
                           case 2:
-                            galleryImages!.addAll(file);
+                            galleryImages!.add(file);
                             break;
                         }
                         Navigator.of(context).pop();
@@ -775,9 +746,41 @@ class _AddAnnouncementWidgetState extends State<AddAnnouncementWidget>
                       });
                     },
                     icon: SvgPicture.asset(
-                        "assets/images/location/pick_from_gallery.svg"),
-                    label: const Text("Choose From Gallery")),
-              ],
+                        "assets/images/location/camera_icon.svg"),
+                    label: const Text("Take From Camera"),
+                  ),
+                  TextButton.icon(
+                      onPressed: () {
+                        getFromGallery((file) {
+                          switch (i) {
+                            case 1:
+                              if (file.length > 1) {
+                                Navigator.of(context).pop();
+                                ScaffoldMessenger.of(buildContext!).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            "Cannot select multiple images for park image!")));
+
+                                setState(() {});
+                                return;
+                              } else if (file.length == 1) {
+                                List<XFile> data = file;
+                                locationImage = data.first;
+                              }
+                              break;
+                            case 2:
+                              galleryImages!.addAll(file);
+                              break;
+                          }
+                          Navigator.of(context).pop();
+                          setState(() {});
+                        });
+                      },
+                      icon: SvgPicture.asset(
+                          "assets/images/location/pick_from_gallery.svg"),
+                      label: const Text("Choose From Gallery")),
+                ],
+              ),
             )));
   }
 
