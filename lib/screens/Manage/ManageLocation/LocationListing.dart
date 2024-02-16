@@ -43,7 +43,7 @@ class _ManageLocationWidgetState extends State<LocationListing> {
     super.initState();
   }
 
-  void getLocationDetails() async {
+  Future<void> getLocationDetails() async {
     var response = await ApiFactory()
         .getLocationService()
         .getLocationListData("list_location");
