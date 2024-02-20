@@ -189,7 +189,7 @@ class _UserListingCardState extends State<UserListingCard> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Divider(color: Colors.grey.shade200),
+
                       const SizedBox(
                         height: 8,
                       ),
@@ -255,7 +255,7 @@ class _UserListingCardState extends State<UserListingCard> {
                       const SizedBox(
                         height: 8,
                       ),
-                      Divider(color: Colors.grey.shade200),
+
                     ],
                   ),
                 ),

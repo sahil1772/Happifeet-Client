@@ -15,6 +15,7 @@ import 'package:happifeet_client_app/storage/shared_preferences.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
 import 'package:happifeet_client_app/utils/DeviceDimensions.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../model/Trails/TrailListingData.dart';
@@ -49,6 +50,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
   List<dynamic> comments = [];
   Map<String, dynamic> parks = {};
   List<TrailListingData>? trails;
+  final PageController controller = PageController();
 
   List<ColumnSeries> commentsGraphColumns = <ColumnSeries<GraphData, String>>[
     // Bind data source
@@ -797,219 +799,440 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                       color: ColorParser().hexToColor(RuntimeStorage
                           .instance.clientTheme!.body_text_color!),
                       fontSize: 18)),
-              Text("(${comments.length})",style: TextStyle(fontSize: 16),)
+              Text(
+                "(${comments.length})",
+                style: TextStyle(fontSize: 16),
+              )
             ],
           ),
         ),
-        SingleChildScrollView(
-          physics: const ClampingScrollPhysics(),
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              for (int commentIndex = 0;
-                  commentIndex < comments.length;
-                  commentIndex++)
-                Container(
-                  width: DeviceDimensions.getDeviceWidth(context),
-                  child: Card(
-                    color: Colors.white,
-                    surfaceTintColor: Colors.white,
-                    elevation: 6,
-                    margin:
-                        const EdgeInsets.only(bottom: 24, left: 16, right: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                comments[commentIndex]["description"],
+
+        SizedBox(
+          height: 220,
+          child: PageView.builder(
+            itemCount: comments.length,
+            controller: controller,
+            itemBuilder: (BuildContext context, int index) {
+              return Container(
+                width: DeviceDimensions.getDeviceWidth(context),
+                child: Card(
+                  color: Colors.white,
+                  surfaceTintColor: Colors.white,
+                  elevation: 6,
+                  margin:
+                      const EdgeInsets.only(bottom: 24, left: 16, right: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              comments[index]["description"],
+                              style: TextStyle(
+                                  color: ColorParser().hexToColor(RuntimeStorage
+                                      .instance.clientTheme!.body_text_color!),
+                                  fontSize: 12),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 10.0, bottom: 10),
+                              child: RatingBar.builder(
+                                initialRating:
+                                    double.parse(comments[index]["rating"]),
+                                minRating:
+                                    double.parse(comments[index]["rating"]),
+                                maxRating:
+                                    double.parse(comments[index]["rating"]),
+                                direction: Axis.horizontal,
+                                allowHalfRating: false,
+                                ignoreGestures: true,
+                                tapOnlyMode: false,
+                                itemCount: 5,
+                                itemSize: 16,
+                                itemPadding:
+                                    const EdgeInsets.symmetric(horizontal: 2),
+                                itemBuilder: (context, _) => const Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                ),
+                                onRatingUpdate: (rating) {},
+                              ),
+                            ),
+                            Text(
+                              "Will you recommend us ?",
+                              style: TextStyle(
+                                  color: ColorParser().hexToColor(RuntimeStorage
+                                      .instance
+                                      .clientTheme!
+                                      .title_color_on_listing!),
+                                  fontSize: 14),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 5.0),
+                              child: Text(
+                                "Maybe",
                                 style: TextStyle(
                                     color: ColorParser().hexToColor(
                                         RuntimeStorage.instance.clientTheme!
                                             .body_text_color!),
                                     fontSize: 12),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 10.0, bottom: 10),
-                                child: RatingBar.builder(
-                                  initialRating: double.parse(
-                                      comments[commentIndex]["rating"]),
-                                  minRating: double.parse(
-                                      comments[commentIndex]["rating"]),
-                                  maxRating: double.parse(
-                                      comments[commentIndex]["rating"]),
-                                  direction: Axis.horizontal,
-                                  allowHalfRating: false,
-                                  ignoreGestures: true,
-                                  tapOnlyMode: false,
-                                  itemCount: 5,
-                                  itemSize: 16,
-                                  itemPadding:
-                                      const EdgeInsets.symmetric(horizontal: 2),
-                                  itemBuilder: (context, _) => const Icon(
-                                    Icons.star,
-                                    color: Colors.amber,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: 1,
+                        color: const Color(0x15000000),
+                      ),
+                      Flex(
+                        direction: Axis.horizontal,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Flexible(
+                            fit: FlexFit.tight,
+                            flex: 2,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10.0, horizontal: 16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    userName.toString(),
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: ColorParser().hexToColor(
+                                            RuntimeStorage.instance.clientTheme!
+                                                .title_color_on_listing!)),
                                   ),
-                                  onRatingUpdate: (rating) {},
-                                ),
+                                  Text(
+                                    "Jan, 25, 2023",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: ColorParser().hexToColor(
+                                            RuntimeStorage.instance.clientTheme!
+                                                .body_text_color!)),
+                                  )
+                                ],
                               ),
-                              Text(
-                                "Will you recommend us ?",
-                                style: TextStyle(
-                                    color: ColorParser().hexToColor(
-                                        RuntimeStorage.instance.clientTheme!
-                                            .title_color_on_listing!),
-                                    fontSize: 14),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 5.0),
-                                child: Text(
-                                  "Maybe",
-                                  style: TextStyle(
-                                      color: ColorParser().hexToColor(
-                                          RuntimeStorage.instance.clientTheme!
-                                              .body_text_color!),
-                                      fontSize: 12),
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
-                        Container(
-                          height: 1,
-                          color: const Color(0x15000000),
-                        ),
-                        Flex(
-                          direction: Axis.horizontal,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Flexible(
-                              fit: FlexFit.tight,
-                              flex: 2,
+                          Flexible(
+                            fit: FlexFit.tight,
+                            flex: 1,
+                            child: Builder(builder: (context) {
+                              return InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    reportId = comments[index]["report_id"];
+                                    Scaffold.of(context).openEndDrawer();
+                                  });
+                                },
+                                child: Container(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10.0, horizontal: 16),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Center(
+                                          child: Image.asset(
+                                            "assets/images/comments/visible.svg",
+                                            width: 20,
+                                            height: 20,
+                                            errorBuilder:
+                                                (context, error, stackTrace) {
+                                              return const SizedBox();
+                                            },
+                                          ),
+                                        ),
+                                        Center(
+                                          child: Text(
+                                            "View",
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold,
+                                                color: ColorParser().hexToColor(
+                                                    RuntimeStorage
+                                                        .instance
+                                                        .clientTheme!
+                                                        .body_text_color!)),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
+                          ),
+                          Flexible(
+                            fit: FlexFit.loose,
+                            flex: 2,
+                            child: Container(
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
                                     vertical: 10.0, horizontal: 16),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      userName.toString(),
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: ColorParser().hexToColor(
-                                              RuntimeStorage
-                                                  .instance
-                                                  .clientTheme!
-                                                  .title_color_on_listing!)),
-                                    ),
-                                    Text(
-                                      "Jan, 25, 2023",
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: ColorParser().hexToColor(
-                                              RuntimeStorage
-                                                  .instance
-                                                  .clientTheme!
-                                                  .body_text_color!)),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Flexible(
-                              fit: FlexFit.tight,
-                              flex: 1,
-                              child: Builder(builder: (context) {
-                                return InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      reportId =
-                                          comments[commentIndex]["report_id"];
-                                      Scaffold.of(context).openEndDrawer();
-                                    });
-                                  },
-                                  child: Container(
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10.0, horizontal: 16),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Center(
-                                            child: Image.asset(
-                                              "assets/images/comments/visible.svg",
-                                              width: 20,
-                                              height: 20,
-                                              errorBuilder:
-                                                  (context, error, stackTrace) {
-                                                return const SizedBox();
-                                              },
-                                            ),
-                                          ),
-                                          Center(
-                                            child: Text(
-                                              "View",
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: ColorParser()
-                                                      .hexToColor(RuntimeStorage
-                                                          .instance
-                                                          .clientTheme!
-                                                          .body_text_color!)),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }),
-                            ),
-                            Flexible(
-                              fit: FlexFit.loose,
-                              flex: 2,
-                              child: Container(
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 10.0, horizontal: 16),
-                                  child: Center(
-                                    child: Text(
-                                      "Completed",
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: ColorParser().hexToColor(
-                                              RuntimeStorage
-                                                  .instance
-                                                  .clientTheme!
-                                                  .body_text_color!)),
-                                    ),
+                                child: Center(
+                                  child: Text(
+                                    "Completed",
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: ColorParser().hexToColor(
+                                            RuntimeStorage.instance.clientTheme!
+                                                .body_text_color!)),
                                   ),
                                 ),
                               ),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
                   ),
                 ),
-            ],
+              );
+            },
           ),
         ),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            child: SmoothPageIndicator(
+              controller: controller,
+              count: comments.length,
+              effect: WormEffect(
+                  dotWidth: 10,
+                  dotHeight: 10,
+                  activeDotColor: ColorParser().hexToColor(
+                      RuntimeStorage.instance.clientTheme!.button_background!)),
+              onDotClicked: (index) {
+                controller.jumpToPage(index);
+              },
+            ),
+          ),
+        ),
+        // SingleChildScrollView(
+        //   physics: const ClampingScrollPhysics(),
+        //   scrollDirection: Axis.horizontal,
+        //   child: Row(
+        //     children: [
+        //       for (int commentIndex = 0;
+        //           commentIndex < comments.length;
+        //           commentIndex++)
+        //         Container(
+        //           width: DeviceDimensions.getDeviceWidth(context),
+        //           child: Card(
+        //             color: Colors.white,
+        //             surfaceTintColor: Colors.white,
+        //             elevation: 6,
+        //             margin:
+        //                 const EdgeInsets.only(bottom: 24, left: 16, right: 16),
+        //             child: Column(
+        //               crossAxisAlignment: CrossAxisAlignment.start,
+        //               mainAxisSize: MainAxisSize.min,
+        //               children: [
+        //                 Padding(
+        //                   padding: const EdgeInsets.all(16.0),
+        //                   child: Column(
+        //                     crossAxisAlignment: CrossAxisAlignment.start,
+        //                     children: [
+        //                       Text(
+        //                         comments[commentIndex]["description"],
+        //                         style: TextStyle(
+        //                             color: ColorParser().hexToColor(
+        //                                 RuntimeStorage.instance.clientTheme!
+        //                                     .body_text_color!),
+        //                             fontSize: 12),
+        //                       ),
+        //                       Padding(
+        //                         padding: const EdgeInsets.only(
+        //                             top: 10.0, bottom: 10),
+        //                         child: RatingBar.builder(
+        //                           initialRating: double.parse(
+        //                               comments[commentIndex]["rating"]),
+        //                           minRating: double.parse(
+        //                               comments[commentIndex]["rating"]),
+        //                           maxRating: double.parse(
+        //                               comments[commentIndex]["rating"]),
+        //                           direction: Axis.horizontal,
+        //                           allowHalfRating: false,
+        //                           ignoreGestures: true,
+        //                           tapOnlyMode: false,
+        //                           itemCount: 5,
+        //                           itemSize: 16,
+        //                           itemPadding:
+        //                               const EdgeInsets.symmetric(horizontal: 2),
+        //                           itemBuilder: (context, _) => const Icon(
+        //                             Icons.star,
+        //                             color: Colors.amber,
+        //                           ),
+        //                           onRatingUpdate: (rating) {},
+        //                         ),
+        //                       ),
+        //                       Text(
+        //                         "Will you recommend us ?",
+        //                         style: TextStyle(
+        //                             color: ColorParser().hexToColor(
+        //                                 RuntimeStorage.instance.clientTheme!
+        //                                     .title_color_on_listing!),
+        //                             fontSize: 14),
+        //                       ),
+        //                       Padding(
+        //                         padding: EdgeInsets.only(top: 5.0),
+        //                         child: Text(
+        //                           "Maybe",
+        //                           style: TextStyle(
+        //                               color: ColorParser().hexToColor(
+        //                                   RuntimeStorage.instance.clientTheme!
+        //                                       .body_text_color!),
+        //                               fontSize: 12),
+        //                         ),
+        //                       ),
+        //                     ],
+        //                   ),
+        //                 ),
+        //                 Container(
+        //                   height: 1,
+        //                   color: const Color(0x15000000),
+        //                 ),
+        //                 Flex(
+        //                   direction: Axis.horizontal,
+        //                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        //                   mainAxisSize: MainAxisSize.max,
+        //                   children: [
+        //                     Flexible(
+        //                       fit: FlexFit.tight,
+        //                       flex: 2,
+        //                       child: Padding(
+        //                         padding: EdgeInsets.symmetric(
+        //                             vertical: 10.0, horizontal: 16),
+        //                         child: Column(
+        //                           crossAxisAlignment: CrossAxisAlignment.start,
+        //                           mainAxisAlignment: MainAxisAlignment.center,
+        //                           children: [
+        //                             Text(
+        //                               userName.toString(),
+        //                               style: TextStyle(
+        //                                   fontSize: 14,
+        //                                   fontWeight: FontWeight.bold,
+        //                                   color: ColorParser().hexToColor(
+        //                                       RuntimeStorage
+        //                                           .instance
+        //                                           .clientTheme!
+        //                                           .title_color_on_listing!)),
+        //                             ),
+        //                             Text(
+        //                               "Jan, 25, 2023",
+        //                               style: TextStyle(
+        //                                   fontSize: 12,
+        //                                   color: ColorParser().hexToColor(
+        //                                       RuntimeStorage
+        //                                           .instance
+        //                                           .clientTheme!
+        //                                           .body_text_color!)),
+        //                             )
+        //                           ],
+        //                         ),
+        //                       ),
+        //                     ),
+        //                     Flexible(
+        //                       fit: FlexFit.tight,
+        //                       flex: 1,
+        //                       child: Builder(builder: (context) {
+        //                         return InkWell(
+        //                           onTap: () {
+        //                             setState(() {
+        //                               reportId =
+        //                                   comments[commentIndex]["report_id"];
+        //                               Scaffold.of(context).openEndDrawer();
+        //                             });
+        //                           },
+        //                           child: Container(
+        //                             child: Padding(
+        //                               padding: const EdgeInsets.symmetric(
+        //                                   vertical: 10.0, horizontal: 16),
+        //                               child: Column(
+        //                                 crossAxisAlignment:
+        //                                     CrossAxisAlignment.stretch,
+        //                                 mainAxisAlignment:
+        //                                     MainAxisAlignment.center,
+        //                                 children: [
+        //                                   Center(
+        //                                     child: Image.asset(
+        //                                       "assets/images/comments/visible.svg",
+        //                                       width: 20,
+        //                                       height: 20,
+        //                                       errorBuilder:
+        //                                           (context, error, stackTrace) {
+        //                                         return const SizedBox();
+        //                                       },
+        //                                     ),
+        //                                   ),
+        //                                   Center(
+        //                                     child: Text(
+        //                                       "View",
+        //                                       style: TextStyle(
+        //                                           fontSize: 14,
+        //                                           fontWeight: FontWeight.bold,
+        //                                           color: ColorParser()
+        //                                               .hexToColor(RuntimeStorage
+        //                                                   .instance
+        //                                                   .clientTheme!
+        //                                                   .body_text_color!)),
+        //                                     ),
+        //                                   ),
+        //                                 ],
+        //                               ),
+        //                             ),
+        //                           ),
+        //                         );
+        //                       }),
+        //                     ),
+        //                     Flexible(
+        //                       fit: FlexFit.loose,
+        //                       flex: 2,
+        //                       child: Container(
+        //                         child: Padding(
+        //                           padding: EdgeInsets.symmetric(
+        //                               vertical: 10.0, horizontal: 16),
+        //                           child: Center(
+        //                             child: Text(
+        //                               "Completed",
+        //                               style: TextStyle(
+        //                                   fontSize: 14,
+        //                                   fontWeight: FontWeight.bold,
+        //                                   color: ColorParser().hexToColor(
+        //                                       RuntimeStorage
+        //                                           .instance
+        //                                           .clientTheme!
+        //                                           .body_text_color!)),
+        //                             ),
+        //                           ),
+        //                         ),
+        //                       ),
+        //                     )
+        //                   ],
+        //                 )
+        //               ],
+        //             ),
+        //           ),
+        //         ),
+        //     ],
+        //   ),
+        // ),
         Padding(
           padding: const EdgeInsets.only(left: 16.0, right: 16, bottom: 24),
           child: ElevatedButton(
@@ -1183,13 +1406,16 @@ class _DashboardWidgetState extends State<DashboardWidget> {
   }
 
   Future<void> getParks() async {
+    parks.clear();
     Response? dashboardResponse = await ApiFactory()
         .getDashboardService()
         .getParks(await SharedPref.instance.getUserId());
 
     Map<String, dynamic> responseData = json.decode(dashboardResponse!.data!);
 
-    parks = responseData!["location_list"];
+    parks.addAll({"0": "All Parks"});
+    parks.addAll(responseData!["location_list"]);
+
     selectedParkId = parks.keys.first;
     SharedPref.instance.setParks(parks);
 

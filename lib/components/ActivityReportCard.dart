@@ -9,18 +9,19 @@ import '../model/ActivityReport/ActivityReportData.dart';
 import '../storage/runtime_storage.dart';
 import '../utils/ColorParser.dart';
 
-class ActivityReportCard extends StatefulWidget{
+class ActivityReportCard extends StatefulWidget {
   ActivityReportData? activityReportData;
 
-  ActivityReportCard({Key? key,this.activityReportData});
+  ActivityReportCard({Key? key, this.activityReportData});
+
   @override
   State<ActivityReportCard> createState() => _ActivityReportCardState();
-  
 }
 
-class _ActivityReportCardState extends State<ActivityReportCard>{
+class _ActivityReportCardState extends State<ActivityReportCard> {
   String? activityDate;
   DateTime? tempDate;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -30,6 +31,7 @@ class _ActivityReportCardState extends State<ActivityReportCard>{
     activityDate = DateFormat("dd-MMM-yyyy").format(tempDate!);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -46,104 +48,190 @@ class _ActivityReportCardState extends State<ActivityReportCard>{
           borderRadius: BorderRadius.circular(10),
         ),
 
-        child:Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(widget.activityReportData!.park_name!,style: TextStyle(fontSize: 18)),
-          SizedBox(
-            height: 20,
-          ),
-          Flex(
-            direction: Axis.horizontal,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      SvgPicture.asset("assets/images/activityReport/date.svg",colorFilter: ColorFilter.mode(Colors.green, BlendMode.srcIn),),
-                    SizedBox(width: 10,),
-                      Text("Date",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w600)),
-                    ],
-                  ),
-                  SizedBox(height: 10,),
-                  Row(
-                    children: [
-                      SvgPicture.asset("assets/images/activityReport/photoGallery.svg",colorFilter: ColorFilter.mode(Colors.green, BlendMode.srcIn),),
-                      SizedBox(width: 10,),
-                      Text("Photo Gallery",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w600),),
-                    ],
-                  ),
-                  SizedBox(height: 10,),
-                  Row(
-                    children: [
-                      SvgPicture.asset("assets/images/activityReport/feedback.svg",colorFilter: ColorFilter.mode(Colors.green, BlendMode.srcIn),),
-                      SizedBox(width: 10,),
-                      Text("Feedback",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w600)),
-                    ],
-                  ),
-                  SizedBox(height: 10,),
-                  Row(
-                    children: [
-                      SvgPicture.asset("assets/images/activityReport/detail.svg",colorFilter: ColorFilter.mode(Colors.green, BlendMode.srcIn),),
-                      SizedBox(width: 10,),
-                      Text("Detail",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w600)),
-                    ],
-                  ),
-                  SizedBox(height: 10,),
-                  Row(
-                    children: [
-                      SvgPicture.asset("assets/images/activityReport/reservation.svg",colorFilter: ColorFilter.mode(Colors.green, BlendMode.srcIn),),
-                      SizedBox(width: 10,),
-                      Text("Reservation",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w600)),
-                    ],
-                  ),
-                  SizedBox(height: 10,),
-                  Row(
-                    children: [
-                      SvgPicture.asset("assets/images/activityReport/detail.svg",colorFilter: ColorFilter.mode(Colors.green, BlendMode.srcIn),),
-                      SizedBox(width: 10,),
-                      Text("Know More",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w600)),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(width: 30,),
-               Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(activityDate!,style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500)),
-                  SizedBox(height: 10,),
-                  Text(widget.activityReportData!.photo_gallary!,style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500)),
-                  SizedBox(height: 10,),
-                  Text(widget.activityReportData!.feedback!,style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500)),
-                  SizedBox(height: 10,),
-                  Text(widget.activityReportData!.detail!,style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500)),
-                  SizedBox(height: 10,),
-                  Text(widget.activityReportData!.reservation!,style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500)),
-                  SizedBox(height: 10,),
-                  Text(widget.activityReportData!.know_more!,style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500)),
-                ],
-              ),
-            ],
-          ),
-          // ListView.builder(
-          //   padding: EdgeInsets.zero,
-          //   itemCount: 5,
-          //   shrinkWrap: true,
-          //     itemBuilder: (BuildContext context, index){
-          //       return Row(
-          //         children: [
-          //           SvgPicture.asset("assets/images/status/excel.svg",colorFilter: ColorFilter.mode(Colors.green, BlendMode.srcIn),),
-          //           Text("Date"),
-          //           Text("jhjhjhjhjhjhjhjh"),
-          //         ]
-          //         ,
-          //       );
-          //     })
+            Text(widget.activityReportData!.park_name!,
+                style: TextStyle(fontSize: 18)),
+            SizedBox(
+              height: 20,
+            ),
+            Flex(
+              direction: Axis.horizontal,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        SvgPicture.asset(
+                          "assets/images/activityReport/date.svg",
+                          colorFilter:
+                              ColorFilter.mode(Colors.green, BlendMode.srcIn),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text("Date",
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w600)),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        SvgPicture.asset(
+                          "assets/images/activityReport/photoGallery.svg",
+                          colorFilter:
+                              ColorFilter.mode(Colors.green, BlendMode.srcIn),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          "Photo Gallery",
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        SvgPicture.asset(
+                          "assets/images/activityReport/feedback.svg",
+                          colorFilter:
+                              ColorFilter.mode(Colors.green, BlendMode.srcIn),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text("Feedback",
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w600)),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        SvgPicture.asset(
+                          "assets/images/activityReport/detail.svg",
+                          colorFilter:
+                              ColorFilter.mode(Colors.green, BlendMode.srcIn),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text("Detail",
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w600)),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        SvgPicture.asset(
+                          "assets/images/activityReport/reservation.svg",
+                          colorFilter:
+                              ColorFilter.mode(Colors.green, BlendMode.srcIn),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text("Reservation",
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w600)),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        SvgPicture.asset(
+                          "assets/images/activityReport/detail.svg",
+                          colorFilter:
+                              ColorFilter.mode(Colors.green, BlendMode.srcIn),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text("Know More",
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w600)),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  width: 30,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(activityDate!,
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w500)),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                        widget.activityReportData!.photo_gallary == "0" ? "No" : "Yes",
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w500)),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(widget.activityReportData!.feedback! == "0" ? "No" : "Yes",
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w500)),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(widget.activityReportData!.detail! == "0" ? "No" : "Yes",
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w500)),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(widget.activityReportData!.reservation! == "0" ? "No" : "Yes",
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w500)),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(widget.activityReportData!.know_more! == "0" ? "No" : "Yes",
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w500)),
+                  ],
+                ),
+              ],
+            ),
+            // ListView.builder(
+            //   padding: EdgeInsets.zero,
+            //   itemCount: 5,
+            //   shrinkWrap: true,
+            //     itemBuilder: (BuildContext context, index){
+            //       return Row(
+            //         children: [
+            //           SvgPicture.asset("assets/images/status/excel.svg",colorFilter: ColorFilter.mode(Colors.green, BlendMode.srcIn),),
+            //           Text("Date"),
+            //           Text("jhjhjhjhjhjhjhjh"),
+            //         ]
+            //         ,
+            //       );
+            //     })
           ],
         ),
       ),
     );
   }
-} 
+}

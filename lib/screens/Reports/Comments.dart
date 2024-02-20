@@ -123,139 +123,145 @@ class _CommentsWidgetState extends State<CommentsWidget> {
                              topRight: Radius.circular(25)),
                          color: Colors.white),
                      // color: Colors.white,
-                    child: SingleChildScrollView(
+                    child: RefreshIndicator(
+                      backgroundColor: Colors.white,
+                      color: ColorParser().hexToColor("#1A7C52"),
+                      onRefresh: () => getComments(),
+                      child: SingleChildScrollView(
 
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          /** Search bar **/
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 26),
-                            child: Row(
-                              children: [
-                                Flexible(
-                                  child: SizedBox(
-                                    height: 50,
-                                    width: 400,
-                                    child: TextField(
-                                        onChanged: (value) {
-                                          // filterSearchResults(value);
-                                        },
-                                        style: const TextStyle(fontSize: 16),
-                                        decoration: InputDecoration(
-                                          prefixIcon: Builder(
-                                            builder: (context) {
-                                              return InkWell(
-                                                  onTap: () {
-                                                    // FilterpageWidget().gotoFilterPage(
-                                                    //     context);
-                                                    // Navigator.of(context).push(_createRoute());
-                                                    Scaffold.of(context).openDrawer();
-                                                  },
-                                                  child: SvgPicture.asset(
-                                                    "assets/images/comments/filter.svg",colorFilter: ColorFilter.mode(ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!), BlendMode.srcIn),));
-                                            },
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            /** Search bar **/
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 26),
+                              child: Row(
+                                children: [
+                                  Flexible(
+                                    child: SizedBox(
+                                      height: 50,
+                                      width: 400,
+                                      child: TextField(
+                                          onChanged: (value) {
+                                            // filterSearchResults(value);
+                                          },
+                                          style: const TextStyle(fontSize: 16),
+                                          decoration: InputDecoration(
+                                            prefixIcon: Builder(
+                                              builder: (context) {
+                                                return InkWell(
+                                                    onTap: () {
+                                                      // FilterpageWidget().gotoFilterPage(
+                                                      //     context);
+                                                      // Navigator.of(context).push(_createRoute());
+                                                      Scaffold.of(context).openDrawer();
+                                                    },
+                                                    child: SvgPicture.asset(
+                                                      "assets/images/comments/filter.svg",colorFilter: ColorFilter.mode(ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!), BlendMode.srcIn),));
+                                              },
 
-                                          ),
-                                          prefixIconConstraints: BoxConstraints(
-                                              minHeight: 30, minWidth: 60),
-
-                                          labelText: ' Filters',
-                                          // labelText: widget.selectedLanguage == "1"
-                                          //     ? "Search".language(context)
-                                          //     : "Search",
-                                          labelStyle: TextStyle(
-                                              color: ColorParser().hexToColor(
-                                                  "#9E9E9E")),
-
-                                        focusedBorder: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                              color: Colors.grey,
-                                              width: 1,
                                             ),
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        enabledBorder: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                              width: 1,
-                                              color: Colors.grey,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                      )),
+                                            prefixIconConstraints: BoxConstraints(
+                                                minHeight: 30, minWidth: 60),
+
+                                            labelText: ' Filters',
+                                            // labelText: widget.selectedLanguage == "1"
+                                            //     ? "Search".language(context)
+                                            //     : "Search",
+                                            labelStyle: TextStyle(
+                                                color: ColorParser().hexToColor(
+                                                    "#9E9E9E")),
+
+                                          focusedBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                color: Colors.grey,
+                                                width: 1,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          enabledBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                width: 1,
+                                                color: Colors.grey,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                        )),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        /**   listview builder     **/
+                          /**   listview builder     **/
 
-                        /**  Comments card Listing **/
+                          /**  Comments card Listing **/
 
-                        Flexible(
-                          child: FutureBuilder<List<CommentData>?>(
-                            future: commentResponse,
-                            builder: (context, snapshot) {
-                              Widget toReturn = const Padding(
-                                  padding: EdgeInsets.all(64.0),
-                                  child: Center(
-                                      child: CircularProgressIndicator()));
+                          Flexible(
+                            child: FutureBuilder<List<CommentData>?>(
+                              future: commentResponse,
+                              builder: (context, snapshot) {
+                                Widget toReturn = const Padding(
+                                    padding: EdgeInsets.all(64.0),
+                                    child: Center(
+                                        child: CircularProgressIndicator()));
 
-                              switch (snapshot.connectionState) {
-                                case ConnectionState.done:
-                                  if (snapshot.hasData) {
-                                    if (snapshot.data!.isNotEmpty) {
-                                      toReturn = ListView.separated(
-                                        padding: EdgeInsets.zero,
-                                        physics: const ScrollPhysics(),
-                                        itemCount: snapshot.data!.length,
-                                        shrinkWrap: true,
-                                        itemBuilder: (context, index) {
-                                          return CommentsCard(
-                                            data: snapshot.data![index],
-                                            onClick: (reportId) {
-                                              setState(() {
-                                                selectedReportId = reportId;
-                                                Scaffold.of(context)
-                                                    .openEndDrawer();
-                                              });
-                                            },
-                                          );
-                                        },
-                                        separatorBuilder:
-                                            (BuildContext context, int index) {
-                                          return const SizedBox(
-                                            height: 8,
-                                          );
-                                        },
-                                      );
-                                    } else {
-                                      toReturn = const Padding(
-                                        padding: EdgeInsets.all(64.0),
-                                        child: Center(
-                                            child: Text("No Comments Found.")),
-                                      );
+                                switch (snapshot.connectionState) {
+                                  case ConnectionState.done:
+                                    if (snapshot.hasData) {
+                                      if (snapshot.data!.isNotEmpty) {
+                                        toReturn = ListView.separated(
+                                          padding: EdgeInsets.zero,
+                                          physics: const ScrollPhysics(),
+                                          itemCount: snapshot.data!.length,
+                                          shrinkWrap: true,
+                                          itemBuilder: (context, index) {
+                                            return CommentsCard(
+                                              data: snapshot.data![index],
+                                              onClick: (reportId) {
+                                                setState(() {
+                                                  selectedReportId = reportId;
+                                                  StatusDetailPage().gotoStatusDetailPage(context,selectedReportId);
+                                                  // Scaffold.of(context)
+                                                  //     .openEndDrawer();
+                                                });
+                                              },
+                                            );
+                                          },
+                                          separatorBuilder:
+                                              (BuildContext context, int index) {
+                                            return const SizedBox(
+                                              height: 8,
+                                            );
+                                          },
+                                        );
+                                      } else {
+                                        toReturn = const Padding(
+                                          padding: EdgeInsets.all(64.0),
+                                          child: Center(
+                                              child: Text("No Comments Found.")),
+                                        );
+                                      }
                                     }
-                                  }
-                                  break;
-                                case ConnectionState.none:
-                                  break;
-                                case ConnectionState.active:
-                                  break;
-                                case ConnectionState.waiting:
-                                  break;
-                              }
-                              return toReturn;
-                            },
+                                    break;
+                                  case ConnectionState.none:
+                                    break;
+                                  case ConnectionState.active:
+                                    break;
+                                  case ConnectionState.waiting:
+                                    break;
+                                }
+                                return toReturn;
+                              },
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 50,
-                        ),
-                      ],
+                          const SizedBox(
+                            height: 50,
+                          ),
+                        ],
+                      ),
+                                        ),
                     ),
-                  ),
                    )
           ],
 
@@ -265,8 +271,8 @@ class _CommentsWidgetState extends State<CommentsWidget> {
     );
   }
 
-  getComments() {
-    commentResponse = ApiFactory.getCommentService().getComments(filterParams);
+ Future<void> getComments() async{
+    commentResponse =  ApiFactory.getCommentService().getComments(filterParams);
     setState(() {});
   }
 

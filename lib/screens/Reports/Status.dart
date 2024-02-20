@@ -419,7 +419,8 @@ class _StatusWidgetState extends State<StatusWidget> {
                                       setState(() {
                                         print("Selected Report => $value");
                                         selectedStatusID = value;
-                                        Scaffold.of(context).openEndDrawer();
+                                        StatusDetailPage().gotoStatusDetailPage(context,selectedStatusID);
+                                        // Scaffold.of(context).openEndDrawer();
                                       });
                                     },
                                   );

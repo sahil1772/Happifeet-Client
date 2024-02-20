@@ -29,6 +29,7 @@ class ActivityReportWidget extends StatefulWidget {
 
 class _ActivityReportWidgetState extends State<ActivityReportWidget> {
   List<ActivityReportData>? activityReportData;
+  List<ActivityReportData>? activityReportDataTemp;
   Future<List<ActivityReportData>>? apiResponse;
   Future<List<CommentData>?>? commentResponse;
 
@@ -52,8 +53,27 @@ class _ActivityReportWidgetState extends State<ActivityReportWidget> {
         .getActivityReportService()
         .getActivityReportListing(filterParams);
     activityReportData = await response;
+    activityReportDataTemp = await response;
     log("ACTIVITY REPORT DATA --> ${activityReportData!.first.toJson()}");
     return activityReportData!;
+  }
+
+  filterSearchResults(String keyword) async {
+    log("search keyword ${keyword}");
+
+    setState(() {
+      if (keyword.isEmpty) {
+        activityReportData = activityReportDataTemp;
+      } else {
+        activityReportData = activityReportDataTemp!.where((element) {
+          return (element as ActivityReportData)
+              .park_name!
+              .toLowerCase()
+              .toString()
+              .contains(keyword.toLowerCase());
+        }).toList();
+      }
+    });
   }
 
   @override
@@ -147,7 +167,7 @@ class _ActivityReportWidgetState extends State<ActivityReportWidget> {
                               width: 400,
                               child: TextField(
                                   onChanged: (value) {
-                                    // filterSearchResults(value);
+                                    filterSearchResults(value);
                                   },
                                   style: const TextStyle(fontSize: 16),
                                   decoration: InputDecoration(

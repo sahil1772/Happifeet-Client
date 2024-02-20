@@ -9,6 +9,7 @@ import 'package:happifeet_client_app/network/services/ApiService.dart';
 import 'package:happifeet_client_app/storage/runtime_storage.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
 
+import '../../components/HappiFeetAppBar.dart';
 import '../../model/FeedbackStatus/FeedbackStatusDetails.dart';
 import '../../resources/resources.dart';
 
@@ -17,9 +18,10 @@ class StatusDetailPage extends StatefulWidget {
 
     StatusDetailPage({Key? key, this.report_id});
 
-  gotoStatusFilterPage(BuildContext context) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (_) => StatusDetailPage()));
+  gotoStatusDetailPage(BuildContext context, String? report_id) {
+    // Navigator.push(
+    //     context, MaterialPageRoute(builder: (_) => StatusDetailPage()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => StatusDetailPage(report_id: report_id,)));
   }
 
   @override
@@ -57,55 +59,57 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
+        appBar: HappiFeetAppBar(IsDashboard: false, isCitiyList: false)
+            .getAppBar(context),
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                horizontal: 16,
+                horizontal:26,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      SizedBox(
-                        height: 40,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: ColorParser().hexToColor(
-                                  RuntimeStorage
-                                      .instance.clientTheme!.button_background!),
-                              elevation: 0,
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)))),
-                          child: Row(
-                            children: [
-                              SvgPicture.asset(
-                                  "assets/images/comments/close.svg"),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              const Text(
-                                "Close",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.end,
+                  //   children: [
+                  //     SizedBox(
+                  //       height: 40,
+                  //       child: ElevatedButton(
+                  //         onPressed: () {
+                  //           Navigator.pop(context);
+                  //         },
+                  //         style: ElevatedButton.styleFrom(
+                  //             backgroundColor: ColorParser().hexToColor(
+                  //                 RuntimeStorage
+                  //                     .instance.clientTheme!.button_background!),
+                  //             elevation: 0,
+                  //             shape: const RoundedRectangleBorder(
+                  //                 borderRadius:
+                  //                     BorderRadius.all(Radius.circular(10)))),
+                  //         child: Row(
+                  //           children: [
+                  //             SvgPicture.asset(
+                  //                 "assets/images/comments/close.svg"),
+                  //             const SizedBox(
+                  //               width: 10,
+                  //             ),
+                  //             const Text(
+                  //               "Close",
+                  //               style: TextStyle(
+                  //                   color: Colors.white,
+                  //                   fontSize: 16,
+                  //                   fontWeight: FontWeight.w500),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  //
                   const SizedBox(
-                    height: 35,
+                    height: 18,
                   ),
 
                   /** QUESTIONS **/

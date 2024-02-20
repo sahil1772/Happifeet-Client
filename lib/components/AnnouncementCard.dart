@@ -153,7 +153,7 @@ class _AnnouncementCardState extends State<AnnouncementCard> {
                                 widget.announcemntData!.id,
                                 () => widget.callback!()),
                         child: SvgPicture.asset(
-                            "assets/images/location/editing.svg")),
+                            "assets/images/activityReport/visible.svg")),
                   ],
                 ),
               )

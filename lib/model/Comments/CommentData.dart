@@ -16,6 +16,7 @@ class CommentData {
   String? assigned_by;
   String? assigned_to;
   String? add_date;
+  String? anonymous_user;
 
 
   CommentData(
@@ -30,7 +31,8 @@ class CommentData {
       this.status,
       this.assigned_by,
       this.assigned_to,
-      this.add_date});
+      this.add_date,
+      this.anonymous_user});
 
   factory CommentData.fromJson(Map<String, dynamic> json) =>
       _$CommentDataFromJson(json);

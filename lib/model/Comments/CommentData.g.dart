@@ -19,6 +19,7 @@ CommentData _$CommentDataFromJson(Map<String, dynamic> json) => CommentData(
       assigned_by: json['assigned_by'] as String?,
       assigned_to: json['assigned_to'] as String?,
       add_date: json['add_date'] as String?,
+      anonymous_user: json['anonymous_user'] as String?,
     );
 
 Map<String, dynamic> _$CommentDataToJson(CommentData instance) =>
@@ -35,4 +36,5 @@ Map<String, dynamic> _$CommentDataToJson(CommentData instance) =>
       'assigned_by': instance.assigned_by,
       'assigned_to': instance.assigned_to,
       'add_date': instance.add_date,
+      'anonymous_user': instance.anonymous_user,
     };

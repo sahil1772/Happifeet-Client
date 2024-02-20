@@ -137,97 +137,102 @@ class _ManageLocationWidgetState extends State<LocationListing> {
                              topRight: Radius.circular(25)),
                          color: Colors.white),
                      // color: Colors.white,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          /** Search bar **/
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 26),
-                            child: Row(
-                              children: [
-                                Flexible(
-                                  child: SizedBox(
-                                    height: 50,
-                                    width: 400,
-                                    child: TextField(
-                                        onChanged: (value) {
-                                          filterSearchResults(value);
-                                        },
-                                        style: const TextStyle(fontSize: 16),
-                                        decoration: InputDecoration(
-                                          prefixIcon: const Icon(Icons.search),
-                                          prefixIconColor:
-                                              ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
-                                          labelText: 'Search',
-                                          // labelText: widget.selectedLanguage == "1"
-                                          //     ? "Search".language(context)
-                                          //     : "Search",
-                                          labelStyle: TextStyle(
-                                              color: ColorParser()
-                                                  .hexToColor("#9E9E9E")),
+                    child: RefreshIndicator(
+                      backgroundColor: Colors.white,
+                      color: ColorParser().hexToColor("#1A7C52"),
+                      onRefresh: () => getLocationDetails(),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            /** Search bar **/
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 26),
+                              child: Row(
+                                children: [
+                                  Flexible(
+                                    child: SizedBox(
+                                      height: 50,
+                                      width: 400,
+                                      child: TextField(
+                                          onChanged: (value) {
+                                            filterSearchResults(value);
+                                          },
+                                          style: const TextStyle(fontSize: 16),
+                                          decoration: InputDecoration(
+                                            prefixIcon: const Icon(Icons.search),
+                                            prefixIconColor:
+                                                ColorParser().hexToColor(RuntimeStorage.instance.clientTheme!.top_title_background_color!),
+                                            labelText: 'Search',
+                                            // labelText: widget.selectedLanguage == "1"
+                                            //     ? "Search".language(context)
+                                            //     : "Search",
+                                            labelStyle: TextStyle(
+                                                color: ColorParser()
+                                                    .hexToColor("#9E9E9E")),
 
-                                          focusedBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                color: Colors.grey,
-                                                width: 1,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          enabledBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                width: 1,
-                                                color: Colors.grey,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                        )),
+                                            focusedBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                  color: Colors.grey,
+                                                  width: 1,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            enabledBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                  width: 1,
+                                                  color: Colors.grey,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                          )),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                          /**   listview builder     **/
+                            /**   listview builder     **/
 
-                          /**  Location Listing **/
+                            /**  Location Listing **/
 
-                          Flexible(
-                            child: ListView.separated(
-                              padding: EdgeInsets.zero,
-                              physics: const ScrollPhysics(),
-                              itemCount: locationDetails.length,
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                return LocationCard(
-                                    locationDetails: locationDetails[index],
-                                    eventListener: (event) {
-                                      switch (event) {
-                                        case events.DELETE:
-                                          getLocationDetails();
-                                          setState(() {});
-                                          break;
-                                        case events.EDIT:
-                                          setState(() {});
-                                          break;
-                                        case events.QR:
-                                          setState(() {});
-                                          break;
-                                      }
-                                    });
-                              },
-                              separatorBuilder:
-                                  (BuildContext context, int index) {
-                                return SizedBox(
-                                  height: 8,
-                                );
-                              },
+                            Flexible(
+                              child: ListView.separated(
+                                padding: EdgeInsets.zero,
+                                physics: const ScrollPhysics(),
+                                itemCount: locationDetails.length,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  return LocationCard(
+                                      locationDetails: locationDetails[index],
+                                      eventListener: (event) {
+                                        switch (event) {
+                                          case events.DELETE:
+                                            getLocationDetails();
+                                            setState(() {});
+                                            break;
+                                          case events.EDIT:
+                                            setState(() {});
+                                            break;
+                                          case events.QR:
+                                            setState(() {});
+                                            break;
+                                        }
+                                      });
+                                },
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
+                                  return SizedBox(
+                                    height: 8,
+                                  );
+                                },
+                              ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 50,
-                          ),
-                        ],
+                            SizedBox(
+                              height: 50,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

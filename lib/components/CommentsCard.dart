@@ -1,8 +1,10 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:happifeet_client_app/components/AddComment.dart';
 import 'package:happifeet_client_app/storage/runtime_storage.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
 
@@ -27,11 +29,16 @@ class _CommentsCardState extends State<CommentsCard> {
   TextEditingController commentController = TextEditingController();
   List<MailLogData>? mailLog = [];
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  DateTime? tempDate;
+  String? feedbackDate;
 
   @override
   void initState() {
     // TODO: implement initState
     getMailLogs();
+    tempDate =
+        DateFormat("yyyy-MM-dd").parse(widget.data!.add_date!);
+    feedbackDate = DateFormat("dd-MMM-yyyy").format(tempDate!);
     super.initState();
   }
 
@@ -591,6 +598,17 @@ class _CommentsCardState extends State<CommentsCard> {
                         // Divider(color: Colors.grey.shade200),
 
                         InkWell(
+                          onTap: (){
+                            // AddComment().gotoAddComment(context,widget.data!.id!,widget.data!.assigned_to,(){
+                            //   Navigator.of(context).pop();
+                            //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Comment Added.")));
+                            //   setState(() {
+                            //     // apiResponse = getFeedbackStatusDetails();
+                            //   });
+                            // },(){
+                            //
+                            // });
+                          },
                             child: SvgPicture.asset(
                                 "assets/images/comments/contact.svg")),
                         const SizedBox(
@@ -636,7 +654,7 @@ class _CommentsCardState extends State<CommentsCard> {
                               color: ColorParser().hexToColor(RuntimeStorage
                                   .instance.clientTheme!.body_text_color!)),
                         ),
-                        Text("-",
+                        Text(widget.data!.anonymous_user!,
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
@@ -717,7 +735,7 @@ class _CommentsCardState extends State<CommentsCard> {
                               fontWeight: FontWeight.w300,
                               color: ColorParser().hexToColor(RuntimeStorage
                                   .instance.clientTheme!.body_text_color!))),
-                      Text("${widget.data?.add_date}",
+                      Text("${feedbackDate}",
                           style: TextStyle(
                               overflow: TextOverflow.ellipsis,
                               fontSize: 14,

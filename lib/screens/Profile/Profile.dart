@@ -373,7 +373,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(10)))),
                                     child: const Text(
-                                      "Save Changes",
+                                      "Submit",
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 16,

@@ -467,57 +467,57 @@ class _ManageWidgetState extends State<ManageWidget> {
                                   ),
                                 ),
                               ),
-                            if (isactivityReport!)
-                              InkWell(
-                                onTap: () {
-                                  // ClientListingWidget()
-                                  //     .gotoClientListingPage(context);
-                                  ActivityReportWidget().gotoActivityReport(context);
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.black12),
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.circular(14),
-                                      )),
-                                  width: 150,
-                                  height: 130,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        width: 70,
-                                        height: 70,
-                                        decoration: BoxDecoration(
-                                            color: ColorParser().hexToColor(
-                                                RuntimeStorage
-                                                    .instance
-                                                    .clientTheme!
-                                                    .top_title_background_color!),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(50))),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(16.0),
-                                          child: SvgPicture.asset(
-                                            "assets/images/manage/activityReport.svg",
-                                            colorFilter: ColorFilter.mode(
-                                                Colors.white, BlendMode.srcIn),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text("Activity Report",
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w500,
-                                              color: Resources.colors.hfText),
-                                          textAlign: TextAlign.center),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                            // if (isactivityReport!)
+                            //   InkWell(
+                            //     onTap: () {
+                            //       // ClientListingWidget()
+                            //       //     .gotoClientListingPage(context);
+                            //       ActivityReportWidget().gotoActivityReport(context);
+                            //     },
+                            //     child: Container(
+                            //       decoration: BoxDecoration(
+                            //           border: Border.all(color: Colors.black12),
+                            //           borderRadius: const BorderRadius.all(
+                            //             Radius.circular(14),
+                            //           )),
+                            //       width: 150,
+                            //       height: 130,
+                            //       child: Column(
+                            //         mainAxisAlignment: MainAxisAlignment.center,
+                            //         children: [
+                            //           Container(
+                            //             width: 70,
+                            //             height: 70,
+                            //             decoration: BoxDecoration(
+                            //                 color: ColorParser().hexToColor(
+                            //                     RuntimeStorage
+                            //                         .instance
+                            //                         .clientTheme!
+                            //                         .top_title_background_color!),
+                            //                 borderRadius: BorderRadius.all(
+                            //                     Radius.circular(50))),
+                            //             child: Padding(
+                            //               padding: const EdgeInsets.all(16.0),
+                            //               child: SvgPicture.asset(
+                            //                 "assets/images/manage/activityReport.svg",
+                            //                 colorFilter: ColorFilter.mode(
+                            //                     Colors.white, BlendMode.srcIn),
+                            //               ),
+                            //             ),
+                            //           ),
+                            //           const SizedBox(
+                            //             height: 5,
+                            //           ),
+                            //           Text("Activity Report",
+                            //               style: TextStyle(
+                            //                   fontSize: 14,
+                            //                   fontWeight: FontWeight.w500,
+                            //                   color: Resources.colors.hfText),
+                            //               textAlign: TextAlign.center),
+                            //         ],
+                            //       ),
+                            //     ),
+                            //   ),
                             if (istrail!)
                               InkWell(
                                 onTap: () {

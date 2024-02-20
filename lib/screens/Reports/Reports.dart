@@ -12,6 +12,7 @@ import '../../resources/resources.dart';
 import '../../storage/shared_preferences.dart';
 import '../../utils/ColorParser.dart';
 import '../../utils/DeviceDimensions.dart';
+import '../Manage/ManageActivityReport/ActivityReportListing.dart';
 
 class ReportsWidget extends StatefulWidget {
   ClientTheme? clientTheme;
@@ -24,15 +25,24 @@ class ReportsWidget extends StatefulWidget {
 
 class _ReportsWidgetState extends State<ReportsWidget> {
   ClientTheme? theme;
+  bool? isactivityReport = false;
 
   @override
   void initState() {
     // TODO: implement initState
+    checkPermission();
     SharedPref.instance.getCityTheme().then((value) {
       log("THEME IN REPORTS PAGE ${value}");
       theme = value;
     });
     super.initState();
+  }
+
+  Future<void> checkPermission() async {
+
+    isactivityReport = await SharedPref.instance.getPermissionActivityReport();
+setState(() {});
+    log("VALUE IN CHECK PERMISSINO ${isactivityReport}");
   }
 
   @override
@@ -116,9 +126,9 @@ class _ReportsWidgetState extends State<ReportsWidget> {
                         GridView(
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 0,
-                            crossAxisSpacing: 20,
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 18,
+                                  mainAxisSpacing: 18
                           ),
                           padding: EdgeInsets.zero,
                           shrinkWrap: true,
@@ -208,6 +218,53 @@ class _ReportsWidgetState extends State<ReportsWidget> {
                                       height: 5,
                                     ),
                                     Text("Status",
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: Resources.colors.hfText),
+                                        textAlign: TextAlign.center),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            if (isactivityReport!)
+                            InkWell(
+                              onTap: () {
+                                ActivityReportWidget().gotoActivityReport(context);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black12),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(14),
+                                    )),
+                                width: 180,
+                                height: 160,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: 70,
+                                      height: 70,
+                                      decoration: BoxDecoration(
+                                          color: ColorParser().hexToColor(
+                                              RuntimeStorage.instance.clientTheme!
+                                                  .top_title_background_color!),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(50))),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: SvgPicture.asset(
+                                          "assets/images/manage/activityReport.svg",
+                                          colorFilter: ColorFilter.mode(
+                                              Colors.white, BlendMode.srcIn),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text("Activity Report",
                                         style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w500,
