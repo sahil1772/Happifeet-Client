@@ -69,6 +69,8 @@ class _StatusWidgetState extends State<StatusWidget> {
         // showKeyword: true,
         // formType: true,
         filterData: (params) {
+          resolvedCount = 0;
+          pendingCount = 0;
           filterParams = params;
           apiResposne = getFeedbackStatusData();
         },

@@ -177,7 +177,7 @@ class _TrailListingCardState extends State<TrailListingCard> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Divider(color: Colors.grey.shade200),
+                  // Divider(color: Colors.grey.shade200),
                   const SizedBox(
                     height: 8,
                   ),
@@ -239,7 +239,7 @@ class _TrailListingCardState extends State<TrailListingCard> {
                   const SizedBox(
                     height: 8,
                   ),
-                  Divider(color: Colors.grey.shade200),
+                  // Divider(color: Colors.grey.shade200),
                 ],
               ),
             )

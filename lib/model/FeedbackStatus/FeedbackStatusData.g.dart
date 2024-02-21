@@ -18,6 +18,8 @@ FeedbackStatusData _$FeedbackStatusDataFromJson(Map<String, dynamic> json) =>
       assigned_by: json['assigned_by'] as String?,
       assigned_to: json['assigned_to'] as String?,
       add_date: json['add_date'] as String?,
+      added_by_name: json['added_by_name'] as String?,
+      assigned_to_name: json['assigned_to_name'] as String?,
     );
 
 Map<String, dynamic> _$FeedbackStatusDataToJson(FeedbackStatusData instance) =>
@@ -32,4 +34,6 @@ Map<String, dynamic> _$FeedbackStatusDataToJson(FeedbackStatusData instance) =>
       'assigned_by': instance.assigned_by,
       'assigned_to': instance.assigned_to,
       'add_date': instance.add_date,
+      'added_by_name': instance.added_by_name,
+      'assigned_to_name': instance.assigned_to_name,
     };

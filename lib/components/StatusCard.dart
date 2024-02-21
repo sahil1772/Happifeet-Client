@@ -136,7 +136,7 @@ class _StatusCardState extends State<StatusCard> {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 3.0),
-                            child: Text(widget.getStatusData!.assigned_by ?? "",
+                            child: Text(widget.getStatusData!.added_by_name ?? "",
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
@@ -212,7 +212,7 @@ class _StatusCardState extends State<StatusCard> {
                             alignment: Alignment.centerRight,
                             child: Padding(
                               padding: const EdgeInsets.only(top: 3.0),
-                              child: Text(widget.getStatusData!.assigned_to ?? "",
+                              child: Text(widget.getStatusData!.assigned_to_name ?? "",
                                   style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
