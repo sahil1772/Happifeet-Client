@@ -5,20 +5,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:happifeet_client_app/components/AddComment.dart';
+import 'package:happifeet_client_app/screens/Reports/FormToAddComment.dart';
 import 'package:happifeet_client_app/storage/runtime_storage.dart';
 import 'package:happifeet_client_app/utils/ColorParser.dart';
 
 import '../model/Comments/CommentData.dart';
 import '../model/Comments/MailLogData.dart';
+import '../model/FeedbackStatus/FeedbackStatusDetails.dart';
 import '../network/ApiFactory.dart';
 import '../resources/resources.dart';
 
 class CommentsCard extends StatefulWidget {
-  CommentsCard({super.key, this.data, this.onClick});
+  CommentsCard({super.key, this.data, this.onClick,this.onSubmit});
+
 
   CommentData? data;
 
   Function? onClick;
+  Function? onSubmit;
 
   @override
   State<CommentsCard> createState() => _CommentsCardState();
@@ -31,14 +35,16 @@ class _CommentsCardState extends State<CommentsCard> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   DateTime? tempDate;
   String? feedbackDate;
+  List<FeedbackStatusDetails>? getStatusDetails;
 
   @override
   void initState() {
     // TODO: implement initState
     getMailLogs();
-    tempDate =
-        DateFormat("yyyy-MM-dd").parse(widget.data!.add_date!);
+    getFeedbackStatusDetails();
+    tempDate = DateFormat("yyyy-MM-dd").parse(widget.data!.add_date!);
     feedbackDate = DateFormat("dd-MMM-yyyy").format(tempDate!);
+    log("REPORT ID IN COMMENTS CARD-->${widget.data!.id!} ");
     super.initState();
   }
 
@@ -48,6 +54,17 @@ class _CommentsCardState extends State<CommentsCard> {
     mailLog = response;
     log("MAIL LOG DATA --> ${mailLog!.length}");
     setState(() {});
+  }
+
+  Future<List<FeedbackStatusDetails>>? getFeedbackStatusDetails() async {
+    var response = ApiFactory()
+        .getFeedbackStatusService()
+        .getFeedbackStatusDetails("feedback_view_report", widget.data!.id!);
+
+    getStatusDetails = await response;
+    log("DATA IN COMMENTS CARD DETAILS ${getStatusDetails!.first.assign_to}");
+
+    return response;
   }
 
   @override
@@ -322,39 +339,38 @@ class _CommentsCardState extends State<CommentsCard> {
                                                     children: [
                                                       ElevatedButton(
                                                         onPressed: () async {
-                                                          if(_formkey.currentState!.validate()){
+                                                          if (_formkey
+                                                              .currentState!
+                                                              .validate()) {
                                                             var response = await ApiFactory
-                                                                .getCommentService()
+                                                                    .getCommentService()
                                                                 .sendEmailData(
-                                                                widget.data!
-                                                                    .email_address!,
-                                                                subjectController
-                                                                    .text,
-                                                                commentController
-                                                                    .text);
+                                                                    widget.data!
+                                                                        .email_address!,
+                                                                    subjectController
+                                                                        .text,
+                                                                    commentController
+                                                                        .text);
                                                             if (response!
-                                                                .status ==
+                                                                    .status ==
                                                                 "1") {
                                                               Navigator.of(
-                                                                  context)
+                                                                      context)
                                                                   .pop();
                                                               log("EMAIL DATA SENT SUCCESSFILLY");
                                                               ScaffoldMessenger
-                                                                  .of(context)
+                                                                      .of(
+                                                                          context)
                                                                   .showSnackBar(
-                                                                  SnackBar(
-                                                                      content:
-                                                                      Text("Email Sent")));
-
-
+                                                                      SnackBar(
+                                                                          content:
+                                                                              Text("Email Sent")));
                                                             } else {
                                                               log("Error in submitting Email data");
                                                             }
-                                                          }
-                                                          else{
+                                                          } else {
                                                             log("validation unsuccessful");
                                                           }
-
                                                         },
                                                         style: ElevatedButton.styleFrom(
                                                             backgroundColor: ColorParser()
@@ -598,17 +614,54 @@ class _CommentsCardState extends State<CommentsCard> {
                         // Divider(color: Colors.grey.shade200),
 
                         InkWell(
-                          onTap: (){
-                            // AddComment().gotoAddComment(context,widget.data!.id!,widget.data!.assigned_to,(){
-                            //   Navigator.of(context).pop();
-                            //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Comment Added.")));
-                            //   setState(() {
-                            //     // apiResponse = getFeedbackStatusDetails();
-                            //   });
-                            // },(){
-                            //
-                            // });
-                          },
+                            onTap: () {
+                              // log("Assigned to User Id => ${widget.data!.assigned_to}");
+                              // FormToAddComment().gotoFormToAddComment(context,widget.data!.id!,widget.data!.assigned_to,(){
+                              //   Navigator.of(context).pop();
+                              //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Comment Added.")));
+                              //   setState(() {
+                              //     // apiResponse = getFeedbackStatusDetails();
+                              //   });
+                              // },(){
+                              //
+                              // });
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    insetPadding: EdgeInsets.all(16),
+                                    contentPadding: EdgeInsets.zero,
+                                    content: Container(
+                                      margin: EdgeInsets.all(10),
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          children: [
+                                            AddComment(
+                                              assignedTo: getStatusDetails!.first.assign_to,
+                                              reportId: widget.data!.id!,
+                                              onSuccess: () {
+                                                Navigator.of(context).pop();
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                        content:
+                                                            Text("Comment Added.")));
+                                                widget.onSubmit;
+                                                setState(() {});
+
+                                              },
+                                              onRequest: (){
+                                                CircularProgressIndicator();
+                                              },
+
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
                             child: SvgPicture.asset(
                                 "assets/images/comments/contact.svg")),
                         const SizedBox(
@@ -797,49 +850,51 @@ class _CommentsCardState extends State<CommentsCard> {
 
           /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-          widget.data?.status == "" || widget.data!.status!.isEmpty ?
-              SizedBox():
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 40,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // AddLocation().gotoAddLocation(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: ColorParser().hexToColor(RuntimeStorage
-                            .instance.clientTheme!.top_title_background_color!),
-                        elevation: 0,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10)))),
-                    child: Text(
-                      "${widget.data?.status}",
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500),
-                    ),
+          widget.data?.status == "" || widget.data!.status!.isEmpty
+              ? SizedBox()
+              : Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 40,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // AddLocation().gotoAddLocation(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: ColorParser().hexToColor(
+                                  RuntimeStorage.instance.clientTheme!
+                                      .top_title_background_color!),
+                              elevation: 0,
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)))),
+                          child: Text(
+                            "${widget.data?.status}",
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-            child: Text(
-              "${widget.data?.description}",
-              style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: ColorParser().hexToColor(
-                      RuntimeStorage.instance.clientTheme!.body_text_color!)),
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+          //   child: Text(
+          //     "${widget.data?.description}",
+          //     style: TextStyle(
+          //         fontSize: 14,
+          //         fontWeight: FontWeight.w400,
+          //         color: ColorParser().hexToColor(
+          //             RuntimeStorage.instance.clientTheme!.body_text_color!)),
+          //   ),
+          // ),
         ],
       ),
     );

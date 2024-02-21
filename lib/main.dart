@@ -54,6 +54,9 @@ class _MyAppState extends State<MyApp> {
       supportedLocales: context.supportedLocales,
       locale: context.locale,
       debugShowCheckedModeBanner: false,
+      builder: (context, child) {
+        return MediaQuery(data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(0.9)), child: child!);
+      },
       theme: ThemeData(
         textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
         canvasColor: Colors.transparent,
@@ -61,6 +64,7 @@ class _MyAppState extends State<MyApp> {
             seedColor: from(hexColor == null ? Color(0xff49AC43) : ColorParser().hexToColor(hexColor!))),
         useMaterial3: true,
       ),
+
       home: const SplashScreen(),
     );
   }

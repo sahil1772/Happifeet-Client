@@ -226,6 +226,10 @@ class _CommentsWidgetState extends State<CommentsWidget> {
                                                   //     .openEndDrawer();
                                                 });
                                               },
+                                              onSubmit: (){
+                                                getComments();
+                                              },
+
                                             );
                                           },
                                           separatorBuilder:

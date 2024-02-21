@@ -31,16 +31,19 @@ class AddComment extends StatefulWidget {
       this.dataCallback,
       this.onRequest});
 
-  gotoAddComment(BuildContext context, String reportId, String? assignedTo,Function onSuccess,Function onRequest) {
+  gotoAddComment(BuildContext context, String reportId, String? assignedTo,
+      Function onSuccess, Function onRequest) {
     // Navigator.push(
     //     context, MaterialPageRoute(builder: (_) => StatusDetailPage()));
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => AddComment(
-              reportId: reportId,
-              assignedTo: assignedTo,
-            ))).then((value) {
-              onSuccess();
-              onRequest();
+    Navigator.of(context)
+        .push(MaterialPageRoute(
+            builder: (_) => AddComment(
+                  reportId: reportId,
+                  assignedTo: assignedTo,
+                )))
+        .then((value) {
+      onSuccess();
+      onRequest();
     });
   }
 }
@@ -58,272 +61,325 @@ class _AddCommentState extends State<AddComment> {
 
   Future<List<FeedbackStatusDetails>>? apiResponse;
   List<AssignedUserData>? userListing = [];
+  Future<List<AssignedUserData>>? apiResponseListing;
 
   @override
   void initState() {
     // TODO: implement initState
     getAssignedUserListing();
+    log("dataaaaaaa->> ${widget.assignedTo}");
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
-      child: Card(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Form(
-              key: _form,
-              child: TextFormField(
-                  validator: (value) {
-                    if (value == "") {
-                      return "Please provide a comment";
-                    }
-                  },
-                  maxLines: 4,
-                  controller: commentsController,
-                  decoration: const InputDecoration(
-                    // labelText: labelText,
-                    hintText: 'Enter Your Comments',
-                    hintStyle:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                    errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        borderSide: BorderSide(color: Colors.red, width: 1)),
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        borderSide: BorderSide(color: Colors.grey, width: 1)),
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        borderSide: BorderSide(width: 1, color: Colors.grey)),
-                  )),
-            ),
-        
-            /** Status **/
-            const SizedBox(
-              height: 24,
-            ),
-            const Text("Status",
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black)),
-            const SizedBox(
-              height: 8,
-            ),
-            Row(
-              children: [
-                OutlinedButton(
-                  onPressed: () {
-                    setState(() {
-                      isStatusSelected = Status.Resolved;
-                    });
-                  },
-                  style: OutlinedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    side: BorderSide(
-                      color: isStatusSelected == Status.Resolved
-                          ? ColorParser().hexToColor(RuntimeStorage
-                              .instance.clientTheme!.button_background!)
-                          : Colors.grey,
-                    ),
-                  ),
-                  child: Text(
-                    "Resolved",
-                    style: TextStyle(
-                        color: isStatusSelected == Status.Resolved
-                            ? ColorParser().hexToColor(RuntimeStorage
-                                .instance.clientTheme!.button_background!)
-                            : Colors.grey),
-                  ),
-                ),
-                const SizedBox(
-                  width: 16,
-                ),
-                OutlinedButton(
-                    onPressed: () {
-                      setState(() {
-                        isStatusSelected = Status.Pending;
-                      });
-                    },
-                    style: OutlinedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      side: BorderSide(
-                        color: isStatusSelected != Status.Pending
-                            ? Colors.grey
-                            : ColorParser().hexToColor(RuntimeStorage
-                                .instance.clientTheme!.button_background!),
-                      ),
-                    ),
-                    child: Text(
-                      "Pending",
-                      style: TextStyle(
-                        color: isStatusSelected != Status.Pending
-                            ? Colors.grey
-                            : ColorParser().hexToColor(RuntimeStorage
-                                .instance.clientTheme!.button_background!),
-                      ),
-                    ))
-              ],
-            ),
-        
-            /** Assigned To **/
-            const SizedBox(
-              height: 24,
-            ),
-            const Text("Assigned To",
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black)),
-            const SizedBox(
-              height: 8,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                widget.assignedTo == null
-                    ? DropdownMenu<String>(
-                        width: MediaQuery.of(context).size.width - 32,
-                        enableSearch: false,
-                        enabled: widget.assignedTo == null,
-                        inputDecorationTheme: InputDecorationTheme(
-                            floatingLabelBehavior: FloatingLabelBehavior.never,
-                            border: OutlineInputBorder(
-                                borderSide: const BorderSide(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(10))),
-                        requestFocusOnTap: false,
-                        label: const Text('Select'),
-                        initialSelection: dropdownValueSelected,
-                        onSelected: (String? park) {
-                          dropdownValueSelected = park;
-                          log("Selected PARK => $park");
-                          setState(() {});
-                        },
-                        dropdownMenuEntries: [
-                          for (int i = 0; i < userListing!.length; i++)
-                            DropdownMenuEntry<String>(
-                              value: userListing![i].id!,
-                              label: userListing![i].name!,
-                            ),
-                        ],
-                      )
-                    : Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.grey,
-                            ),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: SizedBox(
-                          height: 56,
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: Text(
-                                  "${widget.assignedTo != null && userListing!.isNotEmpty ? userListing!.firstWhere((element) => element.id == widget.assignedTo).name : ""}"),
-                            ),
-                          ),
-                        ),
-                      ),
-              ],
-            ),
-        
-            /** Upload File **/
-            const SizedBox(
-              height: 24,
-            ),
-            const Text("Upload File",
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black)),
-            const SizedBox(
-              height: 8,
-            ),
-            Container(
-              // height: 50,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
-                border: Border.all(color: Resources.colors.hfText),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20, top: 5, bottom: 5),
-                child: Row(
-                  children: [
-                    OutlinedButton(
-                      onPressed: () {
-                        if (imageFile!.length < 3) {
-                          getFromGallery();
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Max 3 images can be uploaded')));
+    return Form(
+      key: _form,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        child: FutureBuilder<List<AssignedUserData>?>(
+          future: apiResponseListing,
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              log("user listing --> ${snapshot.data} ");
+              userListing = snapshot.data;
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextFormField(
+                      validator: (value) {
+                        if (value == "") {
+                          return "Please provide a comment";
                         }
                       },
-                      style: OutlinedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        side: BorderSide(
-                          color: ColorParser().hexToColor(RuntimeStorage
-                              .instance.clientTheme!.button_background!),
+                      maxLines: 4,
+                      controller: commentsController,
+                      decoration: const InputDecoration(
+                        // labelText: labelText,
+                        hintText: 'Enter Your Comments',
+                        hintStyle: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w400),
+                        errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            borderSide:
+                                BorderSide(color: Colors.red, width: 1)),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            borderSide:
+                                BorderSide(color: Colors.grey, width: 1)),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            borderSide:
+                                BorderSide(width: 1, color: Colors.grey)),
+                      )),
+
+                  /** Status **/
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  const Text("Status",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black)),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    children: [
+                      OutlinedButton(
+                        onPressed: () {
+                          setState(() {
+                            isStatusSelected = Status.Resolved;
+                          });
+                        },
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          side: BorderSide(
+                            color: isStatusSelected == Status.Resolved
+                                ? ColorParser().hexToColor(RuntimeStorage
+                                    .instance.clientTheme!.button_background!)
+                                : Colors.grey,
+                          ),
+                        ),
+                        child: Text(
+                          "Resolved",
+                          style: TextStyle(
+                              color: isStatusSelected == Status.Resolved
+                                  ? ColorParser().hexToColor(RuntimeStorage
+                                      .instance.clientTheme!.button_background!)
+                                  : Colors.grey),
                         ),
                       ),
-                      child: Text(
-                        "Choose File",
-                        style: TextStyle(
-                            color: ColorParser().hexToColor(RuntimeStorage
-                                .instance.clientTheme!.button_background!)),
+                      const SizedBox(
+                        width: 16,
+                      ),
+                      OutlinedButton(
+                          onPressed: () {
+                            setState(() {
+                              isStatusSelected = Status.Pending;
+                            });
+                          },
+                          style: OutlinedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            side: BorderSide(
+                              color: isStatusSelected != Status.Pending
+                                  ? Colors.grey
+                                  : ColorParser().hexToColor(RuntimeStorage
+                                      .instance
+                                      .clientTheme!
+                                      .button_background!),
+                            ),
+                          ),
+                          child: Text(
+                            "Pending",
+                            style: TextStyle(
+                              color: isStatusSelected != Status.Pending
+                                  ? Colors.grey
+                                  : ColorParser().hexToColor(RuntimeStorage
+                                      .instance
+                                      .clientTheme!
+                                      .button_background!),
+                            ),
+                          ))
+                    ],
+                  ),
+
+                  /** Assigned To **/
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  const Text("Assigned To",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black)),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      (widget.assignedTo == null || widget.assignedTo!.isEmpty)
+                          ?
+                          // Container(decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
+                          //     border: Border.all(color: Colors.grey)),
+                          //   child: DropdownButton(
+                          //     value: dropdownValueSelected,
+                          //     isExpanded: true,
+                          //     hint: Text("Select"),
+                          //     underline: SizedBox(),
+                          //     items: [
+                          //       for (int i = 0; i < userListing!.length; i++)
+                          //         DropdownMenuItem(
+                          //           value: userListing![i].name!,
+                          //           child: Text(userListing![i].name!),
+                          //         )
+                          //     ],
+                          //     onChanged: (park) {
+                          //       dropdownValueSelected = park;
+                          //       log("Selected PARK => $park");
+                          //       setState(() {});
+                          //     },
+                          //   ),
+                          // )
+
+                          DropdownMenu<String>(
+                              expandedInsets: EdgeInsets.all(0),
+                              enableSearch: false,
+                              // enabled: widget.assignedTo == null,
+                              enabled: true,
+                              inputDecorationTheme: InputDecorationTheme(
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.never,
+                                  border: OutlineInputBorder(
+                                      borderSide:
+                                          const BorderSide(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(10))),
+                              requestFocusOnTap: false,
+                              label: const Text('Select'),
+                              initialSelection: dropdownValueSelected,
+                              onSelected: (String? park) {
+                                dropdownValueSelected = park;
+                                log("Selected PARK => $park");
+                                setState(() {});
+                              },
+                              dropdownMenuEntries: [
+                                for (int i = 0; i < userListing!.length; i++)
+                                  DropdownMenuEntry<String>(
+                                    value: userListing![i].id!,
+                                    label: userListing![i].name!,
+                                  ),
+                              ],
+                            )
+                          : Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: SizedBox(
+                                height: 56,
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16.0),
+                                    child: Text(
+                                        "${widget.assignedTo != null && userListing!.isNotEmpty ? userListing!.where((element) => element.id == widget.assignedTo).toList().first.name : ""}"),
+                                  ),
+                                ),
+                              ),
+                            ),
+                    ],
+                  ),
+
+                  /** Upload File **/
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  const Text("Upload File",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black)),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Container(
+                    // height: 50,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      border: Border.all(color: Resources.colors.hfText),
+                    ),
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(left: 20, top: 5, bottom: 5),
+                      child: Row(
+                        children: [
+                          OutlinedButton(
+                            onPressed: () {
+                              if (imageFile!.length < 3) {
+                                getFromGallery();
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            'Max 3 images can be uploaded')));
+                              }
+                            },
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              side: BorderSide(
+                                color: ColorParser().hexToColor(RuntimeStorage
+                                    .instance.clientTheme!.button_background!),
+                              ),
+                            ),
+                            child: Text(
+                              "Choose File",
+                              style: TextStyle(
+                                  color: ColorParser().hexToColor(RuntimeStorage
+                                      .instance
+                                      .clientTheme!
+                                      .button_background!)),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                           Text("${imageFile!.length} File Selected")
+                        ],
                       ),
                     ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    const Text("File")
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 36.0),
-              child: SizedBox(
-                height: 56,
-                width: 160,
-                child: ElevatedButton(
-                  onPressed: () {
-                    submitComment();
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: ColorParser().hexToColor(RuntimeStorage
-                          .instance.clientTheme!.button_background!),
-                      elevation: 0,
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)))),
-                  child: const Text(
-                    "Submit",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500),
                   ),
-                ),
-              ),
-            ),
-          ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 36.0),
+                    child: SizedBox(
+                      height: 56,
+                      width: 160,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          submitComment();
+                        },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: ColorParser().hexToColor(
+                                RuntimeStorage
+                                    .instance.clientTheme!.button_background!),
+                            elevation: 0,
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)))),
+                        child: const Text(
+                          "Submit",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            } else {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
         ),
       ),
     );
   }
 
-  Future<void> getAssignedUserListing() async {
-    var response = await ApiFactory().getUserService().getUserData(
+  Future<List<AssignedUserData>> getAssignedUserListing() async {
+    apiResponseListing = ApiFactory().getUserService().getUserData(
         "list_assigned_users", await SharedPref.instance.getUserId());
+    var response = await apiResponseListing;
 
     userListing = response;
 
@@ -348,6 +404,7 @@ class _AddCommentState extends State<AddComment> {
     }
 
     setState(() {});
+    return userListing!;
   }
 
   void getFromGallery() async {
