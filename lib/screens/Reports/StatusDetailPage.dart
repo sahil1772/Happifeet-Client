@@ -593,6 +593,7 @@ class _StatusDetailPageState extends State<StatusDetailPage> {
                               CircularProgressIndicator();
                             },
                             assignedTo: snapshot.data!.first.assign_to,
+                            isQuickComment: false,
                           );
                         } else {
                           return SizedBox();

@@ -652,6 +652,7 @@ class _CommentsCardState extends State<CommentsCard> {
                                               onRequest: (){
                                                 CircularProgressIndicator();
                                               },
+                                              isQuickComment: true,
 
                                             ),
                                           ],

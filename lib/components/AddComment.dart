@@ -19,6 +19,7 @@ class AddComment extends StatefulWidget {
   Function? onFailure;
   Function? dataCallback;
   Function? onRequest;
+  bool? isQuickComment;
 
   @override
   State<AddComment> createState() => _AddCommentState();
@@ -29,7 +30,8 @@ class AddComment extends StatefulWidget {
       this.onSuccess,
       this.onFailure,
       this.dataCallback,
-      this.onRequest});
+      this.onRequest,
+      this.isQuickComment});
 
   gotoAddComment(BuildContext context, String reportId, String? assignedTo,
       Function onSuccess, Function onRequest) {
@@ -62,6 +64,7 @@ class _AddCommentState extends State<AddComment> {
   Future<List<FeedbackStatusDetails>>? apiResponse;
   List<AssignedUserData>? userListing = [];
   Future<List<AssignedUserData>>? apiResponseListing;
+  bool? textVisible = false;
 
   @override
   void initState() {
@@ -92,6 +95,10 @@ class _AddCommentState extends State<AddComment> {
                           return "Please provide a comment";
                         }
                       },
+                      onTapOutside: (value){
+                        FocusManager.instance.primaryFocus?.unfocus();
+                      },
+
                       maxLines: 4,
                       controller: commentsController,
                       decoration: const InputDecoration(
@@ -302,14 +309,19 @@ class _AddCommentState extends State<AddComment> {
                         children: [
                           OutlinedButton(
                             onPressed: () {
+                            setState(() {
                               if (imageFile!.length < 3) {
+                                textVisible = false;
                                 getFromGallery();
                               } else {
+                                textVisible = true;
+                                !widget.isQuickComment! ?
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                         content: Text(
-                                            'Max 3 images can be uploaded')));
+                                            'Max 3 images can be uploaded'))) : null;
                               }
+                            });
                             },
                             style: OutlinedButton.styleFrom(
                               shape: RoundedRectangleBorder(
@@ -336,6 +348,10 @@ class _AddCommentState extends State<AddComment> {
                       ),
                     ),
                   ),
+                  widget.isQuickComment! ?
+                  Visibility(
+                    visible: textVisible!,
+                      child: Text("Max 3 images can be uploaded",style: TextStyle(color: Colors.red),)) : SizedBox(),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 36.0),
                     child: SizedBox(
@@ -426,8 +442,21 @@ class _AddCommentState extends State<AddComment> {
 
           if (imageFile!.length > 3) {
             imageFile!.clear();
-            ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Max 3 files can be uploaded")));
+            if(!widget.isQuickComment!){
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Max 3 files can be uploaded")));
+            }else{
+              setState(() {
+                textVisible = true;
+              });
+            }
+
+            // !widget.isQuickComment! ?
+            //
+            // ScaffoldMessenger.of(context).showSnackBar(
+            //     const SnackBar(content: Text("Max 3 files can be uploaded"))) : null;
+
           } else {
             // Future.delayed(Duration(seconds: 3),() {
             //
