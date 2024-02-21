@@ -30,13 +30,13 @@ class FilterPage extends StatefulWidget {
 
 enum FilterType { Trail, Park }
 
-enum FilterStatus { UnAssigned, Completed, Pending }
+enum FilterStatus { UnAssigned, Resolved, Pending }
 
 enum FilterFunctionType { Website, Mobile, None }
 
 class _FilterPageState extends State<FilterPage> {
   FilterType type = FilterType.Park;
-  FilterStatus status = FilterStatus.Completed;
+  FilterStatus status = FilterStatus.Resolved;
   FilterFunctionType functionType = FilterFunctionType.None;
   String? dropdownValueSelected = fieldOptions.first;
   DateTime selectedStartDate = DateTime.now();
@@ -449,7 +449,7 @@ class _FilterPageState extends State<FilterPage> {
                               OutlinedButton(
                                 onPressed: () {
                                   setState(() {
-                                    status = FilterStatus.Completed;
+                                    status = FilterStatus.Resolved;
                                     widget.params!.status = status.name;
                                   });
                                 },
@@ -457,7 +457,7 @@ class _FilterPageState extends State<FilterPage> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10)),
                                   side: BorderSide(
-                                    color: status == FilterStatus.Completed
+                                    color: status == FilterStatus.Resolved
                                         ? ColorParser().hexToColor(
                                             RuntimeStorage.instance.clientTheme!
                                                 .top_title_background_color!)
@@ -468,7 +468,7 @@ class _FilterPageState extends State<FilterPage> {
                                   "Completed",
                                   style: TextStyle(
                                       fontWeight: FontWeight.w500,
-                                      color: status == FilterStatus.Completed
+                                      color: status == FilterStatus.Resolved
                                           ? ColorParser().hexToColor(
                                               RuntimeStorage
                                                   .instance

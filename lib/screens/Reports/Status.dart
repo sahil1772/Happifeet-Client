@@ -31,7 +31,8 @@ class StatusWidget extends StatefulWidget {
 }
 
 class _StatusWidgetState extends State<StatusWidget> {
-  List<FeedbackStatusData>? getStatusData;
+  List<FeedbackStatusData>? getStatusData = [];
+  List<FeedbackStatusData>? getStatusDataTemp = [];
   Future<List<FeedbackStatusData>>? apiResposne;
   int resolvedCount = 0;
   int pendingCount = 0;
@@ -53,6 +54,8 @@ class _StatusWidgetState extends State<StatusWidget> {
 
     super.initState();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +147,7 @@ class _StatusWidgetState extends State<StatusWidget> {
                               width: 400,
                               child: TextField(
                                   onChanged: (value) {
-                                    // filterSearchResults(value);
+                                    filterSearchResults(value);
                                   },
                                   style: const TextStyle(fontSize: 16),
                                   decoration: InputDecoration(
@@ -464,7 +467,7 @@ class _StatusWidgetState extends State<StatusWidget> {
         .getFeedbackStatusService()
         .getFeedbackStatusListing(filterParams);
     getStatusData = await response;
-    log("FEEDBACK STATUS DATA --> ${getStatusData!.first.toJson()}");
+    // log("FEEDBACK STATUS DATA --> ${getStatusData!.first.toJson()}");
     for (int i = 0; i < getStatusData!.length; i++) {
       if (getStatusData![i].status == "Resolved") {
         resolvedCount++;
@@ -486,6 +489,24 @@ class _StatusWidgetState extends State<StatusWidget> {
       log("totalFeedback${totalFeedback.toString()}");
     });
     return getStatusData!;
+  }
+
+  filterSearchResults(String keyword) {
+    log("search keyword ${keyword}");
+
+    setState(() {
+      if (keyword.isEmpty) {
+        getStatusData = getStatusDataTemp;
+      } else {
+        getStatusData = getStatusDataTemp!.where((element) {
+          return (element as FeedbackStatusData)
+              .park_name!
+              .toLowerCase()
+              .toString()
+              .contains(keyword.toLowerCase());
+        }).toList();
+      }
+    });
   }
 
   Future<void> downloadExport() async {

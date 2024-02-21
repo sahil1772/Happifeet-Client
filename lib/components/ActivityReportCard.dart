@@ -154,21 +154,21 @@ class _ActivityReportCardState extends State<ActivityReportCard> {
                     SizedBox(
                       height: 10,
                     ),
-                    Row(
-                      children: [
-                        SvgPicture.asset(
-                          "assets/images/activityReport/detail.svg",
-                          colorFilter:
-                              ColorFilter.mode(Colors.green, BlendMode.srcIn),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text("Know More",
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.w600)),
-                      ],
-                    ),
+                    // Row(
+                    //   children: [
+                    //     SvgPicture.asset(
+                    //       "assets/images/activityReport/detail.svg",
+                    //       colorFilter:
+                    //           ColorFilter.mode(Colors.green, BlendMode.srcIn),
+                    //     ),
+                    //     SizedBox(
+                    //       width: 10,
+                    //     ),
+                    //     Text("Know More",
+                    //         style: TextStyle(
+                    //             fontSize: 14, fontWeight: FontWeight.w600)),
+                    //   ],
+                    // ),
                   ],
                 ),
                 const SizedBox(
@@ -205,12 +205,12 @@ class _ActivityReportCardState extends State<ActivityReportCard> {
                     Text(widget.activityReportData!.reservation! == "0" ? "No" : "Yes",
                         style: TextStyle(
                             fontSize: 14, fontWeight: FontWeight.w500)),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(widget.activityReportData!.know_more! == "0" ? "No" : "Yes",
-                        style: TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.w500)),
+                    // SizedBox(
+                    //   height: 10,
+                    // ),
+                    // Text(widget.activityReportData!.know_more! == "0" ? "No" : "Yes",
+                    //     style: TextStyle(
+                    //         fontSize: 14, fontWeight: FontWeight.w500)),
                   ],
                 ),
               ],
