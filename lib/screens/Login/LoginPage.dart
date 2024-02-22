@@ -105,8 +105,10 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                   },);
                 } else {
                   log("INVALID USERNAME IN LOGIN PAGE");
+                Future.delayed(Duration(milliseconds: 100),() {
                   ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text("Invalid username or password")));
+                },);
                 }
               }
 
@@ -244,9 +246,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                             //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             //       content: Text("Invalid username or password")));
                             // }
-                            // // SharedPref.instance.setPermissions();
-                            //
-                            // // OtpPageWidget().goToOtpPage(context);
+
                           },
                           child: const Text("Login",
                               style: TextStyle(
