@@ -39,13 +39,15 @@ class _StatusWidgetState extends State<StatusWidget> {
   String totalFeedback = "0";
 
   String? selectedStatusID = "";
-
+  var date = DateTime.now();
+  // DateFormat("yyyy-MM-dd").format(DateTime.now()),
   FilterMap? filterParams = FilterMap(
       type: FilterType.Park.name,
       popupDatepickerToDateSearch:
-          DateFormat("yyyy-MM-dd").format(DateTime.now()),
+          DateFormat("yyyy-MM-dd").format(DateTime(DateTime.now().year,DateTime.now().month+1,0)),
       popupDatepickerFromDateSearch:
-          DateFormat("yyyy-MM-dd").format(DateTime.now()));
+      DateFormat("yyyy-MM-dd").format(DateTime(DateTime.now().year,DateTime.now().month,1)),
+  );
 
   @override
   void initState() {
